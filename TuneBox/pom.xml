@@ -12,7 +12,8 @@
 
   <modules>
         <module>Library</module>
-        <module>Admin</module>
+        <module>EcommerceAdmin</module>
+        <module>SocialAdmin</module>
         <module>Customer</module>
     </modules>
 
