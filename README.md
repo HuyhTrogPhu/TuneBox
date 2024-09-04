@@ -1,6 +1,9 @@
 SETUP:
 
-      - Java JDK 17+
+      - Java JDK 21
       
       - Node.Js v20.17.0 (LTS)
 
+      -MySQL
+
+      
