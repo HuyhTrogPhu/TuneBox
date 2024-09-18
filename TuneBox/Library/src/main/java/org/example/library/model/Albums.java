@@ -1,0 +1,61 @@
+package org.example.library.model;
+
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class Albums {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "albums_id")
+    private Long id;
+
+    private String title;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String albumImage;
+
+    private String description;
+
+    private Date releaseDate;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createDate;
+
+    private boolean report;
+
+    private Date reportDate;
+
+    private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id", nullable = false)
+    private User creator;
+
+    @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)
+    private Set<Track> tracks;
+
+    @ManyToOne
+    @JoinColumn(name = "album_style_id")
+    private AlbumStyle albumStyle;
+
+
+}
