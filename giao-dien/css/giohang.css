@@ -1,0 +1,69 @@
+.content{
+   margin: 100px 60px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate; /* Đảm bảo không gộp viền giữa các ô */
+    border-spacing: 0 0; /* Tạo khoảng cách 10px giữa các hàng */
+  }
+
+
+  tr {
+    border-bottom: 2px solid #D0CFCF; /* Thêm viền dưới cho hàng */
+  }
+  
+  .img-100px{
+    width: 100px;
+   }
+   
+  .soluongSP {
+    width: 35px;
+    height: 25px;
+    border: 2px solid #CCC;
+   }
+
+  th, td{
+    text-align: center;  /* ngang */
+    vertical-align: middle;  /* dọc */
+  }
+
+  .thanhtoan{
+    margin-left: 50px;
+    width: 35%;
+    height: 550px;
+    background: #D9D9D9;
+    border-radius: 4%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h5{
+    margin-top: 20px;
+    
+  }
+
+ .hoadon th{
+    text-align: left;
+  }
+  
+  .hoadon td{
+    text-align: right;
+  }
+
+  .btnCart{
+
+    width: 350px;
+    height: 50px;
+  }
+
+
+  .btnCart {
+    margin-top: 20px; /* Khoảng cách giữa nút và phần tử phía trên */
+  }
+
+  
+  a{
+    color: #B4AC6C;
+  }

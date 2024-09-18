@@ -1,0 +1,142 @@
+/* Basic styles */
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .sidebar {
+    background-color: #f8f9fa;
+    height: 100vh;
+  }
+  
+  .sidebar ul {
+    padding-left: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 0;
+  }
+  .left {
+    background-color: transparent;
+    border-radius: 8px;
+    border: 1px solid #ffffff; /* Đặt màu và độ dày của border */
+    
+    /* Điều chỉnh kích thước border */
+    width: 200px;  /* Chiều rộng cụ thể */
+    height: auto; /* Chiều cao tự điều chỉnh theo nội dung */
+    
+    /* Khoảng cách từ nội dung tới border */
+    padding: 10px 20px; /* padding-top/bottom: 10px, padding-left/right: 20px */
+    
+    /* Khoảng cách với các phần tử khác */
+    margin-left: 50px; /* Căn lề trái 50px */
+    margin-right: 50px; /* Căn lề phải 50px */
+  }
+  .left a {
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    text-align: center;
+  }
+  
+  .left span {
+    display: block; /* Đảm bảo span chiếm toàn bộ chiều rộng */
+  }
+
+  .left:hover {
+    background-color: #f1f1f1;
+   
+  }
+  hr {
+    width: 50%; /* Chiều dài của đường kẻ ngang, ví dụ là 50% của chiều rộng khối chứa */
+    margin-left: 50px; /* Tự động căn giữa đường kẻ ngang */
+    margin-right: auto; /* Tự động căn giữa đường kẻ ngang */
+    border: 1px solid #ccc; /* Đặt độ dày và màu của đường kẻ ngang */
+  }  
+  
+  .bg-light {
+    --bs-bg-opacity: 0 !important;
+  }
+
+
+  /* right */
+  .right {
+    background-color: transparent; /* Initially transparent */
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid transparent; /* Initially no visible border */
+    transition: border 0.3s ease, background-color 0.3s ease; /* Transition for both border and background color */
+  }
+  
+  .right-img {
+    border-radius: 50%; /* Makes the image circular */
+    width: 40px; /* Fixed width for the image */
+    height: 40px; /* Fixed height for the image */
+    object-fit: cover; /* Ensures the image fits within the circular frame */
+  }
+  
+  .right a {
+    display: flex;
+    justify-content: space-between; /* Ensures the content is spaced horizontally */
+    align-items: center; /* Vertically centers the content */
+    text-decoration: none; /* Removes the underline from the link */
+    color: inherit; /* Inherits the text color */
+  }
+  
+  .right div {
+    display: flex;
+    align-items: center; /* Vertically centers the image and text within the flex container */
+    gap: 10px;
+  }
+  
+  .right:hover {
+    background-color: #f1f1f1; /* Background color on hover */
+  }
+  
+  .hr-left {
+    margin-right: auto;
+    border: 1px solid #ccc; /* Border thickness and color */
+  }
+  
+  .bg-light {
+    --bs-bg-opacity: 0 !important;
+  }
+  
+  h6 {
+    padding: 30px;
+  }
+  
+  .sidebar ul li a {
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .content {
+    background-color: #fff;
+  }
+  
+  .post {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .user-info h6 {
+    margin-bottom: 0;
+  }
+  
+  .user-info p {
+    margin-bottom: 5px;
+  }
+  
+  .audio-player audio {
+    width: 100%;
+  }
+  
+  .post-stats span {
+    margin-right: 10px;
+  }
+  
+  input.form-control {
+    width: 100%;
+    margin-top: 10px;
+  }

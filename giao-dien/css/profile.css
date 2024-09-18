@@ -1,0 +1,132 @@
+body{
+    font-family: var(--bs-body-font-family);
+}
+
+.background {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-color:#1D1B20;
+    cursor: pointer;
+    position: relative;
+    border-radius: 30px;
+}
+.avatar {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: -75px;
+    cursor: pointer;
+    position: relative;
+}
+.avatar_small {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    position: relative;
+}
+.avatar_small-square{
+    width: 70px;
+    height: 70px;
+    border-radius: 15%;
+    object-fit: cover;
+    cursor: pointer;
+    position: relative;
+}
+.avatar-details {
+    margin-left: 15px; 
+  }
+  .avatar-details .name {
+    font-weight: bold; 
+  }
+  .avatar-details .time {
+    display: block; 
+    color: gray; 
+  }
+.hidden-input {
+    display: none;
+}
+.menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    display: none;
+    z-index: 10;
+}
+.menu a {
+    color: white;
+    display: block;
+    margin-bottom: 5px;
+    text-decoration: none;
+}
+.menu a:hover {
+    text-decoration: underline;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.9);
+}
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+#caption {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: #ccc;
+    padding: 10px 0;
+    height: 150px;
+}
+.modal-content, #caption {
+    animation-name: zoom;
+    animation-duration: 0.6s;
+}
+@keyframes zoom {
+    from {transform: scale(0)}
+    to {transform: scale(1)}
+}
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+.nav-link.active {
+    font-weight: bold;
+  }
+  .input-container {
+    display: flex;
+    align-items: center;
+  }
+  .input-container .form-control {
+    margin-left: 10px;
+  }

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Ban Hang</title>
+
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- Owl Stylesheets -->
+    <link
+      rel="stylesheet"
+      href="/assets/owlcarousel/assets/owl.carousel.min.css"
+    />
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/profile.css"/>
+    <link
+      rel="stylesheet"
+      href="/assets/owlcarousel/assets/owl.theme.default.min.css"
+    />
+    <script src="/assets/vendors/jquery.min.js"></script>
+    <script src="/assets/owlcarousel/owl.carousel.js"></script>
+    <!-- Owl Stylesheets -->
+
+    <link rel="stylesheet" href="/css/banhang.css" />
+  </head>
+  <body>
+    <!-- Header  -->
+    <header class="row" style=" align-items: center;">
+      <!-- Phần Bên phải header -->
+
+      <div class="col" style="display: flex; align-items: center;">
+        <!-- Logo header -->
+         <button class="btn">
+          <a href="/template/mangxahoi.html">
+            <img src="/images/logo.png" alt="tunebox" width="150" style="margin-left: 50px; margin-right: 50px;">
+          </a>
+         </button>
+        <!-- kết thúc Logo header -->
+
+        <!-- Trang Feed -->
+         <button class="btn">
+          <a href="/template/mangxahoi.html" class="text-decoration-none text-black">
+            <span style="margin-right: 30px;" class="text-decoration-none"> 
+              <img src="/images/home.png" style="margin-bottom: 15px; margin-right: 15px;"> 
+              <b>Feed</b> 
+            </span>
+           </a>
+         </button>
+        <!--kết thúc Trang Feed -->
+
+        <!-- Trang Shops -->
+         <button class="btn">
+          <a href="/template/TrangBanhHang.html" class="text-decoration-none text-black">
+            <span> 
+              <img src="/images/speaker.png" style="margin-bottom: 15px; margin-right: 15px;" width="35px"> 
+              <b>Shops</b> 
+            </span>
+          </a>
+         </button>
+        <!--Kết thúc Trang Shops -->
+      </div>
+      <!--kết thúc Phần Bên phải header -->
+
+      <!-- Phần Bên Trái header -->
+      <div class="col text-end" style="align-items: center;">
+        <!-- Phần Thông báo -->
+        <span>
+          <img src="/images/notification.png" style="margin-bottom: 15px; margin-right: 30px;">
+        </span>
+        <!--kết thúc Phần thông báo -->
+        
+        <!-- Phần tin nhẵn-->
+        <span>
+          <img src="/images/conversation.png" style="margin-bottom: 15px; margin-right: 30px;">
+        </span>
+        <!--kết thúc Phần tin nhẵn-->
+
+        <!-- Phần Prime-->
+        <button type="button" style="margin-bottom: 15px; margin-right: 20px;" class="btn btn-warning "><span><b>Get</b></span> <img src="/images/crown.png" width="32px" height="32px" style="margin-left: 10px;"></button>
+        <!--kết thúc Phần Prime-->
+
+        <!-- Phần Avatar tiến tới trang profile-->
+         <button class="btn">
+          <a href="/template/profile_User.html">
+            <img src="/images/avt.jpg" class="avatar_small" style="width: 50px; height: 50px; margin-bottom: 15px; margin-right: 30px;" alt="Avatar" />
+           </a>
+         </button>
+        <!--kết thúc Phần Avatar tiến tới trang profile-->
+
+        <!-- Phần giỏ hàng-->
+         <button class="btn">
+          <a href="/template/gioHang.html">
+            <span>
+              <img src="/images/shopping-bag.png" style="margin-bottom: 15px; margin-right: 30px;">
+            </span>
+          </a>
+         </button>
+
+         <!--kết thúc Phần giỏ hàng-->
+        
+          <!-- Phần tạo track-->
+        <button type="button" style="margin-bottom: 15px; margin-right: 10px;" class="btn btn-danger"> <img src="/images/plus-white.png" width="20px" height="20px" style="margin-right: 10px; margin-bottom: 3px;"> <b>Create</b> </button>
+        <!--kết thúc Phần tạo track-->
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- slide -->
+      <div class="slide">
+        <div id="carouselExampleIndicators" class="carousel slide">
+          <div class="carousel-indicators">
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Slide 1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+              aria-label="Slide 2"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+              aria-label="Slide 3"
+            ></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img
+                src="/images/nen3.png"
+                class="slide-img d-block w-100"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="/images/nen1.png"
+                class="slide-img d-block w-100"
+                alt="..."
+              />
+            </div>
+            <div class="carousel-item">
+              <img
+                src="/images/nen2.png"
+                class="slide-img d-block w-100"
+                alt="..."
+              />
+            </div>
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+      <!-- end slide -->
+
+      <!-- gioithieu -->
+      <div class="gioiThieu text-center">
+        <div class="row">
+          <div class="col">
+            <img src="/images/gioithieu1.png" class="w-100 mt-5" alt="Image 1" />
+          </div>
+          <div class="col">
+            <img src="/images/gioithieu2.png" class="w-100 mt-5" alt="Image 2" />
+          </div>
+        </div>
+      </div>
+      <!-- end gioi thieu -->
+
+      <!-- danh muc san pham -->
+      <div class="gioiThieu mt-5">
+        <h2>Danh Mục</h2>
+        <hr />
+        <div class="row text-center">
+          <div class="col-12">
+            <div class="row">
+              <div class="large-12 columns">
+                <div class="owl-carousel owl-theme">
+                  <div class="item">
+                    <a href="TrangPhanLoai.html">
+                      <img src="/icon/guitar.png" alt="" class="img-danhmuc" />
+                      <h5>Guitar & Bass</h5></a
+                    >
+                  </div>
+                  <div class="item">
+                    <img
+                      src="/icon/guitar-amplifier.png"
+                      alt=""
+                      class="img-danhmuc"
+                    />
+                    <h5>Amplifiers & Monitors</h5>
+                  </div>
+                  <div class="item">
+                    <img
+                      src="/icon//guitar-pedal.png"
+                      alt=""
+                      class="img-danhmuc"
+                    />
+                    <h5>Pedals & Pedalboards</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/usb.png" alt="" class="img-danhmuc" />
+                    <h5>Phụ kiện</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/music.png" alt="" class="img-danhmuc" />
+                    <h5>Trống & Bộ gõ</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/key.png" alt="" class="img-danhmuc" />
+                    <h5>Keyboards & Pianos</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/earphones.png" alt="" class="img-danhmuc" />
+                    <h5>Lifestyle & Gifts</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/mic.png" alt="" class="img-danhmuc" />
+                    <h5>Vocals & Microphones</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/vocals.png" alt="" class="img-danhmuc" />
+                    <h5>DJ & Production</h5>
+                  </div>
+                  <div class="item">
+                    <img src="/icon/DJ.png" alt="" class="img-danhmuc" />
+                    <h5>Âm thanh</h5>
+                  </div>
+                  <div class="item">
+                    <img
+                      src="/icon/guitar-amplifier.png"
+                      alt=""
+                      class="img-danhmuc"
+                    />
+                    <h4>11</h4>
+                  </div>
+                  <div class="item">
+                    <img
+                      src="/icon/guitar-amplifier.png"
+                      alt=""
+                      class="img-danhmuc"
+                    />
+                    <h4>12</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr />
+      </div>
+      <!-- end danh muc -->
+
+      <!-- Product ban chay -->
+      <div class="BanChay">
+        <h2>Bán chạy</h2>
+        <div class="sanPham">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/sp1.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/sp1a.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav aria-label="Page navigation example" class="pagination-container">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <hr />
+      <!-- sp noi bat -->
+      <div class="SPNoiBat">
+        <h2>Sản phẩm nổi bật</h2>
+        <div class="sanPham">
+          <div class="row">
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/spNoiBat.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/spNoiBatA.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/spNoiBat.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/spNoiBatA.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/spNoiBat.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/spNoiBatA.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="card">
+                <div class="card-img" style="width: 18rem; border: none">
+                  <img src="/images/spNoiBat.png" class="card-img-top" alt="..." />
+                  <img
+                    src="/images/spNoiBatA.png"
+                    class="card-img-top img-change"
+                    alt="..."
+                  />
+                </div>
+                <div class="card-body">
+                  <p class="card-title">
+                    Ibanez JEMJR-WH Steve Vai Signature Electric Guitar, White
+                  </p>
+                  <p class="card-price">20.010.000đ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav aria-label="Page navigation example" class="pagination-container">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+          </ul>
+        </nav>
+      </div>
+      <!-- end sp noi bat -->
+    </div>
+
+    <div class="Thongtin">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col mt-4 mb-4">
+            <img src="/icon/car.png" class="img-thongtin" alt="" />
+            <p>Miễn Phí Giao Hàng</p>
+            <p>Miễn Phí vận chuyển Cho Mọi Đơn Hàng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="/icon/medal.png" class="img-thongtin" alt="" />
+            <p>Bảo Hành 2 Năm</p>
+            <p>Chính Sách Bảo Hành 24 Tháng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="/icon/hand.png" class="img-thongtin" alt="" />
+            <p>Thanh Toán Đảm Bảo</p>
+            <p>Mua Hàng Trực Tuyến Dễ Dàng, Nhanh Chóng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="/icon/refund.png" class="img-thongtin" alt="" />
+            <p>14 Ngày Hoàn Trả</p>
+            <p>Miễn Phí vận chuyển Cho Mọi Đơn Hàng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+
+    <!-- owl.carousel.js -->
+    <script>
+      $(document).ready(function () {
+        $(".owl-carousel").owlCarousel({
+          loop: true,
+          margin: 10,
+          nav: false,
+          dots: false,
+          responsiveClass: true,
+          responsive: {
+            0: {
+              items: 4,
+            },
+            600: {
+              items: 6,
+            },
+            1000: {
+              items: 10,
+              loop: false,
+              margin: 20,
+            },
+          },
+        });
+      });
+    </script>
+    <!-- owl.carousel.js -->
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

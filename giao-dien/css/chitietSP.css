@@ -1,0 +1,84 @@
+.img {
+    position: relative;
+    margin-top: 50px;
+  }
+  
+  .button {
+    position: absolute;
+    top: 50%;
+    background-color:white;
+    border: none;
+    color: black;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 10;
+  }
+  
+  .button.left {
+    left: 10px;
+  }
+  
+  .button.right {
+    right: 10px;
+  }
+
+  .noidungSP{
+    margin-left: 50px;
+  }
+
+  h3 {
+    max-width: 60%;
+    word-wrap: break-word; /* Đảm bảo từ dài xuống hàng khi cần thiết */
+    margin-bottom: 10px; 
+  }
+
+  .price {
+    color: red;
+    font-weight: 700;
+    font-size: 24px;
+    
+}
+
+.soluongSP {
+    margin-top: 20px;
+    margin-right: 50px;
+    width: 60px;
+    height: 40px;
+    text-align: center;
+    border: 2px solid #CCC;
+
+  }
+
+  .btnCart{
+    width: 250px;
+    height: 40px;
+  }
+
+  .gioiThieu p {
+    text-align: justify; /* Căn đều đoạn văn */
+  }
+  
+  .mxh {
+    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
+    align-items: center; /* Căn giữa các biểu tượng theo chiều dọc */
+    gap: 15px; /* Khoảng cách giữa các biểu tượng */
+  }
+  .mxh a {
+    color: #000; /* Màu mặc định của biểu tượng */
+    font-size: 20px; /* Kích thước biểu tượng */
+    transition: color 0.3s; /* Hiệu ứng chuyển màu khi hover */
+  }
+  .mxh a:hover {
+    color: #007bff; /* Màu khi hover */
+  }
+
+  hr{
+    margin: 30px 50px;
+  }
+  
+  
+  a{
+    color: #B4AC6C;
+  }
+  

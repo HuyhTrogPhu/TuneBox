@@ -1,0 +1,116 @@
+hr {
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.carousel-item {
+height: 50vh; /* 50% chiều cao viewport */
+}
+.slide-img {
+width: 100%;
+height: 100%;
+object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+
+/* danh mục */
+h2 {
+    text-align: left; /* Căn trái tiêu đề */
+    margin-bottom: 2rem; /* Khoảng cách dưới tiêu đề */
+    color: #A3A277;
+}
+
+.owl-carousel .owl-nav {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Để không che khuất nội dung */
+}
+
+.img-danhmuc {
+    width: 80px; /* Đặt chiều rộng cho hình ảnh */
+    height: 80px; /* Đặt chiều cao cho hình ảnh */
+    object-fit: contain; /* Giữ tỷ lệ khung hình và không cắt hình ảnh */
+    display: block;
+    margin: 0 auto; /* Căn giữa hình ảnh trong item */
+}
+
+.item h5 {
+    margin-top: 20px; /* Khoảng cách giữa hình ảnh và tiêu đề */
+    font-size: 17px; /* Kích thước chữ tiêu đề */
+    color: #333; /* Màu chữ tiêu đề */
+}
+
+.item a {
+    text-decoration: none; /* Loại bỏ gạch chân của liên kết */
+  }
+
+/* Bán chạy */
+.card{
+    border: none;
+}
+
+.card-title {
+  font-weight: bold; 
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Khoảng cách từ trên nếu cần */
+}
+
+.pagination .page-link {
+    color: black; 
+}
+
+/* thông tin */
+.Thongtin{
+background-color: #81A4B3;
+}
+
+.img-thongtin{
+width: 30px; /* Đặt chiều rộng cho hình ảnh */
+    height: 30px; /* Đặt chiều cao cho hình ảnh */
+    object-fit: contain; /* Giữ tỷ lệ khung hình và không cắt hình ảnh */
+    display: block;
+    margin: 0 auto; /* Căn giữa hình ảnh trong item */
+}
+
+.Thongtin p {
+    margin-top: 2px; /* Khoảng cách âm phía trên */
+    margin-bottom: 5px; /* Khoảng cách âm phía dưới */
+    font-weight: bold; 
+}
+
+
+/* img change */
+img { vertical-align:middle; }
+.card-img{
+    margin: 10px auto;
+    border: 1px solid #CCC;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+    width: 200px;
+}
+
+.card-img img {
+    max-width: 100%;
+    transition: all 1s;
+}
+
+.card-img .img-change {
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 1;
+}
+.card-img:hover .img-change {
+    opacity: 0;
+}
+a{
+    color: #B4AC6C;
+  }
