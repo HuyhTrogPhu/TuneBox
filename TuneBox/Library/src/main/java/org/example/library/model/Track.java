@@ -47,7 +47,8 @@ public class Track {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "creator_id", nullable = false)
-    private User creators;
+    private User creator;
+
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "albums_id", nullable = false)

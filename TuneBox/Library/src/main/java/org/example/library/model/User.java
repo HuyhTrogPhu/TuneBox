@@ -37,7 +37,7 @@ public class User {
     private String reason;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "inspire_id", referencedColumnName = "inspire_id")
+    @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id")
     private InspiredBy inspiredBy;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -81,8 +81,9 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     private Set<Chat> receivedChats;
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "user")
     private Set<Message> messages;
-    
+
+
 
 }
