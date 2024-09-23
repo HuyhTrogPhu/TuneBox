@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Phân Loại</title>
+    <!-- bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/phanloai.css" />
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/profile.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <header class="row" style=" align-items: center;">
+        <!-- Phần Bên phải header -->
+  
+        <div class="col" style="display: flex; align-items: center;">
+          <!-- Logo header -->
+           <button class="btn">
+            <a href="/template/mangxahoi.html">
+              <img src="/images/logo.png" alt="tunebox" width="150" style="margin-left: 50px; margin-right: 50px;">
+            </a>
+           </button>
+          <!-- kết thúc Logo header -->
+  
+          <!-- Trang Feed -->
+           <button class="btn">
+            <a href="/template/mangxahoi.html" class="text-decoration-none text-black">
+              <span style="margin-right: 30px;" class="text-decoration-none"> 
+                <img src="/images/home.png" style="margin-bottom: 15px; margin-right: 15px;"> 
+                <b>Feed</b> 
+              </span>
+             </a>
+           </button>
+          <!--kết thúc Trang Feed -->
+  
+          <!-- Trang Shops -->
+           <button class="btn">
+            <a href="/template/TrangBanhHang.html" class="text-decoration-none text-black">
+              <span> 
+                <img src="/images/speaker.png" style="margin-bottom: 15px; margin-right: 15px;" width="35px"> 
+                <b>Shops</b> 
+              </span>
+            </a>
+           </button>
+          <!--Kết thúc Trang Shops -->
+        </div>
+        <!--kết thúc Phần Bên phải header -->
+
+        <!-- Phần Bên Trái header -->
+        <div class="col text-end" style="align-items: center;">
+          <!-- Phần Thông báo -->
+          <span>
+            <img src="/images/notification.png" style="margin-bottom: 15px; margin-right: 30px;">
+          </span>
+          <!--kết thúc Phần thông báo -->
+          
+          <!-- Phần tin nhẵn-->
+          <span>
+            <img src="/images/conversation.png" style="margin-bottom: 15px; margin-right: 30px;">
+          </span>
+          <!--kết thúc Phần tin nhẵn-->
+  
+          <!-- Phần Prime-->
+          <button type="button" style="margin-bottom: 15px; margin-right: 20px;" class="btn btn-warning "><span><b>Get</b></span> <img src="/images/crown.png" width="32px" height="32px" style="margin-left: 10px;"></button>
+          <!--kết thúc Phần Prime-->
+  
+          <!-- Phần Avatar tiến tới trang profile-->
+           <button class="btn">
+            <a href="/template/profile_User.html">
+              <img src="/images/avt.jpg" class="avatar_small" style="width: 50px; height: 50px; margin-bottom: 15px; margin-right: 30px;" alt="Avatar" />
+             </a>
+           </button>
+          <!--kết thúc Phần Avatar tiến tới trang profile-->
+  
+          <!-- Phần giỏ hàng-->
+           <button class="btn">
+            <a href="/template/gioHang.html">
+              <span>
+                <img src="/images/shopping-bag.png" style="margin-bottom: 15px; margin-right: 30px;">
+              </span>
+            </a>
+           </button>
+
+           <!--kết thúc Phần giỏ hàng-->
+          
+            <!-- Phần tạo track-->
+          <button type="button" style="margin-bottom: 15px; margin-right: 10px;" class="btn btn-danger"> <img src="/images/plus-white.png" width="20px" height="20px" style="margin-right: 10px; margin-bottom: 3px;"> <b>Create</b> </button>
+          <!--kết thúc Phần tạo track-->
+        </div>
+      </header>
+
+    <div class="container">
+      <hr />
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="margin-left: 70px">
+          <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+          <li class="breadcrumb-item active" aria-current="page">
+            Guitar & Bass
+          </li>
+        </ol>
+      </nav>
+      <hr />
+
+      <div class="gioithieu">
+        <div class="row">
+          <div class="col">
+            <img src="img/banner.webp" alt="" class="banner-img" />
+          </div>
+          <div class="col">
+            <h4>Guitar & Bass</h4>
+            <p>
+              Khám phá bộ sưu tập guitar luôn đổi mới của chúng tôi như guitar
+              electric, hollow body, đàn acoustic, bass và nhiều model khác từ
+              Fender, Martin Guitars, Ibanez và PRS.
+            </p>
+          </div>
+        </div>
+      </div>
+      <hr />
+
+      <div class="content">
+        <div class="row">
+          <div class="col-3 phamloai">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+              <div class="accordion-item rounded-3">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button rounded-3"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseOne"
+                    aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseOne"
+                  >
+                    Thương hiệu
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseOne"
+                  class="accordion-collapse collapse show"
+                >
+                  <div class="accordion-body">
+                    <!-- check box -->
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="fender"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">fender</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="ibanez"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Ibanez</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="squier"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Squier</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="jackson"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Jackson</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="prs"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">PRS</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="gretsch"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Gretsch</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="sterling"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Sterling</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="charvel"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">harvel</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item mt-3 rounded-3">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button rounded-3"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseTwo"
+                    aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseTwo"
+                  >
+                    Mức giá
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseTwo"
+                  class="accordion-collapse collapse show"
+                >
+                  <div class="accordion-body">
+                    <div class="input-group mb-3">
+                      <input
+                        type="text"
+                        class="form-control rounded-3"
+                        placeholder="Giá thấp nhất"
+                      />
+                      <span
+                        style="
+                          margin-left: 10px;
+                          margin-right: 10px;
+                          margin-top: 6px;
+                        "
+                        >-</span
+                      >
+                      <input
+                        type="text"
+                        class="form-control rounded-3"
+                        placeholder="Giá cao nhất"
+                      />
+                    </div>
+                    <div class="d-grid">
+                      <button class="btn btn-warning" type="button">
+                        Áp dụng
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item mt-3 rounded-3">
+                <h2 class="accordion-header">
+                  <button
+                    class="accordion-button rounded-3"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseThree"
+                    aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseThree"
+                  >
+                    Loại sản phẩm
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  class="accordion-collapse collapse show"
+                >
+                  <div class="accordion-body">
+                    <!-- check box -->
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="guitardien"
+                        name="loai"
+                      />
+                      <label for="" class="form-check-label"
+                        >Guitar Điện Solid Body</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="ibanez"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Ibanez</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="bass4"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Bass 4 dây</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="acoustic"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label"
+                        >Đàn Guitar Acoustic</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="bass5"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Bass 5 Dây</label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="classic"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label"
+                        >Đàn Guitar Classic</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        class="form-check-input"
+                        value="ukulele"
+                        name="thuonghieu"
+                      />
+                      <label for="" class="form-check-label">Ukulele</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- sanPham -->
+          <div class="col-9">
+            <div class="row">
+              <div class="dropdown">
+                <label for="">Sắp xếp theo</label>
+                <button
+                  class="btn btn-secondary dropdown-toggle"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Sản phẩm cùng loại
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" href="#">Sản phẩm cùng loại</a>
+                  </li>
+                  <li><a class="dropdown-item" href="#">Giá tháp nhât</a></li>
+                  <li><a class="dropdown-item" href="#">Giá cao nhất</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="sanPham mt-2">
+              <div class="row">
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 mb-4">
+                  <div class="card" style="width: 100%; border: none">
+                    <img src="img/sp1.png" class="card-img-top" alt="..." />
+                    <div class="card-body">
+                      <p class="card-title">
+                        Ibanez JEMJR-WH Steve Vai Signature Electric Guitar,
+                        White
+                      </p>
+                      <p class="card-price">20.010.000đ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <nav
+                aria-label="Page navigation example"
+                class="pagination-container"
+              >
+                <ul
+                  class="pagination d-flex justify-content-center align-items-center"
+                >
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="Thongtin">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col mt-4 mb-4">
+            <img src="icon/car.png" class="img-thongtin" alt="" />
+            <p>Miễn Phí Giao Hàng</p>
+            <p>Miễn Phí vận chuyển Cho Mọi Đơn Hàng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="icon/medal.png" class="img-thongtin" alt="" />
+            <p>Bảo Hành 2 Năm</p>
+            <p>Chính Sách Bảo Hành 24 Tháng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="icon/hand.png" class="img-thongtin" alt="" />
+            <p>Thanh Toán Đảm Bảo</p>
+            <p>Mua Hàng Trực Tuyến Dễ Dàng, Nhanh Chóng</p>
+          </div>
+          <div class="col mt-4 mb-4">
+            <img src="icon/refund.png" class="img-thongtin" alt="" />
+            <p>14 Ngày Hoàn Trả</p>
+            <p>Miễn Phí vận chuyển Cho Mọi Đơn Hàng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer></footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
