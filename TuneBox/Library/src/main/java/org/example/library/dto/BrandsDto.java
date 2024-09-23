@@ -1,6 +1,6 @@
-package org.example.library.model;
+package org.example.library.dto;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +10,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "categories_instrument")
-public class CategoryIns {
+public class BrandsDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "category_id")
     private Long id;
 
     private String name;
