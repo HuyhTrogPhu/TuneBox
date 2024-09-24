@@ -30,7 +30,7 @@ public class Albums {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String albumImage;
 
-    @Size(min = 100, max = 1000)
+    @Size(min = 10, max = 1000)
     private String description;
 
     private Date releaseDate;

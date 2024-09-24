@@ -26,7 +26,7 @@ public class Brand {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String brandImage;
 
-    @Size(min = 100, max = 1000)
+    @Size(min = 10, max = 1000)
     private String description;
 
     private boolean status;
