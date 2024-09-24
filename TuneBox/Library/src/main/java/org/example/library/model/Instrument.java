@@ -34,7 +34,7 @@ public class Instrument {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String image;
 
-    @Size(min = 100, max = 1000)
+    @Size(min = 10, max = 1000)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

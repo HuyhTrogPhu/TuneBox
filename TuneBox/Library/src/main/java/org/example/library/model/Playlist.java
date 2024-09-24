@@ -27,7 +27,7 @@ public class Playlist {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String imagePlaylist;
 
-    @Size(min = 100, max = 1000)
+    @Size(min = 10, max = 1000)
     private String description;
 
     private String type;
