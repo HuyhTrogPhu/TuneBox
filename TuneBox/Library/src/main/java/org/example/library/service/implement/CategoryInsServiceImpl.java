@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import org.example.library.dto.CategoryInsDTO;
 import org.example.library.mapper.CategoryInsMapper;
+import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
 import org.example.library.repository.CategoryInsRepository;
 import org.example.library.service.CategoryInsService;
@@ -47,8 +48,14 @@ public class CategoryInsServiceImpl implements CategoryInsService {
         return CategoryInsMapper.toDTO(existingCategory);
     }
 
+
+
     @Override
-    public void delete(Long id) {
-        categoryInsRepository.deleteById(id);
+    public void deleteCateIns(Long id) {
+        CategoryIns categoryIns = categoryInsRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Brand not found")
+        );
+        categoryIns.setStatus(false);
+        categoryInsRepository.save(categoryIns);
     }
 }

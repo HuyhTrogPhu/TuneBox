@@ -9,5 +9,5 @@ public interface CategoryInsService {
     CategoryInsDTO findById(Long id);
     CategoryInsDTO create(CategoryInsDTO categoryInsDTO);
     CategoryInsDTO update(Long id, CategoryInsDTO categoryInsDTO);
-    void delete(Long id);
+    void deleteCateIns(Long id);
 }
