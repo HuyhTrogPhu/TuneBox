@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@CrossOrigin("*")
 @RestController
 @AllArgsConstructor
-@RequestMapping("/e-comAdmin/brand")
+@RequestMapping("/e-comAdmin/brands")
 public class BrandController {
 
     @Autowired
@@ -31,7 +33,7 @@ public class BrandController {
 
 
 //    Get all brand
-    @GetMapping("/brands")
+    @GetMapping("/getAllBrand")
     public  ResponseEntity<List<BrandsDto>> getAllBrands(){
         List<BrandsDto> brandsDto = brandService.getAllBrand();
         return ResponseEntity.ok(brandsDto);
