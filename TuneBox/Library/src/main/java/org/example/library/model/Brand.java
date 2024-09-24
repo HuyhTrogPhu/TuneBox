@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,13 @@ public class Brand {
     private Long id;
 
     private String name;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String brandImage;
+
+    @Size(min = 10, max = 1000)
+    private String description;
 
     private boolean status;
 }
