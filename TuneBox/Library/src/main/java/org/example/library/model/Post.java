@@ -22,13 +22,8 @@ public class Post {
 
     private String content;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String postImage;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<PostImage> images;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<PostVideo> videos;
 }
