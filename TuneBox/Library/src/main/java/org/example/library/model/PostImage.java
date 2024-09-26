@@ -20,7 +20,7 @@ public class PostImage {
 
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
-    private String postImage;
+    private byte[] postImage; // Thay đổi từ String sang byte[] để lưu trữ dữ liệu hình ảnh
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)

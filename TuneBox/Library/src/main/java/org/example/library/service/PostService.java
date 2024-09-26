@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface PostService {
 
-    PostDto savePost(PostDto postDto, MultipartFile image);
+    PostDto savePost(PostDto postDto, MultipartFile[] images); // Thay đổi từ MultipartFile sang MultipartFile[] để hỗ trợ nhiều ảnh
+
+    PostDto updatePost(Long id, PostDto postDto, List<MultipartFile> images);
 
     PostDto getPostById(long id);
 
     List<PostDto> getAllPosts();
-
-    PostDto updatePost(Long id,PostDto postDto,MultipartFile image);
 
     void deletePost(long id);
 }
