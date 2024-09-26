@@ -41,6 +41,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -73,6 +76,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.library.repository" />
+      <recent name="org.example.library.service" />
+      <recent name="org.example.customer.controller" />
       <recent name="org.example.library.dto" />
     </key>
   </component>
@@ -140,6 +146,7 @@
       <workItem from="1726806260079" duration="3000" />
       <workItem from="1727058930216" duration="5074000" />
       <workItem from="1727070041177" duration="2462000" />
+      <workItem from="1727323014094" duration="1784000" />
     </task>
     <task id="LOCAL-00001" summary="Create DTO belong to model">
       <option name="closed" value="true" />
