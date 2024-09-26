@@ -1,4 +1,4 @@
-package org.example.customer.API;
+package org.example.library.API;
 
 import org.example.library.dto.UserDto;
 import org.example.library.service.UserService;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/User")
+@RequestMapping("/user")
 public class UserAPI {
     @Autowired
     private UserService UserSer;
@@ -33,5 +33,3 @@ public class UserAPI {
         return ResponseEntity.ok(response);
     }
 }
-
-
