@@ -89,5 +89,6 @@ public class User {
     private Set<Message> messages;
 
 
-
+    public User(Long id, String email, String userName, String password, boolean report, Date createDate, String reason, UserInformation userInformation, InspiredBy inspiredBy, Talent talent, Set<Genre> genre, Set<Block> blocker, Set<Block> blocked, Set<Follow> followers, Set<Follow> followers1, List<Order> orderList, Set<Track> tracks, Set<Chat> sentChats, Set<Chat> receivedChats, Set<Message> messages) {
+    }
 }
