@@ -6,23 +6,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Locale;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PostImage {
+@Table(name = "likes")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "image_id")
     private Long id;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private byte[] postImage; // Thay đổi từ String sang byte[] để lưu trữ dữ liệu hình ảnh
+    private LocalDate create;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "track_id")
+    private Track track;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+
 }
