@@ -12,11 +12,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="SocialAdmin" />
         <module name="Library" />
+        <module name="Customer" />
+        <module name="EcommerceAdmin" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Customer" options="-parameters" />
+      <module name="EcommerceAdmin" options="-parameters" />
       <module name="Library" options="-parameters" />
       <module name="SocialAdmin" options="-parameters" />
     </option>
