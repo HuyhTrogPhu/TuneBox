@@ -2,11 +2,12 @@ package org.example.library.service.implement;
 
 import lombok.AllArgsConstructor;
 import org.example.library.dto.TrackDto;
-import org.example.library.mapper.BrandMapper;
 import org.example.library.mapper.TrackMapper;
-import org.example.library.model.Brand;
+import org.example.library.model.Like;
 import org.example.library.model.Track;
+import org.example.library.model.User;
 import org.example.library.repository.TrackRepository;
+import org.example.library.repository.UserRepository;
 import org.example.library.service.TrackService;
 import org.example.library.utils.ImageUploadTrack;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class TrackServiceImpl implements TrackService {
     public TrackRepository trackRepository;
 
     private final ImageUploadTrack imageUploadTrack;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public TrackDto creatTrack(TrackDto trackDto, MultipartFile image) {
@@ -84,24 +87,29 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public void likeTrack(Long id, Long userId) {
-//        Track track = trackRepository.findById(id).orElseThrow(
-//                () -> new RuntimeException("Track not found")
-//        );
-//        // Giả định Track có một danh sách userIds để lưu trữ người dùng đã thích
-//        if (!track.getLikes().contains(userId)) {
-//            track.getLikes().add(userId);
-//            trackRepository.save(track);
-//        }
+        Track track = trackRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Track not found")
+        );
+
+        boolean alreadyLiked = track.getLikes().stream()
+                .anyMatch(like -> like.getUser().getId().equals(userId));
+
+        if (!alreadyLiked) {
+            User user = userRepository.findById(userId).orElseThrow(
+                    () -> new RuntimeException("User not found")
+            );
+
+            Like newLike = new Like();
+            newLike.setUser(user);
+            newLike.setTrack(track);
+            track.getLikes().add(newLike);
+            trackRepository.save(track);
+        }
     }
 
     @Override
     public void commentOnTrack(Long id, Long userId, String comment) {
-//        Track track = trackRepository.findById(id).orElseThrow(
-//                () -> new RuntimeException("Track not found")
-//        );
-//        Comment newComment = new Comment(userId, comment); // Tạo một bình luận mới
-//        track.getComments().add(newComment); // Giả định Track có một danh sách comments
-//        trackRepository.save(track);
+
     }
 
     @Override
