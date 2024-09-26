@@ -59,4 +59,8 @@ public class trackController {
         trackService.deleteTrack(trackId);
         return ResponseEntity.ok("Track deleted successfully");
     }
+
+    // like Track
+
+    // comment Track
 }
