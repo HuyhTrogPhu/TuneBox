@@ -1,62 +1,94 @@
 package org.example.library.service.implement;
 
-import org.example.library.dto.InstrumentDTO;
+import lombok.AllArgsConstructor;
+import org.example.library.dto.InstrumentDto;
 import org.example.library.mapper.InstrumentMapper;
 import org.example.library.model.Instrument;
 import org.example.library.repository.InstrumentRepository;
 import org.example.library.service.InstrumentService;
+import org.example.library.utils.ImageUploadInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class InstrumentServiceImpl implements InstrumentService {
+
     @Autowired
     private InstrumentRepository instrumentRepository;
 
-    @Autowired
-    private InstrumentMapper instrumentMapper;
+    private final ImageUploadInstrument imageUploadInstrument;
 
     @Override
-    public List<InstrumentDTO> getAllInstruments() {
-        return instrumentRepository.findAll().stream()
-                .map(instrumentMapper::toDTO)
-                .collect(Collectors.toList());
+    public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image) {
+        try {
+            Instrument instrument = InstrumentMapper.mapperInstrument(instrumentDto);
+            if (image == null){
+                instrument.setImage(null);
+            }else {
+                imageUploadInstrument.uploadFile(image);
+                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            }
+            instrument.setStatus(true);
+            Instrument saveInstrument = instrumentRepository.save(instrument);
+            return InstrumentMapper.mapperInstrumentDto(saveInstrument);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
+
     @Override
-    public InstrumentDTO getInstrumentById(Long id) {
-        return instrumentRepository.findById(id)
-                .map(instrumentMapper::toDTO)
-                .orElseThrow(() -> new RuntimeException("Instrument not found"));
+    public List<InstrumentDto> getAllInstrument() {
+        List<Instrument> instruments = instrumentRepository.findAll();
+        return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public InstrumentDto getInstrumentById(Long id) {
+        Instrument instrument = instrumentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Instrument not found")
+        );
+        return InstrumentMapper.mapperInstrumentDto(instrument);
     }
 
     @Override
-    public InstrumentDTO createInstrument(InstrumentDTO instrumentDTO) {
-        Instrument instrument = instrumentMapper.toEntity(instrumentDTO);
-        Instrument savedInstrument = instrumentRepository.save(instrument);
-        return instrumentMapper.toDTO(savedInstrument);
-    }
-
-    @Override
-    public InstrumentDTO updateInstrument(Long id, InstrumentDTO instrumentDTO) {
-        Instrument existingInstrument = instrumentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Instrument not found"));
-
-        existingInstrument.setName(instrumentDTO.getName());
-        existingInstrument.setCostPrice(instrumentDTO.getCostPrice());
-        existingInstrument.setQuantity(instrumentDTO.getQuantity());
-        existingInstrument.setColor(instrumentDTO.getColor());
-        existingInstrument.setImage(instrumentDTO.getImage());
-        existingInstrument.setDescription(instrumentDTO.getDescription());
-
-        Instrument updatedInstrument = instrumentRepository.save(existingInstrument);
-        return instrumentMapper.toDTO(updatedInstrument);
+    public InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile image) {
+        try {
+            Instrument instrument = instrumentRepository.findById(id).orElseThrow(
+                    () -> new RuntimeException("Instrument not found")
+            );
+            if(image.getBytes().length > 0){
+                if(imageUploadInstrument.checkExist(image)){
+                    instrument.setImage(instrument.getImage());
+                }else {
+                    imageUploadInstrument.uploadFile(image);
+                    instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                }
+            }
+            instrument.setStatus(true);
+            Instrument saveInstrument = instrumentRepository.save(instrument);
+            return InstrumentMapper.mapperInstrumentDto(saveInstrument);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return  null;
+        }
     }
 
     @Override
     public void deleteInstrument(Long id) {
-        instrumentRepository.deleteById(id);
+        Instrument instrument = instrumentRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Instrument not found")
+        );
+        instrument.setStatus(false);
+        instrumentRepository.save(instrument);
     }
 }

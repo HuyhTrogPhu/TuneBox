@@ -1,54 +1,66 @@
 package org.example.ecommerceadmin.controller;
 
 import lombok.AllArgsConstructor;
-import org.example.library.dto.InstrumentDTO;
-import org.example.library.service.InstrumentService;
+
+import org.example.library.dto.InstrumentDto;
+import org.example.library.model.Instrument;
+import org.example.library.repository.InstrumentRepository;
+import org.example.library.service.implement.InstrumentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @AllArgsConstructor
-@RequestMapping("/e-comAdmin/instruments")
+@RequestMapping("/e-comAdmin/instrument")
 public class InstrumentController {
-    @Autowired
-    private InstrumentService instrumentService;
 
-    // Lấy danh sách tất cả các nhạc cụ
-    @GetMapping
-    public ResponseEntity<List<InstrumentDTO>> getAllInstruments() {
-        List<InstrumentDTO> instruments = instrumentService.getAllInstruments();
+    @Autowired
+    private InstrumentServiceImpl instrumentService;
+
+
+    //    Add new instrument
+    @PostMapping
+    public ResponseEntity<InstrumentDto> createInstrument(@RequestBody InstrumentDto instrumentDto,
+                                                          @RequestParam("insImage") MultipartFile image) {
+        InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, image);
+        return new ResponseEntity<>(saveInstrument, HttpStatus.CREATED);
+    }
+
+    //    Get all instrument
+    @GetMapping("/getAllInstrument")
+    public ResponseEntity<List<InstrumentDto>> getAll() {
+        List<InstrumentDto> instruments = instrumentService.getAllInstrument();
         return ResponseEntity.ok(instruments);
     }
 
-    // Lấy thông tin một nhạc cụ theo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<InstrumentDTO> getInstrumentById(@PathVariable Long id) {
-        InstrumentDTO instrument = instrumentService.getInstrumentById(id);
-        return ResponseEntity.ok(instrument);
+
+    //    Get instrument by id
+    @GetMapping("{instrumentId}")
+    public ResponseEntity<InstrumentDto> getInstrumentById(@PathVariable("instrumentId") Long id) {
+        InstrumentDto instrumentDto = instrumentService.getInstrumentById(id);
+        return ResponseEntity.ok(instrumentDto);
     }
 
-    // Tạo một nhạc cụ mới
-    @PostMapping
-    public ResponseEntity<InstrumentDTO> createInstrument(@RequestBody InstrumentDTO instrumentDTO) {
-        InstrumentDTO createdInstrument = instrumentService.createInstrument(instrumentDTO);
-        return ResponseEntity.status(201).body(createdInstrument);
+
+    //    Update Instrument
+    @PutMapping("{instrumentId}")
+    public ResponseEntity<InstrumentDto> updateInstrument(@PathVariable("instrumentId") Long id,
+                                                          @RequestBody InstrumentDto instrumentDto,
+                                                          @RequestParam("insImage") MultipartFile image) {
+        InstrumentDto saveInstrument = instrumentService.updateInstrument(id, instrumentDto, image);
+        return ResponseEntity.ok(saveInstrument);
     }
 
-    // Cập nhật thông tin nhạc cụ
-    @PutMapping("/{id}")
-    public ResponseEntity<InstrumentDTO> updateInstrument(@PathVariable Long id, @RequestBody InstrumentDTO instrumentDTO) {
-        InstrumentDTO updatedInstrument = instrumentService.updateInstrument(id, instrumentDTO);
-        return ResponseEntity.ok(updatedInstrument);
-    }
-
-    // Xóa nhạc cụ theo ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteInstrument(@PathVariable Long id) {
+    //    Delete instrument
+    @DeleteMapping("{instrumentId}")
+    public ResponseEntity<String> deleteInstrument(@PathVariable("instrumentId") Long id) {
         instrumentService.deleteInstrument(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Delete instrument successfully");
     }
-
 }

@@ -1,18 +1,19 @@
 package org.example.library.mapper;
 
-import org.example.library.dto.InstrumentDTO;
+import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Instrument;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public interface InstrumentMapper {
+public class InstrumentMapper {
 
-    @Mapping(source = "categoryIns.id", target = "categoryInsId")
-    @Mapping(source = "brand.id", target = "brandId")
-    InstrumentDTO toDTO(Instrument instrument);
+    public static InstrumentDto mapperInstrumentDto(Instrument instrument) {
+        return new InstrumentDto(instrument.getId(), instrument.getName(), instrument.getCostPrice(),
+                instrument.getQuantity(), instrument.getColor(), instrument.isStatus(), instrument.getImage(),
+                instrument.getDescription(), instrument.getCategoryIns(), instrument.getBrand());
+    }
 
-    @Mapping(source = "categoryInsId", target = "categoryIns.id")
-    @Mapping(source = "brandId", target = "brand.id")
-    Instrument toEntity(InstrumentDTO instrumentDTO);
+    public static Instrument mapperInstrument(InstrumentDto instrumentDto) {
+        return new Instrument(instrumentDto.getId(), instrumentDto.getName(), instrumentDto.getCostPrice(), instrumentDto.getQuantity()
+                , instrumentDto.getColor(), instrumentDto.isStatus(), instrumentDto.getImage(), instrumentDto.getDescription()
+                , instrumentDto.getCategoryIns(), instrumentDto.getBrand());
+    }
 }

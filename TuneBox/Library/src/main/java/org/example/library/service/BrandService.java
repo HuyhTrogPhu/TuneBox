@@ -1,17 +1,18 @@
 package org.example.library.service;
 
 import org.example.library.dto.BrandsDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface BrandService {
-    BrandsDto createBrand(BrandsDto brandsDto);
+public interface    BrandService {
+    BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image);
 
     BrandsDto getBrandById(Long id);
 
     List<BrandsDto> getAllBrand();
 
-    BrandsDto updateBrand(Long id, BrandsDto brandsDto);
+    BrandsDto updateBrand(Long id, BrandsDto brandsDto, MultipartFile image);
 
     void deleteBrand(Long id);
 }

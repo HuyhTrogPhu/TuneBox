@@ -36,6 +36,10 @@ public class User {
 
     private String reason;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_information_id", referencedColumnName = "id")
+    private UserInformation userInformation;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id")
     private InspiredBy inspiredBy;

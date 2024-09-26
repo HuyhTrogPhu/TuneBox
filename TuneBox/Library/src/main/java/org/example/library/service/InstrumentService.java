@@ -1,13 +1,20 @@
 package org.example.library.service;
 
-import org.example.library.dto.InstrumentDTO;
+import org.example.library.dto.InstrumentDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface InstrumentService {
-    List<InstrumentDTO> getAllInstruments();
-    InstrumentDTO getInstrumentById(Long id);
-    InstrumentDTO createInstrument(InstrumentDTO instrumentDTO);
-    InstrumentDTO updateInstrument(Long id, InstrumentDTO instrumentDTO);
+
+    InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image);
+
+    List<InstrumentDto> getAllInstrument();
+
+    InstrumentDto getInstrumentById(Long id);
+
+    InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile image);
+
     void deleteInstrument(Long id);
+
 }
