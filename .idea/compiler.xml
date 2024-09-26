@@ -11,18 +11,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="SocialAdmin" />
+        <module name="Library" />
         <module name="Customer" />
+        <module name="EcommerceAdmin" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="EcommerceAdmin" target="17" />
-      <module name="Library" target="17" />
-      <module name="TuneBox" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Customer" options="-parameters" />
+      <module name="EcommerceAdmin" options="-parameters" />
+      <module name="Library" options="-parameters" />
       <module name="SocialAdmin" options="-parameters" />
     </option>
   </component>

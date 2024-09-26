@@ -4,7 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="Create DTO belong to model" />
+    <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="add">
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/utils/ImageUploadTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/trackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/trackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="GiaNhu" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -60,8 +71,10 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.CustomerApplication.executor": "Run",
     "Spring Boot.LibraryApplication.executor": "Debug",
+    "git-widget-placeholder": "GiaNhu",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "E:/DuAnTotNghiep",
     "node.js.detected.package.eslint": "true",
@@ -76,10 +89,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.library.mapper" />
+      <recent name="org.example.library.utils" />
       <recent name="org.example.library.repository" />
       <recent name="org.example.library.service" />
       <recent name="org.example.customer.controller" />
-      <recent name="org.example.library.dto" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -175,7 +189,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create DTO belong to model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create DTO belong to model" />
+    <MESSAGE value="add" />
+    <option name="LAST_COMMIT_MESSAGE" value="add" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
