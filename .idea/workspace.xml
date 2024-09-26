@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="add Track 1/2">
+    <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="update TrackServiceImpl">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/trackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/trackController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +170,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727328608195</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="update TrackServiceImpl">
+      <option name="closed" value="true" />
+      <created>1727333882653</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1727333882653</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,7 +199,8 @@
     <MESSAGE value="Create DTO belong to model" />
     <MESSAGE value="add" />
     <MESSAGE value="add Track 1/2" />
-    <option name="LAST_COMMIT_MESSAGE" value="add Track 1/2" />
+    <MESSAGE value="update TrackServiceImpl" />
+    <option name="LAST_COMMIT_MESSAGE" value="update TrackServiceImpl" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

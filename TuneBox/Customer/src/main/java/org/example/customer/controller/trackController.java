@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.dto.TrackDto;
+import org.example.library.model.Track;
 import org.example.library.service.implement.TrackServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,10 +44,19 @@ public class trackController {
         return new ResponseEntity<>(saveTrack, HttpStatus.CREATED);
     }
 
+     // update track
+    @PutMapping("{trackId}")
+    public ResponseEntity<TrackDto> updateTrack(@RequestBody TrackDto trackDto,
+                                                @PathVariable("trackID") Long id,
+                                                @RequestParam("imageTrack") MultipartFile image){
+        TrackDto saveTrack = trackService.updateTrack(id, trackDto, image);
+        return ResponseEntity.ok(saveTrack);
+    }
 
-    // update track
-//    @PutMapping("{trackId}")
-//    public ResponseEntity<TrackDto> updateTrack(){
-//
-//    }
+    // Delete Track
+    @DeleteMapping("{trackId}")
+    public ResponseEntity<String> deleteTrack(@PathVariable("trackId") Long trackId) {
+        trackService.deleteTrack(trackId);
+        return ResponseEntity.ok("Track deleted successfully");
+    }
 }
