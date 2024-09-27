@@ -6,11 +6,11 @@ import org.example.library.model.Post;
 import org.example.library.model.PostImage;
 import org.example.library.repository.PostRepository;
 import org.example.library.service.PostService;
-import org.example.library.utils.ImageUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,83 +21,64 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
-    @Autowired
-    private ImageUpload imageUpload;
 
     @Override
-    public PostDto savePost(PostDto postDto, MultipartFile[] images) {
-        try {
-            Post post = PostMapper.maptoPost(postDto);
-            Set<PostImage> postImages = new HashSet<>();
+    public PostDto savePost(PostDto postDto, MultipartFile[] images) throws IOExceptiond {
+        Post post = PostMapper.mapToPost(postDto);
 
-            // Upload từng file ảnh
-            for (MultipartFile image : images) {
-                if (image != null && !image.isEmpty()) {
-                    PostImage postImage = new PostImage();
-                    // Tải ảnh lên và lưu trữ dưới dạng byte[] trong PostImage
-                    postImage.setPostImage(image.getBytes());
-                    postImage.setPost(post);
-                    postImages.add(postImage);
-                }
-            }
-
-            // Gán Set PostImage vào Post
-            post.setImages(postImages);
-
-            post.setContent(postDto.getContent());
-            Post savedPost = postRepository.save(post);
-            return PostMapper.maptoPostDto(savedPost);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public PostDto updatePost(Long id, PostDto postDto, List<MultipartFile> images) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Post not found")
-        );
-
-        // Handle image updates
+        // Chuyển đổi MultipartFile[] thành PostImage[]
         Set<PostImage> postImages = new HashSet<>();
-        if (images != null && !images.isEmpty()) {
-            for (MultipartFile image : images) {
-                if (!imageUpload.checkExist(image)) {
-                    imageUpload.uploadFile(image);
-                    PostImage postImage = new PostImage();
-                    postImage.setPost(post); // Set the relationship with Post
-                    postImages.add(postImage);
-                }
-            }
+        for (MultipartFile image : images) {
+            PostImage postImage = new PostImage();
+            postImage.setPost(post); // Gắn liên kết với Post
+            postImage.setPostImage(image.getBytes()); // Lưu hình ảnh dưới dạng byte[]
+            postImages.add(postImage);
         }
+        post.setImages(postImages);
 
-        post.setImages(postImages); // Update the images in the Post entity
-        post.setContent(postDto.getContent());
         Post savedPost = postRepository.save(post);
-        return PostMapper.maptoPostDto(savedPost);
+        return PostMapper.mapToPostDto(savedPost);
     }
-
 
     @Override
     public PostDto getPostById(long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Post not found")
-        );
-        return PostMapper.maptoPostDto(post);
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        return PostMapper.mapToPostDto(post);
     }
 
     @Override
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(PostMapper::maptoPostDto).collect(Collectors.toList());
+        return posts.stream()
+                .map(PostMapper::mapToPostDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto updatePost(Long id, PostDto postDto, MultipartFile[] images) throws IOException {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        post.setContent(postDto.getContent());
+
+        // Cập nhật hình ảnh nếu có
+        if (images != null) {
+            Set<PostImage> postImages = new HashSet<>();
+            for (MultipartFile image : images) {
+                PostImage postImage = new PostImage();
+                postImage.setPost(post);
+                postImage.setPostImage(image.getBytes());
+                postImages.add(postImage);
+            }
+            post.setImages(postImages);
+        }
+
+        Post updatedPost = postRepository.save(post);
+        return PostMapper.mapToPostDto(updatedPost);
     }
 
     @Override
     public void deletePost(long id) {
-        Post post = postRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Post not found")
-        );
-        postRepository.deleteById(post.getId());
+        postRepository.deleteById(id);
     }
 }

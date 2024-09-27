@@ -1,23 +1,17 @@
 package org.example.library.dto;
 
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.PostImage;
-
-import java.util.Set;
+import org.example.library.model.Post;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDto {
-
+public class PostImageDto {
     private Long id;
-
-    private String content;
-
-    private Set<PostImageDto> images;
-
+    private byte[] postImage;
 }
