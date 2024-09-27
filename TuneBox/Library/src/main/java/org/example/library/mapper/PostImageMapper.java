@@ -2,22 +2,42 @@ package org.example.library.mapper;
 
 import org.example.library.dto.PostImageDto;
 import org.example.library.model.PostImage;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PostImageMapper {
 
-    // Chuyển từ PostImage entity sang PostImageDto
-    public static PostImageDto mapToPostImageDto(PostImage postImage) {
-        PostImageDto postImageDto = new PostImageDto();
-        postImageDto.setId(postImage.getId());
-        postImageDto.setPostImage(postImage.getPostImage());
-        return postImageDto;
+    public static PostImageDto toDto(PostImage postImage) {
+        if (postImage == null) return null;
+        
+        PostImageDto dto = new PostImageDto();
+        dto.setId(postImage.getId());
+        dto.setPostImage(postImage.getPostImage());
+        return dto;
     }
 
-    // Chuyển từ PostImageDto sang PostImage entity
-    public static PostImage mapToPostImage(PostImageDto postImageDto) {
-        PostImage postImage = new PostImage();
-        postImage.setId(postImageDto.getId());
-        postImage.setPostImage(postImageDto.getPostImage());
-        return postImage;
+    public static PostImage toEntity(PostImageDto postImageDto) {
+        if (postImageDto == null) return null;
+        
+        PostImage entity = new PostImage();
+        entity.setId(postImageDto.getId());
+        entity.setPostImage(postImageDto.getPostImage());
+        return entity;
+    }
+
+    public static Set<PostImageDto> toDtoSet(Set<PostImage> postImages) {
+        if (postImages == null) return null;
+        
+        return postImages.stream()
+                .map(PostImageMapper::toDto)
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<PostImage> toEntitySet(Set<PostImageDto> postImageDtos) {
+        if (postImageDtos == null) return null;
+        
+        return postImageDtos.stream()
+                .map(PostImageMapper::toEntity)
+                .collect(Collectors.toSet());
     }
 }

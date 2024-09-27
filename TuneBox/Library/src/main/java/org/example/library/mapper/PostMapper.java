@@ -1,48 +1,28 @@
 package org.example.library.mapper;
 
 import org.example.library.dto.PostDto;
-import org.example.library.dto.PostImageDto;
 import org.example.library.model.Post;
-import org.example.library.model.PostImage;
-import org.springframework.stereotype.Component;
-
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@Component
 public class PostMapper {
 
-    // Chuyển từ Post sang PostDto
-    public static PostDto mapToPostDto(Post post) {
-        PostDto postDto = new PostDto();
-        postDto.setId(post.getId());
-        postDto.setContent(post.getContent());
+    public static PostDto toDto(Post post) {
+        if (post == null) return null;
 
-        // Map Set<PostImage> thành Set<PostImageDto>
-        if (post.getImages() != null) {
-            Set<PostImageDto> postImageDtos = post.getImages().stream()
-                    .map(PostImageMapper::mapToPostImageDto)
-                    .collect(Collectors.toSet());
-            postDto.setImages(postImageDtos);
-        }
-
-        return postDto;
+        PostDto dto = new PostDto();
+        dto.setId(post.getId());
+        dto.setContent(post.getContent());
+        dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
+        return dto;
     }
 
-    // Chuyển từ PostDto sang Post
-    public static Post mapToPost(PostDto postDto) {
-        Post post = new Post();
-        post.setId(postDto.getId());
-        post.setContent(postDto.getContent());
+    public static Post toEntity(PostDto postDto) {
+        if (postDto == null) return null;
 
-        // Map Set<PostImageDto> thành Set<PostImage>
-        if (postDto.getImages() != null) {
-            Set<PostImage> postImages = postDto.getImages().stream()
-                    .map(PostImageMapper::mapToPostImage)
-                    .collect(Collectors.toSet());
-            post.setImages(postImages);
-        }
-
-        return post;
+        Post entity = new Post();
+        entity.setId(postDto.getId());
+        entity.setContent(postDto.getContent());
+        entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
+        return entity;
     }
 }

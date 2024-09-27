@@ -8,21 +8,27 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("/*")
 @RequestMapping("/api/posts")
 public class PostController {
 
-    private final PostService postService;
+    private PostService postService;
 
     public PostController(PostService postService) {
         this.postService = postService;
     }
 
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto,
-                                              @RequestParam("images") MultipartFile[] images) {
+    public ResponseEntity<PostDto> createPost(
+            @RequestParam(value = "content") String content, // Đảm bảo tên đúng
+            @RequestParam(value = "images", required = false) MultipartFile[] images) {
+
+        PostDto postDto = new PostDto();
+        postDto.setContent(content); // Gán nội dung vào PostDto
+
         try {
             PostDto savedPost = postService.savePost(postDto, images);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
@@ -31,9 +37,18 @@ public class PostController {
         }
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable long id) {
         PostDto postDto = postService.getPostById(id);
         return new ResponseEntity<>(postDto, HttpStatus.OK);
     }
+    // Phương thức lấy tất cả các bài viết
+    @GetMapping
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> posts = postService.getAllPosts(); // Tạo phương thức getAllPosts trong service
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
 }
+
