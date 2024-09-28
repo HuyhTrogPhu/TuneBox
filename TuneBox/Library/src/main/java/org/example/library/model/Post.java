@@ -30,4 +30,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Like> likes;
 
+    @ManyToOne
+    @JoinColumn(name = "postCreator_id", nullable = false)
+    private User creator;
+
+
 }
