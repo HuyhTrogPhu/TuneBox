@@ -1,5 +1,6 @@
 package org.example.library.service;
 
+import org.example.library.dto.CommentDto;
 import org.example.library.dto.TrackDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,7 @@ public interface TrackService {
 
     void likeTrack(Long id, Long userId);
 
-    void commentOnTrack(Long id, Long userId, String comment);
+    CommentDto commentOnTrack(Long id, Long userId, String comment);
 
     TrackDto getTrackByID(Long id);
 

@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
+import org.example.library.dto.CommentDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.Track;
 import org.example.library.service.implement.TrackServiceImpl;
@@ -47,7 +48,7 @@ public class trackController {
      // update track
     @PutMapping("{trackId}")
     public ResponseEntity<TrackDto> updateTrack(@RequestBody TrackDto trackDto,
-                                                @PathVariable("trackID") Long id,
+                                                @PathVariable("trackId") Long id,
                                                 @RequestParam("imageTrack") MultipartFile image){
         TrackDto saveTrack = trackService.updateTrack(id, trackDto, image);
         return ResponseEntity.ok(saveTrack);
@@ -61,6 +62,19 @@ public class trackController {
     }
 
     // like Track
+    @PostMapping("{trackId}/like")
+    public ResponseEntity<String> likeTrack(@PathVariable("trackId") Long trackId,
+                                            @RequestParam("userId") Long userId) {
+        trackService.likeTrack(trackId, userId);
+        return ResponseEntity.ok("Like successfully");
+    }
 
     // comment Track
+    @PostMapping("{trackId}/comment")
+    public ResponseEntity<CommentDto> commentOnTrack(@PathVariable("trackId") Long trackId,
+                                                     @RequestParam("userId") Long userId,
+                                                     @RequestBody String content) {
+        CommentDto newComment = trackService.commentOnTrack(trackId, userId, content);
+        return new ResponseEntity<>(newComment, HttpStatus.CREATED);
+    }
 }
