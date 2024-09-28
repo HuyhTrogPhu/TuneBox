@@ -74,6 +74,9 @@ public class User {
     private List<Order> orderList;
 
     @OneToMany(mappedBy = "creator")
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")

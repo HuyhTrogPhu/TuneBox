@@ -41,16 +41,16 @@ public class InstrumentController {
 
 
     //    Get instrument by id
-    @GetMapping("{instrumentId}")
-    public ResponseEntity<InstrumentDto> getInstrumentById(@PathVariable("instrumentId") Long id) {
+    @GetMapping("{id}")
+    public ResponseEntity<InstrumentDto> getInstrumentById(@PathVariable Long id) {
         InstrumentDto instrumentDto = instrumentService.getInstrumentById(id);
         return ResponseEntity.ok(instrumentDto);
     }
 
 
     //    Update Instrument
-    @PutMapping("{instrumentId}")
-    public ResponseEntity<InstrumentDto> updateInstrument(@PathVariable("instrumentId") Long id,
+    @PutMapping("{id}")
+    public ResponseEntity<InstrumentDto> updateInstrument(@PathVariable Long id,
                                                           @RequestBody InstrumentDto instrumentDto,
                                                           @RequestParam("insImage") MultipartFile image) {
         InstrumentDto saveInstrument = instrumentService.updateInstrument(id, instrumentDto, image);
@@ -58,8 +58,8 @@ public class InstrumentController {
     }
 
     //    Delete instrument
-    @DeleteMapping("{instrumentId}")
-    public ResponseEntity<String> deleteInstrument(@PathVariable("instrumentId") Long id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteInstrument(@PathVariable Long id) {
         instrumentService.deleteInstrument(id);
         return ResponseEntity.ok("Delete instrument successfully");
     }

@@ -49,7 +49,7 @@ public class Albums {
     private Genre genre;
 
     @ManyToOne
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "albumCreator_id", nullable = false)
     private User creator;
 
     @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)

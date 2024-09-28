@@ -46,7 +46,7 @@ public class Track {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "trackCreator_id", nullable = false)
     private User creator;
 
 

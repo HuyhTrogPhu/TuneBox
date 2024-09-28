@@ -31,4 +31,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<PostVideo> videos;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "trackCreator_id", nullable = false)
+    private User creator;
 }
