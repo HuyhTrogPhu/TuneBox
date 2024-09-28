@@ -30,6 +30,7 @@ public class UserMapper {
                 user.getSentChats(),
                 user.getReceivedChats(),
                 user.getMessages());
+
     }
 
     public static User maptoUser(UserDto user) {

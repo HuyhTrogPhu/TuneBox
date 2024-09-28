@@ -7,5 +7,5 @@ import org.example.library.dto.UserDto;
 import java.util.List;
 
 public interface UserService {
-    UserDto Register(UserDto userdto, Long inspiredById,Long TalentId,Long GenreId);
+    UserDto Register(UserDto userdto, String[] inspiredByName,String[] TalentName,String[] GenreName);
 }
