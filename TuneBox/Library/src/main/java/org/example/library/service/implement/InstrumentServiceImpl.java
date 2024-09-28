@@ -1,9 +1,14 @@
 package org.example.library.service.implement;
 
 import lombok.AllArgsConstructor;
+import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.mapper.InstrumentMapper;
+import org.example.library.model.Brand;
+import org.example.library.model.CategoryIns;
 import org.example.library.model.Instrument;
+import org.example.library.repository.BrandRepository;
+import org.example.library.repository.CategoryInsRepository;
 import org.example.library.repository.InstrumentRepository;
 import org.example.library.service.InstrumentService;
 import org.example.library.utils.ImageUploadInstrument;
@@ -23,6 +28,12 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Autowired
     private InstrumentRepository instrumentRepository;
 
+    @Autowired
+    private CategoryInsRepository categoryInsRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
+
     private final ImageUploadInstrument imageUploadInstrument;
 
     @Override
@@ -35,6 +46,8 @@ public class InstrumentServiceImpl implements InstrumentService {
                 imageUploadInstrument.uploadFile(image);
                 instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
+            instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
+            instrument.setBrand(getManagedBrand(instrumentDto.getBrand().getId()));
             instrument.setStatus(true);
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
@@ -90,5 +103,15 @@ public class InstrumentServiceImpl implements InstrumentService {
         );
         instrument.setStatus(false);
         instrumentRepository.save(instrument);
+    }
+
+    public CategoryIns getManagedCategory(Long id){
+        return categoryInsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+    }
+
+    public Brand getManagedBrand(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 }

@@ -30,18 +30,15 @@ public class BrandServiceImpl implements BrandService {
     public BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image) {
         try {
             Brand brand = BrandMapper.maptoBrand(brandsDto);
-            if (image == null) {
-                brand.setBrandImage(null);
-            } else {
+            if (image != null) {
                 imageUploadBrand.uploadFile(image);
                 brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
             brand.setStatus(true);
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image: " + e.getMessage());
         }
     }
 
@@ -90,5 +87,11 @@ public class BrandServiceImpl implements BrandService {
         );
         brand.setStatus(false);
         brandRepository.save(brand);
+    }
+
+    @Override
+    public List<BrandsDto> searchBrand(String keyword) {
+        List<Brand> list = brandRepository.findByKeyword(keyword);
+        return list.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
     }
 }

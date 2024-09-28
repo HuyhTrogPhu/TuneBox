@@ -15,4 +15,6 @@ public interface    BrandService {
     BrandsDto updateBrand(Long id, BrandsDto brandsDto, MultipartFile image);
 
     void deleteBrand(Long id);
+
+    List<BrandsDto> searchBrand(String keyword);
 }

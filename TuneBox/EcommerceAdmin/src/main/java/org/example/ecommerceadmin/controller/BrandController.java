@@ -1,5 +1,6 @@
 package org.example.ecommerceadmin.controller;
 
+import jakarta.servlet.annotation.MultipartConfig;
 import lombok.AllArgsConstructor;
 
 import org.example.library.dto.BrandsDto;
@@ -25,15 +26,22 @@ public class BrandController {
 
     //    Add new brand
     @PostMapping
-    public ResponseEntity<BrandsDto> createBrand(@RequestBody BrandsDto brandsDto,
-                                                 @RequestParam("imageBrand") MultipartFile image) {
+    public ResponseEntity<BrandsDto> createBrand(@RequestParam("name") String name,
+                                                 @RequestParam("imageBrand") MultipartFile image,
+                                                 @RequestParam("desc") String description
+    ) {
+        BrandsDto brandsDto = new BrandsDto();
+        brandsDto.setName(name);
+        brandsDto.setDescription(description);
+        brandsDto.setStatus(true);
+
         BrandsDto saveBrand = brandService.createBrand(brandsDto, image);
         return new ResponseEntity<>(saveBrand, HttpStatus.CREATED);
     }
 
 
     //    Get all brand
-    @GetMapping("/getAllBrand")
+    @GetMapping
     public ResponseEntity<List<BrandsDto>> getAllBrand() {
         List<BrandsDto> brandsDto = brandService.getAllBrand();
         return ResponseEntity.ok(brandsDto);
@@ -41,17 +49,17 @@ public class BrandController {
 
 
     //    Get brand by id
-    @GetMapping("{brandId}")
-    public ResponseEntity<BrandsDto> getBrand(@PathVariable("brandId") Long brandId) {
-        BrandsDto brandsDto = brandService.getBrandById(brandId);
+    @GetMapping("{id}")
+    public ResponseEntity<BrandsDto> getBrand(@PathVariable Long id) {
+        BrandsDto brandsDto = brandService.getBrandById(id);
         return ResponseEntity.ok(brandsDto);
     }
 
 
     //    Update brand
-    @PutMapping("{brandId}")
+    @PutMapping("{id}")
     public ResponseEntity<BrandsDto> updateBrand(@RequestBody BrandsDto brandsDto,
-                                                 @PathVariable("brandId") Long id,
+                                                 @PathVariable Long id,
                                                  @RequestParam("imageBrand") MultipartFile image) {
         BrandsDto saveBrand = brandService.updateBrand(id, brandsDto, image);
         return ResponseEntity.ok(saveBrand);
@@ -59,11 +67,16 @@ public class BrandController {
 
 
     //    Delete brand
-    @DeleteMapping("{brandId}")
-    public ResponseEntity<String> deleteBrand(@PathVariable("brandId") Long id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteBrand(@PathVariable Long id) {
         brandService.deleteBrand(id);
         return ResponseEntity.ok("Delete brand successfully");
     }
 
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<BrandsDto>> getBrandsByKeyword(@PathVariable String keyword) {
+        List<BrandsDto> brandsDto = brandService.searchBrand(keyword);
+        return ResponseEntity.ok(brandsDto);
+    }
 
 }
