@@ -35,7 +35,7 @@ public class InstrumentController {
     // Add new instrument
     @PostMapping
     public ResponseEntity<InstrumentDto> createInstrument(@RequestParam("name") String name,
-                                              @RequestParam("price") double price,
+                                              @RequestParam("costPrice") double costPrice,
                                               @RequestParam("quantity") int quantity,
                                               @RequestParam("color") String color,
                                               @RequestParam("description") String description,
@@ -45,7 +45,7 @@ public class InstrumentController {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
-            instrumentDto.setCostPrice(price);
+            instrumentDto.setCostPrice(costPrice);
             instrumentDto.setQuantity(quantity);
             instrumentDto.setColor(color);
             instrumentDto.setDescription(description);
