@@ -21,7 +21,7 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private LocalDate create;
+    private LocalDate createDate;
 
     @ManyToOne
     @JoinColumn(name = "track_id")
