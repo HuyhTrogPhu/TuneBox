@@ -68,10 +68,12 @@ public class UserServiceImpl implements UserService {
 
         if (userOptional.isPresent()) {
             String token = generateToken(); // Hàm tạo token
-            String resetLink = "http://localhost:8080/reset-password?token=" + token;
+            //link sẽ chuyển hướng đến trang đổi pass word
+            String resetLink = "http://localhost:3000/reset-password?token=" + token;
 
             // Gửi email
-            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn", resetLink);
+            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
+                    "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
 
             userOptional.get().setResetToken(token);
             Repo.save(userOptional.get());
@@ -103,7 +105,24 @@ public class UserServiceImpl implements UserService {
         try {
             javaMailSender.send(message);
         } catch (MailException e) {
-            // In ra thông tin chi tiết về lỗi
             System.out.println("Error sending email: " + e.getMessage());
-        }    }
+        }
+    }
+
+    @Override
+    public UserDto loginWithGoogle(String email, String name) {
+        Optional<User> userOptional = Repo.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return UserMapper.maptoUserDto(userOptional.get());
+        } else {
+            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
+            User newUser = new User();
+            newUser.setEmail(email);
+            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
+            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+            User savedUser = Repo.save(newUser);
+            return UserMapper.maptoUserDto(savedUser);
+        }
+    }
+
 }

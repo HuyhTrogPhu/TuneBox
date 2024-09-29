@@ -1,9 +1,14 @@
-package org.example.customer.API;
+package org.example.customer.controller;
 
 import org.example.library.dto.UserDto;
+import org.example.library.repository.UserRepository;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -13,10 +18,12 @@ import java.util.Map;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/User")
-public class UserAPI {
+public class UserController {
     @Autowired
     private UserService UserService;
 
+    @Autowired
+    private UserRepository Repo;
 
     //REGISTER
     @PostMapping("/sign-up")
@@ -74,5 +81,49 @@ public class UserAPI {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        try {
+            if (!Repo.existsById(id)) {
+                return ResponseEntity.badRequest().body("Không tìm thấy người dùng với ID này.");
+            }
+            Repo.deleteById(id);
+            return ResponseEntity.ok("Người dùng đã được xóa thành công.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body("Lỗi khi xóa người dùng: " + ex.getMessage());
+        }
+    }
+
+
+    @GetMapping("/login/oauth2/success")
+    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
+        }
+
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+
+        // Kiểm tra oauth2User có phải null hay không
+        if (oauth2User == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2 User is not found");
+        }
+
+        String email = oauth2User.getAttribute("email");
+        String name = oauth2User.getAttribute("name");
+
+        if (email == null || name == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
+        }
+
+        UserDto userDto = UserService.loginWithGoogle(email, name);
+
+        response.put("status", true);
+        response.put("message", "Đăng nhập thành công");
+        response.put("data", userDto);
+
+        return ResponseEntity.ok(response);
+    }
 
 }

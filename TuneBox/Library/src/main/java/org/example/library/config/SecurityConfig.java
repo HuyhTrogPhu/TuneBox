@@ -20,18 +20,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Vô hiệu hóa CSRF
-                .authorizeRequests(authz -> authz
-                        .anyRequest().permitAll() // Cho phép tất cả các yêu cầu
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers("/", "/User/login", "/login/oauth2/**", "/oauth2/**", "/User/**").permitAll() // Cho phép truy cập
+                                .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults()); // Sử dụng form login mặc định nếu cần
-
+                .oauth2Login(oauth2 ->
+                        oauth2.defaultSuccessUrl("http://localhost:3000/", true) // Chuyển hướng sau khi đăng nhập thành công
+                );
         return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Sử dụng BCrypt để mã hóa mật khẩu
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
