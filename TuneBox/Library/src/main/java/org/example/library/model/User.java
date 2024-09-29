@@ -1,10 +1,7 @@
 package org.example.library.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Collection;
 import java.util.Date;
@@ -17,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
+@Data
 public class User {
 
     @Id
@@ -35,6 +33,12 @@ public class User {
     private Date createDate;
 
     private String reason;
+
+    private String resetToken;
+
+    private String token;
+
+    private String newPassword;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
