@@ -34,4 +34,5 @@ public class Post {
     @JoinColumn(name = "postCreator_id", nullable = false)
     private User creator;
 
+
 }
