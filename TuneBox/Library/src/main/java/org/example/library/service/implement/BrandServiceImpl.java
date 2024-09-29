@@ -59,26 +59,41 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandsDto updateBrand(Long id, BrandsDto brandsDto, MultipartFile image) {
         try {
+            // Tìm thương hiệu cần cập nhật
             Brand brand = brandRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Brand not found")
             );
-            if (image.getBytes().length > 0) {
-                if (imageUploadBrand.checkExist(image)) {
-                    brand.setBrandImage(brand.getBrandImage());
-                } else {
-                    imageUploadBrand.uploadFile(image);
-                    brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
-                }
-            }
+
+            System.out.println("Updating brand with ID: " + id);
+            System.out.println("New name: " + brandsDto.getName());
+            System.out.println("New description: " + brandsDto.getDescription());
+            System.out.println("New status: " + brandsDto.getStatus());
+
+            // Cập nhật tên và mô tả
             brand.setName(brandsDto.getName());
-            brand.setStatus(true);
+            brand.setDescription(brandsDto.getDescription());
+            brand.setStatus(brandsDto.getStatus());
+
+            // Kiểm tra xem hình ảnh có được truyền vào không
+            if (image != null && !image.isEmpty()) {
+                // Tải lên hình ảnh mới
+                imageUploadBrand.uploadFile(image);
+                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            }
+
+            // Lưu thương hiệu đã cập nhật
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException("Failed to update brand image: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("An unexpected error occurred: " + e.getMessage() + ", cause: " + e.getCause());
         }
     }
+
+
 
     @Override
     public void deleteBrand(Long id) {
