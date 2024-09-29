@@ -125,4 +125,16 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        User user = Repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Mật khẩu cũ không chính xác");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        Repo.save(user);
+    }
+
 }

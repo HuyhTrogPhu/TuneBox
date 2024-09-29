@@ -18,4 +18,6 @@ public interface UserService {
     void resetPassword(String token, String newPassword);
 
     UserDto loginWithGoogle(String email , String name);
+
+    void changePassword(String email, String oldPassword, String newPassword);
 }
