@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 
 @CrossOrigin("*")
@@ -58,12 +59,25 @@ public class BrandController {
 
     //    Update brand
     @PutMapping("{id}")
-    public ResponseEntity<BrandsDto> updateBrand(@RequestBody BrandsDto brandsDto,
-                                                 @PathVariable Long id,
-                                                 @RequestParam("imageBrand") MultipartFile image) {
-        BrandsDto saveBrand = brandService.updateBrand(id, brandsDto, image);
-        return ResponseEntity.ok(saveBrand);
+    public ResponseEntity<BrandsDto> updateBrand(
+            @RequestParam("name") String name,
+            @RequestParam("desc") String description,
+            @RequestParam(value = "imageBrand", required = false) MultipartFile image,
+            @RequestParam(value = "status") Boolean status,
+            @PathVariable Long id) {
+
+        // Tạo BrandsDto mới với thông tin cập nhật
+        BrandsDto brandsDto = new BrandsDto();
+        brandsDto.setName(name);
+        brandsDto.setDescription(description);
+        brandsDto.setStatus(status);
+
+        // Gọi phương thức cập nhật thương hiệu
+        BrandsDto updatedBrand = brandService.updateBrand(id, brandsDto, image);
+        return ResponseEntity.ok(updatedBrand);
     }
+
+
 
 
     //    Delete brand
