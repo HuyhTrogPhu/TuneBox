@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
+import org.example.library.model.Brand;
+import org.example.library.model.CategoryIns;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
 import org.example.library.service.implement.InstrumentServiceImpl;
@@ -32,9 +34,24 @@ public class InstrumentController {
 
     // Add new instrument
     @PostMapping
-    public ResponseEntity<InstrumentDto> createInstrument(@RequestBody InstrumentDto instrumentDto,
+    public ResponseEntity<InstrumentDto> createInstrument(@RequestParam("name") String name,
+                                              @RequestParam("price") double price,
+                                              @RequestParam("quantity") int quantity,
+                                              @RequestParam("color") String color,
+                                              @RequestParam("description") String description,
+                                              @RequestParam("brandId") Brand brand,
+                                              @RequestParam("categoryId") CategoryIns category,
                                               @RequestParam("image") MultipartFile image) {
         try {
+            InstrumentDto instrumentDto = new InstrumentDto();
+            instrumentDto.setName(name);
+            instrumentDto.setCostPrice(price);
+            instrumentDto.setQuantity(quantity);
+            instrumentDto.setColor(color);
+            instrumentDto.setDescription(description);
+            instrumentDto.setBrand(brand);
+            instrumentDto.setCategoryIns(category);
+
             InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, image);
             return new ResponseEntity<>(saveInstrument, HttpStatus.CREATED);
         } catch (Exception e) {
