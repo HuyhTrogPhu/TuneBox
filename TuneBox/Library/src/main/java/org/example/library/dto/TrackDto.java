@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Albums;
-import org.example.library.model.Genre;
-import org.example.library.model.Playlist;
-import org.example.library.model.User;
+import org.example.library.model.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -44,5 +41,9 @@ public class TrackDto {
     private Albums albums;
 
     private Set<Playlist> playlists;
+
+    private Set<Comment> comments;
+
+    private Set<Like> likes;
     
 }
