@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +31,6 @@ public class Genre {
 
     @OneToMany(mappedBy = "genre")
     private Set<Albums> albums;
+
+
 }

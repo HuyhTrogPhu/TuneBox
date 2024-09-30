@@ -17,14 +17,14 @@ import java.util.List;
 @CrossOrigin("*")
 @RestController
 @AllArgsConstructor
-@RequestMapping("/e-comAdmin/track")
+@RequestMapping("/profileUser/track")
 public class trackController {
 
     @Autowired
     private TrackServiceImpl trackService;
 
     // get all track
-    @GetMapping("/getAllTrack")
+    @GetMapping("/getAll")
     public ResponseEntity<List<TrackDto>> getAllTrack() {
         List<TrackDto> trackDto = trackService.getAllTrack();
         return ResponseEntity.ok(trackDto);

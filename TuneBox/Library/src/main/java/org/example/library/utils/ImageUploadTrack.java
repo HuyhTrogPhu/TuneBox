@@ -13,6 +13,14 @@ public class ImageUploadTrack {
 
     private final String UPLOAD_FOLDER = "ImageTrack";
 
+    public ImageUploadTrack() {
+        // Tạo thư mục nếu nó không tồn tại
+        File uploadDir = new File(UPLOAD_FOLDER);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+    }
+
     public boolean uploadFile(MultipartFile file) {
         boolean isUpload = false;
         try {

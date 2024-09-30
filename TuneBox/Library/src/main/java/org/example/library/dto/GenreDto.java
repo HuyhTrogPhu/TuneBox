@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.Albums;
+import org.example.library.model.Genre;
 import org.example.library.model.Track;
 import org.example.library.model.User;
 
@@ -29,4 +30,10 @@ public class GenreDto {
     private Set<Track> tracks;
 
     private Set<Albums> albums;
+
+    public GenreDto(Genre genre) {
+        this.id = genre.getId();
+        this.name = genre.getName();
+    }
+
 }

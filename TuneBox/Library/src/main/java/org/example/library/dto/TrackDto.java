@@ -18,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class TrackDto {
 
+
     private Long id;
 
     private String name;
@@ -34,16 +35,18 @@ public class TrackDto {
 
     private Date reportDate;
 
-    private Genre genre;
+    private Long genreId;
 
-    private User creator;
+    private Long creatorId;
 
-    private Albums albums;
+    private Long albumId;
 
     private Set<Playlist> playlists;
 
     private Set<Comment> comments;
 
     private Set<Like> likes;
-    
+
+
+
 }
