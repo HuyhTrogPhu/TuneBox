@@ -91,19 +91,25 @@ public class InstrumentServiceImpl implements InstrumentService {
 
             // Kiểm tra hình ảnh mới
             if (image != null && !image.isEmpty()) {
-                // Nếu có hình ảnh mới, cập nhật
-                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                // Nếu có hình ảnh mới, upload và lưu lại ảnh
+                boolean isUploaded = imageUploadInstrument.uploadFile(image);
+                if (isUploaded) {
+                    // Lưu ảnh dưới dạng Base64 trong cơ sở dữ liệu
+                    instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                } else {
+                    throw new RuntimeException("Failed to upload the image");
+                }
             }
-            // Không làm gì nếu không có hình ảnh mới, giữ lại hình ảnh cũ
 
             instrument.setStatus(true);
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return null; // Có thể trả về một đối tượng phản hồi có lỗi
         }
     }
+
 
 
 
