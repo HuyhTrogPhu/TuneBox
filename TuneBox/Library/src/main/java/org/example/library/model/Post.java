@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Setter
@@ -27,4 +28,6 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
     @JoinColumn(name = "user_id") // Tên cột trong bảng Post
     private User user;
+
+    private LocalDateTime createdAt;
 }
