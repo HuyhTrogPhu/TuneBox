@@ -79,19 +79,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.EcommerceAdminApplication">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="TuneBox" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="TuneBox" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
