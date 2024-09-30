@@ -46,5 +46,8 @@ public class UserDto {
     private Set<Chat> receivedChats;
     private Set<Message> messages;
 
-
+    public UserDto(Long id, String userName) {
+        this.id = id;
+        this.userName = userName;
+    }
 }

@@ -14,4 +14,6 @@ public interface UserService {
     void ForgotPassword(UserDto user);
 
     void resetPassword(String token, String newPassword);
+    UserDto getUserById(Long id);
+
 }

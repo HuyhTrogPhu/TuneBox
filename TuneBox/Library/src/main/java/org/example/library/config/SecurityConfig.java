@@ -8,6 +8,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,7 +25,10 @@ public class SecurityConfig {
                 .authorizeRequests(authz -> authz
                         .anyRequest().permitAll() // Cho phép tất cả các yêu cầu
                 )
-                .formLogin(Customizer.withDefaults()); // Sử dụng form login mặc định nếu cần
+                .formLogin(Customizer.withDefaults()) // Sử dụng form login mặc định nếu cần
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Tạo phiên nếu cần thiết
+                );
 
         return http.build();
     }
@@ -41,3 +45,4 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 }
+

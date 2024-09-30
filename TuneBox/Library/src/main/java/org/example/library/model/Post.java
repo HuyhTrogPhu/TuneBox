@@ -24,4 +24,7 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<PostImage> images;
 
+    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
+    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
+    private User user;
 }

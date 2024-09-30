@@ -15,9 +15,9 @@ import java.util.Set;
 public class PostDto {
 
     private Long id;
-
     private String content;
-
+    private Long userId; // Trường userId
+    private String userName; // Thêm trường username
     private Set<PostImageDto> images;
 
 }

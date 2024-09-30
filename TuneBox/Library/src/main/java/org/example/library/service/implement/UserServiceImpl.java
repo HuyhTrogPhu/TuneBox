@@ -19,8 +19,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository Repo;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JavaMailSender javaMailSender;
+
 
 
     @Override
@@ -35,17 +38,16 @@ public class UserServiceImpl implements UserService {
     public UserDto Login(UserDto userdto) {
         Optional<User> userOptional;
 
-        if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
-                (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
+        // Kiểm tra email trước, sau đó là userName
+        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
             userOptional = Repo.findByEmail(userdto.getEmail());
-            if (!userOptional.isPresent()) {
-                userOptional = Repo.findByUserName(userdto.getUserName());
-            }
+        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
+            userOptional = Repo.findByUserName(userdto.getUserName());
         } else {
             throw new RuntimeException("Username or email cannot be null or empty");
         }
 
-
+        // Kiểm tra xem người dùng có tồn tại không và xác thực mật khẩu
         if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
             return UserMapper.maptoUserDto(userOptional.get());
         } else {
@@ -53,10 +55,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public void ForgotPassword(UserDto userdto) {
         Optional<User> userOptional;
 
+        // Tìm người dùng qua email trước, sau đó userName
         if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
             userOptional = Repo.findByEmail(userdto.getEmail());
         } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
@@ -65,9 +69,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Email or username cannot be null or empty");
         }
 
-
         if (userOptional.isPresent()) {
-            String token = generateToken(); // Hàm tạo token
+            String token = generateToken(); // Tạo token
             String resetLink = "http://localhost:8080/reset-password?token=" + token;
 
             // Gửi email
@@ -89,6 +92,13 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("Invalid token");
         }
+    }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        return Repo.findById(id)
+                .map(user -> new UserDto(user.getId(), user.getUserName())) // Chuyển đổi sang UserDto
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     private String generateToken() {
