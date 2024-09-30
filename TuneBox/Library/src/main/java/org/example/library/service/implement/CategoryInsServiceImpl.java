@@ -1,8 +1,8 @@
 //package org.example.library.service.implement;
 //
-//import org.example.library.dto.CategoryInsDTO;
+//
+//import org.example.library.dto.CategoryInsDto;
 //import org.example.library.mapper.CategoryInsMapper;
-//import org.example.library.model.Brand;
 //import org.example.library.model.CategoryIns;
 //import org.example.library.repository.CategoryInsRepository;
 //import org.example.library.service.CategoryInsService;
@@ -18,28 +18,28 @@
 //    private CategoryInsRepository categoryInsRepository;
 //
 //    @Override
-//    public List<CategoryInsDTO> findAll() {
+//    public List<CategoryInsDto> findAll() {
 //        return categoryInsRepository.findAll().stream()
 //                .map(CategoryInsMapper::toDTO)
 //                .collect(Collectors.toList());
 //    }
 //
 //    @Override
-//    public CategoryInsDTO findById(Long id) {
+//        public CategoryInsDto findById(Long id) {
 //        return categoryInsRepository.findById(id)
 //                .map(CategoryInsMapper::toDTO)
 //                .orElseThrow(() -> new RuntimeException("Category not found"));
 //    }
 //
 //    @Override
-//    public CategoryInsDTO create(CategoryInsDTO categoryInsDTO) {
+//    public CategoryInsDto create(CategoryInsDto categoryInsDTO) {
 //        CategoryIns categoryIns = CategoryInsMapper.toEntity(categoryInsDTO);
 //        categoryIns = categoryInsRepository.save(categoryIns);
 //        return CategoryInsMapper.toDTO(categoryIns);
 //    }
 //
 //    @Override
-//    public CategoryInsDTO update(Long id, CategoryInsDTO categoryInsDTO) {
+//    public CategoryInsDto update(Long id, CategoryInsDto categoryInsDTO) {
 //        CategoryIns existingCategory = categoryInsRepository.findById(id)
 //                .orElseThrow(() -> new RuntimeException("Category not found"));
 //        existingCategory.setName(categoryInsDTO.getName());
