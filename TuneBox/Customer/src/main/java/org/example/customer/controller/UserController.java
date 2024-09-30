@@ -32,9 +32,9 @@ public class UserController {
             response.put("status", true);
             response.put("message", "Đăng ký thành công");
             response.put("data", UserService.Register(user));
-        } catch (Exception ex) {
+        } catch (Exception e) {
             response.put("status", false);
-            response.put("message", "Đăng ký thất bại");
+            response.put("message", e.getMessage());
             response.put("data", null);
         }
         return ResponseEntity.ok(response);
@@ -49,9 +49,9 @@ public class UserController {
             response.put("status", true);
             response.put("message", "Đăng nhập thành công");
             response.put("data", loggedInUser);
-        } catch (RuntimeException ex) {
+        } catch (Exception e) {
             response.put("status", false);
-            response.put("message", ex.getMessage());
+            response.put("message", e.getMessage());
             response.put("data", null);
         }
         return ResponseEntity.ok(response);

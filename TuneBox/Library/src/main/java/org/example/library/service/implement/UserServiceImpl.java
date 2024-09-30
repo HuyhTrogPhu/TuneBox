@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,19 +28,38 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
 
+    private UserDto convertToDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setUserName(user.getUserName());
+        dto.setReport(user.isReport());
+        dto.setCreateDate(user.getCreateDate());
+        dto.setReason(user.getReason());
+        dto.setRoleNames(user.getRole().stream().map(Role::getName).collect(Collectors.toSet()));
+        return dto;
+    }
+
+    private User convertToEntity(UserDto dto) {
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setUserName(dto.getUserName());
+        if (dto.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        return user;
+    }
+
     @Override
     public UserDto Register(UserDto userdto) {
-        User user = UserMapper.maptoUser(userdto);
+        User user = convertToEntity(userdto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role customerRole = roleRepository.findByName("Customer")
                 .orElseThrow(() -> new RuntimeException("Role 'Customer' not found"));
-
-        // Gán vai trò 'Customer' cho người dùng mới
         user.setRole(Collections.singleton(customerRole));
-
         User savedUser = Repo.save(user);
-        return UserMapper.maptoUserDto(savedUser);
+        return convertToDto(savedUser);
     }
 
     @Override

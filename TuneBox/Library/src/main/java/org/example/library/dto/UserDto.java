@@ -29,7 +29,7 @@ public class UserDto {
     private boolean report;
     private Date createDate;
     private String reason;
-    private Collection<Role> role;
+    private Set<String> roleNames; // Thay thế Collection<Role>
     private String status;
     private Set<Genre> genre;
     private InspiredBy inspiredBy;

@@ -2,7 +2,10 @@ package org.example.library.mapper;
 
 
 import org.example.library.dto.UserDto;
+import org.example.library.model.Role;
 import org.example.library.model.User;
+
+import java.util.stream.Collectors;
 
 public class UserMapper {
 
@@ -26,8 +29,11 @@ public class UserMapper {
         userdto.setToken(user.getToken());
         userdto.setNewPassword(user.getNewPassword());
         userdto.setGenre(user.getGenre());
-        userdto.setRole(user.getRole());
-        userdto.setBlocker(user.getBlocker());
+        if (user.getRole() != null) {
+            userdto.setRoleNames(user.getRole().stream()
+                    .map(Role::getName)
+                    .collect(Collectors.toSet()));
+        }        userdto.setBlocker(user.getBlocker());
         userdto.setBlocked(user.getBlocked());
         userdto.setFollowing(user.getFollowing());
         userdto.setFollowers(user.getFollowers());
@@ -42,17 +48,17 @@ public class UserMapper {
 
 
     public static User maptoUser(UserDto userdto) {
-            if (userdto == null)
-                return null;
-           User user = new User();
-           user.setId(userdto.getId());
-           user.setEmail(userdto.getEmail());
-           user.setUserName(userdto.getUserName());
-           user.setPassword(userdto.getPassword());
-           user.setResetToken(userdto.getResetToken());
-           user.setToken(userdto.getToken());
-           user.setNewPassword(userdto.getNewPassword());
-           return user;
+        if (userdto == null)
+            return null;
+        User user = new User();
+        user.setId(userdto.getId());
+        user.setEmail(userdto.getEmail());
+        user.setUserName(userdto.getUserName());
+        user.setPassword(userdto.getPassword());
+        user.setResetToken(userdto.getResetToken());
+        user.setToken(userdto.getToken());
+        user.setNewPassword(userdto.getNewPassword());
+        return user;
     }
 
 }

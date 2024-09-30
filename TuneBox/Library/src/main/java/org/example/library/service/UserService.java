@@ -19,5 +19,5 @@ public interface UserService {
 
     UserDto loginWithGoogle(String email , String name);
 
-    void changePassword(String email, String oldPassword, String newPassword);
+//    void changePassword(String email, String oldPassword, String newPassword);
 }
