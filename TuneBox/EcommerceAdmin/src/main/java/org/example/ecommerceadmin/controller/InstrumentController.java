@@ -6,6 +6,9 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
+import org.example.library.service.BrandService;
+import org.example.library.service.CategoryService;
+import org.example.library.service.InstrumentService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryInsServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
@@ -25,13 +28,13 @@ import java.util.List;
 public class InstrumentController {
 
     @Autowired
-    private InstrumentServiceImpl instrumentService;
+    private InstrumentService instrumentService;
 
     @Autowired
-    private BrandServiceImpl brandService;
+    private BrandService brandService;
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
     @Autowired
     private CategoryInsServiceImpl categoryInsService;
 
@@ -64,7 +67,7 @@ public class InstrumentController {
     }
 
     // Get all instruments
-    @GetMapping
+    @GetMapping("/instruments")
     public ResponseEntity<List<InstrumentDto>> getAll() {
         List<InstrumentDto> instruments = instrumentService.getAllInstrument();
         return ResponseEntity.ok(instruments);
@@ -95,24 +98,31 @@ public class InstrumentController {
                     .body("Instrument not found: " + e.getMessage());
         }
     }
+
     // Update Instrument
     @PutMapping("{id}")
     public ResponseEntity<?> updateInstrument(
             @PathVariable Long id,
             @RequestParam("name") String name,
-            @RequestParam("costPrice") double costPrice,
-            @RequestParam("quantity") int quantity,
+            @RequestParam("costPrice") String costPrice,
+            @RequestParam("quantity") String quantity,
             @RequestParam("color") String color,
             @RequestParam("description") String description,
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
+        // Kiểm tra giá trị null hoặc không hợp lệ
+        if (brandId == null || categoryId == null) {
+            return ResponseEntity.badRequest().body("Brand ID or Category ID is missing");
+        }
+
+        // Xử lý tiếp với giá trị hợp lệ
         try {
             InstrumentDto existingInstrument = instrumentService.getInstrumentById(id);
             existingInstrument.setName(name);
-            existingInstrument.setCostPrice(costPrice);
-            existingInstrument.setQuantity(quantity);
+            existingInstrument.setCostPrice(Double.parseDouble(costPrice));
+            existingInstrument.setQuantity(Integer.parseInt(quantity));
             existingInstrument.setColor(color);
             existingInstrument.setDescription(description);
 
@@ -122,14 +132,13 @@ public class InstrumentController {
             existingInstrument.setBrand(brand);
             existingInstrument.setCategoryIns(category);
 
-            InstrumentDto saveInstrument = instrumentService.updateInstrument(id, existingInstrument, image);
-            return ResponseEntity.ok(saveInstrument);
+            InstrumentDto savedInstrument = instrumentService.updateInstrument(id, existingInstrument, image);
+            return ResponseEntity.ok(savedInstrument);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
-
 
 
 
