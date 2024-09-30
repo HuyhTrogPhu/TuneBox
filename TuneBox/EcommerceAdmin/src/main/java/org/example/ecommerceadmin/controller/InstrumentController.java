@@ -106,6 +106,7 @@ public class InstrumentController {
             @RequestParam("description") String description,
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
+            @RequestParam("status") boolean status,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
         try {
@@ -122,6 +123,7 @@ public class InstrumentController {
             existingInstrument.setQuantity(Integer.parseInt(quantity));
             existingInstrument.setColor(color);
             existingInstrument.setDescription(description);
+            existingInstrument.setStatus(status);
 
 
             Brand brand = brandService.getManagedBrand(brandId);
