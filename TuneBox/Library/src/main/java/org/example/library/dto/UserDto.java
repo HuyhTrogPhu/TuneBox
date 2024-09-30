@@ -1,17 +1,13 @@
 package org.example.library.dto;
 
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.*;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Getter
 @Setter
@@ -26,10 +22,13 @@ public class UserDto {
     private boolean report;
     private Date createDate;
     private String reason;
-    private UserInformation userInformation;
-    private InspiredBy inspiredBy;
-    private Talent talent;
-    private Set<Genre> genre;
+
+    // Multiple IDs for relationships
+    private UserInformation userInformationIds;
+    private Set<Long> inspiredByIds;
+    private Set<Long> talentIds;
+    private Set<Long> genreIds;      // Multiple Genre IDs
+
     private Collection<Role> role;
     private Set<Block> blocker;
     private Set<Block> blocked;
@@ -41,6 +40,4 @@ public class UserDto {
     private Set<Chat> sentChats;
     private Set<Chat> receivedChats;
     private Set<Message> messages;
-
-
 }

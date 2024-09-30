@@ -19,8 +19,4 @@ public class InspiredBy {
     private Long id;
 
     private String name;
-
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String image;
 }

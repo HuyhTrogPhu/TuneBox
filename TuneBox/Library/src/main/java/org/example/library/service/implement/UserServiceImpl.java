@@ -79,15 +79,15 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        savedUser.setInspiredBy(inspiredByList.get(0));
-        savedUser.setTalent(talentList.get(0));
+        savedUser.setInspiredBy(Set.copyOf(inspiredByList));
+        savedUser.setTalent(Set.copyOf(talentList));
         savedUser.setGenre(Set.copyOf(genreList));
 
         savedUser.setRole(roleRepo.findByName("CUSTOMER"));
 
 
         Repo.save(savedUser);
-        return UserMapper.maptoUserDto(savedUser);
+        return UserMapper.mapToUserDto(savedUser);
    }
 
     @Override

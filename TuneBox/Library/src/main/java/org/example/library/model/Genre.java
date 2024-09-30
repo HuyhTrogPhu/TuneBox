@@ -1,5 +1,7 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +25,7 @@ public class Genre {
     private String name;
 
     @ManyToMany(mappedBy = "genre")
+    @JsonIgnore
     private Set<User> user;
 
     @OneToMany(mappedBy = "genre")

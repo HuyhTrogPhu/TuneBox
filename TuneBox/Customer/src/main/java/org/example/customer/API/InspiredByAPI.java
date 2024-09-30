@@ -1,8 +1,7 @@
-package org.example.library.API;
+package org.example.customer.API;
 
-import org.example.library.model.Genre;
 import org.example.library.model.RespondModel;
-import org.example.library.service.GenreService;
+import org.example.library.service.InspiredByService;
 import org.example.library.service.TalentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/Genre")
-public class GenreAPI {
+@RequestMapping("/inspired")
+public class InspiredByAPI {
     @Autowired
-    private GenreService GenreService;
+    private InspiredByService InsSer;
 
     @GetMapping ("/getall")
     public ResponseEntity<?> FindAll() {
@@ -25,7 +24,7 @@ public class GenreAPI {
         try {
             response.setStatus(true);
             response.setMessage("succesfull");
-            response.setData(GenreService.findAll());
+            response.setData(InsSer.findAll());
 
         } catch (Exception ex) {
             response.setMessage(ex.getMessage());

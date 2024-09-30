@@ -1,14 +1,14 @@
-package org.example.library.API;
+package org.example.customer.API;
 
 import org.example.library.dto.RequestSignUpModel;
-import org.example.library.dto.UserDto;
+
 import org.example.library.model.RespondModel;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.Map;
 
