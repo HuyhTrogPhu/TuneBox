@@ -88,6 +88,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             instrument.setDescription(instrumentDto.getDescription());
             instrument.setBrand(instrumentDto.getBrand());
             instrument.setCategoryIns(instrumentDto.getCategoryIns());
+            instrument.setStatus(instrumentDto.isStatus());
 
             // Kiểm tra hình ảnh mới
             if (image != null && !image.isEmpty()) {
@@ -101,7 +102,6 @@ public class InstrumentServiceImpl implements InstrumentService {
                 }
             }
 
-            instrument.setStatus(true);
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
         } catch (IOException e) {
