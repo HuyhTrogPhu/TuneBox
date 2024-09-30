@@ -79,22 +79,33 @@ public class InstrumentServiceImpl implements InstrumentService {
             Instrument instrument = instrumentRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Instrument not found")
             );
-            if(image.getBytes().length > 0){
-                if(imageUploadInstrument.checkExist(image)){
-                    instrument.setImage(instrument.getImage());
-                }else {
-                    imageUploadInstrument.uploadFile(image);
-                    instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
-                }
+
+            // Cập nhật các trường khác của nhạc cụ
+            instrument.setName(instrumentDto.getName());
+            instrument.setCostPrice(instrumentDto.getCostPrice());
+            instrument.setQuantity(instrumentDto.getQuantity());
+            instrument.setColor(instrumentDto.getColor());
+            instrument.setDescription(instrumentDto.getDescription());
+            instrument.setBrand(instrumentDto.getBrand());
+            instrument.setCategoryIns(instrumentDto.getCategoryIns());
+
+            // Kiểm tra hình ảnh mới
+            if (image != null && !image.isEmpty()) {
+                // Nếu có hình ảnh mới, cập nhật
+                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
             }
+            // Không làm gì nếu không có hình ảnh mới, giữ lại hình ảnh cũ
+
             instrument.setStatus(true);
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
         } catch (IOException e) {
             e.printStackTrace();
-            return  null;
+            return null;
         }
     }
+
+
 
     @Override
     public void deleteInstrument(Long id) {
@@ -114,4 +125,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
+
+
 }

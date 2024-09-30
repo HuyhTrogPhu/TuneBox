@@ -7,6 +7,7 @@ import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
 import org.example.library.service.implement.BrandServiceImpl;
+import org.example.library.service.implement.CategoryInsServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
 import org.example.library.service.implement.InstrumentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class InstrumentController {
 
     @Autowired
     private CategoryServiceImpl categoryService;
+    @Autowired
+    private CategoryInsServiceImpl categoryInsService;
 
     // Add new instrument
     @PostMapping
@@ -92,20 +95,45 @@ public class InstrumentController {
                     .body("Instrument not found: " + e.getMessage());
         }
     }
-
     // Update Instrument
     @PutMapping("{id}")
-    public ResponseEntity<?> updateInstrument(@PathVariable Long id,
-                                              @RequestBody InstrumentDto instrumentDto,
-                                              @RequestParam("insImage") MultipartFile image) {
+    public ResponseEntity<?> updateInstrument(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("costPrice") double costPrice,
+            @RequestParam("quantity") int quantity,
+            @RequestParam("color") String color,
+            @RequestParam("description") String description,
+            @RequestParam("brandId") Long brandId,
+            @RequestParam("categoryId") Long categoryId,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+
         try {
-            InstrumentDto saveInstrument = instrumentService.updateInstrument(id, instrumentDto, image);
+            InstrumentDto existingInstrument = instrumentService.getInstrumentById(id);
+            existingInstrument.setName(name);
+            existingInstrument.setCostPrice(costPrice);
+            existingInstrument.setQuantity(quantity);
+            existingInstrument.setColor(color);
+            existingInstrument.setDescription(description);
+
+            Brand brand = brandService.getManagedBrand(brandId);
+            CategoryIns category = categoryInsService.getManagedCategory(categoryId);
+
+            existingInstrument.setBrand(brand);
+            existingInstrument.setCategoryIns(category);
+
+            InstrumentDto saveInstrument = instrumentService.updateInstrument(id, existingInstrument, image);
             return ResponseEntity.ok(saveInstrument);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
+
+
+
+
+
 
     // Delete instrument
     @DeleteMapping("{id}")
@@ -118,4 +146,5 @@ public class InstrumentController {
                     .body("Error deleting instrument: " + e.getMessage());
         }
     }
+
 }

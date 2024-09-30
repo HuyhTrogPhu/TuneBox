@@ -109,4 +109,10 @@ public class BrandServiceImpl implements BrandService {
         List<Brand> list = brandRepository.findByKeyword(keyword);
         return list.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
     }
+    @Override
+    public Brand getManagedBrand(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
+
 }

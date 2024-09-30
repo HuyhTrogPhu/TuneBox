@@ -58,4 +58,10 @@ public class CategoryInsServiceImpl implements CategoryInsService {
         categoryIns.setStatus(false);
         categoryInsRepository.save(categoryIns);
     }
+
+    @Override
+    public CategoryIns getManagedCategory(Long id) {
+        return categoryInsRepository.findById(id) // Đúng rồi, sử dụng instance
+                .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+    }
 }
