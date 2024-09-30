@@ -106,7 +106,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
         } catch (IOException e) {
             e.printStackTrace();
-            return null; // Có thể trả về một đối tượng phản hồi có lỗi
+            return null;
         }
     }
 

@@ -98,7 +98,7 @@ public class InstrumentController {
     // Update Instrument
     @PutMapping("{id}")
     public ResponseEntity<?> updateInstrument(
-            @PathVariable String id,  // Nhận id dưới dạng String từ frontend
+            @PathVariable String id,
             @RequestParam("name") String name,
             @RequestParam("costPrice") String costPrice,
             @RequestParam("quantity") String quantity,
@@ -109,34 +109,29 @@ public class InstrumentController {
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
         try {
-            // Kiểm tra nếu id là "undefined" hoặc rỗng
-            if (id == null || id.equals("undefined") || id.trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Invalid instrument ID: " + id);
-            }
 
-            // Chuyển đổi id từ String sang Long
+
             Long instrumentId = Long.parseLong(id);
 
-            // Tìm nhạc cụ theo id
+
             InstrumentDto existingInstrument = instrumentService.getInstrumentById(instrumentId);
 
-            // Cập nhật thông tin nhạc cụ
+
             existingInstrument.setName(name);
             existingInstrument.setCostPrice(Double.parseDouble(costPrice));
             existingInstrument.setQuantity(Integer.parseInt(quantity));
             existingInstrument.setColor(color);
             existingInstrument.setDescription(description);
 
-            // Tìm thương hiệu và danh mục
+
             Brand brand = brandService.getManagedBrand(brandId);
             CategoryIns category = categoryInsService.getManagedCategory(categoryId);
 
-            // Cập nhật thông tin thương hiệu và danh mục
+
             existingInstrument.setBrand(brand);
             existingInstrument.setCategoryIns(category);
 
-            // Lưu thay đổi
+
             InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, image);
             return ResponseEntity.ok(saveInstrument);
         } catch (NumberFormatException e) {
