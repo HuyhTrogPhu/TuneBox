@@ -2,7 +2,7 @@ package org.example.library.service.implement;
 
 
 import lombok.AllArgsConstructor;
-import org.example.library.config.CryptePassword;
+import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
 import org.example.library.mapper.UserMapper;
 import org.example.library.model.Genre;
@@ -12,7 +12,6 @@ import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +40,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder crypt;
 
+
     @Override
-    public UserDto Register(UserDto userdto, String[] inspiredByName,String[] TalentName,String[] GenreName) {
+    public UserDto Register(RequestSignUpModel requestSignUpModel) {
         User savedUser = new User();
 
-        savedUser.setEmail(userdto.getEmail());
-        savedUser.setPassword(crypt.encode(userdto.getPassword()));
-        savedUser.setUserName(userdto.getUserName());
+        savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
+        savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
+        savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
 
 
 
@@ -55,33 +55,33 @@ public class UserServiceImpl implements UserService {
         List<Talent> talentList = new ArrayList<>();
         List<Genre> genreList = new ArrayList<>();
 
-        for (String inspiredByName1 : inspiredByName) {
-            InspiredBy inspiredBy = (InspiredBy) inspiredByRepository.findByName(inspiredByName1);
+        for (String inspiredByName1 : requestSignUpModel.getListInspiredBy()) {
+            List<InspiredBy> inspiredBy = inspiredByRepository.findByName(inspiredByName1);
             if (inspiredBy != null) {
-                inspiredByList.add(inspiredBy);
+                inspiredByList.addAll(inspiredBy);
             }
         }
 
 
-        for (String talentName : TalentName) {
-            Talent talent = (Talent) TalentRepo.findByName(talentName);
+        for (String talentName : requestSignUpModel.getListTalent()) {
+            List<Talent> talent =  TalentRepo.findByName(talentName);
             if (talent != null) {
-                talentList.add(talent);
+                talentList.addAll(talent);
             }
         }
 
 
-        for (String genreName : GenreName) {
-            Genre genre = (Genre) GenreRepo.findByName(genreName);
+        for (String genreName : requestSignUpModel.getGenreBy()) {
+            List<Genre> genre =  GenreRepo.findByName(genreName);
             if (genre != null) {
-                genreList.add(genre);
+                genreList.addAll(genre);
             }
         }
 
 
-        savedUser.setInspiredBy((InspiredBy) inspiredByList);
-        savedUser.setTalent((Talent) talentList);
-        savedUser.setGenre((Set<Genre>) genreList);
+        savedUser.setInspiredBy(inspiredByList.get(0));
+        savedUser.setTalent(talentList.get(0));
+        savedUser.setGenre(Set.copyOf(genreList));
 
         savedUser.setRole(roleRepo.findByName("CUSTOMER"));
 
@@ -89,4 +89,9 @@ public class UserServiceImpl implements UserService {
         Repo.save(savedUser);
         return UserMapper.maptoUserDto(savedUser);
    }
+
+    @Override
+    public Optional<User> findById(Long userId) {
+        return Repo.findById(userId);
+    }
 }

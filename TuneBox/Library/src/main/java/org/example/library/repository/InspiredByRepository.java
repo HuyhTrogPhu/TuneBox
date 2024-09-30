@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface InspiredByRepository extends JpaRepository<InspiredBy, Long> {
 List<InspiredBy> findByName(String name);
+List<InspiredBy> findAll();
 }
