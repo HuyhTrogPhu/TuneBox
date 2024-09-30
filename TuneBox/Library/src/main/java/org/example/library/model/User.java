@@ -78,6 +78,9 @@ public class User {
     private List<Order> orderList;
 
     @OneToMany(mappedBy = "creator")
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")
@@ -92,6 +95,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Like> likes;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Comment> comments;
 
 
 }

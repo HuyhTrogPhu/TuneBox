@@ -46,7 +46,7 @@ public class Track {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "creator_id", nullable = false)
+    @JoinColumn(name = "trackCreator_id", nullable = false)
     private User creator;
 
 
@@ -56,5 +56,11 @@ public class Track {
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
+
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+    private Set<Like> likes;
 
 }
