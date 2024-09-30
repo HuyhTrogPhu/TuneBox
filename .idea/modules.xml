@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TuneBox/Customer/Customer.iml" filepath="$PROJECT_DIR$/TuneBox/Customer/Customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TuneBox/EcommerceAdmin/EcommerceAdmin.iml" filepath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/EcommerceAdmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TuneBox/Library/Library.iml" filepath="$PROJECT_DIR$/TuneBox/Library/Library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TuneBox/SocialAdmin/SocialAdmin.iml" filepath="$PROJECT_DIR$/TuneBox/SocialAdmin/SocialAdmin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TuneBox/TuneBox.iml" filepath="$PROJECT_DIR$/TuneBox/TuneBox.iml" />
+    </modules>
+  </component>
+</project>
