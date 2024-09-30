@@ -91,7 +91,7 @@ public class InstrumentServiceImpl implements InstrumentService {
             instrument.setStatus(instrumentDto.isStatus());
 
             // Kiểm tra hình ảnh mới
-            if (image != null && !image.isEmpty()) {
+            if (image != null) {
                 // Nếu có hình ảnh mới, upload và lưu lại ảnh
                 boolean isUploaded = imageUploadInstrument.uploadFile(image);
                 if (isUploaded) {

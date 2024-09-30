@@ -6,6 +6,10 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
+import org.example.library.service.BrandService;
+import org.example.library.service.CategoryInsService;
+import org.example.library.service.CategoryService;
+import org.example.library.service.InstrumentService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryInsServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
@@ -25,15 +29,16 @@ import java.util.List;
 public class InstrumentController {
 
     @Autowired
-    private InstrumentServiceImpl instrumentService;
+    private InstrumentService instrumentService;
 
     @Autowired
-    private BrandServiceImpl brandService;
+    private BrandService brandService;
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
+
     @Autowired
-    private CategoryInsServiceImpl categoryInsService;
+    private CategoryInsService categoryInsService;
 
     // Add new instrument
     @PostMapping
