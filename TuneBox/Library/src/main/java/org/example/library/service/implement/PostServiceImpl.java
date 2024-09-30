@@ -53,6 +53,7 @@
 
             Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
             post.setUser(user); // Gán User vào bài đăng
+            post.setCreatedAt(post.getCreatedAt());
 
             // Xử lý hình ảnh nếu có
             if (images != null && images.length > 0) {
