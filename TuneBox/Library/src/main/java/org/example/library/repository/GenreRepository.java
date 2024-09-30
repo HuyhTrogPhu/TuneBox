@@ -10,4 +10,5 @@ import java.util.List;
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     List<Genre> findByName(String name);
     List<Genre> findAll();
+
 }

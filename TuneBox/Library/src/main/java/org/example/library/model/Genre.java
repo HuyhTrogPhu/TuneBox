@@ -10,9 +10,9 @@ import java.util.Set;
 
 @Setter
 @Getter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Genre {
 
     @Id
@@ -30,4 +30,12 @@ public class Genre {
 
     @OneToMany(mappedBy = "genre")
     private Set<Albums> albums;
+
+
+    public Genre(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
+
 }
