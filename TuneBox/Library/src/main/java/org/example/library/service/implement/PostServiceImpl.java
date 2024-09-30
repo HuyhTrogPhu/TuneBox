@@ -37,21 +37,15 @@
 
             // Lấy ID và tên người dùng từ session
             Long userId = (Long) session.getAttribute("userId");
-            String userName = (String) session.getAttribute("userName");
-            if (userId == null || userName == null) {
-                throw new RuntimeException("User ID or Username not found in session");
+            if (userId == null) {
+                throw new RuntimeException("User ID not found in session");
             }
 
             // Cập nhật PostDto với tên người dùng
             postDto.setUserId(userId); // Lưu userId vào PostDto
-            // Bạn có thể thêm một trường userName vào PostDto nếu cần
-            postDto.setUserName(userName); // Thêm trường userName vào PostDto (nếu PostDto có trường này)
-
             // Tạo đối tượng User từ ID
             User user = new User();
             user.setId(userId);
-            user.setUserName(userName);
-
             // Tiếp tục xử lý lưu bài viết như trước
             if (postDto.getContent() == null || postDto.getContent().isEmpty()) {
                 throw new IllegalArgumentException("Post content must not be empty");
@@ -97,11 +91,11 @@
                     .collect(Collectors.toList());
         }
 
-        // Phương thức lấy tất cả bài đăng của người dùng
+        @Override
         public List<PostDto> getPostsByUserId(Long userId) {
-            List<Post> posts = postRepository.findByUserId(userId); // Cần tạo phương thức này trong repository
+            List<Post> posts = postRepository.findByUserId(userId);  // Lấy tất cả các bài đăng của userId
             return posts.stream()
-                    .map(PostMapper::toDto) // Chuyển đổi thành PostDto
+                    .map(PostMapper::toDto)  // Chuyển đổi từ Post entity sang PostDto
                     .collect(Collectors.toList());
         }
     }

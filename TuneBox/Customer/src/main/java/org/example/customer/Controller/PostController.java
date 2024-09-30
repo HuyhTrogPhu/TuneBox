@@ -1,6 +1,7 @@
 package org.example.customer.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.PostDto;
 import org.example.library.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,17 @@ public class PostController {
     }
 
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
-        List<PostDto> posts = postService.getPostsByUserId(userId);
-        return ResponseEntity.ok(posts);
+    // Lấy tất cả bài viết của người dùng từ session
+    @GetMapping("/current-user")
+    public List<PostDto> getPostsByCurrentUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        Long userId = (Long) session.getAttribute("userId");
+        return postService.getPostsByUserId(userId); // Chỉ lấy bài viết của userId này
     }
+
     // Phương thức lấy tất cả các bài viết
     @GetMapping
     public ResponseEntity<List<PostDto>> getAllPosts() {
