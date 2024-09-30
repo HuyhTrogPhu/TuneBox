@@ -6,9 +6,6 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
-import org.example.library.service.BrandService;
-import org.example.library.service.CategoryService;
-import org.example.library.service.InstrumentService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryInsServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
@@ -28,13 +25,13 @@ import java.util.List;
 public class InstrumentController {
 
     @Autowired
-    private InstrumentService instrumentService;
+    private InstrumentServiceImpl instrumentService;
 
     @Autowired
-    private BrandService brandService;
+    private BrandServiceImpl brandService;
 
     @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceImpl categoryService;
     @Autowired
     private CategoryInsServiceImpl categoryInsService;
 
@@ -67,7 +64,7 @@ public class InstrumentController {
     }
 
     // Get all instruments
-    @GetMapping("/instruments")
+    @GetMapping
     public ResponseEntity<List<InstrumentDto>> getAll() {
         List<InstrumentDto> instruments = instrumentService.getAllInstrument();
         return ResponseEntity.ok(instruments);
@@ -98,11 +95,10 @@ public class InstrumentController {
                     .body("Instrument not found: " + e.getMessage());
         }
     }
-
     // Update Instrument
     @PutMapping("{id}")
     public ResponseEntity<?> updateInstrument(
-            @PathVariable Long id,
+            @PathVariable String id,  // Nhận id dưới dạng String từ frontend
             @RequestParam("name") String name,
             @RequestParam("costPrice") String costPrice,
             @RequestParam("quantity") String quantity,
@@ -112,28 +108,40 @@ public class InstrumentController {
             @RequestParam("categoryId") Long categoryId,
             @RequestParam(value = "image", required = false) MultipartFile image) {
 
-        // Kiểm tra giá trị null hoặc không hợp lệ
-        if (brandId == null || categoryId == null) {
-            return ResponseEntity.badRequest().body("Brand ID or Category ID is missing");
-        }
-
-        // Xử lý tiếp với giá trị hợp lệ
         try {
-            InstrumentDto existingInstrument = instrumentService.getInstrumentById(id);
+            // Kiểm tra nếu id là "undefined" hoặc rỗng
+            if (id == null || id.equals("undefined") || id.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Invalid instrument ID: " + id);
+            }
+
+            // Chuyển đổi id từ String sang Long
+            Long instrumentId = Long.parseLong(id);
+
+            // Tìm nhạc cụ theo id
+            InstrumentDto existingInstrument = instrumentService.getInstrumentById(instrumentId);
+
+            // Cập nhật thông tin nhạc cụ
             existingInstrument.setName(name);
             existingInstrument.setCostPrice(Double.parseDouble(costPrice));
             existingInstrument.setQuantity(Integer.parseInt(quantity));
             existingInstrument.setColor(color);
             existingInstrument.setDescription(description);
 
+            // Tìm thương hiệu và danh mục
             Brand brand = brandService.getManagedBrand(brandId);
             CategoryIns category = categoryInsService.getManagedCategory(categoryId);
 
+            // Cập nhật thông tin thương hiệu và danh mục
             existingInstrument.setBrand(brand);
             existingInstrument.setCategoryIns(category);
 
-            InstrumentDto savedInstrument = instrumentService.updateInstrument(id, existingInstrument, image);
-            return ResponseEntity.ok(savedInstrument);
+            // Lưu thay đổi
+            InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, image);
+            return ResponseEntity.ok(saveInstrument);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid instrument ID format: " + id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error updating instrument: " + e.getMessage());
