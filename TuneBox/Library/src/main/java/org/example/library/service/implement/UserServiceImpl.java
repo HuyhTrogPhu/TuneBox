@@ -3,7 +3,9 @@ package org.example.library.service.implement;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.UserDto;
 import org.example.library.mapper.UserMapper;
+import org.example.library.model.Role;
 import org.example.library.model.User;
+import org.example.library.repository.RoleRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.UserService;
 import org.springframework.mail.MailException;
@@ -12,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -21,12 +24,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository Repo;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
+    private final RoleRepository roleRepository;
 
 
     @Override
     public UserDto Register(UserDto userdto) {
         User user = UserMapper.maptoUser(userdto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Role customerRole = roleRepository.findByName("Customer")
+                .orElseThrow(() -> new RuntimeException("Role 'Customer' not found"));
+
+        // Gán vai trò 'Customer' cho người dùng mới
+        user.setRole(Collections.singleton(customerRole));
+
         User savedUser = Repo.save(user);
         return UserMapper.maptoUserDto(savedUser);
     }
