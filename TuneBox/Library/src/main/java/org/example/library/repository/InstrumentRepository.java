@@ -20,10 +20,27 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     public List<Instrument> findByBrandId(Long brandId);
 
 
-    //    Search by category
-    @Query("select i from Instrument i join i.categoryIns " +
+    // Search by category
+    @Query("select i from Instrument i join i.categoryIns c " +
             "where c.id = :categoryId")
     public List<Instrument> findByCategoryId(Long categoryId);
+
+    // Sort instrument name from a to z
+    @Query("select i from Instrument i order by i.name asc")
+    public List<Instrument> sortByNameAsc();
+
+    // Sort instrument name from z to a
+    @Query("select i from Instrument i order by i.name desc")
+    public List<Instrument> sortByNameDesc();
+
+    // Sort instrument price low to high
+    @Query("select i from Instrument i order by i.costPrice asc")
+    public List<Instrument> sortByCostPriceAsc();
+
+    // Sort instrument price high to low
+    @Query("select i from Instrument i order by i.costPrice desc")
+    public List<Instrument> sortByCostPriceDesc();
+
 
 
 }
