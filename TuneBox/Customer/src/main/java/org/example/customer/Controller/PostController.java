@@ -25,19 +25,27 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @RequestParam(value = "content") String content,
+            @RequestParam(value = "content", required = false) String content, // Chỉ cần thay đổi 'required' thành false
             @RequestParam(value = "images", required = false) MultipartFile[] images,
             HttpServletRequest request) {
         PostDto postDto = new PostDto();
-        postDto.setContent(content);
+        postDto.setContent(content); // Nội dung có thể là null
 
         try {
+            // Kiểm tra có ít nhất một hình ảnh hoặc có nội dung không
+            if (images == null || images.length == 0) {
+                throw new IllegalArgumentException("At least one image or content must be provided");
+            }
+
             PostDto savedPost = postService.savePost(postDto, images, request);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
     // Lấy tất cả bài viết của người dùng từ session
     @GetMapping("/current-user")
