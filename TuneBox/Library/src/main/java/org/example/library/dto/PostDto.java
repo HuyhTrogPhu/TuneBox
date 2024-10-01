@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.PostImage;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -19,5 +20,5 @@ public class PostDto {
     private Long userId; // Trường userId
     private String userName; // Thêm trường username
     private Set<PostImageDto> images;
-
+    private LocalDateTime createdAt;
 }

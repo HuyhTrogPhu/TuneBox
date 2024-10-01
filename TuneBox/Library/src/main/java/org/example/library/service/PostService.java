@@ -17,4 +17,8 @@ public interface PostService {
     List<PostDto> getAllPosts();
 
     List<PostDto> getPostsByUserId(Long userId);
+
+    PostDto updatePost(PostDto postDto, MultipartFile[] images, HttpServletRequest request) throws IOException;
+
+    void deletePost(Long id);
 }

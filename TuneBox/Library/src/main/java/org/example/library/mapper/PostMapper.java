@@ -14,6 +14,7 @@ public class PostMapper {
         dto.setContent(post.getContent());
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
+        dto.setCreatedAt(post.getCreatedAt());
         return dto;
     }
 
@@ -25,6 +26,7 @@ public class PostMapper {
         entity.setContent(postDto.getContent());
         // Chưa gán user vì ID sẽ được lấy từ session trong service
         entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
+        entity.setCreatedAt(postDto.getCreatedAt());
         return entity;
     }
 }
