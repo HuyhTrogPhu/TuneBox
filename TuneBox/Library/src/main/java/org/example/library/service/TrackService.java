@@ -20,5 +20,5 @@ public interface TrackService {
 
     TrackDto getTrackByID(Long id);
 
-    List<TrackDto> getAllTrack();
+    List<TrackDto> getAllTrack(Long userId);
 }

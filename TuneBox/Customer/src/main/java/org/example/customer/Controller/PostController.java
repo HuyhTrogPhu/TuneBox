@@ -1,7 +1,8 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import org.example.library.dto.PostDto;
 import org.example.library.service.PostService;
 import org.springframework.http.HttpStatus;

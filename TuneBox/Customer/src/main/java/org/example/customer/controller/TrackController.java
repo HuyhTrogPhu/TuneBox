@@ -1,11 +1,11 @@
 package org.example.customer.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.BrandsDto;
 import org.example.library.dto.CommentDto;
 import org.example.library.dto.TrackDto;
-import org.example.library.model.Track;
-import org.example.library.service.implement.TrackServiceImpl;
+import org.example.library.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +14,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin("/**")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/profileUser/track")
-public class trackController {
+public class TrackController {
 
     @Autowired
-    private TrackServiceImpl trackService;
+    private TrackService trackService;
 
-    // get all track
+    //get all track
     @GetMapping("/getAll")
-    public ResponseEntity<List<TrackDto>> getAllTrack() {
-        List<TrackDto> trackDto = trackService.getAllTrack();
-        return ResponseEntity.ok(trackDto);
+    public List<TrackDto> getAllTrack(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new RuntimeException("User not logged in");
+        }
+            Long userId = (Long) session.getAttribute("userId");
+        return trackService.getAllTrack(userId);
     }
+
 
     // get track by id
     @GetMapping("{trackId}")

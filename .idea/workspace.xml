@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/trackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="QuocTrung" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -84,10 +90,10 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.library.utils" />
       <recent name="org.example.library.mapper" />
       <recent name="org.example.library.dto" />
       <recent name="org.example.library.repository" />
-      <recent name="org.example.library.utils" />
       <recent name="org.example.library.service" />
     </key>
   </component>
@@ -158,6 +164,9 @@
       <list>
         <item itemvalue="JUnit.All in DuAnTotNghiep" />
         <item itemvalue="Application.CustomerApplication" />
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
+        <item itemvalue="Application.CustomerApplication" />
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
       </list>
     </recent_temporary>
   </component>
@@ -187,6 +196,8 @@
       <workItem from="1727615088163" duration="953000" />
       <workItem from="1727616056274" duration="23945000" />
       <workItem from="1727751196948" duration="2502000" />
+      <workItem from="1727756219923" duration="5840000" />
+      <workItem from="1727762888127" duration="7445000" />
     </task>
     <task id="LOCAL-00001" summary="Create DTO belong to model">
       <option name="closed" value="true" />
@@ -285,7 +296,8 @@
     <MESSAGE value="update trackController" />
     <MESSAGE value="commit" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="cap nhat post" />
+    <option name="LAST_COMMIT_MESSAGE" value="cap nhat post" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
