@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/talent")
 public class TalentAPI {
