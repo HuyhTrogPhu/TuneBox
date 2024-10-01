@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat post">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat post(sửa lỗi đăng bài chi  nội dung hoac  chỉ ảnh)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/API/UserAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/API/UserAPI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +39,16 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
     &quot;accountId&quot;: &quot;f7858ff9-959f-43df-afb4-670d33901c15&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;HuyhTrogPhu&quot;,
+    &quot;repository&quot;: &quot;TuneBox&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -70,7 +77,7 @@
     &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;QuocTrung&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#14 on QuocTrung&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/DATN&quot;,
@@ -148,7 +155,8 @@
       <workItem from="1727751088505" duration="3548000" />
       <workItem from="1727756022311" duration="6365000" />
       <workItem from="1727763978632" duration="1290000" />
-      <workItem from="1727771018877" duration="2828000" />
+      <workItem from="1727771018877" duration="3315000" />
+      <workItem from="1727781303073" duration="2392000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -182,7 +190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727745212945</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="cap nhat post(sửa lỗi đăng bài chi  nội dung hoac  chỉ ảnh)">
+      <option name="closed" value="true" />
+      <created>1727774065222</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1727774065222</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,7 +219,8 @@
     <MESSAGE value="update post" />
     <MESSAGE value="commit" />
     <MESSAGE value="cap nhat post" />
-    <option name="LAST_COMMIT_MESSAGE" value="cap nhat post" />
+    <MESSAGE value="cap nhat post(sửa lỗi đăng bài chi  nội dung hoac  chỉ ảnh)" />
+    <option name="LAST_COMMIT_MESSAGE" value="cap nhat post(sửa lỗi đăng bài chi  nội dung hoac  chỉ ảnh)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

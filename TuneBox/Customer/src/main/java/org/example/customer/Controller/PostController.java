@@ -82,8 +82,10 @@ public class PostController {
 
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều không có
-            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
-                throw new IllegalArgumentException("At least one image or content must be provided");
+            if ((content == null || content.trim().isEmpty())) {
+                if ((images == null || images.length == 0)){
+                    throw new IllegalArgumentException("At least one image  or must be provided");
+                }
             }
 
             // Gọi service để cập nhật bài post
