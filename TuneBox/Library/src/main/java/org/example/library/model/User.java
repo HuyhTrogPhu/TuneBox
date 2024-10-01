@@ -36,6 +36,8 @@ public class User {
 
     private String reason;
 
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
@@ -94,4 +96,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
 
+
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }

@@ -47,7 +47,10 @@ public class UserMapper {
                 user.getAlbums(),
                 user.getSentChats(),
                 user.getReceivedChats(),
-                user.getMessages()
+                user.getMessages(),
+                user.getResetToken(),
+                user.getToken(),
+                user.getNewPassword()
         );
     }
 
@@ -105,8 +108,12 @@ public class UserMapper {
         user.setSentChats(userDto.getSentChats());
         user.setReceivedChats(userDto.getReceivedChats());
         user.setMessages(userDto.getMessages());
+        user.setResetToken(userDto.getResetToken());
+        user.setToken(userDto.getToken());
+        user.setNewPassword(userDto.getNewPassword());
 
         return user;
     }
+
 
 }

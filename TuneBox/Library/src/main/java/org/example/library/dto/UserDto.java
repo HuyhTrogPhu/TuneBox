@@ -40,4 +40,7 @@ public class UserDto {
     private Set<Chat> sentChats;
     private Set<Chat> receivedChats;
     private Set<Message> messages;
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }
