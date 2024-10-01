@@ -48,7 +48,7 @@ public class UserAPI {
                 Long userId = loggedInUser.getId(); // Lấy ID từ loggedInUser
                 session.setAttribute("userId", userId); // Lưu ID vào session
 
-                // Thiết lập thời gian session timeout (30 phút)
+                // Thiết lập thời gian session timeout (1 tieng)
                 session.setMaxInactiveInterval(60 * 60);
 
                 response.put("status", true);

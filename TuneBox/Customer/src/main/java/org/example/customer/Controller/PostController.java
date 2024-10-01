@@ -25,18 +25,20 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @RequestParam(value = "content", required = false) String content, // Chỉ cần thay đổi 'required' thành false
+            @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
             HttpServletRequest request) {
         PostDto postDto = new PostDto();
-        postDto.setContent(content); // Nội dung có thể là null
+        postDto.setContent(content);
 
         try {
-            // Kiểm tra có ít nhất một hình ảnh hoặc có nội dung không
-            if (images == null || images.length == 0) {
-                throw new IllegalArgumentException("At least one image or content must be provided");
+            // Kiểm tra nếu cả 'content' và 'images' đều trống
+            if ((content == null || content.trim().isEmpty())) {
+                if ((images == null || images.length == 0)){
+                    throw new IllegalArgumentException("At least one image  or must be provided");
+                }
             }
-
+            // Gọi service để lưu bài viết
             PostDto savedPost = postService.savePost(postDto, images, request);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (IOException e) {
@@ -45,6 +47,8 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
 
     // Lấy tất cả bài viết của người dùng từ session
@@ -69,22 +73,31 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable Long id,
-            @RequestParam(value = "content") String content,
+            @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
             HttpServletRequest request) {
         PostDto postDto = new PostDto();
         postDto.setId(id);
-        postDto.setContent(content);
+        postDto.setContent(content); // Nội dung có thể là null
 
         try {
+            // Kiểm tra nếu cả 'content' và 'images' đều không có
+            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
+                throw new IllegalArgumentException("At least one image or content must be provided");
+            }
+
+            // Gọi service để cập nhật bài post
             PostDto updatedPost = postService.updatePost(postDto, images, request);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Hoặc sử dụng status khác tùy thuộc vào lỗi
         }
     }
+
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
