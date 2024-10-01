@@ -1,7 +1,6 @@
 package org.example.library.dto;
 
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +24,8 @@ public class InstrumentDto {
 
     private String color;
 
+    private boolean status;
+
     private String image;
 
     private String description;
@@ -32,6 +33,4 @@ public class InstrumentDto {
     private CategoryIns categoryIns;
 
     private Brand brand;
-
-
 }
