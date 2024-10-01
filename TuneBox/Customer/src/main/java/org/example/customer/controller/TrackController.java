@@ -14,14 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("/**")
+@CrossOrigin("/*")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/profileUser/track")
 public class TrackController {
 
     @Autowired
-    private TrackService trackService;
+    private final TrackService trackService;
 
     //get all track
     @GetMapping("/getAll")

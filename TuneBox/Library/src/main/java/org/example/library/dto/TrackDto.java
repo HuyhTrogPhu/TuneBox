@@ -35,9 +35,9 @@ public class TrackDto {
 
     private Date reportDate;
 
-    private String genreName;
+    private Long genreId;
 
-    private String creatorName;
+    private Long creatorId;
 
     private Long albumId;
 

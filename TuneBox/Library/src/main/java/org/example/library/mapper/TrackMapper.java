@@ -18,8 +18,8 @@ public class TrackMapper {
                 track.getCreateDate(),
                 track.isReport(),
                 track.getReportDate(),
-                track.getGenre() != null ? track.getGenre().getName() : null,
-                track.getCreator() != null ? track.getCreator().getUserName() : null,
+                track.getGenre() != null ? track.getGenre().getId() : null,
+                track.getCreator() != null ? track.getCreator().getId() : null,
                 track.getAlbums() != null ? track.getAlbums().getId() : null,
                 track.getPlaylists(),
                 track.getComments(),
@@ -39,15 +39,15 @@ public class TrackMapper {
         track.setReport(trackDto.isReport());
         track.setReportDate(trackDto.getReportDate());
 
-        if (trackDto.getGenreName() != null) {
+        if (trackDto.getGenreId() != null) {
             Genre genre = new Genre();
-            genre.setName(trackDto.getGenreName());
+            genre.setId(trackDto.getGenreId());
             track.setGenre(genre);
         }
 
-        if (trackDto.getCreatorName() != null) {
+        if (trackDto.getCreatorId() != null) {
             User user = new User();
-            user.setUserName(trackDto.getCreatorName());
+            user.setId(trackDto.getCreatorId());
             track.setCreator(user);
         }
 
