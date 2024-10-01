@@ -21,4 +21,11 @@ public class BrandsDto {
     private String description;
 
     private boolean status;
+
+    public boolean getStatus() {
+        return status;
+    }
+    public boolean isStatus() {
+        return status;
+    }
 }

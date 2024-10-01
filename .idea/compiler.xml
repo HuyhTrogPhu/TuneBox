@@ -16,13 +16,7 @@
         <module name="EcommerceAdmin" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Customer" target="17" />
-      <module name="EcommerceAdmin" target="17" />
-      <module name="Library" target="17" />
-      <module name="SocialAdmin" target="17" />
-      <module name="TuneBox" target="17" />
-    </bytecodeTargetLevel>
+
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

@@ -1,6 +1,5 @@
 package org.example.library.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +21,18 @@ public class Post {
 
     private String content;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<PostImage> images;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<PostImage> images;
+    private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Like> likes;
+
+    @ManyToOne
+    @JoinColumn(name = "postCreator_id", nullable = false)
+    private User creator;
+
 
 }
