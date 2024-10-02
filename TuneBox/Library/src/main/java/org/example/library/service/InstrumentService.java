@@ -15,4 +15,6 @@ public interface InstrumentService {
     InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile image);
 
     void deleteInstrument(Long id);
+    List<InstrumentDto> getInstrumentsByBrandId(Long brandId);
+
 }

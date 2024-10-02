@@ -132,5 +132,9 @@ public class InstrumentServiceImpl implements InstrumentService {
                 .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 
-
+    @Override
+    public List<InstrumentDto> getInstrumentsByBrandId(Long brandId) {
+        List<Instrument> instruments = instrumentRepository.findByBrandId(brandId);
+        return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
 }

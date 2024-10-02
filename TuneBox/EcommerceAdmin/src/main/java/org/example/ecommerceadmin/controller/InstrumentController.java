@@ -76,6 +76,12 @@ public class InstrumentController {
         List<BrandsDto> brandsDto = brandService.getAllBrand();
         return ResponseEntity.ok(brandsDto);
     }
+    //get all brand id instrument
+    @GetMapping("/brand/{brandId}")
+    public ResponseEntity<List<InstrumentDto>> getInstrumentsByBrandId(@PathVariable Long brandId) {
+        List<InstrumentDto> instruments = instrumentService.getInstrumentsByBrandId(brandId);
+        return ResponseEntity.ok(instruments);
+    }
 
     // Get all categories
     @GetMapping("/categories")

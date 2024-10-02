@@ -12,4 +12,6 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
             "where i.name like %?1% or i.brand.name like %?1% " +
             "or i.categoryIns.name like %?1%")
     public List<Instrument> findByKeyword(String keyword);
+
+    List<Instrument> findByBrandId(Long brandId);
 }
