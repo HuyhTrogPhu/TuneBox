@@ -36,8 +36,6 @@ public class User {
 
     private String reason;
 
-
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
@@ -80,9 +78,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList;
-
-    @OneToMany(mappedBy = "creator")
-    private Set<Post> posts;
 
     @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
