@@ -9,6 +9,7 @@ import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.HashMap;
@@ -80,4 +81,17 @@ public class UserAPI {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/check")
+    public ResponseEntity<String> check(@RequestBody RequestSignUpModel requestSignUpModel) {
+        try {
+            UserSer.CheckLogin(requestSignUpModel);
+            return ResponseEntity.ok("Check completed successfully");
+        } catch (ResponseStatusException ex) {
+            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason()); // Use getStatusCode()
+        }
+    }
+
+
+
 }

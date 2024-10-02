@@ -12,11 +12,13 @@ import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -48,7 +50,21 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
 
+    @Override
+    public void CheckLogin(RequestSignUpModel requestSignUpModel) {
+        List<User> fullList = Repo.findAll();
 
+        for (User user : fullList) {
+            if (user.getEmail().equals(requestSignUpModel.getUserDto().getEmail())) {
+                System.out.println("trùng Email: " + requestSignUpModel.getUserDto().getEmail());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
+            }
+            if (user.getUserName().equals(requestSignUpModel.getUserDto().getUserName())) {
+                System.out.println("trùng Username: " + requestSignUpModel.getUserDto().getUserName());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username đã tồn tại");
+            }
+        }
+    }
 
     @Override
     public UserDto Register(RequestSignUpModel requestSignUpModel) {
@@ -57,7 +73,7 @@ public class UserServiceImpl implements UserService {
         savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
         savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
         savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
-
+        savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
 
 
         List<InspiredBy> inspiredByList = new ArrayList<>();
@@ -73,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
 
         for (String talentName : requestSignUpModel.getListTalent()) {
-            List<Talent> talent =  TalentRepo.findByName(talentName);
+            List<Talent> talent = TalentRepo.findByName(talentName);
             if (talent != null) {
                 talentList.addAll(talent);
             }
@@ -81,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
 
         for (String genreName : requestSignUpModel.getGenreBy()) {
-            List<Genre> genre =  GenreRepo.findByName(genreName);
+            List<Genre> genre = GenreRepo.findByName(genreName);
             if (genre != null) {
                 genreList.addAll(genre);
             }
@@ -97,11 +113,15 @@ public class UserServiceImpl implements UserService {
 
         Repo.save(savedUser);
         return UserMapper.mapToUserDto(savedUser);
-   }
+    }
 
     @Override
     public Optional<User> findById(Long userId) {
         return Repo.findById(userId);
+    }
+
+    public User updateById(Long userId, UserDto userDto) {
+        return Repo.save(UserMapper.mapToUser(userDto));
     }
 
     @Override
@@ -185,7 +205,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-        @Override
+    @Override
     public void ForgotPassword(UserDto userdto) {
         Optional<User> userOptional;
 

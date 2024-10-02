@@ -31,10 +31,6 @@
 //                );
 //        return http.build();
 //    }
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 //
 //    @Bean
 //    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
