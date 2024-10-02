@@ -1,5 +1,4 @@
-package org.example.customer.controller;
-
+package org.example.customer.Controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;

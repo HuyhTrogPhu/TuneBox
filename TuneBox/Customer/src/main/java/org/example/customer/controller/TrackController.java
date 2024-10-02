@@ -1,4 +1,4 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin("/*")
@@ -22,6 +24,22 @@ public class TrackController {
 
     @Autowired
     private final TrackService trackService;
+
+    @PostMapping("/music")
+    public ResponseEntity<String> uploadMusicFile(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Please select a file!", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            // Lưu file vào thư mục trên server
+            String filePath = "uploads/" + file.getOriginalFilename();
+            file.transferTo(new File(filePath));
+            return new ResponseEntity<>("File uploaded successfully: " + filePath, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     //get all track
     @GetMapping("/getAll")
@@ -42,13 +60,15 @@ public class TrackController {
         return ResponseEntity.ok(trackDto);
     }
 
+
+
     // add new Track
-    @PostMapping
-    public ResponseEntity<TrackDto> createTrack(@RequestBody TrackDto trackDto,
-                                                @RequestParam("imageTrack")MultipartFile image) {
-        TrackDto saveTrack = trackService.creatTrack(trackDto, image);
-        return new ResponseEntity<>(saveTrack, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<TrackDto> createTrack(@RequestBody TrackDto trackDto,
+//                                                @RequestParam("imageTrack")MultipartFile image) {
+//        TrackDto saveTrack = trackService.creatTrack(trackDto, image);
+//        return new ResponseEntity<>(saveTrack, HttpStatus.CREATED);
+//    }
 
      // update track
     @PutMapping("{trackId}")

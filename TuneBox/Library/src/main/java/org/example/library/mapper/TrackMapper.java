@@ -8,12 +8,7 @@ import org.example.library.model.User;
 
 public class TrackMapper {
 
-    // Chuyển đổi từ Track sang TrackDto
-    public static TrackDto mapToTrackDto(Track track) {
-        if (track == null) {
-            return null; // Trả về null nếu track là null
-        }
-
+    public static TrackDto maptoTrackDto(Track track) {
         return new TrackDto(
                 track.getId(),
                 track.getName(),
@@ -32,12 +27,8 @@ public class TrackMapper {
         );
     }
 
-    // Chuyển đổi từ TrackDto sang Track
-    public static Track mapToTrack(TrackDto trackDto) {
-        if (trackDto == null) {
-            return null; // Trả về null nếu trackDto là null
-        }
 
+    public static Track maptoTrack(TrackDto trackDto) {
         Track track = new Track();
         track.setId(trackDto.getId());
         track.setName(trackDto.getName());
@@ -65,7 +56,6 @@ public class TrackMapper {
             album.setId(trackDto.getAlbumId());
             track.setAlbums(album);
         }
-
         track.setPlaylists(trackDto.getPlaylists());
         track.setComments(trackDto.getComments());
         track.setLikes(trackDto.getLikes());
