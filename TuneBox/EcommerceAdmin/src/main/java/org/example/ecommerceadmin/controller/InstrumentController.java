@@ -49,7 +49,7 @@ public class InstrumentController {
                                               @RequestParam("description") String description,
                                               @RequestParam("brandId") Brand brand,
                                               @RequestParam("categoryId") CategoryIns category,
-                                              @RequestParam("image") MultipartFile image) {
+                                              @RequestParam("image") MultipartFile[] images) {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
@@ -57,10 +57,11 @@ public class InstrumentController {
             instrumentDto.setQuantity(quantity);
             instrumentDto.setColor(color);
             instrumentDto.setDescription(description);
+
             instrumentDto.setBrand(brand);
             instrumentDto.setCategoryIns(category);
 
-            InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, image);
+            InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, images);
             return new ResponseEntity<>(saveInstrument, HttpStatus.CREATED);
         } catch (Exception e) {
             e.getStackTrace();
@@ -69,7 +70,7 @@ public class InstrumentController {
     }
 
     // Get all instruments
-    @GetMapping
+    @GetMapping("/instruments")
     public ResponseEntity<List<InstrumentDto>> getAll() {
         List<InstrumentDto> instruments = instrumentService.getAllInstrument();
         return ResponseEntity.ok(instruments);
@@ -112,7 +113,7 @@ public class InstrumentController {
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam("status") boolean status,
-            @RequestParam(value = "image", required = false) MultipartFile image) {
+            @RequestParam(value = "image", required = false) MultipartFile[] images) {
 
         try {
 
@@ -130,16 +131,13 @@ public class InstrumentController {
             existingInstrument.setDescription(description);
             existingInstrument.setStatus(status);
 
-
             Brand brand = brandService.getManagedBrand(brandId);
             CategoryIns category = categoryInsService.getManagedCategory(categoryId);
-
 
             existingInstrument.setBrand(brand);
             existingInstrument.setCategoryIns(category);
 
-
-            InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, image);
+            InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, images);
             return ResponseEntity.ok(saveInstrument);
         } catch (NumberFormatException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -149,10 +147,6 @@ public class InstrumentController {
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
-
-
-
-
 
     // Delete instrument
     @DeleteMapping("{id}")
