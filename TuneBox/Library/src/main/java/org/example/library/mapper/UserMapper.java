@@ -29,6 +29,7 @@ public class UserMapper {
                 user.getId(),
                 user.getEmail(),
                 user.getUserName(),
+                user.getUserNickname(),
                 user.getPassword(),
                 user.isReport(),
                 user.getCreateDate(),
@@ -61,6 +62,7 @@ public class UserMapper {
         user.setId(userDto.getId());
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
+        user.setUserNickname(userDto.getUserNickname());
         user.setPassword(userDto.getPassword());
         user.setReport(userDto.isReport());
         user.setCreateDate(userDto.getCreateDate());

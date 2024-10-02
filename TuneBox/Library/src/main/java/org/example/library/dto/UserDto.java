@@ -18,6 +18,7 @@ public class UserDto {
     private Long id;
     private String email;
     private String userName;
+    private String userNickname;
     private String password;
     private boolean report;
     private Date createDate;

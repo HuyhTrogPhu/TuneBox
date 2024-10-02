@@ -9,6 +9,7 @@ import org.example.library.model.User;
 import java.util.Optional;
 
 public interface UserService {
+    void CheckLogin(RequestSignUpModel requestSignUpModel);
     UserDto Register(RequestSignUpModel requestSignUpModel);
     Optional<User> findById(Long userId);
 
