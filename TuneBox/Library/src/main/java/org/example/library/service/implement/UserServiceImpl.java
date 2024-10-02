@@ -98,9 +98,9 @@ public class UserServiceImpl implements UserService {
 
 
         if (userOptional.isPresent()) {
-            String token = generateToken(); // Hàm tạo token
+            String token = generateToken(); // Hàm tạo token    
             //link sẽ chuyển hướng đến trang đổi pass word
-            String resetLink = "http://localhost:3000/reset-password?token=" + token;
+            String resetLink = "http://localhost:3000/reset-password2?token=" + token;
 
             // Gửi email
             sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
@@ -150,22 +150,27 @@ public class UserServiceImpl implements UserService {
             User newUser = new User();
             newUser.setEmail(email);
             newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+            newUser.setPassword(passwordEncoder.encode("123456"));
+
+            Role customerRole = roleRepository.findByName("Customer")
+                    .orElseThrow(() -> new RuntimeException("Role 'Customer' not found"));
+            newUser.setRole(Collections.singleton(customerRole));
+
             User savedUser = Repo.save(newUser);
             return UserMapper.maptoUserDto(savedUser);
         }
     }
 
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = Repo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
-
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new RuntimeException("Mật khẩu cũ không chính xác");
-        }
-
-        user.setPassword(passwordEncoder.encode(newPassword));
-        Repo.save(user);
-    }
+//    public void changePassword(String email, String oldPassword, String newPassword) {
+//        User user = Repo.findByEmail(email)
+//                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
+//
+//        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+//            throw new RuntimeException("Mật khẩu cũ không chính xác");
+//        }
+//
+//        user.setPassword(passwordEncoder.encode(newPassword));
+//        Repo.save(user);
+//    }
 
 }

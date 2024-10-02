@@ -34,6 +34,7 @@ public class UserMapper {
                     .map(Role::getName)
                     .collect(Collectors.toSet()));
         }        userdto.setBlocker(user.getBlocker());
+
         userdto.setBlocked(user.getBlocked());
         userdto.setFollowing(user.getFollowing());
         userdto.setFollowers(user.getFollowers());

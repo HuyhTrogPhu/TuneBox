@@ -23,11 +23,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/", "/User/login", "/login/oauth2/**", "/oauth2/**", "/User/**").permitAll() // Cho phép truy cập
+                                .requestMatchers("/", "/User/login", "/login/oauth2/**", "/oauth2/**", "/User/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->
-                        oauth2.defaultSuccessUrl("http://localhost:3000/", true) // Chuyển hướng sau khi đăng nhập thành công
+                        oauth2.defaultSuccessUrl("http://localhost:3000/", true)
                 );
         return http.build();
     }
