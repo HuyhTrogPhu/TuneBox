@@ -28,10 +28,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class CustomerConfiguration {
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomerServiceConfig();
-    }
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
