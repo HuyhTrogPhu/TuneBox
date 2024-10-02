@@ -2,7 +2,12 @@ package org.example.library.mapper;
 
 
 import org.example.library.dto.UserDto;
+import org.example.library.model.Albums;
+import org.example.library.model.Track;
 import org.example.library.model.User;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserMapper {
 
@@ -32,8 +37,19 @@ public class UserMapper {
         userdto.setFollowing(user.getFollowing());
         userdto.setFollowers(user.getFollowers());
         userdto.setOrderList(user.getOrderList());
-        userdto.setTracks(user.getTracks());
-        userdto.setAlbums(user.getAlbums());
+
+        // Lấy danh sách ID của các Track
+        Set<Long> trackIds = user.getTracks().stream()
+                .map(Track::getId) // Lấy ID của mỗi Track
+                .collect(Collectors.toSet()); // Thu thập vào Set
+        userdto.setTrackIds(trackIds); // Gán danh sách ID cho thuộc tính trackIds
+
+        Set<Long> albumIds = user.getAlbums().stream()
+                .map(Albums::getId)
+                .collect(Collectors.toSet());
+        // Lấy danh sách ID của các Albums
+        userdto.setAlbumIds(albumIds);
+
         userdto.setSentChats(user.getSentChats());
         userdto.setReceivedChats(user.getReceivedChats());
         userdto.setMessages(user.getMessages());

@@ -43,7 +43,7 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public TrackDto creatTrack(TrackDto trackDto, MultipartFile image) {
         try {
-            Track track = TrackMapper.maptoTrack(trackDto);
+            Track track = TrackMapper.mapToTrack(trackDto);
 
             if (image == null){
                 track.setTrackImage(null);
@@ -53,7 +53,7 @@ public class TrackServiceImpl implements TrackService {
             }
             track.setStatus(true);
             Track saveTrack = trackRepository.save(track);
-            return TrackMapper.maptoTrackDto(saveTrack);
+            return TrackMapper.mapToTrackDto(saveTrack);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -78,7 +78,7 @@ public class TrackServiceImpl implements TrackService {
             track.setName(trackDto.getName());
             track.setStatus(true);
             Track saveTrack = trackRepository.save(track);
-            return TrackMapper.maptoTrackDto(saveTrack);
+            return TrackMapper.mapToTrackDto(saveTrack);
         } catch (IOException e){
             e.printStackTrace();
             return null;

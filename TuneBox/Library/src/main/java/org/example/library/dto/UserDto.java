@@ -40,8 +40,8 @@ public class UserDto {
     private Set<Follow> followers;
     private Set<Follow> following;
     private List<Order> orderList;
-    private Set<Track> tracks;
-    private Set<Albums> albums;
+    private Set<Long> trackIds;
+    private Set<Long> albumIds;
     private Set<Chat> sentChats;
     private Set<Chat> receivedChats;
     private Set<Message> messages;
