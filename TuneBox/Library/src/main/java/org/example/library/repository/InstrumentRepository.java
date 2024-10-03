@@ -4,14 +4,19 @@ import org.example.library.model.Instrument;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 
 public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
 
-//    Select all instrument
+    //    Select all instrument
     @Query("select i from Instrument i join i.images")
     public List<Instrument> getAllInstrument();
+
+    // Select instrument by id
+    @Query("SELECT DISTINCT i FROM Instrument i LEFT JOIN FETCH i.images WHERE i.id = :instrumentId")
+    public Instrument getInstrument(Long instrumentId);
 
     //    Search by keyword
     @Query("select i from Instrument i join i.brand join i.categoryIns " +
@@ -45,7 +50,6 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     // Sort instrument price high to low
     @Query("select i from Instrument i order by i.costPrice desc")
     public List<Instrument> sortByCostPriceDesc();
-
 
 
 }

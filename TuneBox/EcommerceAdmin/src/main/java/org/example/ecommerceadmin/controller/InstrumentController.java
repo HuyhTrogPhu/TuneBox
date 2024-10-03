@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/instrument")
@@ -95,12 +95,19 @@ public class InstrumentController {
     public ResponseEntity<?> getInstrumentById(@PathVariable Long id) {
         try {
             InstrumentDto instrumentDto = instrumentService.getInstrumentById(id);
+            if (instrumentDto == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Instrument not found for ID: " + id);
+            }
             return ResponseEntity.ok(instrumentDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Instrument not found: " + e.getMessage());
+            e.printStackTrace(); // In lỗi ra log để tiện theo dõi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving instrument: " + e.getMessage());
         }
     }
+
+
     // Update Instrument
     @PutMapping("{id}")
     public ResponseEntity<?> updateInstrument(

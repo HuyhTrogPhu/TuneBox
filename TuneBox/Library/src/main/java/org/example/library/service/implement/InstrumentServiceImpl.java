@@ -45,6 +45,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile[] images) {
         try {
+            // Khởi tạo danh sách hình ảnh nếu nó là null
+            if (instrumentDto.getImage() == null) {
+                instrumentDto.setImage(new ArrayList<>());
+            }
+
             Instrument instrument = InstrumentMapper.mapperInstrument(instrumentDto);
 
             // Thiết lập danh mục và thương hiệu
@@ -59,15 +64,22 @@ public class InstrumentServiceImpl implements InstrumentService {
             if (images != null && images.length > 0) {
                 List<InstrumentImage> imageList = new ArrayList<>();
                 for (MultipartFile image : images) {
-                    InstrumentImage instrumentImage = new InstrumentImage();
-                    String filePath = imageUploadInstrument.uploadFile(image); // Upload và lấy đường dẫn ảnh
-                    instrumentImage.setImagePath(filePath); // Lưu đường dẫn ảnh
-                    instrumentImage.setInstrument(savedInstrument); // Liên kết ảnh với nhạc cụ đã lưu
-                    imageList.add(instrumentImage);
+                    // Kiểm tra xem tệp đã tồn tại chưa
+                    if (!imageUploadInstrument.checkExist(image)) {
+                        InstrumentImage instrumentImage = new InstrumentImage();
+                        String filePath = imageUploadInstrument.uploadFile(image); // Upload và lấy đường dẫn ảnh
+                        instrumentImage.setImagePath(filePath); // Lưu đường dẫn ảnh
+                        instrumentImage.setInstrument(savedInstrument); // Liên kết ảnh với nhạc cụ đã lưu
+                        imageList.add(instrumentImage);
+                    } else {
+                        System.out.println("File already exists: " + image.getOriginalFilename());
+                    }
                 }
                 // Lưu danh sách ảnh vào cơ sở dữ liệu
-                instrumentImageRepository.saveAll(imageList);
-                savedInstrument.setImages(imageList);
+                if (!imageList.isEmpty()) {
+                    instrumentImageRepository.saveAll(imageList);
+                    savedInstrument.setImages(imageList);
+                }
             }
 
             return InstrumentMapper.mapperInstrumentDto(savedInstrument);
@@ -75,8 +87,9 @@ public class InstrumentServiceImpl implements InstrumentService {
             e.printStackTrace();
             return null;
         }
-
     }
+
+
 
     @Override
     public List<InstrumentDto> getAllInstrument() {
@@ -87,18 +100,30 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public InstrumentDto getInstrumentById(Long id) {
-        Instrument instrument = instrumentRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Instrument not found")
-        );
-        return InstrumentMapper.mapperInstrumentDto(instrument);
+        try {
+            Instrument instrument = instrumentRepository.getInstrument(id);
+            if (instrument != null) {
+                return InstrumentMapper.mapperInstrumentDto(instrument);
+            } else {
+                // Xử lý trường hợp không tìm thấy instrument
+                return null; // Hoặc ném một exception cụ thể
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Có thể xử lý riêng cho từng loại exception nếu cần
+        }
     }
+
 
     @Override
     public InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile[] images) {
         try {
-            Instrument instrument = instrumentRepository.findById(id).orElseThrow(
-                    () -> new RuntimeException("Instrument not found")
-            );
+            Instrument instrument = instrumentRepository.getInstrument(id);
+
+            // Khởi tạo danh sách hình ảnh nếu nó là null
+            if (instrumentDto.getImage() == null) {
+                instrumentDto.setImage(new ArrayList<>());
+            }
 
             // Cập nhật các thuộc tính của nhạc cụ
             instrument.setName(instrumentDto.getName());
