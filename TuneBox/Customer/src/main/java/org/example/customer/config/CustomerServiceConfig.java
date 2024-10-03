@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,14 +22,24 @@ public class CustomerServiceConfig implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username);
-        if(user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), user.getRole()
-                .stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        Optional<User> optionalUser = userRepository.findByUserName(username);
+
+        User user = optionalUser.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        List<SimpleGrantedAuthority> authorities = user.getRole() != null ?
+                user.getRole().stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())) // Add "ROLE_" prefix if needed
+                        .collect(Collectors.toList())
+                : new ArrayList<>();
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUserName(),
+                user.getPassword(),
+                authorities
+        );
     }
+
+
 }

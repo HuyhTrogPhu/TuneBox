@@ -3,7 +3,14 @@ package org.example.library.repository;
 import org.example.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.List;
+import java.util.Optional;
 
-    User findByUserName(String username);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findById(Long userId);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByResetToken(String resetToken);
+    Optional<User> findByUserName(String userName);
+    List<User> findAll();
+
 }
