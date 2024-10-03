@@ -21,7 +21,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/User")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -143,6 +143,7 @@ public class UserController {
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data", userService.findById(UserId));
+
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", "Fail");
@@ -186,21 +187,17 @@ public class UserController {
     }
     // Lấy thông tin người dùng hiện tại
     @GetMapping("/current")
-    public ResponseEntity<UserDto> getCurrentUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Long userId = (Long) session.getAttribute("userId");
+    public ResponseEntity<UserDto> getCurrentUser(@RequestParam("userId") Long userId) {
             if (userId != null) {
                 UserDto userDto = userService.getUserById(userId);
                 return ResponseEntity.ok(userDto);
             }
-        }
         return ResponseEntity.status(401).body(null); // Trả về 401 nếu không tìm thấy thông tin người dùng
     }
         // Lấy thông tin người dùng theo ID
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        UserDto userDto = userService.getUserById(id);
+    public ResponseEntity<UserDto> getUserById(@RequestParam("userId") Long userId) {
+        UserDto userDto = userService.getUserById(userId);
         return ResponseEntity.ok(userDto);
     }
 }

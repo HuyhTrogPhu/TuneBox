@@ -1,7 +1,5 @@
 package org.example.customer.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.PostDto;
 import org.example.library.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @RequestMapping("/api/posts")
+@RequestMapping("/api/posts")
 public class PostController {
 
     private final PostService postService;
@@ -33,10 +31,8 @@ public class PostController {
 
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
-            if ((content == null || content.trim().isEmpty())) {
-                if ((images == null || images.length == 0)){
-                    throw new IllegalArgumentException("At least one image  or must be provided");
-                }
+            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
+                throw new IllegalArgumentException("At least one image or content must be provided");
             }
             // Gọi service để lưu bài viết
             PostDto savedPost = postService.savePost(postDto, images, userId);
@@ -48,19 +44,21 @@ public class PostController {
         }
     }
 
+    // Lấy tất cả bài viết của người dùng từ ID
+        @GetMapping("/current-user")
+        public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
+            if (userId == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+            }
 
+            List<PostDto> posts = postService.getPostsByUserId(userId);
+            if (posts.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+            }
 
-
-    // Lấy tất cả bài viết của người dùng từ session
-    @GetMapping("/current-user")
-    public List<PostDto> getPostsByCurrentUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new RuntimeException("User not logged in");
+            return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
         }
-        Long userId = (Long) session.getAttribute("userId");
-        return postService.getPostsByUserId(userId);
-    }
+
 
     // Phương thức lấy tất cả các bài viết
     @GetMapping
@@ -75,17 +73,15 @@ public class PostController {
             @PathVariable Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
-            @RequestParam("userId") Long userId ) {
+            @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setId(id);
         postDto.setContent(content); // Nội dung có thể là null
 
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều không có
-            if ((content == null || content.trim().isEmpty())) {
-                if ((images == null || images.length == 0)){
-                    throw new IllegalArgumentException("At least one image  or must be provided");
-                }
+            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
+                throw new IllegalArgumentException("At least one image or content must be provided");
             }
 
             // Gọi service để cập nhật bài post
@@ -100,7 +96,6 @@ public class PostController {
         }
     }
 
-
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
@@ -111,5 +106,4 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }
