@@ -49,12 +49,12 @@ public class CustomerConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(author -> author
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/**", "/login", "/signup","/createusername","/talent","/artist","/categorymusic", "/do-register", "/product-detail/**").permitAll()
+                        .requestMatchers("/**", "/login", "/signup","/createUsername","/talent","/artist","/categoryMusic", "/do-register", "/product-detail/**").permitAll()
                         .requestMatchers("/shop/**", "/find-products/**").hasRole("CUSTOMER")
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .loginProcessingUrl("/User/log-in")
+                        .loginProcessingUrl("/user/log-in")
                         .defaultSuccessUrl("/", false)
                         .permitAll()
                 )

@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/categoryIns")
 public class CategoryInsController {
+
     @Autowired
     private CategoryInsService categoryInsService;
 

@@ -9,6 +9,7 @@ import org.example.library.repository.BrandRepository;
 import org.example.library.service.BrandService;
 import org.example.library.utils.ImageUploadBrand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -109,4 +110,166 @@ public class BrandServiceImpl implements BrandService {
         List<Brand> list = brandRepository.findByKeyword(keyword);
         return list.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
     }
+    @Override
+    public Brand getManagedBrand(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandA() {
+        List<Brand> brands = brandRepository.findByNameStartingWithA();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandB() {
+        List<Brand> brands = brandRepository.findByNameStartingWithB();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandC() {
+        List<Brand> brands = brandRepository.findByNameStartingWithC();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandD() {
+        List<Brand> brands = brandRepository.findByNameStartingWithD();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandE() {
+        List<Brand> brands = brandRepository.findByNameStartingWithE();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandF() {
+        List<Brand> brands = brandRepository.findByNameStartingWithF();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandG() {
+        List<Brand> brands = brandRepository.findByNameStartingWithG();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandH() {
+        List<Brand> brands = brandRepository.findByNameStartingWithH();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandI() {
+        List<Brand> brands = brandRepository.findByNameStartingWithI();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandJ() {
+        List<Brand> brands = brandRepository.findByNameStartingWithJ();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandK() {
+        List<Brand> brands = brandRepository.findByNameStartingWithK();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandL() {
+        List<Brand> brands = brandRepository.findByNameStartingWithL();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandM() {
+        List<Brand> brands = brandRepository.findByNameStartingWithM();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandN() {
+        List<Brand> brands = brandRepository.findByNameStartingWithN();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandO() {
+        List<Brand> brands = brandRepository.findByNameStartingWithO();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandP() {
+        List<Brand> brands = brandRepository.findByNameStartingWithP();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandQ() {
+        List<Brand> brands = brandRepository.findByNameStartingWithQ();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandR() {
+        List<Brand> brands = brandRepository.findByNameStartingWithR();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandS() {
+        List<Brand> brands = brandRepository.findByNameStartingWithS();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandT() {
+        List<Brand> brands = brandRepository.findByNameStartingWithT();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandU() {
+        List<Brand> brands =  brandRepository.findByNameStartingWithU();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandV() {
+        List<Brand> brands = brandRepository.findByNameStartingWithV();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandW() {
+        List<Brand> brands = brandRepository.findByNameStartingWithW();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandX() {
+        List<Brand> brands = brandRepository.findByNameStartingWithX();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getAllBrandY() {
+        List<Brand> brands = brandRepository.findByNameStartingWithY();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BrandsDto> getALlBrandZ() {
+        List<Brand> brands = brandRepository.findByNameStartingWithZ();
+        return brands.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
+    }
+
 }

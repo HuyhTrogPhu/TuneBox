@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,9 +32,8 @@ public class Instrument {
 
     private boolean status;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String image;
+    @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InstrumentImage> images;
 
     @Size(min = 10, max = 1000)
     private String description;
