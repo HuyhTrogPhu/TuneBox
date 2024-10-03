@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -43,9 +44,9 @@ public class UserServiceImpl implements UserService {
     private GenreRepository GenreRepo;
 
 
-    private PasswordEncoder crypt;
+    private BCryptPasswordEncoder crypt;
 
-    private final PasswordEncoder passwordEncoder;
+
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
 
@@ -139,7 +140,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
+        if (userOptional.isPresent() && crypt.matches(userdto.getPassword(), userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
             throw new RuntimeException("Invalid username or password");
@@ -151,7 +152,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = Repo.findByResetToken(token); // Tìm người dùng theo token
 
         if (userOptional.isPresent()) {
-            userOptional.get().setPassword(passwordEncoder.encode(newPassword));
+            userOptional.get().setPassword(crypt.encode(newPassword));
             Repo.save(userOptional.get());
         } else {
             throw new RuntimeException("Invalid token");
@@ -185,7 +186,7 @@ public class UserServiceImpl implements UserService {
             User newUser = new User();
             newUser.setEmail(email);
             newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+            newUser.setPassword(crypt.encode("defaultPassword")); // Hoặc một password mặc định khác
             User savedUser = Repo.save(newUser);
 
             return UserMapper.mapToUserDto(savedUser);
@@ -196,11 +197,11 @@ public class UserServiceImpl implements UserService {
         User user = Repo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!crypt.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("Mật khẩu cũ không chính xác");
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(crypt.encode(newPassword));
         Repo.save(user);
     }
 
