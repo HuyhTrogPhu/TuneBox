@@ -7,8 +7,10 @@ import org.example.library.mapper.InstrumentMapper;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
 import org.example.library.model.Instrument;
+import org.example.library.model.InstrumentImage;
 import org.example.library.repository.BrandRepository;
 import org.example.library.repository.CategoryInsRepository;
+import org.example.library.repository.InstrumentImageRepository;
 import org.example.library.repository.InstrumentRepository;
 import org.example.library.service.InstrumentService;
 import org.example.library.utils.ImageUploadInstrument;
@@ -30,6 +32,9 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentRepository instrumentRepository;
 
     @Autowired
+    private InstrumentImageRepository instrumentImageRepository;
+
+    @Autowired
     private CategoryInsRepository categoryInsRepository;
 
     @Autowired
@@ -41,23 +46,32 @@ public class InstrumentServiceImpl implements InstrumentService {
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile[] images) {
         try {
             Instrument instrument = InstrumentMapper.mapperInstrument(instrumentDto);
-            List<String> imageBase64List = new ArrayList<>();
 
-            if (images != null) {
-                List<String> imageList = new ArrayList<>();
-                for (MultipartFile image : images) {
-                    imageUploadInstrument.uploadFile(image);
-                    imageList.add(Base64.getEncoder().encodeToString(image.getBytes()));
-                }
-                instrument.setImage(imageList);
-            }
+            // Thiết lập danh mục và thương hiệu
             instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
             instrument.setBrand(getManagedBrand(instrumentDto.getBrand().getId()));
             instrument.setStatus(true);
 
-            Instrument saveInstrument = instrumentRepository.save(instrument);
-            return InstrumentMapper.mapperInstrumentDto(saveInstrument);
-        } catch (IOException e) {
+            // Lưu nhạc cụ vào cơ sở dữ liệu trước để có thể liên kết ảnh
+            Instrument savedInstrument = instrumentRepository.save(instrument);
+
+            // Nếu có danh sách ảnh được tải lên
+            if (images != null && images.length > 0) {
+                List<InstrumentImage> imageList = new ArrayList<>();
+                for (MultipartFile image : images) {
+                    InstrumentImage instrumentImage = new InstrumentImage();
+                    String filePath = imageUploadInstrument.uploadFile(image); // Upload và lấy đường dẫn ảnh
+                    instrumentImage.setImagePath(filePath); // Lưu đường dẫn ảnh
+                    instrumentImage.setInstrument(savedInstrument); // Liên kết ảnh với nhạc cụ đã lưu
+                    imageList.add(instrumentImage);
+                }
+                // Lưu danh sách ảnh vào cơ sở dữ liệu
+                instrumentImageRepository.saveAll(imageList);
+                savedInstrument.setImages(imageList);
+            }
+
+            return InstrumentMapper.mapperInstrumentDto(savedInstrument);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -66,7 +80,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<InstrumentDto> getAllInstrument() {
-        List<Instrument> instruments = instrumentRepository.findAll();
+        List<Instrument> instruments = instrumentRepository.getAllInstrument();
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
     }
 
@@ -86,7 +100,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                     () -> new RuntimeException("Instrument not found")
             );
 
-            // Cập nhật các trường khác của nhạc cụ
+            // Cập nhật các thuộc tính của nhạc cụ
             instrument.setName(instrumentDto.getName());
             instrument.setCostPrice(instrumentDto.getCostPrice());
             instrument.setQuantity(instrumentDto.getQuantity());
@@ -96,28 +110,33 @@ public class InstrumentServiceImpl implements InstrumentService {
             instrument.setCategoryIns(instrumentDto.getCategoryIns());
             instrument.setStatus(instrumentDto.isStatus());
 
-            if (images != null) {
-                List<String> imageList = new ArrayList<>();
+            // Xóa các ảnh cũ trong cơ sở dữ liệu
+            instrumentImageRepository.deleteAll(instrument.getImages());
+            instrument.getImages().clear();
+
+            // Thêm danh sách ảnh mới
+            if (images != null && images.length > 0) {
+                List<InstrumentImage> newImages = new ArrayList<>();
                 for (MultipartFile image : images) {
-                    boolean isUploaded = imageUploadInstrument.uploadFile(image);
-                    if (isUploaded) {
-                        imageList.add(Base64.getEncoder().encodeToString(image.getBytes()));
-                    } else {
-                        throw new RuntimeException("Failed to upload the image");
-                    }
+                    InstrumentImage instrumentImage = new InstrumentImage();
+                    String filePath = imageUploadInstrument.uploadFile(image); // Upload và lấy đường dẫn ảnh
+                    instrumentImage.setImagePath(filePath); // Lưu đường dẫn ảnh
+                    instrumentImage.setInstrument(instrument); // Liên kết ảnh với nhạc cụ
+                    newImages.add(instrumentImage);
                 }
-                instrument.setImage(imageList);
+                // Lưu danh sách ảnh vào cơ sở dữ liệu
+                instrumentImageRepository.saveAll(newImages);
+                instrument.setImages(newImages); // Gán danh sách ảnh mới vào nhạc cụ
             }
 
-            Instrument saveInstrument = instrumentRepository.save(instrument);
-            return InstrumentMapper.mapperInstrumentDto(saveInstrument);
-        } catch (IOException e) {
+            // Lưu cập nhật vào cơ sở dữ liệu
+            Instrument updatedInstrument = instrumentRepository.save(instrument);
+            return InstrumentMapper.mapperInstrumentDto(updatedInstrument);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-
-
 
 
     @Override
@@ -129,7 +148,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrumentRepository.save(instrument);
     }
 
-    public CategoryIns getManagedCategory(Long id){
+    public CategoryIns getManagedCategory(Long id) {
         return categoryInsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
     }

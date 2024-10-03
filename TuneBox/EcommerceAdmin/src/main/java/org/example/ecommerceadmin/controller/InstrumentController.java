@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/instrument")
@@ -49,7 +49,7 @@ public class InstrumentController {
                                               @RequestParam("description") String description,
                                               @RequestParam("brandId") Brand brand,
                                               @RequestParam("categoryId") CategoryIns category,
-                                              @RequestParam("image") MultipartFile[] images) {
+                                              @RequestParam("images") MultipartFile[] images) {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
@@ -113,16 +113,12 @@ public class InstrumentController {
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam("status") boolean status,
-            @RequestParam(value = "image", required = false) MultipartFile[] images) {
+            @RequestParam(value = "images", required = false) MultipartFile[] images) {
 
         try {
-
-
             Long instrumentId = Long.parseLong(id);
 
-
             InstrumentDto existingInstrument = instrumentService.getInstrumentById(instrumentId);
-
 
             existingInstrument.setName(name);
             existingInstrument.setCostPrice(Double.parseDouble(costPrice));

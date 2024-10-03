@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
+import org.example.library.model.InstrumentImage;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class InstrumentDto {
 
     private boolean status;
 
-    private List<String> image;
+    private List<InstrumentImage> image;
 
     private String description;
 
