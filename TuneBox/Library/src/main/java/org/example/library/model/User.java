@@ -105,7 +105,5 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
-    private String resetToken;
-    private String token;
-    private String newPassword;
+
 }

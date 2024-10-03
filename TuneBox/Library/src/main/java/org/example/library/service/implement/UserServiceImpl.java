@@ -43,12 +43,11 @@ public class UserServiceImpl implements UserService {
     private GenreRepository GenreRepo;
 
 
-    private PasswordEncoder crypt;
 
-    private final PasswordEncoder passwordEncoder;
+
+
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
-
 
     @Override
     public void CheckLogin(RequestSignUpModel requestSignUpModel) {
@@ -71,7 +70,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = new User();
 
         savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
+        savedUser.setPassword(requestSignUpModel.getUserDto().getPassword());
         savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
         savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
 
@@ -139,7 +138,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
+        if (userOptional.isPresent() && userdto.getPassword().matches(userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
             throw new RuntimeException("Invalid username or password");
@@ -151,11 +150,16 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = Repo.findByResetToken(token); // Tìm người dùng theo token
 
         if (userOptional.isPresent()) {
-            userOptional.get().setPassword(passwordEncoder.encode(newPassword));
+            userOptional.get().setPassword((newPassword));
             Repo.save(userOptional.get());
         } else {
             throw new RuntimeException("Invalid token");
         }
+    }
+
+    @Override
+    public UserDto loginWithGoogle(String email, String name) {
+        return null;
     }
 
     private String generateToken() {
@@ -173,65 +177,65 @@ public class UserServiceImpl implements UserService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
-
-    @Override
-    public UserDto loginWithGoogle(String email, String name) {
-        Optional<User> userOptional = Repo.findByEmail(email);
-        if (userOptional.isPresent()) {
-
-            return UserMapper.mapToUserDto((userOptional.get()));
-        } else {
-            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
-            User savedUser = Repo.save(newUser);
-
-            return UserMapper.mapToUserDto(savedUser);
-        }
-    }
+//
+//    @Override
+//    public UserDto loginWithGoogle(String email, String name) {
+//        Optional<User> userOptional = Repo.findByEmail(email);
+//        if (userOptional.isPresent()) {
+//
+//            return UserMapper.mapToUserDto((userOptional.get()));
+//        } else {
+//            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
+//            User newUser = new User();
+//            newUser.setEmail(email);
+//            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
+//            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+//            User savedUser = Repo.save(newUser);
+//
+//            return UserMapper.mapToUserDto(savedUser);
+//        }
+//    }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
         User user = Repo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!oldPassword.matches(newPassword)) {
             throw new RuntimeException("Mật khẩu cũ không chính xác");
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword);
         Repo.save(user);
     }
 
 
     @Override
     public void ForgotPassword(UserDto userdto) {
-        Optional<User> userOptional;
-
-        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
-            userOptional = Repo.findByEmail(userdto.getEmail());
-        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
-            userOptional = Repo.findByUserName(userdto.getUserName());
-        } else {
-            throw new RuntimeException("Email or username cannot be null or empty");
-        }
-
-
-        if (userOptional.isPresent()) {
-            String token = generateToken(); // Hàm tạo token
-            //link sẽ chuyển hướng đến trang đổi pass word
-            String resetLink = "http://localhost:3000/reset-password?token=" + token;
-
-            // Gửi email
-            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
-                    "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
-
-            userOptional.get().setResetToken(token);
-            Repo.save(userOptional.get());
-        } else {
-            throw new RuntimeException("User not found");
-        }
+//        Optional<User> userOptional;
+//
+//        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
+//            userOptional = Repo.findByEmail(userdto.getEmail());
+//        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
+//            userOptional = Repo.findByUserName(userdto.getUserName());
+//        } else {
+//            throw new RuntimeException("Email or username cannot be null or empty");
+//        }
+//
+//
+//        if (userOptional.isPresent()) {
+//            String token = generateToken(); // Hàm tạo token
+//            //link sẽ chuyển hướng đến trang đổi pass word
+//            String resetLink = "http://localhost:3000/reset-password?token=" + token;
+//
+//            // Gửi email
+//            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
+//                    "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
+//
+//            userOptional.get().setResetToken(token);
+//            Repo.save(userOptional.get());
+//        } else {
+//            throw new RuntimeException("User not found");
+//        }
     }
 
 
