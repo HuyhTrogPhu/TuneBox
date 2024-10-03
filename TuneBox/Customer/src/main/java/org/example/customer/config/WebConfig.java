@@ -1,5 +1,4 @@
-package org.example.customer.config;
-
+package org.example.customer.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -8,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc // Bật hỗ trợ MVC
-public class WebConfig implements WebMvcConfigurer  {
+public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Áp dụng cho tất cả các đường dẫn
