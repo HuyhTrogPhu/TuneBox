@@ -30,18 +30,18 @@
 
 
         @Override
-                public PostDto savePost(PostDto postDto, MultipartFile[] images, HttpServletRequest request) throws IOException {
+                public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
                     // Lấy session hiện tại
-                    HttpSession session = request.getSession(false);
-                    if (session == null || session.getAttribute("userId") == null) {
-                        throw new RuntimeException("User not logged in");
-                    }
+//                    HttpSession session = request.getSession(false);
+//                    if (session == null || session.getAttribute("userId") == null) {
+//                        throw new RuntimeException("User not logged in");
+//                    }
 
-                    // Lấy ID và tên người dùng từ session
-                    Long userId = (Long) session.getAttribute("userId");
-                    if (userId == null) {
-                        throw new RuntimeException("User ID not found in session");
-                    }
+//                    // Lấy ID và tên người dùng từ session
+//                    Long userId = (Long) session.getAttribute("userId");
+//                    if (userId == null) {
+//                        throw new RuntimeException("User ID not found in session");
+//                    }
 
                     // Cập nhật PostDto với tên người dùng
                     postDto.setUserId(userId); // Lưu userId vào PostDto
@@ -102,18 +102,18 @@
         }
 
         @Override
-        public PostDto updatePost(PostDto postDto, MultipartFile[] images, HttpServletRequest request) throws IOException {
+        public PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
             // Lấy session hiện tại
-            HttpSession session = request.getSession(false);
-            if (session == null || session.getAttribute("userId") == null) {
-                throw new RuntimeException("User not logged in");
-            }
-
-            // Lấy ID và tên người dùng từ session
-            Long userId = (Long) session.getAttribute("userId");
-            if (userId == null) {
-                throw new RuntimeException("User ID not found in session");
-            }
+//            HttpSession session = request.getSession(false);
+//            if (session == null || session.getAttribute("userId") == null) {
+//                throw new RuntimeException("User not logged in");
+//            }
+//
+//            // Lấy ID và tên người dùng từ session
+//            Long userId = (Long) session.getAttribute("userId");
+//            if (userId == null) {
+//                throw new RuntimeException("User ID not found in session");
+//            }
 
             // Kiểm tra xem bài viết có tồn tại không
             Post post = postRepository.findById(postDto.getId())

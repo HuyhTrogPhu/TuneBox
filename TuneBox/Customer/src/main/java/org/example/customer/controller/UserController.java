@@ -184,4 +184,23 @@ public class UserController {
             return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason()); // Use getStatusCode()
         }
     }
+    // Lấy thông tin người dùng hiện tại
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getCurrentUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId != null) {
+                UserDto userDto = userService.getUserById(userId);
+                return ResponseEntity.ok(userDto);
+            }
+        }
+        return ResponseEntity.status(401).body(null); // Trả về 401 nếu không tìm thấy thông tin người dùng
+    }
+        // Lấy thông tin người dùng theo ID
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        UserDto userDto = userService.getUserById(id);
+        return ResponseEntity.ok(userDto);
+    }
 }

@@ -34,14 +34,14 @@ public class CustomerConfiguration {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoderbao() {
         return new BCryptPasswordEncoder();
     }
 
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 
-        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoderbao());
 
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface PostService {
 
-    PostDto savePost(PostDto postDto, MultipartFile[] images, HttpServletRequest request) throws IOException;
+    PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
     PostDto getPostById(Long id);
 
@@ -18,7 +18,7 @@ public interface PostService {
 
     List<PostDto> getPostsByUserId(Long userId);
 
-    PostDto updatePost(PostDto postDto, MultipartFile[] images, HttpServletRequest request) throws IOException;
+    PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
     void deletePost(Long id);
 }

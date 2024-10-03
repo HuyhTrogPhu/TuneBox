@@ -43,10 +43,9 @@ public class UserServiceImpl implements UserService {
     private GenreRepository GenreRepo;
 
 
-    private PasswordEncoder crypt;
+//    private PasswordEncoder crypt;
 
     private final PasswordEncoder passwordEncoder;
-
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
 
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = new User();
 
         savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
+        savedUser.setPassword(passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword()));
         savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
         savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
 
@@ -131,20 +130,15 @@ public class UserServiceImpl implements UserService {
 
         if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
                 (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
-        // Kiểm tra email trước, sau đó là userName
-        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
             userOptional = Repo.findByEmail(userdto.getEmail());
             if (!userOptional.isPresent()) {
                 userOptional = Repo.findByUserName(userdto.getUserName());
             }
-        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
-            userOptional = Repo.findByUserName(userdto.getUserName());
         } else {
             throw new RuntimeException("Username or email cannot be null or empty");
         }
 
 
-        // Kiểm tra xem người dùng có tồn tại không và xác thực mật khẩu
         if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
@@ -164,13 +158,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public UserDto getUserById(Long id) {
-        return Repo.findById(id)
-                .map(user -> new UserDto(user.getId(), user.getUserName())) // Chuyển đổi sang UserDto
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
     private String generateToken() {
         return java.util.UUID.randomUUID().toString();
     }
@@ -183,9 +170,7 @@ public class UserServiceImpl implements UserService {
         try {
             javaMailSender.send(message);
         } catch (MailException e) {
-            // In ra thông tin chi tiết về lỗi
             System.out.println("Error sending email: " + e.getMessage());
-        }    }
         }
     }
 
@@ -217,6 +202,12 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(newPassword));
         Repo.save(user);
+    }
+
+    public UserDto getUserById(Long id) {
+        return Repo.findById(id)
+                .map(user -> new UserDto(user.getId(), user.getUserName())) // Chuyển đổi sang UserDto
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
 

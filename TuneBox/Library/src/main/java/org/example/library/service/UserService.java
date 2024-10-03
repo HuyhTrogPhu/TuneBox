@@ -3,7 +3,6 @@ package org.example.library.service;
 
 
 import org.example.library.dto.RequestSignUpModel;
-import org.example.library.dto.BrandsDto;
 import org.example.library.dto.UserDto;
 import org.example.library.model.User;
 
@@ -20,11 +19,12 @@ public interface UserService {
     void ForgotPassword(UserDto user);
 
     void resetPassword(String token, String newPassword);
-    UserDto getUserById(Long id);
 
     UserDto loginWithGoogle(String email , String name);
 
     UserDto Login(UserDto user);
 
     void changePassword(String email, String oldPassword, String newPassword);
+
+    UserDto getUserById(Long userId);
 }

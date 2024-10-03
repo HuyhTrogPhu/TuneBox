@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("/*")
-@RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    @RequestMapping("/api/posts")
 public class PostController {
 
     private final PostService postService;
@@ -27,7 +27,7 @@ public class PostController {
     public ResponseEntity<PostDto> createPost(
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
-            HttpServletRequest request) {
+            @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
 
@@ -39,7 +39,7 @@ public class PostController {
                 }
             }
             // Gọi service để lưu bài viết
-            PostDto savedPost = postService.savePost(postDto, images, request);
+            PostDto savedPost = postService.savePost(postDto, images, userId);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,7 +75,7 @@ public class PostController {
             @PathVariable Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
-            HttpServletRequest request) {
+            @RequestParam("userId") Long userId ) {
         PostDto postDto = new PostDto();
         postDto.setId(id);
         postDto.setContent(content); // Nội dung có thể là null
@@ -89,7 +89,7 @@ public class PostController {
             }
 
             // Gọi service để cập nhật bài post
-            PostDto updatedPost = postService.updatePost(postDto, images, request);
+            PostDto updatedPost = postService.updatePost(postDto, images, userId);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,4 +111,5 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }
