@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
 
 
     private final JavaMailSender javaMailSender;
+
     private final RoleRepository roleRepository;
 
     @Override
