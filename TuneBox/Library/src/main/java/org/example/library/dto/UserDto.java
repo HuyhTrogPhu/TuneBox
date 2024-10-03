@@ -1,50 +1,47 @@
 package org.example.library.dto;
 
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.*;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
+
     private Long id;
     private String email;
     private String userName;
+    private String userNickname;
     private String password;
-    private String resetToken;
-    private String token;
-    private String newPassword;
     private boolean report;
     private Date createDate;
     private String reason;
-    private Set<String> roleNames; // Thay thế Collection<Role>
-    private String status;
-    private Set<Genre> genre;
-    private InspiredBy inspiredBy;
-    private Talent talent;
-    private UserInformation userInformation;
+
+    // Multiple IDs for relationships
+    private UserInformation userInformationIds;
+    private Set<Long> inspiredByIds;
+    private Set<Long> talentIds;
+    private Set<Long> genreIds;      // Multiple Genre IDs
+
+    private Collection<Role> role;
     private Set<Block> blocker;
     private Set<Block> blocked;
-    private Set<Follow> followers;
     private Set<Follow> following;
+    private Set<Follow> followers;
     private List<Order> orderList;
     private Set<Track> tracks;
     private Set<Albums> albums;
     private Set<Chat> sentChats;
     private Set<Chat> receivedChats;
     private Set<Message> messages;
-
-
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }

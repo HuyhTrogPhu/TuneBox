@@ -1,8 +1,10 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,7 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-@Data
 public class User {
 
     @Id
@@ -26,7 +27,7 @@ public class User {
     private String email;
 
     private String userName;
-
+    private String userNickname;
     private String password;
 
     private boolean report;
@@ -35,35 +36,35 @@ public class User {
 
     private String reason;
 
-    private String resetToken;
 
-    private String token;
-
-    private String newPassword;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id")
-    private InspiredBy inspiredBy;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_inspired_by",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id"))
+    private Set<InspiredBy> inspiredBy;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "talent_id", referencedColumnName = "talent_id")
-    private Talent talent;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_talent",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "talent_id", referencedColumnName = "talent_id"))
+    private Set<Talent> talent;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genre;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    @JsonIgnore
-    private Set<Role> role ;
+    private Collection<Role> role;
 
     @OneToMany(mappedBy = "blocker")
     private Set<Block> blocker;
@@ -81,6 +82,9 @@ public class User {
     private List<Order> orderList;
 
     @OneToMany(mappedBy = "creator")
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")
@@ -95,6 +99,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Like> likes;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Comment> comments;
 
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }

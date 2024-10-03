@@ -1,65 +1,121 @@
 package org.example.library.mapper;
 
-
 import org.example.library.dto.UserDto;
-import org.example.library.model.Role;
-import org.example.library.model.User;
+import org.example.library.model.*;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserMapper {
 
-    public static UserDto maptoUserDto(User user) {
-        if (user == null)
-            return null;
+    // Map User to UserDto
+    public static UserDto mapToUserDto(User user) {
+        // Extract genre IDs from the Genre Set
+        Set<Long> genreIds = user.getGenre() != null ?
+                user.getGenre().stream().map(Genre::getId).collect(Collectors.toSet()) :
+                null;
 
-        UserDto userdto = new UserDto();
+        // Extract talent IDs (if Talent is a collection)
+        Set<Long> talentIds = user.getTalent() != null ?
+                user.getTalent().stream().map(Talent::getId).collect(Collectors.toSet()) :
+                null;
 
-        userdto.setId(user.getId());
-        userdto.setEmail(user.getEmail());
-        userdto.setUserName(user.getUserName());
-        userdto.setPassword(user.getPassword());
-        userdto.isReport();
-        userdto.setCreateDate(user.getCreateDate());
-        userdto.setReason(user.getReason());
-        userdto.setUserInformation(user.getUserInformation());
-        userdto.setInspiredBy(user.getInspiredBy());
-        userdto.setTalent(user.getTalent());
-        userdto.setResetToken(user.getResetToken());
-        userdto.setToken(user.getToken());
-        userdto.setNewPassword(user.getNewPassword());
-        userdto.setGenre(user.getGenre());
-        if (user.getRole() != null) {
-            userdto.setRoleNames(user.getRole().stream()
-                    .map(Role::getName)
-                    .collect(Collectors.toSet()));
-        }        userdto.setBlocker(user.getBlocker());
+        // Extract InspiredBy IDs (if InspiredBy is a collection)
+        Set<Long> inspiredByIds = user.getInspiredBy() != null ?
+                user.getInspiredBy().stream().map(InspiredBy::getId).collect(Collectors.toSet()) :
+                null;
 
-        userdto.setBlocked(user.getBlocked());
-        userdto.setFollowing(user.getFollowing());
-        userdto.setFollowers(user.getFollowers());
-        userdto.setOrderList(user.getOrderList());
-        userdto.setTracks(user.getTracks());
-        userdto.setAlbums(user.getAlbums());
-        userdto.setSentChats(user.getSentChats());
-        userdto.setReceivedChats(user.getReceivedChats());
-        userdto.setMessages(user.getMessages());
-        return userdto;
+        return new UserDto(
+                user.getId(),
+                user.getEmail(),
+                user.getUserName(),
+                user.getUserNickname(),
+                user.getPassword(),
+                user.isReport(),
+                user.getCreateDate(),
+                user.getReason(),
+                user.getUserInformation(),
+                inspiredByIds,   // Multiple InspiredBy IDs
+                talentIds,       // Multiple Talent IDs
+                genreIds,        // Multiple Genre IDs
+                user.getRole(),
+                user.getBlocker(),
+                user.getBlocked(),
+                user.getFollowing(),
+                user.getFollowers(),
+                user.getOrderList(),
+                user.getTracks(),
+                user.getAlbums(),
+                user.getSentChats(),
+                user.getReceivedChats(),
+                user.getMessages(),
+                user.getResetToken(),
+                user.getToken(),
+                user.getNewPassword()
+        );
     }
 
 
-    public static User maptoUser(UserDto userdto) {
-        if (userdto == null)
-            return null;
+    // Map UserDto to User
+    public static User mapToUser(UserDto userDto) {
         User user = new User();
-        user.setId(userdto.getId());
-        user.setEmail(userdto.getEmail());
-        user.setUserName(userdto.getUserName());
-        user.setPassword(userdto.getPassword());
-        user.setResetToken(userdto.getResetToken());
-        user.setToken(userdto.getToken());
-        user.setNewPassword(userdto.getNewPassword());
+        user.setId(userDto.getId());
+        user.setEmail(userDto.getEmail());
+        user.setUserName(userDto.getUserName());
+        user.setUserNickname(userDto.getUserNickname());
+        user.setPassword(userDto.getPassword());
+        user.setReport(userDto.isReport());
+        user.setCreateDate(userDto.getCreateDate());
+        user.setReason(userDto.getReason());
+
+        // Map Talent from talentIds (map back to Talent objects)
+        if (userDto.getTalentIds() != null && !userDto.getTalentIds().isEmpty()) {
+            Set<Talent> talents = userDto.getTalentIds().stream().map(id -> {
+                Talent talent = new Talent();
+                talent.setId(id);
+                return talent;
+            }).collect(Collectors.toSet());
+            user.setTalent(talents);
+        }
+
+        // Map InspiredBy from inspiredByIds (map back to InspiredBy objects)
+        if (userDto.getInspiredByIds() != null && !userDto.getInspiredByIds().isEmpty()) {
+            Set<InspiredBy> inspiredBys = userDto.getInspiredByIds().stream().map(id -> {
+                InspiredBy inspiredBy = new InspiredBy();
+                inspiredBy.setId(id);
+                return inspiredBy;
+            }).collect(Collectors.toSet());
+            user.setInspiredBy(inspiredBys);
+        }
+
+        // Map Genre from genreIds (map back to Genre objects)
+        if (userDto.getGenreIds() != null && !userDto.getGenreIds().isEmpty()) {
+            Set<Genre> genres = userDto.getGenreIds().stream().map(id -> {
+                Genre genre = new Genre();
+                genre.setId(id);
+                return genre;
+            }).collect(Collectors.toSet());
+            user.setGenre(genres);
+        }
+
+        // Set other fields
+        user.setRole(userDto.getRole());
+        user.setBlocker(userDto.getBlocker());
+        user.setBlocked(userDto.getBlocked());
+        user.setFollowing(userDto.getFollowing());
+        user.setFollowers(userDto.getFollowers());
+        user.setOrderList(userDto.getOrderList());
+        user.setTracks(userDto.getTracks());
+        user.setAlbums(userDto.getAlbums());
+        user.setSentChats(userDto.getSentChats());
+        user.setReceivedChats(userDto.getReceivedChats());
+        user.setMessages(userDto.getMessages());
+        user.setResetToken(userDto.getResetToken());
+        user.setToken(userDto.getToken());
+        user.setNewPassword(userDto.getNewPassword());
+
         return user;
     }
+
 
 }
