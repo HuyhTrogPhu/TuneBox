@@ -27,7 +27,7 @@ public class User {
     private String email;
 
     private String userName;
-
+    private String userNickname;
     private String password;
 
     private boolean report;
@@ -36,13 +36,25 @@ public class User {
 
     private String reason;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id")
-    private InspiredBy inspiredBy;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "talent_id", referencedColumnName = "talent_id")
-    private Talent talent;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_information_id", referencedColumnName = "id")
+    private UserInformation userInformation;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_inspired_by",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id"))
+    private Set<InspiredBy> inspiredBy;
+
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_talent",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "talent_id", referencedColumnName = "talent_id"))
+    private Set<Talent> talent;
+
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
@@ -70,6 +82,9 @@ public class User {
     private List<Order> orderList;
 
     @OneToMany(mappedBy = "creator")
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")
@@ -84,6 +99,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Message> messages;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Like> likes;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Comment> comments;
 
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }

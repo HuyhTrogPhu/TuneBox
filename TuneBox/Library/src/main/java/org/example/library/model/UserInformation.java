@@ -41,5 +41,8 @@ public class UserInformation {
     @JoinColumn(name = "address", referencedColumnName = "number_id")
     private Number number;
 
+    @OneToOne(mappedBy = "userInformation")
+    private User user;
+
 
 }
