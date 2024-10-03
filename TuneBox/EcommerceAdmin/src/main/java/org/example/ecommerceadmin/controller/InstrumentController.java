@@ -6,10 +6,6 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
-import org.example.library.service.BrandService;
-import org.example.library.service.CategoryInsService;
-import org.example.library.service.CategoryService;
-import org.example.library.service.InstrumentService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryInsServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
@@ -22,23 +18,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin("*")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/instrument")
 public class InstrumentController {
 
     @Autowired
-    private InstrumentService instrumentService;
+    private InstrumentServiceImpl instrumentService;
 
     @Autowired
-    private BrandService brandService;
+    private BrandServiceImpl brandService;
 
     @Autowired
-    private CategoryService categoryService;
-
+    private CategoryServiceImpl categoryService;
     @Autowired
-    private CategoryInsService categoryInsService;
+    private CategoryInsServiceImpl categoryInsService;
 
     // Add new instrument
     @PostMapping
@@ -49,7 +44,7 @@ public class InstrumentController {
                                               @RequestParam("description") String description,
                                               @RequestParam("brandId") Brand brand,
                                               @RequestParam("categoryId") CategoryIns category,
-                                              @RequestParam("images") MultipartFile[] images) {
+                                                          @RequestParam(value = "image", required = false) MultipartFile[] image)  {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
@@ -57,11 +52,10 @@ public class InstrumentController {
             instrumentDto.setQuantity(quantity);
             instrumentDto.setColor(color);
             instrumentDto.setDescription(description);
-
             instrumentDto.setBrand(brand);
             instrumentDto.setCategoryIns(category);
 
-            InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, images);
+            InstrumentDto saveInstrument = instrumentService.createInstrument(instrumentDto, image);
             return new ResponseEntity<>(saveInstrument, HttpStatus.CREATED);
         } catch (Exception e) {
             e.getStackTrace();
@@ -70,7 +64,7 @@ public class InstrumentController {
     }
 
     // Get all instruments
-    @GetMapping("/instruments")
+    @GetMapping
     public ResponseEntity<List<InstrumentDto>> getAll() {
         List<InstrumentDto> instruments = instrumentService.getAllInstrument();
         return ResponseEntity.ok(instruments);
@@ -81,6 +75,12 @@ public class InstrumentController {
     public ResponseEntity<List<BrandsDto>> getAllBrand() {
         List<BrandsDto> brandsDto = brandService.getAllBrand();
         return ResponseEntity.ok(brandsDto);
+    }
+    //get all brand id instrument
+    @GetMapping("/brand/{brandId}")
+    public ResponseEntity<List<InstrumentDto>> getInstrumentsByBrandId(@PathVariable Long brandId) {
+        List<InstrumentDto> instruments = instrumentService.getInstrumentsByBrandId(brandId);
+        return ResponseEntity.ok(instruments);
     }
 
     // Get all categories
@@ -95,23 +95,16 @@ public class InstrumentController {
     public ResponseEntity<?> getInstrumentById(@PathVariable Long id) {
         try {
             InstrumentDto instrumentDto = instrumentService.getInstrumentById(id);
-            if (instrumentDto == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Instrument not found for ID: " + id);
-            }
             return ResponseEntity.ok(instrumentDto);
         } catch (Exception e) {
-            e.printStackTrace(); // In lỗi ra log để tiện theo dõi
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error retrieving instrument: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Instrument not found: " + e.getMessage());
         }
     }
-
-
     // Update Instrument
     @PutMapping("{id}")
     public ResponseEntity<?> updateInstrument(
-            @PathVariable String id,
+            @PathVariable String id,  // Nhận id dưới dạng String từ frontend
             @RequestParam("name") String name,
             @RequestParam("costPrice") String costPrice,
             @RequestParam("quantity") String quantity,
@@ -120,13 +113,22 @@ public class InstrumentController {
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam("status") boolean status,
-            @RequestParam(value = "images", required = false) MultipartFile[] images) {
+            @RequestParam(value = "image", required = false) MultipartFile[] image) {
 
         try {
+            // Kiểm tra nếu id là "undefined" hoặc rỗng
+            if (id == null || id.equals("undefined") || id.trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Invalid instrument ID: " + id);
+            }
+
+            // Chuyển đổi id từ String sang Long
             Long instrumentId = Long.parseLong(id);
 
+            // Tìm nhạc cụ theo id
             InstrumentDto existingInstrument = instrumentService.getInstrumentById(instrumentId);
 
+            // Cập nhật thông tin nhạc cụ
             existingInstrument.setName(name);
             existingInstrument.setCostPrice(Double.parseDouble(costPrice));
             existingInstrument.setQuantity(Integer.parseInt(quantity));
@@ -134,13 +136,16 @@ public class InstrumentController {
             existingInstrument.setDescription(description);
             existingInstrument.setStatus(status);
 
+            // Tìm thương hiệu và danh mục
             Brand brand = brandService.getManagedBrand(brandId);
             CategoryIns category = categoryInsService.getManagedCategory(categoryId);
 
+            // Cập nhật thông tin thương hiệu và danh mục
             existingInstrument.setBrand(brand);
             existingInstrument.setCategoryIns(category);
 
-            InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, images);
+            // Lưu thay đổi
+            InstrumentDto saveInstrument = instrumentService.updateInstrument(instrumentId, existingInstrument, image);
             return ResponseEntity.ok(saveInstrument);
         } catch (NumberFormatException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -150,6 +155,10 @@ public class InstrumentController {
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
+
+
+
+
 
     // Delete instrument
     @DeleteMapping("{id}")

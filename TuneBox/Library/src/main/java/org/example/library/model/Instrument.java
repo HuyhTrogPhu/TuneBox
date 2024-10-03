@@ -32,8 +32,10 @@ public class Instrument {
 
     private boolean status;
 
-    @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<InstrumentImage> images;
+    @ElementCollection
+    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private List<String> image;
 
     @Size(min = 10, max = 1000)
     private String description;
