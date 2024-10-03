@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@SpringBootApplication(scanBasePackages = {"org.example.library.*", "org.example.customer.*"})
+@SpringBootApplication(scanBasePackages = {"org.example.library.*", "org.example.*"})
 @EnableJpaRepositories(value = "org.example.library.repository")
 @EntityScan(value = "org.example.library.model")
 
