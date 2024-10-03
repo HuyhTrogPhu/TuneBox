@@ -1,5 +1,7 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,9 +12,9 @@ import java.util.Set;
 
 @Setter
 @Getter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Genre {
 
     @Id
@@ -23,6 +25,7 @@ public class Genre {
     private String name;
 
     @ManyToMany(mappedBy = "genre")
+    @JsonIgnore
     private Set<User> user;
 
     @OneToMany(mappedBy = "genre")
@@ -30,4 +33,12 @@ public class Genre {
 
     @OneToMany(mappedBy = "genre")
     private Set<Albums> albums;
+
+
+    public Genre(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
+
 }
