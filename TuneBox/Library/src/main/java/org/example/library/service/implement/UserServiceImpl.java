@@ -239,6 +239,10 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found");
         }
     }
+    @Override
+    public User findUserById(Long userId) {
+        return Repo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
 
 }

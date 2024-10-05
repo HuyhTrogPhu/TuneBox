@@ -32,6 +32,12 @@ public class CommentMapper {
         comment.setUser(user);
         comment.setPost(post);
 
+        // Set parentId nếu có
+        if (commentDTO.getParentId() != null) {
+            comment.setParentId(commentDTO.getParentId()); // Bạn cần thêm trường này trong lớp Comment entity
+        }
+
         return comment;
     }
+
 }

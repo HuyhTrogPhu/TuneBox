@@ -1,7 +1,9 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.repository.LikeRepository;
 import org.example.library.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,8 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
+    @Autowired
+    private LikeRepository likeRepository;
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
@@ -106,4 +110,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+
 }

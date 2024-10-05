@@ -2,7 +2,6 @@ package org.example.library.mapper;
 
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
-import java.util.Set;
 
 public class PostMapper {
 
@@ -24,7 +23,6 @@ public class PostMapper {
         Post entity = new Post();
         entity.setId(postDto.getId());
         entity.setContent(postDto.getContent());
-        // Chưa gán user vì ID sẽ được lấy từ session trong service
         entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
         entity.setCreatedAt(postDto.getCreatedAt());
         return entity;

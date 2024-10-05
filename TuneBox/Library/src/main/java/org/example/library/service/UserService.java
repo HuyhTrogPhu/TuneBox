@@ -27,4 +27,6 @@ public interface UserService {
     void changePassword(String email, String oldPassword, String newPassword);
 
     UserDto getUserById(Long userId);
+
+    User findUserById(Long userId);
 }

@@ -1,24 +1,19 @@
 package org.example.library.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDTO {
+public class ReplyDto {
     private Long id;
     private String content;
     private LocalDateTime creationDate;
     private Long userId;
     private String userName;
-    private Long postId;
-    private Long parentId; // Thêm trường parentId
-    private List<CommentDTO> replies;
+    private Long commentId;
 }

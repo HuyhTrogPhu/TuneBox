@@ -8,6 +8,7 @@ import lombok.Setter;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -40,5 +41,8 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private Long parentId;
 
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reply> replies; // Danh sách các reply của bình luận này
 }

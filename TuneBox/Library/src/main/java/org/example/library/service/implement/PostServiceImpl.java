@@ -68,11 +68,11 @@
         }
 
 
-        @Override
-        public PostDto getPostById(Long id) {
-            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-            return PostMapper.toDto(post);
-        }
+//        @Override
+//        public PostDto getPostById(Long id) {
+//            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+//            return PostMapper.toDto(post);
+//        }
 
         @Override
         public List<PostDto> getAllPosts() {
@@ -137,5 +137,10 @@
             // Xóa bài viết khỏi cơ sở dữ liệu
             postRepository.delete(post);
         }
+
+//        @Override
+//        public Post findPostById(Long postId) {
+//            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+//        }
 
     }
