@@ -31,7 +31,11 @@ public class UserController {
     @Autowired
     private UserRepository Repo;
 
-private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
+
 
     //LOGIN
     @PostMapping("/log-in")
@@ -50,7 +54,6 @@ private BCryptPasswordEncoder passwordEncoder;
         }
         return ResponseEntity.ok(response);
     }
-
 
     //FORGOT PASSWORD
     @PostMapping("/forgot-password")
@@ -83,7 +86,7 @@ private BCryptPasswordEncoder passwordEncoder;
         changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
         changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
         try {
-            UserService.changePassword(changePasswordRequestdto.getEmail(),
+            UserService.    changePassword(changePasswordRequestdto.getEmail(),
                     changePasswordRequestdto.getOldPassword(),
                     changePasswordRequestdto.getNewPassword());
             return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
@@ -106,36 +109,36 @@ private BCryptPasswordEncoder passwordEncoder;
     }
 
 
-//    @GetMapping("/login/oauth2/success")
-//    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
-//        Map<String, Object> response = new HashMap<>();
-//
-//        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
-//        }
-//
-//        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-//
-//        // Kiểm tra oauth2User có phải null hay không
-//        if (oauth2User == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2 User is not found");
-//        }
-//
-//        String email = oauth2User.getAttribute("email");
-//        String name = oauth2User.getAttribute("name");
-//
-//        if (email == null || name == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
-//        }
-//
-//        UserDto userDto = UserService.loginWithGoogle(email, name);
-//
-//        response.put("status", true);
-//        response.put("message", "Đăng nhập thành công");
-//        response.put("data", userDto);
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @GetMapping("/login/oauth2/success")
+    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
+        }
+
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+
+        // Kiểm tra oauth2User có phải null hay không
+        if (oauth2User == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2 User is not found");
+        }
+
+        String email = oauth2User.getAttribute("email");
+        String name = oauth2User.getAttribute("name");
+
+        if (email == null || name == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
+        }
+
+        UserDto userDto = UserService.loginWithGoogle(email, name);
+
+        response.put("status", true);
+        response.put("message", "Đăng nhập thành công");
+        response.put("data", userDto);
+
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<?> Register(@RequestBody RequestSignUpModel requestSignUpModel,
@@ -144,6 +147,13 @@ private BCryptPasswordEncoder passwordEncoder;
         String psEncode =passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword());
         requestSignUpModel.getUserDto().setPassword(psEncode);
         RespondModel response = new RespondModel();
+        if (requestSignUpModel.getUserDto() == null) {
+            response.setMessage("Thông tin người dùng không được cung cấp.");
+            response.setData(null);
+            response.setStatus(false);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         try {
             response.setMessage("Đăng ký thành công");
             response.setData(UserService.Register(requestSignUpModel));
