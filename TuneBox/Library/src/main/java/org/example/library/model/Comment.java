@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -22,7 +23,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private Set<CommentLike> commentLikes;
