@@ -36,6 +36,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     private BrandRepository brandRepository;
 
     private final ImageUploadInstrument imageUploadInstrument;
+
     @Autowired
     private ObjectMapper jacksonObjectMapper;
 
@@ -51,9 +52,7 @@ public class InstrumentServiceImpl implements InstrumentService {
                     imageUploadInstrument.uploadFile(image[i]);
                     base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
                 }
-                List<String> imageList = List.of(base64Images);
-                String imageJson = jacksonObjectMapper.writeValueAsString(imageList); // chuyển hình ảnh qua Json
-                instrument.setImage(imageJson); // Lưu dưới dạng Json
+                instrument.setImage(List.of(base64Images)); // Lưu dưới dạng List<String>
             }
 
             instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
@@ -62,8 +61,6 @@ public class InstrumentServiceImpl implements InstrumentService {
 
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
-
-
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -107,16 +104,14 @@ public class InstrumentServiceImpl implements InstrumentService {
             if (image != null && image.length > 0) {
                 String[] base64Images = new String[image.length];
                 for (int i = 0; i < image.length; i++) {
-                    boolean isUploaded = Boolean.parseBoolean(imageUploadInstrument.uploadFile(image[i]));
+                    boolean isUploaded = imageUploadInstrument.uploadFile(image[i]);
                     if (isUploaded) {
                         base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
                     } else {
                         throw new RuntimeException("Failed to upload the image");
                     }
                 }
-                List<String> imageList = List.of(base64Images);
-                String imageJson = jacksonObjectMapper.writeValueAsString(imageList);
-                instrument.setImage(imageJson);
+                instrument.setImage(List.of(base64Images));
             }
 
 

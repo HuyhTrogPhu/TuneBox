@@ -36,12 +36,12 @@ public class InstrumentController {
     // Add new instrument
     @PostMapping
     public ResponseEntity<InstrumentDto> createInstrument(@RequestParam("name") String name,
-                                              @RequestParam("costPrice") double costPrice,
-                                              @RequestParam("quantity") int quantity,
-                                              @RequestParam("color") String color,
-                                              @RequestParam("description") String description,
-                                              @RequestParam("brandId") Brand brand,
-                                              @RequestParam("categoryId") CategoryIns category,
+                                                          @RequestParam("costPrice") double costPrice,
+                                                          @RequestParam("quantity") int quantity,
+                                                          @RequestParam("color") String color,
+                                                          @RequestParam("description") String description,
+                                                          @RequestParam("brandId") Brand brand,
+                                                          @RequestParam("categoryId") CategoryIns category,
                                                           @RequestParam(value = "image", required = false) MultipartFile[] image)  {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();

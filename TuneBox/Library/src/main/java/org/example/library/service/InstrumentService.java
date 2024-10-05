@@ -12,7 +12,7 @@ public interface InstrumentService {
 
     InstrumentDto getInstrumentById(Long id);
 
-    InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile[] images); // Cập nhật thành MultipartFile[]
+    InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile[] images);
 
     void deleteInstrument(Long id);
 

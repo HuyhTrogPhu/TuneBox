@@ -15,25 +15,30 @@ public class ImageUploadInstrument {
 
     private final String UPLOAD_FOLDER = "ImageInstrument";
 
-    public String uploadFile(MultipartFile file) {
-        String filePath = null;
+    public boolean uploadFile(MultipartFile file) {
+        boolean isUpload = false;
         try {
             Path uploadPath = Paths.get(UPLOAD_FOLDER);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            Path filePathLocation = uploadPath.resolve(file.getOriginalFilename());
-            Files.copy(file.getInputStream(), filePathLocation, StandardCopyOption.REPLACE_EXISTING);
-            filePath = filePathLocation.toString();
+            Files.copy(file.getInputStream(), uploadPath.resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            isUpload = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return filePath;
+        return isUpload;
     }
 
     public boolean checkExist(MultipartFile multipartFile) {
-        File file = new File(UPLOAD_FOLDER + multipartFile.getOriginalFilename());
-        return file.exists();
+        boolean isExist = false;
+        try {
+            File file = new File(UPLOAD_FOLDER +"\\" + multipartFile.getOriginalFilename());
+            isExist = file.exists();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return isExist;
     }
 }
