@@ -1,5 +1,6 @@
 package org.example.library.service.implement;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
@@ -35,6 +36,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     private BrandRepository brandRepository;
 
     private final ImageUploadInstrument imageUploadInstrument;
+    @Autowired
+    private ObjectMapper jacksonObjectMapper;
 
     @Override
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile[] image) {
@@ -48,7 +51,9 @@ public class InstrumentServiceImpl implements InstrumentService {
                     imageUploadInstrument.uploadFile(image[i]);
                     base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
                 }
-                instrument.setImage(List.of(base64Images)); // Lưu dưới dạng List<String>
+                List<String> imageList = List.of(base64Images);
+                String imageJson = jacksonObjectMapper.writeValueAsString(imageList); // chuyển hình ảnh qua Json
+                instrument.setImage(imageJson); // Lưu dưới dạng Json
             }
 
             instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
@@ -102,14 +107,16 @@ public class InstrumentServiceImpl implements InstrumentService {
             if (image != null && image.length > 0) {
                 String[] base64Images = new String[image.length];
                 for (int i = 0; i < image.length; i++) {
-                    boolean isUploaded = imageUploadInstrument.uploadFile(image[i]);
+                    boolean isUploaded = Boolean.parseBoolean(imageUploadInstrument.uploadFile(image[i]));
                     if (isUploaded) {
                         base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
                     } else {
                         throw new RuntimeException("Failed to upload the image");
                     }
                 }
-                instrument.setImage(List.of(base64Images));
+                List<String> imageList = List.of(base64Images);
+                String imageJson = jacksonObjectMapper.writeValueAsString(imageList);
+                instrument.setImage(imageJson);
             }
 
 

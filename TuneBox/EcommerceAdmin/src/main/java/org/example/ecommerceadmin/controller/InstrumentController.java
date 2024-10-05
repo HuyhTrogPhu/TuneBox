@@ -6,10 +6,9 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
-import org.example.library.service.implement.BrandServiceImpl;
-import org.example.library.service.implement.CategoryInsServiceImpl;
-import org.example.library.service.implement.CategoryServiceImpl;
-import org.example.library.service.implement.InstrumentServiceImpl;
+import org.example.library.service.BrandService;
+import org.example.library.service.CategoryService;
+import org.example.library.service.InstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +24,14 @@ import java.util.List;
 public class InstrumentController {
 
     @Autowired
-    private InstrumentServiceImpl instrumentService;
+    private InstrumentService instrumentService;
 
     @Autowired
-    private BrandServiceImpl brandService;
+    private BrandService brandService;
 
     @Autowired
-    private CategoryServiceImpl categoryService;
-    @Autowired
-    private CategoryInsServiceImpl categoryInsService;
+    private CategoryService categoryService;
+
 
     // Add new instrument
     @PostMapping
@@ -138,7 +136,7 @@ public class InstrumentController {
 
             // Tìm thương hiệu và danh mục
             Brand brand = brandService.getManagedBrand(brandId);
-            CategoryIns category = categoryInsService.getManagedCategory(categoryId);
+            CategoryIns category = categoryService.getManagedCategory(categoryId);
 
             // Cập nhật thông tin thương hiệu và danh mục
             existingInstrument.setBrand(brand);
