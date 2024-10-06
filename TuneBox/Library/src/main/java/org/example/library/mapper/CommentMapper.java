@@ -20,6 +20,7 @@ public class CommentMapper {
         commentDTO.setUserId(comment.getUser().getId());
         commentDTO.setUserName(comment.getUser().getUserName());
         commentDTO.setPostId(comment.getPost().getId());
+        commentDTO.setEdited(comment.isEdited());
 
         return commentDTO;
     }
@@ -31,7 +32,7 @@ public class CommentMapper {
         comment.setCreationDate(commentDTO.getCreationDate());
         comment.setUser(user);
         comment.setPost(post);
-
+        comment.setEdited(commentDTO.isEdited());
         // Set parentId nếu có
         if (commentDTO.getParentId() != null) {
             comment.setParentId(commentDTO.getParentId()); // Bạn cần thêm trường này trong lớp Comment entity

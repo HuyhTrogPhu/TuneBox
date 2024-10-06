@@ -89,5 +89,24 @@ public class CommentServiceImpl implements CommentService {
 
         return topLevelComments; // Trả về danh sách bình luận gốc cùng với bình luận trả lời
     }
+    @Override
+    public CommentDTO updateComment(Long commentId, CommentDTO commentDTO) {
+        Optional<Comment> existingComment = commentRepository.findById(commentId);
+
+        if (existingComment.isPresent()) {
+            Comment comment = existingComment.get();
+
+            // Cập nhật nội dung bình luận
+            comment.setContent(commentDTO.getContent());
+            comment.setEdited(true); // Đánh dấu bình luận là đã chỉnh sửa
+
+            comment = commentRepository.save(comment); // Lưu lại bình luận đã chỉnh sửa
+            return commentMapper.toDto(comment); // Trả về bình luận đã chỉnh sửa dưới dạng DTO
+        } else {
+            throw new IllegalArgumentException("Comment not found");
+        }
+    }
+
+
 
 }

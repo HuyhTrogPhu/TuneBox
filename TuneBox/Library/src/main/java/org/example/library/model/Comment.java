@@ -45,4 +45,6 @@ public class Comment {
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reply> replies; // Danh sách các reply của bình luận này
+
+    private boolean edited;
 }
