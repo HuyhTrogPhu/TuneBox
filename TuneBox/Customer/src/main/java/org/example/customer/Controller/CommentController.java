@@ -38,5 +38,12 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
     }
+    // Cập nhật comment
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+        CommentDTO updatedComment = commentService.updateComment(commentId, commentDTO);
+        return ResponseEntity.ok(updatedComment);
+    }
+
 
 }
