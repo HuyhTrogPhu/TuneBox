@@ -123,6 +123,7 @@
 
                 // Lưu bài viết đã cập nhật vào database
                 Post updatedPost = postRepository.save(post);
+                updatedPost.setEdited(true);
 
                 // Chuyển Post entity thành PostDto và trả về
                 return PostMapper.toDto(updatedPost);

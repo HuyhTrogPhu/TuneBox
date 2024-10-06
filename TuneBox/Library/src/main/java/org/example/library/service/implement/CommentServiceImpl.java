@@ -52,7 +52,6 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
-
     @Override
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
@@ -60,7 +59,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDTO> getCommentsByPost(Long postId) {
-        // Lấy tất cả các bình luận cho bài viết
         List<Comment> comments = commentRepository.findByPostId(postId);
 
         // Tạo một danh sách bình luận DTO
@@ -82,13 +80,20 @@ public class CommentServiceImpl implements CommentService {
             if (commentDTO.getParentId() == null) {
                 // Nếu không có parentId, đây là bình luận gốc
                 List<CommentDTO> replies = repliesMap.get(commentDTO.getId());
-                commentDTO.setReplies(replies); // Thêm bình luận trả lời vào bình luận gốc
+                if (replies != null) {
+                    // Đệ quy xử lý các trả lời (replies) theo nhiều cấp
+                    for (CommentDTO reply : replies) {
+                        reply.setReplies(repliesMap.get(reply.getId())); // Gán các trả lời của reply
+                    }
+                    commentDTO.setReplies(replies);
+                }
                 topLevelComments.add(commentDTO);
             }
         }
 
-        return topLevelComments; // Trả về danh sách bình luận gốc cùng với bình luận trả lời
+        return topLevelComments; // Trả về danh sách bình luận gốc với các reply
     }
+
     @Override
     public CommentDTO updateComment(Long commentId, CommentDTO commentDTO) {
         Optional<Comment> existingComment = commentRepository.findById(commentId);
