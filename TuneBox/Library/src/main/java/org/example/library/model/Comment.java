@@ -1,3 +1,4 @@
+
 package org.example.library.model;
 
 import jakarta.persistence.*;
@@ -6,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,7 +25,7 @@ public class Comment {
 
     private String content;
 
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private Set<CommentLike> commentLikes;
@@ -39,5 +42,8 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private Long parentId;
 
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Reply> replies; // Danh sách các reply của bình luận này
 }

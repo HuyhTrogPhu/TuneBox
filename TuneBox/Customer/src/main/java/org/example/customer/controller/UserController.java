@@ -40,6 +40,9 @@ public class UserController {
             UserDto loggedInUser = userService.Login(user);
             response.put("status", true);
             response.put("message", "Đăng nhập thành công");
+            System.out.println("Đang đăng nhập với: " + user.getUserName());
+            System.out.println("Thông tin người dùng đăng nhập: " + loggedInUser);
+
             response.put("data", loggedInUser);
         } catch (Exception e) {
             response.put("status", false);

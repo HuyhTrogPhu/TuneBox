@@ -1,8 +1,10 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,7 +17,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-@Data
 public class User {
 
     @Id
@@ -34,12 +35,6 @@ public class User {
     private Date createDate;
 
     private String reason;
-
-    private String resetToken;
-
-    private String token;
-
-    private String newPassword;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
@@ -61,7 +56,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "genre_id"))
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genre;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -105,5 +100,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
-
+    private String resetToken;
+    private String token;
+    private String newPassword;
 }

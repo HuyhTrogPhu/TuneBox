@@ -1,9 +1,5 @@
 package org.example.customer.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
-import org.example.library.dto.CommentDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,94 +8,69 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin("/*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@AllArgsConstructor
-@RequestMapping("/profileUser/track")
+@RequestMapping("/tracks")
 public class TrackController {
 
     @Autowired
-    private final TrackService trackService;
+    private TrackService trackService;
 
-    @PostMapping("/music")
-    public ResponseEntity<String> uploadMusicFile(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return new ResponseEntity<>("Please select a file!", HttpStatus.BAD_REQUEST);
-        }
+    @PostMapping
+    public ResponseEntity<TrackDto> createTrack(
+            @RequestParam("title") String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam("musicFile") MultipartFile musicFile,
+            @RequestParam("userId") Long userId) {
+
+        // Tạo TrackDto
+        TrackDto trackDto = new TrackDto();
+        trackDto.setName(title);
+        trackDto.setDescription(description);
 
         try {
-            // Lưu file vào thư mục trên server
-            String filePath = "uploads/" + file.getOriginalFilename();
-            file.transferTo(new File(filePath));
-            return new ResponseEntity<>("File uploaded successfully: " + filePath, HttpStatus.OK);
+            // Gọi service để lưu track
+            TrackDto savedTrack = trackService.createTrack(trackDto, musicFile, userId);
+            return new ResponseEntity<>(savedTrack, HttpStatus.CREATED);
         } catch (IOException e) {
-            return new ResponseEntity<>("File upload failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    //get all track
-    @GetMapping("/getAll")
-    public List<TrackDto> getAllTrack(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new RuntimeException("User not logged in");
-        }
-            Long userId = (Long) session.getAttribute("userId");
-        return trackService.getAllTrack(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<TrackDto> getTrackById(@PathVariable Long id) {
+        TrackDto trackDto = trackService.getTrackById(id);
+        return new ResponseEntity<>(trackDto, HttpStatus.OK);
     }
 
-
-    // get track by id
-    @GetMapping("{trackId}")
-    public ResponseEntity<TrackDto> getTrack(@PathVariable("trackId") Long trackId) {
-        TrackDto trackDto = trackService.getTrackByID(trackId);
-        return ResponseEntity.ok(trackDto);
+    @GetMapping
+    public ResponseEntity<List<TrackDto>> getAllTracks() {
+        List<TrackDto> trackDtos = trackService.getAllTracks();
+        return new ResponseEntity<>(trackDtos, HttpStatus.OK);
     }
 
-
-
-    // add new Track
-//    @PostMapping
-//    public ResponseEntity<TrackDto> createTrack(@RequestBody TrackDto trackDto,
-//                                                @RequestParam("imageTrack")MultipartFile image) {
-//        TrackDto saveTrack = trackService.creatTrack(trackDto, image);
-//        return new ResponseEntity<>(saveTrack, HttpStatus.CREATED);
+//    @PutMapping("/{id}")
+//    public ResponseEntity<TrackDto> updateTrack(@PathVariable Long id,
+//                                                @RequestParam("trackDto") TrackDto trackDto,
+//                                                @RequestParam(value = "musicFile", required = false) MultipartFile musicFile) {
+//        TrackDto updatedTrack = trackService.updateTrack(id, trackDto, musicFile);
+//        return new ResponseEntity<>(updatedTrack, HttpStatus.OK);
 //    }
 
-     // update track
-    @PutMapping("{trackId}")
-    public ResponseEntity<TrackDto> updateTrack(@RequestBody TrackDto trackDto,
-                                                @PathVariable("trackId") Long id,
-                                                @RequestParam("imageTrack") MultipartFile image){
-        TrackDto saveTrack = trackService.updateTrack(id, trackDto, image);
-        return ResponseEntity.ok(saveTrack);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTrack(@PathVariable Long id) {
+        trackService.deleteTrack(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Delete Track
-    @DeleteMapping("{trackId}")
-    public ResponseEntity<String> deleteTrack(@PathVariable("trackId") Long trackId) {
-        trackService.deleteTrack(trackId);
-        return ResponseEntity.ok("Track deleted successfully");
-    }
-
-    // like Track
-    @PostMapping("{trackId}/like")
-    public ResponseEntity<String> likeTrack(@PathVariable("trackId") Long trackId,
-                                            @RequestParam("userId") Long userId) {
-        trackService.likeTrack(trackId, userId);
-        return ResponseEntity.ok("Like successfully");
-    }
-
-    // comment Track
-    @PostMapping("{trackId}/comment")
-    public ResponseEntity<CommentDto> commentOnTrack(@PathVariable("trackId") Long trackId,
-                                                     @RequestParam("userId") Long userId,
-                                                     @RequestBody String content) {
-        CommentDto newComment = trackService.commentOnTrack(trackId, userId, content);
-        return new ResponseEntity<>(newComment, HttpStatus.CREATED);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TrackDto>> getTracksByUserId(@PathVariable Long userId) {
+        List<TrackDto> tracks = trackService.getTracksByUserId(userId);
+        return new ResponseEntity<>(tracks, HttpStatus.OK);
     }
 }

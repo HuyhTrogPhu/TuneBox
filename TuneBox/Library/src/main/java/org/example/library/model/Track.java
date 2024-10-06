@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,11 +30,16 @@ public class Track {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String trackImage;
 
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[]  musicFile;
+
     private String description;
 
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createDate;
 
     private boolean report;

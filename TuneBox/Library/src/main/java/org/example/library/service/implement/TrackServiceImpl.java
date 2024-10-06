@@ -1,157 +1,135 @@
 package org.example.library.service.implement;
 
-import lombok.AllArgsConstructor;
-import org.example.library.dto.CommentDto;
+import org.example.library.dto.PostDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.mapper.TrackMapper;
-import org.example.library.mapper.CommentMapper;
-import org.example.library.model.Comment;
-import org.example.library.model.Like;
 import org.example.library.model.Track;
 import org.example.library.model.User;
-import org.example.library.repository.CommentRepository;
 import org.example.library.repository.TrackRepository;
-import org.example.library.repository.UserRepository;
 import org.example.library.service.TrackService;
-import org.example.library.utils.ImageUploadTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.Base64;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class TrackServiceImpl implements TrackService {
 
     @Autowired
-    public TrackRepository trackRepository;
+    private TrackRepository trackRepository;
 
-    private final ImageUploadTrack imageUploadTrack;
+    @Override
+    public TrackDto createTrack(TrackDto trackDto, MultipartFile musicFile, Long userId) throws IOException {
 
-    @Autowired
-    private UserRepository userRepository;
+        // Cập nhật TrackDto với thông tin người dùng
+        trackDto.setCreatorId(userId); // Lưu userId vào TrackDto
+        User user = new User();
+        user.setId(userId);
 
-    @Autowired
-    private CommentRepository commentRepository;
+        Track track = TrackMapper.mapToTrack(trackDto); // Chuyển đổi TrackDto thành Track entity
+        track.setCreator(user); // Gán User vào track
+        track.setCreateDate(LocalDate.now());
+
+        // Xử lý file nhạc
+        if (musicFile != null && !musicFile.isEmpty()) {
+            // Lưu dữ liệu nhạc dưới dạng byte[]
+            track.setMusicFile(musicFile.getBytes()); // Lưu dữ liệu nhạc
+
+            // Tạo tên file nhạc dựa trên title
+            String uniqueFileName = trackDto.getName().replaceAll(" ", "_") + "_" + System.currentTimeMillis() + ".mp3";
+            track.setName(uniqueFileName); // Lưu tên file nhạc
+
+            // Lưu file nhạc vào thư mục
+            Path uploadDir = Paths.get("uploads/music");
+            if (!Files.exists(uploadDir)) {
+                Files.createDirectories(uploadDir);
+            }
+            Path path = uploadDir.resolve(uniqueFileName);
+            Files.copy(musicFile.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        // mô tả
+        if (trackDto.getDescription() != null && !trackDto.getDescription().isEmpty()) {
+            track.setDescription(trackDto.getDescription());
+        } else {
+            track.setDescription("");
+        }
+
+        // Lưu track vào database
+        Track savedTrack = trackRepository.save(track);
+
+        // Chuyển Track entity thành TrackDto và trả về
+        return TrackMapper.mapToTrackDto(savedTrack);
+    }
 
 
     @Override
-    public TrackDto creatTrack(TrackDto trackDto, MultipartFile file) {
-        try {
-            Track track = TrackMapper.maptoTrack(trackDto);
-
-            if (file == null){
-                track.setTrackImage(null);
-            } else {
-                imageUploadTrack.uploadFile(file);
-                track.setTrackImage(Base64.getEncoder().encodeToString(file.getBytes()));
-            }
-            track.setStatus(true);
-            Track saveTrack = trackRepository.save(track);
-            return TrackMapper.maptoTrackDto(saveTrack);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public TrackDto getTrackById(Long id) {
+        Track track = trackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Track not found"));
+        return TrackMapper.mapToTrackDto(track);
     }
 
     @Override
-    public TrackDto updateTrack(Long id, TrackDto trackDto, MultipartFile image) {
-        try {
-            Track track = trackRepository.findById(id).orElseThrow(
-                    () -> new RuntimeException("Track not found")
-            );
-            if (image.getBytes().length > 0) {
-                if (imageUploadTrack.checkExist(image)) {
-                    track.setTrackImage(track.getTrackImage());
-                } else {
-                    imageUploadTrack.uploadFile(image);
-                    track.setTrackImage(Base64.getEncoder().encodeToString(image.getBytes()));
-                }
-            }
-
-            track.setName(trackDto.getName());
-            track.setStatus(true);
-            Track saveTrack = trackRepository.save(track);
-            return TrackMapper.maptoTrackDto(saveTrack);
-        } catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
+    public List<TrackDto> getAllTracks() {
+        List<Track> tracks = trackRepository.findAll();
+        return tracks.stream()
+                .map(TrackMapper::mapToTrackDto)
+                .collect(Collectors.toList());
     }
 
+//    @Override
+//    public TrackDto updateTrack(Long id, TrackDto trackDto, MultipartFile musicFile) {
+//        Track existingTrack = trackRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("Track not found"));
+//
+//        existingTrack.setName(trackDto.getName());
+//        existingTrack.setDescription(trackDto.getDescription());
+//        existingTrack.setStatus(trackDto.isStatus());
+//        existingTrack.setCreateDate(trackDto.getCreateDate());
+//        existingTrack.setReport(trackDto.isReport());
+//        existingTrack.setReportDate(trackDto.getReportDate());
+//
+//        if (musicFile != null && !musicFile.isEmpty()) {
+//            existingTrack.setMusicFile(musicFile.getOriginalFilename()); // Cập nhật tên file
+//            // Cập nhật file vào thư mục
+//            try {
+//                Path path = Paths.get("your/upload/directory/" + musicFile.getOriginalFilename());
+//                Files.copy(musicFile.getInputStream(), path);
+//            } catch (IOException e) {
+//                throw new RuntimeException("Failed to store music file", e);
+//            }
+//        }
+//
+//        Track updatedTrack = trackRepository.save(existingTrack);
+//        return TrackMapper.mapToTrackDto(updatedTrack);
+//    }
 
     @Override
     public void deleteTrack(Long id) {
-        Track track = trackRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Track not found")
-        );
-        track.setStatus(false);
-        trackRepository.save(track);
+        Track statusTrack = trackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Track not found"));
+
+        // Chuyển đổi trạng thái của track
+        statusTrack.setStatus(false);
+        trackRepository.save(statusTrack);
     }
 
     @Override
-    public void likeTrack(Long id, Long userId) {
-        Track track = trackRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Track not found")
-        );
-
-        boolean alreadyLiked = track.getLikes().stream()
-                .anyMatch(like -> like.getUser().getId().equals(userId));
-
-        if (!alreadyLiked) {
-            User user = userRepository.findById(userId).orElseThrow(
-                    () -> new RuntimeException("User not found")
-            );
-
-            Like newLike = new Like();
-            newLike.setUser(user);
-            newLike.setTrack(track);
-            track.getLikes().add(newLike);
-            trackRepository.save(track);
-        }
+    public List<TrackDto> getTracksByUserId(Long userId) {
+        return trackRepository.findByCreatorId(userId)
+                .stream()
+                .map(TrackMapper::mapToTrackDto)
+                .collect(Collectors.toList());
     }
-
-    @Override
-    public CommentDto commentOnTrack(Long id, Long userId, String comment) {
-        Track track = trackRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Track not found")
-        );
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new RuntimeException("User not found")
-        );
-
-        Comment newComment = new Comment();
-        newComment.setContent(comment);
-        newComment.setCreationDate(LocalDate.now());
-        newComment.setTrack(track);
-        newComment.setUser(user);
-        commentRepository.save(newComment);
-
-        // Chuyển đổi Comment sang CommentDto trước khi trả về
-        return CommentMapper.maptoCommentDto(newComment);
-    }
-
-    @Override
-    public TrackDto getTrackByID(Long id) {
-        Track track = trackRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Track not found")
-        );
-        return TrackMapper.maptoTrackDto(track);
-    }
-
-    @Override
-    public List<TrackDto> getAllTrack(Long userId) {
-        List<Track> tracks = trackRepository.findByCreator_Id(userId);
-        return tracks.stream().map(TrackMapper::maptoTrackDto).collect(Collectors.toList());
-    }
-
-
-
 
 }

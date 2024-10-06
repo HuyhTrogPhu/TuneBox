@@ -1,24 +1,17 @@
 package org.example.library.service;
 
-import org.example.library.dto.CommentDto;
+import org.example.library.dto.PostDto;
 import org.example.library.dto.TrackDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TrackService {
-
-    TrackDto creatTrack(TrackDto trackDto, MultipartFile file);
-
-    TrackDto updateTrack(Long id, TrackDto trackDto, MultipartFile file);
-
+    TrackDto createTrack(TrackDto trackDto, MultipartFile musicFile, Long userId) throws IOException;
+    TrackDto getTrackById(Long id);
+    List<TrackDto> getAllTracks();
+   // TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile musicFile, Long userId);
     void deleteTrack(Long id);
-
-    void likeTrack(Long id, Long userId);
-
-    CommentDto commentOnTrack(Long id, Long userId, String comment);
-
-    TrackDto getTrackByID(Long id);
-
-    List<TrackDto> getAllTrack(Long userId);
+    List<TrackDto> getTracksByUserId(Long userId);
 }
