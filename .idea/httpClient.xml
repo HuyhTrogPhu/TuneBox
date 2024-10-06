@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HttpClientEndpointsTabState">
+    <option name="requestToText" value="&lt;CachedHttpClientTabRequests&gt;&#10;  &lt;entry key=&quot;9f2a00c86db5ff8cc5a155c3ef878f5ea9e44cd0&quot; value=&quot;###&amp;#10;PUT http://localhost:8080/api/posts/{{id}}?&amp;#10;    content={{$random.alphanumeric(8)}}&amp;amp;&amp;#10;    images={{$placeholder}}&amp;amp;&amp;#10;    userId={{$random.integer(100)}}&quot; /&gt;&#10;  &lt;entry key=&quot;d0670f84ba8bb63d85b4ef75ed33bf2ebf5c4979&quot; value=&quot;###&amp;#10;GET http://localhost:8080/api/posts/{{userId}}?&amp;#10;    userId={{$random.integer(100)}}&quot; /&gt;&#10;  &lt;entry key=&quot;e19d1ffeb0045414f6b24ffb1fa25ca7a30e0892&quot; value=&quot;###&amp;#10;GET http://localhost:8080/api/posts&quot; /&gt;&#10;  &lt;entry key=&quot;a8bc769f7bab9107d0963499b2012868beec64fe&quot; value=&quot;###&amp;#10;POST http://localhost:8080/api/posts?&amp;#10;    content={{$random.alphanumeric(8)}}&amp;amp;&amp;#10;    images={{$placeholder}}&quot; /&gt;&#10;&lt;/CachedHttpClientTabRequests&gt;" />
+  </component>
+</project>
