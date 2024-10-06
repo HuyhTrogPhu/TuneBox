@@ -42,10 +42,18 @@ public class InstrumentController {
         List<BrandsDto> brandsDto = brandService.getAllBrand();
         return ResponseEntity.ok(brandsDto);
     }
+
     //get all brand id instrument
     @GetMapping("/brand/{brandId}")
     public ResponseEntity<List<InstrumentDto>> getInstrumentsByBrandId(@PathVariable Long brandId) {
         List<InstrumentDto> instruments = instrumentService.getInstrumentsByBrandId(brandId);
+        return ResponseEntity.ok(instruments);
+    }
+
+    // Get all instruments by category id
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<InstrumentDto>> getInstrumentByCategoryId(@PathVariable Long categoryId) {
+        List<InstrumentDto> instruments = instrumentService.getInstrumentByCategoryId(categoryId);
         return ResponseEntity.ok(instruments);
     }
 
@@ -55,6 +63,7 @@ public class InstrumentController {
         List<CategoryDto> categoryDto = categoryService.getAllCategory();
         return ResponseEntity.ok(categoryDto);
     }
+
     // Get instrument by id
     @GetMapping("{id}")
     public ResponseEntity<?> getInstrumentById(@PathVariable Long id) {

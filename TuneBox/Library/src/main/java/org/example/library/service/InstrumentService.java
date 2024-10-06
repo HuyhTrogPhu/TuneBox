@@ -18,5 +18,7 @@ public interface InstrumentService {
 
     List<InstrumentDto> getInstrumentsByBrandId(Long brandId);
 
+    List<InstrumentDto> getInstrumentByCategoryId(Long categoryId);
+
 }
 
