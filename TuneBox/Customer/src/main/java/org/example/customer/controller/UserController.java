@@ -40,18 +40,11 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-<<<<<<<< HEAD:TuneBox/Customer/src/main/java/org/example/customer/API/UserController.java
-
-
-========
->>>>>>>> main:TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java
-
     //LOGIN
     @PostMapping("/log-in")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
         Map<String, Object> response = new HashMap<>();
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             UserDto loggedInUser = UserService.Login(user);
 
@@ -94,20 +87,7 @@ public class UserController {
         }
     }
 
-<<<<<<<< HEAD:TuneBox/Customer/src/main/java/org/example/customer/API/UserController.java
-        //encode
-        changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
-        changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
-        try {
-            UserService.    changePassword(changePasswordRequestdto.getEmail(),
-                    changePasswordRequestdto.getOldPassword(),
-                    changePasswordRequestdto.getNewPassword());
-            return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
-========
+
 //Change Password
 //    @PostMapping("/change-password")
 //    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestdto) {
@@ -125,7 +105,6 @@ public class UserController {
 //        }
 //    }
 
->>>>>>>> main:TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
@@ -142,39 +121,6 @@ public class UserController {
         }
     }
 
-
-<<<<<<<< HEAD:TuneBox/Customer/src/main/java/org/example/customer/API/UserController.java
-    @GetMapping("/login/oauth2/success")
-    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
-        Map<String, Object> response = new HashMap<>();
-
-        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
-        }
-
-        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-
-        // Kiểm tra oauth2User có phải null hay không
-        if (oauth2User == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2 User is not found");
-        }
-
-        String email = oauth2User.getAttribute("email");
-        String name = oauth2User.getAttribute("name");
-
-        if (email == null || name == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
-        }
-
-        UserDto userDto = UserService.loginWithGoogle(email, name);
-
-        response.put("status", true);
-        response.put("message", "Đăng nhập thành công");
-        response.put("data", userDto);
-
-        return ResponseEntity.ok(response);
-    }
-========
 
 //    @GetMapping("/login/oauth2/success")
 //    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
@@ -206,7 +152,7 @@ public class UserController {
 //
 //        return ResponseEntity.ok(response);
 //    }
->>>>>>>> main:TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java
+
 
 
     @PostMapping("/sign-up")

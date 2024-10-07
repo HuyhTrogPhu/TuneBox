@@ -12,10 +12,12 @@ import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -41,12 +43,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GenreRepository GenreRepo;
 
+    @Autowired
+    public UserServiceImpl(
+            @Lazy UserService userService,
+            JavaMailSender javaMailSender, // Khởi tạo javaMailSender
+            RoleRepository roleRepository // Khởi tạo roleRepository
+    ) {
+        this.userService = userService;
+        this.javaMailSender = javaMailSender; // Khởi tạo biến
+        this.roleRepository = roleRepository; // Khởi tạo biến
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
 
-
+    private final UserService userService;
 
 
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     @Override
     public void CheckLogin(RequestSignUpModel requestSignUpModel) {
@@ -136,13 +151,13 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Username or email cannot be null or empty");
         }
 
-
-        if (userOptional.isPresent() && userdto.getPassword().matches(userOptional.get().getPassword())) {
+        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
             throw new RuntimeException("Invalid username or password");
         }
     }
+
 
 
     public void resetPassword(String token, String newPassword) {
