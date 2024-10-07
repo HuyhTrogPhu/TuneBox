@@ -16,4 +16,5 @@ public class ReplyDto {
     private Long userId;
     private String userName;
     private Long commentId;
+    private Long parentReplyId;
 }

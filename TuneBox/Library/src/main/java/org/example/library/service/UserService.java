@@ -20,7 +20,8 @@ public interface UserService {
 
     void resetPassword(String token, String newPassword);
 
-    UserDto loginWithGoogle(String email , String name);
+
+//    UserDto loginWithGoogle(String email , String name);
 
     UserDto Login(UserDto user);
 

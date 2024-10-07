@@ -1,4 +1,4 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 import org.example.library.dto.ReplyDto;
 import org.example.library.service.ReplyService;
@@ -20,8 +20,15 @@ public class ReplyController {
     }
 
     @PostMapping("/comment/{commentId}/user/{userId}")
-    public ResponseEntity<ReplyDto> addReply(@PathVariable Long commentId, @PathVariable Long userId, @RequestBody ReplyDto replyDto) {
-        ReplyDto createdReply = replyService.addReply(commentId, userId, replyDto);
+    public ResponseEntity<ReplyDto> addReply(@PathVariable Long commentId,
+                                             @PathVariable Long userId,
+                                             @RequestBody ReplyDto replyDto,
+                                             @RequestParam(required = false) Long parentReplyId) {
+        System.out.println("Comment ID: " + commentId);
+        System.out.println("User ID: " + userId);
+        System.out.println("Reply DTO: " + replyDto);
+
+        ReplyDto createdReply = replyService.addReply(commentId, userId, replyDto, parentReplyId);
         return new ResponseEntity<>(createdReply, HttpStatus.CREATED);
     }
 
@@ -36,4 +43,14 @@ public class ReplyController {
         replyService.deleteReply(replyId);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/reply/{parentReplyId}/user/{userId}")
+    public ResponseEntity<ReplyDto> addReplyToReply(
+            @PathVariable Long parentReplyId,
+            @PathVariable Long userId,
+            @RequestBody ReplyDto replyDto) {
+
+        ReplyDto newReply = replyService.addReplyToReply(parentReplyId, userId, replyDto);
+        return new ResponseEntity<>(newReply, HttpStatus.CREATED);
+    }
+
 }

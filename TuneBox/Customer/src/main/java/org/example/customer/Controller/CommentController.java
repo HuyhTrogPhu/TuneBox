@@ -1,10 +1,11 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 import org.example.library.dto.CommentDTO;
 import org.example.library.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -29,11 +30,16 @@ public class CommentController {
     @PostMapping("/post/{postId}/user/{userId}")
     public ResponseEntity<CommentDTO> addComment(@PathVariable Long postId, @PathVariable Long userId,
                                                  @RequestParam(value = "createdAt", required = false) String createdAt,
-                                                 @RequestBody CommentDTO commentDTO)
-    {
+                                                 @RequestBody CommentDTO commentDTO) {
+        // Nếu createdAt được truyền từ request, chuyển đổi nó sang LocalDateTime
+        if (createdAt != null && !createdAt.isEmpty()) {
+            commentDTO.setCreationDate(LocalDateTime.parse(createdAt));
+        }
+
         CommentDTO createdComment = commentService.addComment(postId, userId, commentDTO);
         return ResponseEntity.ok(createdComment);
     }
+
 
     // Xóa comment
     @DeleteMapping("/{commentId}")

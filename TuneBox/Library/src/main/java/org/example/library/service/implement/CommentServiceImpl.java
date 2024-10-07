@@ -46,8 +46,8 @@ public class CommentServiceImpl implements CommentService {
             }
 
             Comment comment = commentMapper.toEntity(commentDTO, user.get(), post.get());
-            comment = commentRepository.save(comment);
             comment.setCreationDate(LocalDateTime.now());
+            comment = commentRepository.save(comment);
             return commentMapper.toDto(comment);
         } else {
             throw new IllegalArgumentException("Post or User not found");
@@ -84,10 +84,7 @@ public class CommentServiceImpl implements CommentService {
                 List<CommentDTO> replies = repliesMap.get(commentDTO.getId());
                 if (replies != null) {
                     // Đệ quy xử lý các trả lời (replies) theo nhiều cấp
-                    for (CommentDTO reply : replies) {
-                        reply.setReplies(repliesMap.get(reply.getId())); // Gán các trả lời của reply
-                    }
-                    commentDTO.setReplies(replies);
+                    commentDTO.setReplies(getNestedReplies(replies, repliesMap)); // Sử dụng phương thức getNestedReplies
                 }
                 topLevelComments.add(commentDTO);
             }
@@ -95,6 +92,18 @@ public class CommentServiceImpl implements CommentService {
 
         return topLevelComments; // Trả về danh sách bình luận gốc với các reply
     }
+
+    // Phương thức hỗ trợ để lấy các replies theo nhiều cấp
+    private List<CommentDTO> getNestedReplies(List<CommentDTO> replies, Map<Long, List<CommentDTO>> repliesMap) {
+        for (CommentDTO reply : replies) {
+            List<CommentDTO> nestedReplies = repliesMap.get(reply.getId());
+            if (nestedReplies != null) {
+                reply.setReplies(getNestedReplies(nestedReplies, repliesMap)); // Đệ quy để lấy replies của replies
+            }
+        }
+        return replies;
+    }
+
 
     @Override
     public CommentDTO updateComment(Long commentId, CommentDTO commentDTO) {
