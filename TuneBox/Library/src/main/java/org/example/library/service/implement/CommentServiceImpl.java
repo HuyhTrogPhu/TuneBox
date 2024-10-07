@@ -11,6 +11,7 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.CommentService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,7 @@ public class CommentServiceImpl implements CommentService {
 
             Comment comment = commentMapper.toEntity(commentDTO, user.get(), post.get());
             comment = commentRepository.save(comment);
+            comment.setCreationDate(LocalDateTime.now());
             return commentMapper.toDto(comment);
         } else {
             throw new IllegalArgumentException("Post or User not found");

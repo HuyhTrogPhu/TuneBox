@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -25,10 +27,12 @@ public class PostController {
     @Autowired
     private LikeRepository likeRepository;
 
+
     @PostMapping
     public ResponseEntity<PostDto> createPost(
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
+            @RequestParam(value = "createdAt", required = false) String createdAt,
             @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
@@ -38,6 +42,15 @@ public class PostController {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
             }
+
+            // Chuyển đổi chuỗi createdAt thành LocalDateTime nếu có
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                LocalDateTime dateTime = LocalDateTime.parse(createdAt); // Chuyển đổi chuỗi thành LocalDateTime
+                postDto.setCreatedAt(dateTime); // Gán giá trị cho createdAt
+            } else {
+                postDto.setCreatedAt(LocalDateTime.now()); // Nếu không có, sử dụng thời gian hiện tại
+            }
+
             // Gọi service để lưu bài viết
             PostDto savedPost = postService.savePost(postDto, images, userId);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
@@ -45,8 +58,11 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (DateTimeParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Xử lý lỗi định dạng thời gian
         }
     }
+
 
     // Lấy tất cả bài viết của người dùng từ ID
         @GetMapping("/current-user")
@@ -77,7 +93,9 @@ public class PostController {
             @PathVariable Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
+            @RequestParam(value = "createdAt", required = false) String createdAt, // Thêm trường createdAt
             @RequestParam("userId") Long userId) {
+
         PostDto postDto = new PostDto();
         postDto.setId(id);
         postDto.setContent(content); // Nội dung có thể là null
@@ -88,6 +106,12 @@ public class PostController {
                 throw new IllegalArgumentException("At least one image or content must be provided");
             }
 
+            // Chuyển đổi chuỗi createdAt thành LocalDateTime nếu có
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                LocalDateTime dateTime = LocalDateTime.parse(createdAt); // Chuyển đổi chuỗi thành LocalDateTime
+                postDto.setCreatedAt(dateTime); // Gán giá trị cho createdAt
+            }
+
             // Gọi service để cập nhật bài post
             PostDto updatedPost = postService.updatePost(postDto, images, userId);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);
@@ -95,10 +119,13 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (DateTimeParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Xử lý lỗi định dạng thời gian
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Hoặc sử dụng status khác tùy thuộc vào lỗi
         }
     }
+
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
