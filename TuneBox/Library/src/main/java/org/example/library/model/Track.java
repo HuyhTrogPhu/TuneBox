@@ -26,15 +26,18 @@ public class Track {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String trackImage;
+
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] trackFile;
 
     private String description;
 
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     private boolean report;
 
@@ -50,8 +53,8 @@ public class Track {
     private User creator;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "albums_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "albums_id", nullable = true)
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")

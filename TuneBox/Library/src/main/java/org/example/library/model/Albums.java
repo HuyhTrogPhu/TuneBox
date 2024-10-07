@@ -36,7 +36,7 @@ public class Albums {
     private Date releaseDate;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     private boolean report;
 
