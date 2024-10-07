@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/brand")

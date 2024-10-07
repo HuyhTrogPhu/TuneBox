@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import org.example.library.dto.ChangePasswordRequestDto;
 import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
 import org.example.library.model.RespondModel;
@@ -36,7 +37,8 @@ public class UserController {
     @Autowired
     private UserRepository Repo;
 
-private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     //LOGIN

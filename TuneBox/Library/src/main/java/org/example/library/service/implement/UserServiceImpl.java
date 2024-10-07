@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,7 +46,6 @@ public class UserServiceImpl implements UserService {
 
 
     private final JavaMailSender javaMailSender;
-
     private final RoleRepository roleRepository;
 
     @Override
