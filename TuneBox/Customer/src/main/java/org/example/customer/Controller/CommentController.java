@@ -27,7 +27,10 @@ public class CommentController {
 
     // Thêm comment vào bài viết
     @PostMapping("/post/{postId}/user/{userId}")
-    public ResponseEntity<CommentDTO> addComment(@PathVariable Long postId, @PathVariable Long userId, @RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable Long postId, @PathVariable Long userId,
+                                                 @RequestParam(value = "createdAt", required = false) String createdAt,
+                                                 @RequestBody CommentDTO commentDTO)
+    {
         CommentDTO createdComment = commentService.addComment(postId, userId, commentDTO);
         return ResponseEntity.ok(createdComment);
     }
@@ -38,6 +41,7 @@ public class CommentController {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
     }
+
     // Cập nhật comment
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {

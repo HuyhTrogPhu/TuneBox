@@ -45,7 +45,7 @@ public class TrackMapper {
         track.setStatus(dto.isStatus());
         track.setCreateDate(dto.getCreateDate());
         track.setReport(dto.isReport());
-        // Nếu cần set reportDate
+
         track.setReportDate(dto.getReportDate() != null ? Date.from(dto.getReportDate().atStartOfDay(ZoneId.systemDefault()).toInstant()) : null);
 
         return track;

@@ -41,7 +41,7 @@ public class Track {
     private Date reportDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
+    @JoinColumn(name = "genre_id")
     private Genre genre;
 
 
