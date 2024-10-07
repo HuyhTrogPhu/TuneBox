@@ -7,7 +7,7 @@ import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
 import org.example.library.service.implement.BrandServiceImpl;
-import org.example.library.service.implement.CategoryInsServiceImpl;
+
 import org.example.library.service.implement.CategoryServiceImpl;
 import org.example.library.service.implement.InstrumentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,19 +32,18 @@ public class InstrumentController {
 
     @Autowired
     private CategoryServiceImpl categoryService;
-    @Autowired
-    private CategoryInsServiceImpl categoryInsService;
+
 
     // Add new instrument
     @PostMapping
     public ResponseEntity<InstrumentDto> createInstrument(@RequestParam("name") String name,
-                                              @RequestParam("costPrice") double costPrice,
-                                              @RequestParam("quantity") int quantity,
-                                              @RequestParam("color") String color,
-                                              @RequestParam("description") String description,
-                                              @RequestParam("brandId") Brand brand,
-                                              @RequestParam("categoryId") CategoryIns category,
-                                                          @RequestParam(value = "image", required = false) MultipartFile[] image)  {
+                                                          @RequestParam("costPrice") double costPrice,
+                                                          @RequestParam("quantity") int quantity,
+                                                          @RequestParam("color") String color,
+                                                          @RequestParam("description") String description,
+                                                          @RequestParam("brandId") Brand brand,
+                                                          @RequestParam("categoryId") CategoryIns category,
+                                                          @RequestParam("image") MultipartFile image) {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
@@ -113,7 +112,7 @@ public class InstrumentController {
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam("status") boolean status,
-            @RequestParam(value = "image", required = false) MultipartFile[] image) {
+            @RequestParam(value = "image", required = false) MultipartFile image) {
 
         try {
             // Kiểm tra nếu id là "undefined" hoặc rỗng
@@ -138,7 +137,7 @@ public class InstrumentController {
 
             // Tìm thương hiệu và danh mục
             Brand brand = brandService.getManagedBrand(brandId);
-            CategoryIns category = categoryInsService.getManagedCategory(categoryId);
+            CategoryIns category = categoryService.getManagedCategory(categoryId);
 
             // Cập nhật thông tin thương hiệu và danh mục
             existingInstrument.setBrand(brand);

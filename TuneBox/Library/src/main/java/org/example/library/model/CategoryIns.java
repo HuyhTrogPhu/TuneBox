@@ -21,5 +21,11 @@ public class CategoryIns {
 
     private String name;
 
-    private boolean status;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String image;
+
+    private String description;
+
+    private Boolean status;
 }

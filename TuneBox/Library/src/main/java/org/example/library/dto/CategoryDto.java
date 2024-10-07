@@ -16,5 +16,9 @@ public class CategoryDto {
 
     private String name;
 
-    private boolean status;
+    private String image;
+
+    private String description;
+
+    private Boolean status;
 }
