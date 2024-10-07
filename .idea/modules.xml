@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TuneBox/Library/Library.iml" filepath="$PROJECT_DIR$/TuneBox/Library/Library.iml" />
     </modules>
   </component>
 </project>

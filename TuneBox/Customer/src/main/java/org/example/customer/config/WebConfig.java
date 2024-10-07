@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer  {
                 .allowedOriginPatterns("http://localhost:3000") // Cho phép origin từ frontend
                 .allowCredentials(true)  // Cho phép gửi cookie
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Cho phép các phương thức
-                .allowedHeaders("*"); // Cho phép tất cả các header
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
