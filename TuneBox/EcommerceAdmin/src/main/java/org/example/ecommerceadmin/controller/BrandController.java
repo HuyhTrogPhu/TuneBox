@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 
 import org.example.library.dto.BrandsDto;
 import org.example.library.model.Brand;
+import org.example.library.service.BrandService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,14 @@ import java.util.List;
 import java.util.Map;
 
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/brand")
 public class BrandController {
 
     @Autowired
-    private BrandServiceImpl brandService;
+    private BrandService brandService;
 
     //    Add new brand
     @PostMapping
