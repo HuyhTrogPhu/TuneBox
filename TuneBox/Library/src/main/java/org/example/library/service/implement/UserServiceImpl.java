@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,12 +42,11 @@ public class UserServiceImpl implements UserService {
     private GenreRepository GenreRepo;
 
 
-    private PasswordEncoder crypt;
 
-    private final PasswordEncoder passwordEncoder;
+
+
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
-
 
     @Override
     public void CheckLogin(RequestSignUpModel requestSignUpModel) {
@@ -71,7 +69,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = new User();
 
         savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
+        savedUser.setPassword(requestSignUpModel.getUserDto().getPassword());
         savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
         savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
 
@@ -139,7 +137,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
+        if (userOptional.isPresent() && userdto.getPassword().matches(userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
             throw new RuntimeException("Invalid username or password");
@@ -151,7 +149,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = Repo.findByResetToken(token); // Tìm người dùng theo token
 
         if (userOptional.isPresent()) {
-            userOptional.get().setPassword(passwordEncoder.encode(newPassword));
+            userOptional.get().setPassword((newPassword));
             Repo.save(userOptional.get());
         } else {
             throw new RuntimeException("Invalid token");
@@ -173,34 +171,34 @@ public class UserServiceImpl implements UserService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
-
-    @Override
-    public UserDto loginWithGoogle(String email, String name) {
-        Optional<User> userOptional = Repo.findByEmail(email);
-        if (userOptional.isPresent()) {
-
-            return UserMapper.mapToUserDto((userOptional.get()));
-        } else {
-            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
-            User savedUser = Repo.save(newUser);
-
-            return UserMapper.mapToUserDto(savedUser);
-        }
-    }
+//
+//    @Override
+//    public UserDto loginWithGoogle(String email, String name) {
+//        Optional<User> userOptional = Repo.findByEmail(email);
+//        if (userOptional.isPresent()) {
+//
+//            return UserMapper.mapToUserDto((userOptional.get()));
+//        } else {
+//            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
+//            User newUser = new User();
+//            newUser.setEmail(email);
+//            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
+//            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+//            User savedUser = Repo.save(newUser);
+//
+//            return UserMapper.mapToUserDto(savedUser);
+//        }
+//    }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
         User user = Repo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!oldPassword.matches(newPassword)) {
             throw new RuntimeException("Mật khẩu cũ không chính xác");
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword);
         Repo.save(user);
     }
 

@@ -9,6 +9,7 @@ import org.example.library.repository.BrandRepository;
 import org.example.library.service.BrandService;
 import org.example.library.utils.ImageUploadBrand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,11 +65,6 @@ public class BrandServiceImpl implements BrandService {
                     () -> new RuntimeException("Brand not found")
             );
 
-            System.out.println("Updating brand with ID: " + id);
-            System.out.println("New name: " + brandsDto.getName());
-            System.out.println("New description: " + brandsDto.getDescription());
-            System.out.println("New status: " + brandsDto.getStatus());
-
             // Cập nhật tên và mô tả
             brand.setName(brandsDto.getName());
             brand.setDescription(brandsDto.getDescription());
@@ -109,4 +105,11 @@ public class BrandServiceImpl implements BrandService {
         List<Brand> list = brandRepository.findByKeyword(keyword);
         return list.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
     }
+    @Override
+    public Brand getManagedBrand(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
+
+
 }
