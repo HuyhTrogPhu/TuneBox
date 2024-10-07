@@ -45,8 +45,8 @@ public class CustomerConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Tắt CSRF
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**", "/login", "/signup","/createUsername","/talent","/artist","/categoryMusic", "/do-register", "/product-detail/**").permitAll()
-                        .requestMatchers("/shop/**", "/find-products/**").hasRole("CUSTOMER")
+                        .requestMatchers("/**", "/login", "/signup","/createUsername","/talent","/artist","/categoryMusic", "/do-register").permitAll()
+                        .requestMatchers("/customer/shop/checkout", "/customer/track/**", "/customer/post/**").hasRole("CUSTOMER")
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
