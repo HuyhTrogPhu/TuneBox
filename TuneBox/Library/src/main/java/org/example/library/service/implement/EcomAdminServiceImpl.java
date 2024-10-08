@@ -61,10 +61,14 @@ public class EcomAdminServiceImpl implements EcomAdminService {
 
     @Override
     public EcomAdminDTO AddAdmin(EcomAdminDTO admin){
-
-        EcommerceAdmin adminSaved = new EcommerceAdmin();
-        adminSaved.setRole(roleRepo.findByName("ECOMADMIN"));
-        Repo.save(EcomAdminMapping.mapToEntity(admin));
-        return EcomAdminMapping.mapToDTO(adminSaved);
+try {
+    EcommerceAdmin adminSaved = new EcommerceAdmin();
+    adminSaved.setRole(roleRepo.findByName("ECOMADMIN"));
+    Repo.save(EcomAdminMapping.mapToEntity(admin));
+    return EcomAdminMapping.mapToDTO(adminSaved);
+}catch (Exception e){
+    e.printStackTrace();
+    return null;
+}
     }
 }

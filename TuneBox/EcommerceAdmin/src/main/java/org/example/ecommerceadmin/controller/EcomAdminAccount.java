@@ -43,7 +43,6 @@ public class EcomAdminAccount {
     @PostMapping("/add")
     public ResponseEntity<?> ADDbyPostMan(@RequestBody EcomAdminDTO admin) {
         Map<String, Object> response = new HashMap<>();
-
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         try {
             EcomAdminDTO Added = serviceAdmin.AddAdmin(admin);
