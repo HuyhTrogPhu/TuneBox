@@ -39,13 +39,11 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
     //LOGIN
     @PostMapping("/log-in")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
         Map<String, Object> response = new HashMap<>();
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             UserDto loggedInUser = UserService.Login(user);
 
@@ -59,7 +57,6 @@ public class UserController {
         }
         return ResponseEntity.ok(response);
     }
-
 
     //FORGOT PASSWORD
     @PostMapping("/forgot-password")
@@ -88,6 +85,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
+
 
 //Change Password
 //    @PostMapping("/change-password")
@@ -123,7 +121,6 @@ public class UserController {
     }
 
 
-
 //    @GetMapping("/login/oauth2/success")
 //    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
 //        Map<String, Object> response = new HashMap<>();
@@ -156,6 +153,7 @@ public class UserController {
 //    }
 
 
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> Register(@RequestBody RequestSignUpModel requestSignUpModel,
                                       HttpServletRequest request
@@ -164,6 +162,13 @@ public class UserController {
         String psEncode =passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword());
         requestSignUpModel.getUserDto().setPassword(psEncode);
         RespondModel response = new RespondModel();
+        if (requestSignUpModel.getUserDto() == null) {
+            response.setMessage("Thông tin người dùng không được cung cấp.");
+            response.setData(null);
+            response.setStatus(false);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         try {
             response.setMessage("Đăng ký thành công");
             response.setData(UserService.Register(requestSignUpModel));

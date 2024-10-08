@@ -4,25 +4,8 @@
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/TuneBox/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
-    <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="SocialAdmin" />
-        <module name="Library" />
-        <module name="Customer" />
-        <module name="EcommerceAdmin" />
-      </profile>
-    </annotationProcessing>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="Customer" options="-parameters" />
-      <module name="EcommerceAdmin" options="-parameters" />
-      <module name="Library" options="-parameters" />
-      <module name="SocialAdmin" options="-parameters" />
-    </option>
+    <bytecodeTargetLevel>
+      <module name="EcommerceAdmin" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

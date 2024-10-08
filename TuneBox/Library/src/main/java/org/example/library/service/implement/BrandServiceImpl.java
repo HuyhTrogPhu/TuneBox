@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class BrandServiceImpl implements BrandService {
-
-    @Autowired
     public BrandRepository brandRepository;
 
     private final ImageUploadBrand imageUploadBrand;
@@ -31,15 +29,15 @@ public class BrandServiceImpl implements BrandService {
     public BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image) {
         try {
             Brand brand = BrandMapper.maptoBrand(brandsDto);
-            if (image != null) {
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            if (image != null && !image.isEmpty()) {
+                String imageUrl = imageUploadBrand.uploadFile(image);
+                brand.setBrandImage(imageUrl);
             }
             brand.setStatus(true);
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload image: " + e.getMessage());
+            throw new RuntimeException("Failed to upload image: " + e.getMessage(),e);
         }
     }
 
@@ -60,32 +58,23 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandsDto updateBrand(Long id, BrandsDto brandsDto, MultipartFile image) {
         try {
-            // Tìm thương hiệu cần cập nhật
             Brand brand = brandRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Brand not found")
             );
 
-            // Cập nhật tên và mô tả
             brand.setName(brandsDto.getName());
             brand.setDescription(brandsDto.getDescription());
             brand.setStatus(brandsDto.getStatus());
 
-            // Kiểm tra xem hình ảnh có được truyền vào không
             if (image != null && !image.isEmpty()) {
-                // Tải lên hình ảnh mới
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                String imageUrl = imageUploadBrand.uploadFile(image);
+                brand.setBrandImage(imageUrl);
             }
 
-            // Lưu thương hiệu đã cập nhật
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("Failed to update brand image: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("An unexpected error occurred: " + e.getMessage() + ", cause: " + e.getCause());
         }
     }
 
