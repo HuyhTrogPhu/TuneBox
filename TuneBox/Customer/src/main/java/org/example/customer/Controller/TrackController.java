@@ -30,6 +30,8 @@ public class TrackController {
     @Autowired
     private GenreService genreService;
 
+
+    //creat Track
     @PostMapping
     public ResponseEntity<TrackDto> createTrack(@RequestParam("name") String name, @RequestParam("trackImage") MultipartFile trackImage,
                                                 @RequestParam("trackFile") MultipartFile trackFile, @RequestParam("description") String description,
@@ -55,29 +57,48 @@ public class TrackController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TrackDto> getTrackById(@PathVariable Long id) {
-        TrackDto trackDto = trackService.getTrackById(id);
-        return new ResponseEntity<>(trackDto, HttpStatus.OK);
+    // update TRack
+    @PutMapping("/{trackId}")
+    public ResponseEntity<TrackDto> updateTrack(@PathVariable Long trackId,
+                                                @RequestParam(value = "name", required = false) String name,
+                                                @RequestParam(value = "trackImage", required = false) MultipartFile trackImage,
+                                                @RequestParam(value = "trackFile", required = false) MultipartFile trackFile,
+                                                @RequestParam(value = "description", required = false) String description,
+                                                @RequestParam(value = "status", required = false) Boolean status,
+                                                @RequestParam(value = "report", required = false) Boolean report,
+                                                @RequestParam(value = "genreId", required = false) Long genreId,
+                                                @RequestParam(value = "userId", required = false) Long userId)  {
+
+        try {
+            TrackDto trackDto = new TrackDto();
+            trackDto.setName(name);
+            trackDto.setDescription(description);
+            trackDto.setStatus(status);
+            trackDto.setReport(report);
+//            trackDto.setCreateDate(LocalDate.now());
+//            trackDto.setReportDate(null);
+
+            // Cập nhật track
+            TrackDto updatedTrack = trackService.updateTrack(trackId, trackDto, trackImage, trackFile, userId, genreId);
+            if (updatedTrack == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(updatedTrack, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
-
-
-
-//    @PutMapping("/{id}")
-//    public ResponseEntity<TrackDto> updateTrack(@PathVariable Long id,
-//                                                @RequestParam("trackDto") TrackDto trackDto,
-//                                                @RequestParam(value = "musicFile", required = false) MultipartFile musicFile) {
-//        TrackDto updatedTrack = trackService.updateTrack(id, trackDto, musicFile);
-//        return new ResponseEntity<>(updatedTrack, HttpStatus.OK);
-//    }
-
+    // delete
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrack(@PathVariable Long id) {
         trackService.deleteTrack(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // get Track theo id ngdung
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TrackDto>> getTracksByUserId(@PathVariable Long userId) {
         List<TrackDto> tracks = trackService.getTracksByUserId(userId);
@@ -90,9 +111,17 @@ public class TrackController {
         return new ResponseEntity<>(tracks, HttpStatus.OK);
     }
 
+    //get tat ca cac theloai
     @GetMapping("/getAllGenre")
     public ResponseEntity<List<GenreDto>> getAllGenres() {
         List<GenreDto> genres = genreService.findAll();
         return ResponseEntity.ok(genres);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TrackDto> getTrackById(@PathVariable Long id) {
+        TrackDto trackDto = trackService.getTrackById(id);
+        return new ResponseEntity<>(trackDto, HttpStatus.OK);
+    }
+
 }

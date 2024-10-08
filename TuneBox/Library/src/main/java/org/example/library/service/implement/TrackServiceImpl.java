@@ -97,19 +97,74 @@ public class TrackServiceImpl implements TrackService {
 
     }
 
-//    @Override
-//    public TrackDto getAllTracks() {
-//        return null;
-//    }
-
-    @Override
-    public TrackDto getTrackById(Long trackId) {
-        return null;
-    }
 
     @Override
     public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId) {
-        return null;
+        try {
+            // Lấy idTrack
+            Track editTrack = trackRepository.findById(trackId).orElseThrow(
+                    () -> new RuntimeException("Trackid not found")
+            );
+
+            if (genreId != null) {
+                Genre genre = genreRepository.findById(genreId).orElseThrow(
+                        () -> new RuntimeException("Genre not found")
+                );
+                editTrack.setGenre(genre);
+            }
+
+            if (userId != null) {
+                User user = userRepository.findById(userId).orElseThrow(
+                        () -> new RuntimeException(" user not found")
+                );
+                editTrack.setCreator(user);
+            }
+
+            // Ánh xạ các thuộc tính mới từ trackDto
+            editTrack.setName(trackDto.getName());
+            editTrack.setDescription(trackDto.getDescription());
+
+            // Xử lý tải hình ảnh
+            if (imageTrack != null && !imageTrack.isEmpty()) {
+                if (!imageUploadTrack.checkExist(imageTrack)) {
+                    boolean isUploaded = imageUploadTrack.uploadFile(imageTrack);
+                    if (isUploaded) {
+                        editTrack.setTrackImage(imageTrack.getOriginalFilename());
+                    } else {
+                        throw new RuntimeException("Failed to upload track image");
+                    }
+                } else {
+                    editTrack.setTrackImage(imageTrack.getOriginalFilename());
+                }
+            }
+
+            // Xử lý tải file nhạc
+            if (trackFile != null && !trackFile.isEmpty()) {
+                if (!mp3UploadTrack.checkExist(trackFile)) {
+                    boolean isUploaded = mp3UploadTrack.uploadFile(trackFile);
+                    if (isUploaded) {
+                        editTrack.setTrackFile(trackFile.getBytes());
+                    } else {
+                        throw new RuntimeException("Tải file nhạc thất bại");
+                    }
+                } else {
+                    editTrack.setTrackFile(trackFile.getBytes());
+                }
+            }
+
+            editTrack.setCreateDate(LocalDate.now());
+            editTrack.setStatus(false);
+            editTrack.setReport(false);
+            editTrack.setAlbums(null);
+
+            // Lưu track đã cập nhật
+            trackRepository.save(editTrack);
+
+            return TrackMapper.mapperTrackDto(editTrack);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -128,6 +183,16 @@ public class TrackServiceImpl implements TrackService {
                 .stream()
                 .map(TrackMapper::mapperTrackDto)
                 .collect(Collectors.toList());
+    }
+
+    //    @Override
+//    public TrackDto getAllTracks() {
+//        return null;
+//    }
+
+    @Override
+    public TrackDto getTrackById(Long trackId) {
+        return null;
     }
 
 }
