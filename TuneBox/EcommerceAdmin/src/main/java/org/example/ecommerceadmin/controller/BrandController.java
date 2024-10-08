@@ -25,13 +25,16 @@ public class BrandController {
 
     @Autowired
     private BrandService brandService;
-
     //    Add new brand
     @PostMapping
     public ResponseEntity<BrandsDto> createBrand(@RequestParam("name") String name,
                                                  @RequestParam("imageBrand") MultipartFile image,
                                                  @RequestParam("desc") String description
     ) {
+        System.out.println("Name: " + name);
+        System.out.println("Image: " + (image != null ? image.getOriginalFilename() : "null"));
+        System.out.println("Description: " + description);
+
         BrandsDto brandsDto = new BrandsDto();
         brandsDto.setName(name);
         brandsDto.setDescription(description);
