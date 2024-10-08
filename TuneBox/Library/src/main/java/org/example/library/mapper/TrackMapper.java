@@ -1,22 +1,30 @@
+
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
 import org.example.library.model.*;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TrackMapper {
 
-    public static TrackDto mapToTrackDto(Track track) {
-        if (track == null) {
-            return null; // Xử lý trường hợp đối tượng track là null
-        }
+    public static TrackDto mapperTrackDto(Track track) {
+
+        Set<Long> playlist = track.getPlaylists() != null ? track.getPlaylists().stream()
+                .map(Playlist::getId).collect(Collectors.toSet()) : null;
+
+        Set<Long> comments = track.getComments() != null ? track.getComments().stream()
+                .map(Comment::getId).collect(Collectors.toSet()) : null;
+
+        Set<Long> likes = track.getLikes() != null ? track.getLikes().stream()
+                .map(Like::getId).collect(Collectors.toSet()) : null;
 
         return new TrackDto(
                 track.getId(),
                 track.getName(),
                 track.getTrackImage(),
-                track.getMusicFile(), // Thêm musicFile nếu cần
+                track.getTrackFile(),
                 track.getDescription(),
                 track.isStatus(),
                 track.getCreateDate(),
@@ -25,68 +33,66 @@ public class TrackMapper {
                 track.getGenre() != null ? track.getGenre().getId() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
                 track.getAlbums() != null ? track.getAlbums().getId() : null,
-                track.getPlaylists() != null ? track.getPlaylists().stream().map(p -> p.getId()).collect(Collectors.toSet()) : null, // Ánh xạ ID cho playlists
-                track.getComments() != null ? track.getComments().stream().map(c -> c.getId()).collect(Collectors.toSet()) : null, // Ánh xạ ID cho comments
-                track.getLikes() != null ? track.getLikes().stream().map(l -> l.getId()).collect(Collectors.toSet()) : null // Ánh xạ ID cho likes
+                playlist,
+                comments,
+                likes
         );
     }
 
-    public static Track mapToTrack(TrackDto trackDto) {
-        if (trackDto == null) {
-            return null; // Xử lý trường hợp đối tượng trackDto là null
-        }
-
+    public static Track mapperTrack(TrackDto trackDto) {
         Track track = new Track();
         track.setId(trackDto.getId());
         track.setName(trackDto.getName());
-        track.setTrackImage(trackDto.getTrackImage());
-        track.setMusicFile(trackDto.getMusicFile()); // Thêm musicFile nếu cần
+        track.setTrackImage(trackDto.getImageTrack());
+        track.setTrackFile(trackDto.getTrackFile());
         track.setDescription(trackDto.getDescription());
-        track.setStatus(trackDto.isStatus());
+        track.setStatus(trackDto.isStatus()); // Convert Long to boolean
         track.setCreateDate(trackDto.getCreateDate());
         track.setReport(trackDto.isReport());
         track.setReportDate(trackDto.getReportDate());
 
-        if (trackDto.getGenreId() != null) {
-            Genre genre = new Genre();
-            genre.setId(trackDto.getGenreId());
-            track.setGenre(genre);
-        }
+        // Set the genre, user (creator), and albums using IDs from trackDto
+        Genre genre = new Genre();
+        genre.setId(trackDto.getGenreId());
+        track.setGenre(genre);  // Assume genre is already fetched or managed elsewhere
 
-        if (trackDto.getCreatorId() != null) {
-            User user = new User();
-            user.setId(trackDto.getCreatorId());
-            track.setCreator(user);
-        }
+        User creator = new User();
+        creator.setId(trackDto.getUserId());
+        track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
-        if (trackDto.getAlbumId() != null) {
-            Albums album = new Albums();
-            album.setId(trackDto.getAlbumId());
-            track.setAlbums(album);
-        }
+        Albums albums = new Albums();
+        albums.setId(trackDto.getAlbumId());
+        track.setAlbums(albums);  // Assume albums is already fetched or managed elsewhere
 
-        // Ánh xạ ID cho playlists, comments và likes
-        track.setPlaylists(trackDto.getPlaylistsId() != null ?
-                trackDto.getPlaylistsId().stream().map(id -> {
+        // Set playlists (if necessary)
+        Set<Playlist> playlists = trackDto.getPlaylistIds() != null ?
+                trackDto.getPlaylistIds().stream().map(id -> {
                     Playlist playlist = new Playlist();
                     playlist.setId(id);
                     return playlist;
-                }).collect(Collectors.toSet()) : null);
+                }).collect(Collectors.toSet()) : null;
+        track.setPlaylists(playlists);
 
-        track.setComments(trackDto.getCommentsId() != null ?
-                trackDto.getCommentsId().stream().map(id -> {
+        // Set comments (if necessary)
+        Set<Comment> comments = trackDto.getComments() != null ?
+                trackDto.getComments().stream().map(id -> {
                     Comment comment = new Comment();
                     comment.setId(id);
                     return comment;
-                }).collect(Collectors.toSet()) : null);
+                }).collect(Collectors.toSet()) : null;
+        track.setComments(comments);
 
-        track.setLikes(trackDto.getLikesId() != null ?
-                trackDto.getLikesId().stream().map(id -> {
+        // Set likes (if necessary)
+        Set<Like> likes = trackDto.getLikes() != null ?
+                trackDto.getLikes().stream().map(id -> {
                     Like like = new Like();
                     like.setId(id);
                     return like;
-                }).collect(Collectors.toSet()) : null);
+                }).collect(Collectors.toSet()) : null;
+        track.setLikes(likes);
 
         return track;
     }
+
+
 }

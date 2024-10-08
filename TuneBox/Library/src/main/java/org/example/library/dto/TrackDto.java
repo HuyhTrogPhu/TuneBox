@@ -16,19 +16,35 @@ import java.util.Set;
 public class TrackDto {
 
     private Long id;
+
     private String name;
-    private String trackImage;
-    private byte[]  musicFile;
+
+    private String imageTrack;
+
+    private byte[] trackFile;
+
     private String description;
+
     private boolean status;
+
     private LocalDate createDate;
+
     private boolean report;
+
     private Date reportDate;
+
     private Long genreId;
-    private Long creatorId;
+
+    private Long userId;
+
     private Long albumId;
-    private Set<Long> playlistsId;
-    private Set<Long> commentsId;
-    private Set<Long> likesId;
+
+    private Set<Long> playlistIds;
+
+    private Set<Long> comments;
+
+    private Set<Long> likes;
+
+
 
 }

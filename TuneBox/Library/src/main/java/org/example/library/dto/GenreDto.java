@@ -21,9 +21,13 @@ public class GenreDto {
     private Long id;
     private String name;
     private Set<User> user;
-    private Set<Track> tracks;
-    private Set<Albums> albums;
+    private Long trackId;
+    private Long albumId;
 
+    public GenreDto(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
 
 }

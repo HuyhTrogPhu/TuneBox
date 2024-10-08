@@ -8,10 +8,16 @@ import java.io.IOException;
 import java.util.List;
 
 public interface TrackService {
-    TrackDto createTrack(TrackDto trackDto, MultipartFile musicFile, Long userId) throws IOException;
-    TrackDto getTrackById(Long id);
-    List<TrackDto> getAllTracks();
-   // TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile musicFile, Long userId);
-    void deleteTrack(Long id);
+
+        public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+
+//        public TrackDto getAllTracks();
+
+        public TrackDto getTrackById(Long id);
+
+        public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+
+        public void deleteTrack(Long trackId);
+
     List<TrackDto> getTracksByUserId(Long userId);
 }
