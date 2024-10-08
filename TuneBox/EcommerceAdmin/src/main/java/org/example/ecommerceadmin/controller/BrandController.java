@@ -73,7 +73,7 @@ public class BrandController {
         brandsDto.setDescription(description);
         brandsDto.setStatus(status);
 
-        // Gọi phương thức cập nhật thương hiệu
+        // Gọi phương thức cập nhật thưdgdssfsdfdsfdsdơng hiệu
         BrandsDto updatedBrand = brandService.updateBrand(id, brandsDto, image);
         return ResponseEntity.ok(updatedBrand);
     }

@@ -32,10 +32,9 @@ public class Instrument {
 
     private boolean status;
 
-    @ElementCollection
     @Lob
     @Column(columnDefinition = "LONGTEXT")
-    private List<String> image;
+    private String image;
 
     @Size(min = 10, max = 1000)
     private String description;

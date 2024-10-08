@@ -27,7 +27,7 @@ public class InstrumentDto {
 
     private boolean status;
 
-    private List<String> image;
+    private String image;
 
     private String description;
 

@@ -11,9 +11,14 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     @Query("select i from Instrument i join i.brand join i.categoryIns " +
             "where i.name like %?1% or i.brand.name like %?1% " +
             "or i.categoryIns.name like %?1%")
-    public List<Instrument> findByKeyword(String keyword);
-
     List<Instrument> findByBrandId(Long brandId);
 
     List<Instrument> findByCategoryInsId(Long categoryId);
+
+
+    //    List instrument use in shop
+    @Query("select i.id, i.name from Instrument i where i.status = false")
+    public List<Instrument> getSortedInstruments();
+
+
 }
