@@ -48,8 +48,7 @@ public class CategoryController {
     //    Update category by id
     @PutMapping("{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("categoryId") Long id,
-                                                      @RequestBody CategoryDto categoryDto,
-                                                      MultipartFile image) {
+                                                      @RequestBody CategoryDto categoryDto,MultipartFile image) {
         CategoryDto saveCategory = categoryService.updateCategory(id, categoryDto,image);
         return ResponseEntity.ok(saveCategory);
     }

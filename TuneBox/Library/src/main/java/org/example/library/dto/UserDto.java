@@ -1,5 +1,6 @@
 package org.example.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,10 +28,13 @@ public class UserDto {
     // Multiple IDs for relationships
     private UserInformation userInformationIds;
     private Set<Long> inspiredByIds;
-    private Set<Long> talentIds;
-    private Set<Long> genreIds;      // Multiple Genre IDs
 
+    private Set<Long> talentIds;
+    private Set<Long> genreIds;
+
+    @JsonIgnore
     private Collection<Role> role;
+
     private Set<Block> blocker;
     private Set<Block> blocked;
     private Set<Follow> following;
