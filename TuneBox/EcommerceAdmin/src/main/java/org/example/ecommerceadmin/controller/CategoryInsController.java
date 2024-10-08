@@ -40,32 +40,34 @@ public class CategoryInsController {
     public ResponseEntity<CategoryDto> createCategory(@RequestParam("name") String name,
                                                       @RequestParam("description") String description,
                                                       @RequestParam("image") MultipartFile image) {
-
+        // Tạo đối tượng CategoryDto
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setName(name);
         categoryDto.setDescription(description);
 
+        // Gọi phương thức để tạo category và tải lên hình ảnh
         CategoryDto newCategory = categoryService.createCategory(categoryDto, image);
-        return new  ResponseEntity<>(newCategory, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
     }
 
     // Update existing category
-        @PutMapping("/{id}")
-        public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id,
-                                                          @RequestParam("name") String name,
-                                                          @RequestParam("description") String description,
-                                                          @RequestParam("status") Boolean status,
-                                                          @RequestParam(value = "image", required = false) MultipartFile image) {
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id,
+                                                      @RequestParam("name") String name,
+                                                      @RequestParam("description") String description,
+                                                      @RequestParam("status") Boolean status,
+                                                      @RequestParam(value = "image", required = false) MultipartFile image) {
+        // Tạo đối tượng CategoryDto
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName(name);
+        categoryDto.setDescription(description);
+        categoryDto.setStatus(status);
 
-            CategoryDto categoryDto = new CategoryDto();
-
-            categoryDto.setName(name);
-            categoryDto.setDescription(description);
-            categoryDto.setStatus(status);
-
-            CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto, image);
-            return ResponseEntity.ok(updatedCategory);
-        }
+        // Gọi phương thức cập nhật category
+        CategoryDto updatedCategory = categoryService.updateCategory(id, categoryDto, image);
+        return ResponseEntity.ok(updatedCategory);
+    }
 
     // Change category status
     @PatchMapping("/{id}/status")

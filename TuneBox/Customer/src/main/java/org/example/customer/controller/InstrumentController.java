@@ -27,8 +27,7 @@ public class InstrumentController {
 
     @Autowired
     private CategoryServiceImpl categoryService;
-    @Autowired
-    private CategoryInsServiceImpl categoryInsService;
+
 
     // Get all instruments
     @GetMapping
