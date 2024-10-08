@@ -2,6 +2,9 @@ package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
 import org.example.library.model.Track;
+import org.example.library.model.Genre;
+import org.example.library.repository.GenreRepository; // Nhập repo
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,6 +13,13 @@ import java.util.Date;
 
 @Component
 public class TrackMapper {
+
+    private final GenreRepository genreRepository;
+
+    @Autowired
+    public TrackMapper(GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
+    }
 
     public TrackDto toDto(Track track) {
         if (track == null) {
@@ -25,9 +35,9 @@ public class TrackMapper {
         dto.setCreateDate(track.getCreateDate());
         dto.setReport(track.isReport());
         dto.setReportDate(track.getReportDate() != null ? LocalDate.from(track.getReportDate().toInstant().atZone(ZoneId.systemDefault())) : null);
-        dto.setGenreId(track.getGenre().getId());
-        dto.setUser(track.getUser().getId());
-        dto.setAlbumsId(track.getAlbums().getId());
+        dto.setGenreId(track.getGenre() != null ? track.getGenre().getId() : null); // Kiểm tra Genre
+        dto.setUser(track.getUser() != null ? track.getUser().getId() : null); // Kiểm tra User
+        dto.setAlbumsId(track.getAlbums() != null ? track.getAlbums().getId() : null); // Kiểm tra Albums
 
         return dto;
     }
@@ -46,8 +56,18 @@ public class TrackMapper {
         track.setCreateDate(dto.getCreateDate());
         track.setReport(dto.isReport());
 
+        // Ánh xạ Genre từ genreId
+        if (dto.getGenreId() != null) {
+            Genre genre = new Genre();
+            genre.setId(dto.getGenreId());
+            track.setGenre(genre);
+        } else {
+            throw new IllegalArgumentException("Genre must not be null");
+        }
+
         track.setReportDate(dto.getReportDate() != null ? Date.from(dto.getReportDate().atStartOfDay(ZoneId.systemDefault()).toInstant()) : null);
 
         return track;
     }
+
 }
