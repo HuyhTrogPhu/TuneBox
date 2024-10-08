@@ -61,10 +61,10 @@ public class CustomerConfiguration {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
+                                .loginPage("/login")
 //                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("http://localhost:3000/", true)
-                        .permitAll()
+                                .defaultSuccessUrl("http://localhost:3000/", true)
+                                .permitAll()
                 )
                 .logout(logout -> logout
                         .invalidateHttpSession(true)
@@ -79,20 +79,6 @@ public class CustomerConfiguration {
                 .authenticationManager(authenticationManager);
 
         return http.build();
-    }
-
-    // Cấu hình nguồn CORS
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Cho phép React frontend
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Áp dụng cho tất cả các đường dẫn
-        return source;
     }
 
 

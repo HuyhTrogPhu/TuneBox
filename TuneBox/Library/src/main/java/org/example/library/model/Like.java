@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "likes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "post_id"})})
+@Table(name = "likes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "post_id", "comment_id", "reply_id"})})
 public class Like {
 
     @Id
@@ -28,8 +28,16 @@ public class Like {
     private Track track;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id")
     private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment; // Thêm trường này cho bình luận
+
+    @ManyToOne
+    @JoinColumn(name = "reply_id")
+    private Reply reply; // Thêm trường này cho phản hồi
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
