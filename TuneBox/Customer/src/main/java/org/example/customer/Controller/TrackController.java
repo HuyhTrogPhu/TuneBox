@@ -75,8 +75,8 @@ public class TrackController {
             trackDto.setDescription(description);
             trackDto.setStatus(status);
             trackDto.setReport(report);
-//            trackDto.setCreateDate(LocalDate.now());
-//            trackDto.setReportDate(null);
+//          trackDto.setCreateDate(LocalDate.now());
+//          trackDto.setReportDate(null);
 
             // Cập nhật track
             TrackDto updatedTrack = trackService.updateTrack(trackId, trackDto, trackImage, trackFile, userId, genreId);
