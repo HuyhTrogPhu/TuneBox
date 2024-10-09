@@ -91,21 +91,21 @@ public class UserController {
     }
 
 //Change Password
-    @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestdto) {
-
-        //encode
-        changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
-        changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
-        try {
-            UserService.changePassword(changePasswordRequestdto.getEmail(),
-                    changePasswordRequestdto.getOldPassword(),
-                    changePasswordRequestdto.getNewPassword());
-            return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
+//    @PostMapping("/change-password")
+//    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestdto) {
+//
+//        //encode
+//        changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
+//        changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
+//        try {
+//            UserService.changePassword(changePasswordRequestdto.getEmail(),
+//                    changePasswordRequestdto.getOldPassword(),
+//                    changePasswordRequestdto.getNewPassword());
+//            return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
+//        } catch (RuntimeException ex) {
+//            return ResponseEntity.badRequest().body(ex.getMessage());
+//        }
+//    }
 
 
     @DeleteMapping("/{id}")
