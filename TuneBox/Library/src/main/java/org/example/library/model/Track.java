@@ -43,9 +43,15 @@ public class Track {
 
     private Date reportDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
+    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
+    private User user;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

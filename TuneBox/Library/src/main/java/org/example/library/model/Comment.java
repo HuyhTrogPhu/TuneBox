@@ -1,12 +1,15 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -22,10 +25,11 @@ public class Comment {
 
     private String content;
 
-    private LocalDate creationDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
-    private Set<CommentLike> commentLikes;
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies = new ArrayList<>(); // Danh sách các reply liên quan
 
     @ManyToOne
     @JoinColumn(name = "track_id")
@@ -39,5 +43,8 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private Long parentId;
 
+    private boolean edited;
 }
+

@@ -2,8 +2,6 @@ package org.example.customer.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-
-import org.example.library.dto.ChangePasswordRequestDto;
 import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
 import org.example.library.model.RespondModel;
@@ -13,12 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -28,7 +20,6 @@ import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -40,13 +31,11 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
     //LOGIN
     @PostMapping("/log-in")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
         Map<String, Object> response = new HashMap<>();
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             UserDto loggedInUser = UserService.Login(user);
 
@@ -60,7 +49,6 @@ public class UserController {
         }
         return ResponseEntity.ok(response);
     }
-
 
     //FORGOT PASSWORD
     @PostMapping("/forgot-password")
@@ -89,6 +77,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
+
 
 //Change Password
 //    @PostMapping("/change-password")
@@ -124,7 +113,6 @@ public class UserController {
     }
 
 
-
 //    @GetMapping("/login/oauth2/success")
 //    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
 //        Map<String, Object> response = new HashMap<>();
@@ -157,6 +145,7 @@ public class UserController {
 //    }
 
 
+
     @PostMapping("/sign-up")
     public ResponseEntity<?> Register(@RequestBody RequestSignUpModel requestSignUpModel,
                                       HttpServletRequest request
@@ -165,6 +154,13 @@ public class UserController {
         String psEncode =passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword());
         requestSignUpModel.getUserDto().setPassword(psEncode);
         RespondModel response = new RespondModel();
+        if (requestSignUpModel.getUserDto() == null) {
+            response.setMessage("Thông tin người dùng không được cung cấp.");
+            response.setData(null);
+            response.setStatus(false);
+            return ResponseEntity.badRequest().body(response);
+        }
+
         try {
             response.setMessage("Đăng ký thành công");
             response.setData(UserService.Register(requestSignUpModel));
