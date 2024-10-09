@@ -9,14 +9,11 @@ import org.example.library.mapper.BrandMapper;
 import org.example.library.model.Brand;
 import org.example.library.repository.BrandRepository;
 import org.example.library.service.BrandService;
-import org.example.library.utils.ImageUploadBrand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -137,9 +134,5 @@ public class BrandServiceImpl implements BrandService {
                 .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
     }
 
-    @Override
-    public List<BrandsDto> getSortedBrand() {
-        return List.of();
-    }
 
 }

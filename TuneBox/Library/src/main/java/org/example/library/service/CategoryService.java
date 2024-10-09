@@ -24,5 +24,5 @@ public interface CategoryService {
 
     CategoryIns getManagedCategory(Long id);
 
-    List<CategoryDto> getSortedCategory();
+
 }

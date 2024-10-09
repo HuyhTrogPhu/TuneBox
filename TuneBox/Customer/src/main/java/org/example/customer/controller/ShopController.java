@@ -2,9 +2,7 @@ package org.example.customer.controller;
 
 
 import lombok.AllArgsConstructor;
-import org.example.library.dto.BrandsDto;
-import org.example.library.dto.CategoryDto;
-import org.example.library.dto.InstrumentDto;
+import org.example.library.dto.*;
 import org.example.library.model.CategoryIns;
 import org.example.library.model.Instrument;
 import org.example.library.service.BrandService;
@@ -55,7 +53,7 @@ public class ShopController {
         }
     }
 
-//    Get instruments detail from shop
+    //    Get instruments detail from shop
     @GetMapping("{id}")
     public ResponseEntity<?> getBrandById(@PathVariable Long id) {
         try {
@@ -64,6 +62,27 @@ public class ShopController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Instrument not found: " + e.getMessage());
+        }
+    }
+
+//    Get instrument by category id and brand id
+    @GetMapping("/instruments")
+    public ResponseEntity<List<InstrumentDto>> getInstrumentsByCategoryAndBrand(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId) {
+
+        try {
+            // Nếu cả categoryId và brandId đều không được truyền vào, trả về tất cả instruments
+            if (categoryId == null && brandId == null) {
+                return ResponseEntity.ok(instrumentService.getAllInstrument());
+            }
+
+            // Nếu có tham số, tìm kiếm theo category và brand
+            List<InstrumentDto> instruments = instrumentService.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
+            return ResponseEntity.ok(instruments);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

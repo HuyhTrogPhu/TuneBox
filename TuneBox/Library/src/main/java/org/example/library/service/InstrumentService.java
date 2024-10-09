@@ -22,7 +22,7 @@ public interface InstrumentService {
 
     List<InstrumentDto> getInstrumentByCategoryId(Long categoryId);
 
-    List<InstrumentDto> getSortedInstruments();
-
+    //    Get list instrument by category id anh brand id
+    List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId);
 }
 

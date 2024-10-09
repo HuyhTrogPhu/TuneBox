@@ -20,5 +20,9 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     @Query("select i.id, i.name from Instrument i where i.status = false")
     public List<Instrument> getSortedInstruments();
 
+    //    List instrument by category id and brand id
+    @Query("select i from Instrument i join fetch i.brand b join fetch i.categoryIns c " +
+            "where c.id = ?1 and b.id = ?2")
+    public List<Instrument> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId);
 
 }

@@ -174,8 +174,10 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public List<InstrumentDto> getSortedInstruments() {
-        List<Instrument> instrument = instrumentRepository.getSortedInstruments();
-        return instrument.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    public List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId) {
+        List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
+        return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
     }
+
+
 }

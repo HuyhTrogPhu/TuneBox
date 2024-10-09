@@ -22,7 +22,6 @@ public interface    BrandService {
 
     Brand getManagedBrand(Long id);
 
-    List<BrandsDto> getSortedBrand();
 
 
 }

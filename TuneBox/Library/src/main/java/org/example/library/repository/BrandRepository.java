@@ -12,10 +12,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     @Query("select b from Brand b where b.name like %?1%")
     public List<Brand> findByKeyword(String keyword);
 
-    //    List brand use sort in shop
-    @Query("select b.id , b.name from Brand b where b.status = false")
-    public List<Brand> getSortedBrands();
-
 
 
 }
