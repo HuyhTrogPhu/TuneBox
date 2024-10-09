@@ -12,7 +12,10 @@ import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.EcomAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.*;
@@ -26,12 +29,15 @@ public class EcomAdminServiceImpl implements EcomAdminService {
     @Autowired
     private RoleRepository roleRepo;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public EcomAdminDTO login(EcomAdminDTO admin) {
         Optional<EcommerceAdmin> ecommerceAdmin;
 
         if (admin.getEmail() == null || admin.getEmail().isEmpty()) {
-            throw new RuntimeException("Username or email cannot be null or empty");
+            throw new RuntimeException("email khong duoc de trong");
         }
 
         ecommerceAdmin = Repo.findByEmail(admin.getEmail());
@@ -39,36 +45,44 @@ public class EcomAdminServiceImpl implements EcomAdminService {
         if (ecommerceAdmin.isPresent()) {
             EcommerceAdmin adminEntity = ecommerceAdmin.get();
 
-            // check role {ECOMADMIN}
-            boolean hasAdminRole = adminEntity.getRole().stream()
-                    .anyMatch(role -> role.getName().equals("ECOMADMIN"));
+//            // check role {ECOMADMIN}
+//            boolean hasAdminRole = adminEntity.getRole().stream()
+//                    .anyMatch(role -> role.getName().equals("ECOMADMIN"));
+//
+//            if (!hasAdminRole) {
+//                throw new RuntimeException("ACCESS DENIED");
+//            }
 
-            if (!hasAdminRole) {
-                throw new RuntimeException("ACCESS DENIED");
-            }
 
-            // Kiểm tra mật khẩu (nên dùng so sánh bảo mật nếu mật khẩu được mã hóa)
-            if (admin.getPassword().equals(adminEntity.getPassword())) {
+            if (passwordEncoder.matches(admin.getPassword(), adminEntity.getPassword())) {
                 return EcomAdminMapping.mapToDTO(adminEntity);
             } else {
-                throw new RuntimeException("Invalid username or password");
+                throw new RuntimeException("sai username/password");
             }
         } else {
-            throw new RuntimeException("Invalid username or password");
+            throw new RuntimeException("Khong tim thay nguoi dung");
         }
     }
 
 
     @Override
     public EcomAdminDTO AddAdmin(EcomAdminDTO admin){
-try {
-    EcommerceAdmin adminSaved = new EcommerceAdmin();
-    adminSaved.setRole(roleRepo.findByName("ECOMADMIN"));
-    Repo.save(EcomAdminMapping.mapToEntity(admin));
-    return EcomAdminMapping.mapToDTO(adminSaved);
-}catch (Exception e){
-    e.printStackTrace();
-    return null;
+        List<EcommerceAdmin> fullList = Repo.findAll();
+        for (EcommerceAdmin check : fullList) {
+            if (check.getEmail().equals(admin.getEmail())) {
+                System.out.println("trùng Email: " + admin.getEmail());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
+            }}
+        try {
+            EcommerceAdmin adminSaved = EcomAdminMapping.mapToEntity(admin);
+            adminSaved.setRole(roleRepo.findByName("ECOMADMIN"));
+            adminSaved.setPassword(passwordEncoder.encode(admin.getPassword()));
+            Repo.save(adminSaved);
+              return EcomAdminMapping.mapToDTO(adminSaved);
+        }catch(Exception e){
+            e.printStackTrace();
+              return null;
+                           }
+        }
 }
-    }
-}
+

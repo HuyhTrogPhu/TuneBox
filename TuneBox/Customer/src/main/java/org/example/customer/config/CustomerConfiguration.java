@@ -27,8 +27,7 @@ public class CustomerConfiguration {
         return new CustomerServiceConfig();
     }
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    private BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

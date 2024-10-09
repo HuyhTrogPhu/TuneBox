@@ -1,4 +1,4 @@
-package org.example.ecommerceadmin.config;
+package org.example.library.config;
 
 
 import org.springframework.context.annotation.Bean;

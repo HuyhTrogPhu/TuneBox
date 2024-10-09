@@ -18,14 +18,12 @@ public class EcomAdminAccount {
     @Autowired
     private EcomAdminService serviceAdmin;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/log-in")
     public ResponseEntity<?> login(@RequestBody EcomAdminDTO admin) {
         Map<String, Object> response = new HashMap<>();
 
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
         try {
             EcomAdminDTO loggedIn = serviceAdmin.login(admin);
 
@@ -43,7 +41,7 @@ public class EcomAdminAccount {
     @PostMapping("/add")
     public ResponseEntity<?> ADDbyPostMan(@RequestBody EcomAdminDTO admin) {
         Map<String, Object> response = new HashMap<>();
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+
         try {
             EcomAdminDTO Added = serviceAdmin.AddAdmin(admin);
 
