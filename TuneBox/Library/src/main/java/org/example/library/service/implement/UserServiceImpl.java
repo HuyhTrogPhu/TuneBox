@@ -46,12 +46,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public UserServiceImpl(
             @Lazy UserService userService,
-            JavaMailSender javaMailSender, // Khởi tạo javaMailSender
-            RoleRepository roleRepository // Khởi tạo roleRepository
+            JavaMailSender javaMailSender,
+            RoleRepository roleRepository
     ) {
         this.userService = userService;
-        this.javaMailSender = javaMailSender; // Khởi tạo biến
-        this.roleRepository = roleRepository; // Khởi tạo biến
+        this.javaMailSender = javaMailSender;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
