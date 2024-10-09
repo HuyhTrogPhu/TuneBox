@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="updateTrack">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/CloudinaryConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,6 +23,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -22,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="TrongPhu" />
+        <entry key="$PROJECT_DIR$" value="XuanTruong" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -39,18 +48,17 @@
     &quot;accountId&quot;: &quot;0b5de1f3-c52d-414b-b5eb-2774c7915b64&quot;
   }
 }</component>
-  <component name="HierarchyBrowserManager">
-    <option name="SORT_ALPHABETICALLY" value="true" />
-    <option name="SCOPE" value="Tests" />
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 0
 }</component>
-  <component name="ProjectId" id="2lapBt7OyLe02kHHR5m9nUm1klk" />
+  <component name="ProjectId" id="2majaHCdOnWZr93uoNP2yt7dSev" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -64,40 +72,34 @@
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;GiaNhu&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/backkk/TuneBox-XuanTruong&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.example.library.dto" />
-      <recent name="org.example.library.model" />
-      <recent name="org.example.library.mapper" />
-      <recent name="org.example.library.utils" />
-      <recent name="org.example.library.repository" />
-    </key>
-  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
-        <option value="KtorApplicationConfigurationType" />
         <option value="MicronautRunConfigurationType" />
         <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.CustomerApplication">
+  <component name="RunManager" selected="Spring Boot.LibraryApplication">
     <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
       <module name="Customer" />
@@ -115,6 +117,19 @@
       <module name="DuAnTotNghiep" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="TuneBox" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="TuneBox" />
+      <option name="filePath" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -154,9 +169,6 @@
       <list>
         <item itemvalue="JUnit.All in DuAnTotNghiep" />
         <item itemvalue="Application.CustomerApplication" />
-        <item itemvalue="JUnit.All in DuAnTotNghiep" />
-        <item itemvalue="Application.CustomerApplication" />
-        <item itemvalue="JUnit.All in DuAnTotNghiep" />
       </list>
     </recent_temporary>
   </component>
@@ -171,192 +183,133 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9304f8f8-5800-4f0a-b144-102508208f0a" name="Changes" comment="" />
-      <created>1725427909140</created>
+      <changelist id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="" />
+      <created>1727321644143</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1725427909140</updated>
-      <workItem from="1725427910310" duration="103000" />
-      <workItem from="1725428019504" duration="419000" />
-      <workItem from="1726806260079" duration="3000" />
-      <workItem from="1727058930216" duration="5074000" />
-      <workItem from="1727070041177" duration="2462000" />
-      <workItem from="1727323014094" duration="1784000" />
-      <workItem from="1727507093233" duration="2511000" />
-      <workItem from="1727615088163" duration="953000" />
-      <workItem from="1727616056274" duration="23945000" />
-      <workItem from="1727751196948" duration="2502000" />
-      <workItem from="1727756219923" duration="5840000" />
-      <workItem from="1727762888127" duration="7445000" />
-      <workItem from="1727773958616" duration="1996000" />
-      <workItem from="1727777104739" duration="710000" />
-      <workItem from="1727777835632" duration="3692000" />
-      <workItem from="1727841513359" duration="65000" />
-      <workItem from="1727841593659" duration="28000" />
-      <workItem from="1727841780730" duration="21000" />
-      <workItem from="1727843244029" duration="3000" />
-      <workItem from="1727844550644" duration="354000" />
-      <workItem from="1727844914651" duration="696000" />
-      <workItem from="1727845630892" duration="31000" />
-      <workItem from="1727845912101" duration="915000" />
-      <workItem from="1727846846757" duration="122000" />
-      <workItem from="1727847145161" duration="5000" />
-      <workItem from="1727847960336" duration="21215000" />
-      <workItem from="1727933489773" duration="765000" />
-      <workItem from="1727934666045" duration="443000" />
-      <workItem from="1728155714877" duration="4432000" />
-      <workItem from="1728160543440" duration="2544000" />
-      <workItem from="1728191892136" duration="6080000" />
-      <workItem from="1728198662637" duration="6812000" />
-      <workItem from="1728386302043" duration="11904000" />
-      <workItem from="1728409820166" duration="3890000" />
-      <workItem from="1728444464586" duration="1119000" />
+      <updated>1727321644143</updated>
+      <workItem from="1727321647230" duration="168000" />
+      <workItem from="1727507412957" duration="8406000" />
+      <workItem from="1727615323794" duration="6377000" />
+      <workItem from="1727663776241" duration="13028000" />
+      <workItem from="1727753652794" duration="3389000" />
+      <workItem from="1727780806373" duration="1354000" />
+      <workItem from="1727837865440" duration="2864000" />
+      <workItem from="1727841496846" duration="4305000" />
+      <workItem from="1727849901811" duration="1647000" />
+      <workItem from="1727862401344" duration="3954000" />
+      <workItem from="1727956923416" duration="10346000" />
+      <workItem from="1728294068682" duration="13895000" />
+      <workItem from="1728359683470" duration="4824000" />
+      <workItem from="1728451346751" duration="5188000" />
+      <workItem from="1728478827231" duration="4944000" />
+      <workItem from="1728499346123" duration="2724000" />
     </task>
-    <task id="LOCAL-00001" summary="Create DTO belong to model">
+    <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
-      <created>1727062724074</created>
+      <created>1727321699555</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1727062724074</updated>
+      <updated>1727321699555</updated>
     </task>
-    <task id="LOCAL-00002" summary="add Track 1/2">
+    <task id="LOCAL-00002" summary="update brand function">
       <option name="closed" value="true" />
-      <created>1727328608195</created>
+      <created>1727515877629</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1727328608195</updated>
+      <updated>1727515877629</updated>
     </task>
-    <task id="LOCAL-00003" summary="update TrackServiceImpl">
+    <task id="LOCAL-00003" summary="update costPrice in InstrumentController">
       <option name="closed" value="true" />
-      <created>1727333882653</created>
+      <created>1727613750419</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1727333882653</updated>
+      <updated>1727613750419</updated>
     </task>
-    <task id="LOCAL-00004" summary="update trackController">
+    <task id="LOCAL-00004" summary="update search sort and edit in InstrumentController">
       <option name="closed" value="true" />
-      <created>1727334358939</created>
+      <created>1727663844854</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1727334358939</updated>
+      <updated>1727663844854</updated>
     </task>
-    <task id="LOCAL-00005" summary="update trackController">
+    <task id="LOCAL-00005" summary="update">
       <option name="closed" value="true" />
-      <created>1727334411944</created>
+      <created>1727672547227</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1727334411944</updated>
+      <updated>1727672547227</updated>
     </task>
     <task id="LOCAL-00006" summary="update">
       <option name="closed" value="true" />
-      <created>1727616689645</created>
+      <created>1727673596921</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1727616689645</updated>
+      <updated>1727673596921</updated>
     </task>
-    <task id="LOCAL-00007" summary="update">
+    <task id="LOCAL-00007" summary="done instrument">
       <option name="closed" value="true" />
-      <created>1727643743977</created>
+      <created>1727678881155</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1727643743977</updated>
+      <updated>1727678881155</updated>
     </task>
-    <task id="LOCAL-00008" summary="update">
+    <task id="LOCAL-00008" summary="done brandpage and brandDetail">
       <option name="closed" value="true" />
-      <created>1727679721821</created>
+      <created>1727853103708</created>
       <option name="number" value="00008" />
       <option name="presentableId" value="LOCAL-00008" />
       <option name="project" value="LOCAL" />
-      <updated>1727679721822</updated>
+      <updated>1727853103708</updated>
     </task>
-    <task id="LOCAL-00009" summary="update">
+    <task id="LOCAL-00009" summary="update brand ins customer">
       <option name="closed" value="true" />
-      <created>1727680900799</created>
+      <created>1727863373253</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1727680900800</updated>
+      <updated>1727863373253</updated>
     </task>
-    <task id="LOCAL-00010" summary="update">
+    <task id="LOCAL-00010" summary="commit">
       <option name="closed" value="true" />
-      <created>1727782959458</created>
+      <created>1727931594207</created>
       <option name="number" value="00010" />
       <option name="presentableId" value="LOCAL-00010" />
       <option name="project" value="LOCAL" />
-      <updated>1727782959458</updated>
+      <updated>1727931594207</updated>
     </task>
-    <task id="LOCAL-00011" summary="commit">
+    <task id="LOCAL-00011" summary="commit 10.7">
       <option name="closed" value="true" />
-      <created>1727891180732</created>
+      <created>1728306936404</created>
       <option name="number" value="00011" />
       <option name="presentableId" value="LOCAL-00011" />
       <option name="project" value="LOCAL" />
-      <updated>1727891180732</updated>
+      <updated>1728306936404</updated>
     </task>
-    <task id="LOCAL-00012" summary="update creatTrack">
-      <option name="closed" value="true" />
-      <created>1728405510067</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1728405510067</updated>
-    </task>
-    <task id="LOCAL-00013" summary="updateTrack">
-      <option name="closed" value="true" />
-      <created>1728415175233</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1728415175233</updated>
-    </task>
-    <option name="localTasksCounter" value="14" />
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="GiaNhu" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Create DTO belong to model" />
-    <MESSAGE value="add" />
-    <MESSAGE value="add Track 1/2" />
-    <MESSAGE value="update TrackServiceImpl" />
-    <MESSAGE value="update trackController" />
-    <MESSAGE value="cap nhat post" />
+    <MESSAGE value="update brand function" />
+    <MESSAGE value="update costPrice in InstrumentController" />
+    <MESSAGE value="update search sort and edit in InstrumentController" />
     <MESSAGE value="update" />
+    <MESSAGE value="done instrument" />
+    <MESSAGE value="done brandpage and brandDetail" />
+    <MESSAGE value="update brand ins customer" />
     <MESSAGE value="commit" />
-    <MESSAGE value="update creatTrack" />
-    <MESSAGE value="updateTrack" />
-    <option name="LAST_COMMIT_MESSAGE" value="updateTrack" />
+    <MESSAGE value="commit 10.7" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit 10.7" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -372,9 +325,5 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>

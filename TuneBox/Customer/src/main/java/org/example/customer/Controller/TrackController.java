@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,10 +119,13 @@ public class TrackController {
         return ResponseEntity.ok(genres);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TrackDto> getTrackById(@PathVariable Long id) {
-        TrackDto trackDto = trackService.getTrackById(id);
+    //get track theo id track
+    @GetMapping("/{trackId}")
+    public ResponseEntity<TrackDto> getTrackById(@PathVariable Long trackId) {
+        TrackDto trackDto = trackService.getTrackById(trackId);
         return new ResponseEntity<>(trackDto, HttpStatus.OK);
     }
+
+
 
 }

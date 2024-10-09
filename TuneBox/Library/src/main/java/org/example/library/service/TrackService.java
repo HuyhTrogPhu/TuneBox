@@ -1,10 +1,9 @@
 package org.example.library.service;
 
-import org.example.library.dto.PostDto;
 import org.example.library.dto.TrackDto;
+import org.example.library.model.Track;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface TrackService {
@@ -13,7 +12,7 @@ public interface TrackService {
 
 //        public TrackDto getAllTracks();
 
-        public TrackDto getTrackById(Long id);
+        TrackDto getTrackById(Long trackId);
 
         public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
