@@ -1,12 +1,10 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 
 import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
-import org.example.library.model.CategoryIns;
-import org.example.library.model.Instrument;
 import org.example.library.service.BrandService;
 import org.example.library.service.CategoryService;
 import org.example.library.service.InstrumentService;

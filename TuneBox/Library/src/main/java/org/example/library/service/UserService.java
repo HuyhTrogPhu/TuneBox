@@ -7,6 +7,7 @@ import org.example.library.dto.UserDto;
 import org.example.library.model.User;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface UserService {
     void CheckLogin(RequestSignUpModel requestSignUpModel);
@@ -21,4 +22,8 @@ public interface UserService {
     UserDto Login(UserDto user);
 
     void changePassword(String email, String oldPassword, String newPassword);
+
+    UserDto getUserById(Long userId);
+
+    User findUserById(Long userId);
 }

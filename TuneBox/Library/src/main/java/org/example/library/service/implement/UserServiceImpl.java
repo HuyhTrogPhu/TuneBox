@@ -217,6 +217,16 @@ public class UserServiceImpl implements UserService {
         Repo.save(user);
     }
 
+    @Override
+    public UserDto getUserById(Long userId) {
+        return null;
+    }
+
+    @Override
+    public User findUserById(Long userId) {
+        return null;
+    }
+
 
     @Override
     public void ForgotPassword(UserDto userdto) {

@@ -48,4 +48,9 @@ public class UserDto {
     private String resetToken;
     private String token;
     private String newPassword;
+
+    public UserDto(Long id, String userName) {
+        this.id = id;
+        this.userName = userName;
+    }
 }

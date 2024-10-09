@@ -40,25 +40,24 @@ public class Track {
 
     private Date reportDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "trackCreator_id", nullable = false)
-    private User creator;
+
+    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
+    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
+    private User user;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "albums_id", nullable = false)
+    @JoinColumn(name = "albums_id")
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
 
-    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Like> likes;

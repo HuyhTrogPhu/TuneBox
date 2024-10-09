@@ -61,10 +61,10 @@ public class CustomerConfiguration {
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
+                                .loginPage("/login")
 //                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("http://localhost:3000/", true)
-                        .permitAll()
+                                .defaultSuccessUrl("http://localhost:3000/", true)
+                                .permitAll()
                 )
                 .logout(logout -> logout
                         .invalidateHttpSession(true)
