@@ -10,14 +10,19 @@ import java.util.Optional;
 
 public interface UserService {
     void CheckLogin(RequestSignUpModel requestSignUpModel);
+
     UserDto Register(RequestSignUpModel requestSignUpModel);
+
     Optional<User> findById(Long userId);
 
     void ForgotPassword(UserDto user);
 
     void resetPassword(String token, String newPassword);
 
+
 //    UserDto loginWithGoogle(String email , String name);
+
     UserDto Login(UserDto user);
+
     void changePassword(String email, String oldPassword, String newPassword);
 }
