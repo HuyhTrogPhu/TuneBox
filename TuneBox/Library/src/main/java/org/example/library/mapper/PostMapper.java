@@ -12,10 +12,15 @@ public class PostMapper {
         dto.setId(post.getId());
         dto.setContent(post.getContent());
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
+
+        // Kiểm tra post.getUser() không null trước khi lấy userName
+        dto.setUserNickname(post.getUser() != null ? post.getUser().getUserNickname() : null);
+
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
         dto.setCreatedAt(post.getCreatedAt());
         return dto;
     }
+
 
     public static Post toEntity(PostDto postDto) {
         if (postDto == null) return null;

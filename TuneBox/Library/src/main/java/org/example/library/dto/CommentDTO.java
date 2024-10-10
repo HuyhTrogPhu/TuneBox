@@ -17,7 +17,7 @@ public class CommentDTO {
     private String content;
     private LocalDateTime creationDate;
     private Long userId;
-    private String userName;
+    private String userNickname;
     private Long postId;
     private Long parentId; // Thêm trường parentId
     private List<CommentDTO> replies;

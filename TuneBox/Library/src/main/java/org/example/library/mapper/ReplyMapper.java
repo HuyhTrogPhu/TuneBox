@@ -23,7 +23,7 @@ public class ReplyMapper {
 
         // Lấy tên người dùng từ thông tin User nếu cần
         if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
-            replyDTO.setUserName(reply.getParentComment().getUser().getUserName());
+            replyDTO.setUserNickname(reply.getParentComment().getUser().getUserNickname());
         }
 
         // Set commentId từ parentComment

@@ -20,7 +20,7 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserName(comment.getUser().getUserName());
+        commentDTO.setUserNickname(comment.getUser().getUserNickname());
         commentDTO.setPostId(comment.getPost().getId());
         commentDTO.setEdited(comment.isEdited());
 

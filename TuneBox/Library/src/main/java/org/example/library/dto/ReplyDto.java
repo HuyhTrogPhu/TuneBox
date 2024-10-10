@@ -14,7 +14,7 @@ public class ReplyDto {
     private String content;
     private LocalDateTime creationDate;
     private Long userId;
-    private String userName;
+    private String userNickname;
     private Long commentId;
     private Long parentReplyId;
 }
