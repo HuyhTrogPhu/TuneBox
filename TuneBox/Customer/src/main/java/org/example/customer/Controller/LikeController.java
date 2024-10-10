@@ -3,6 +3,7 @@ package org.example.customer.Controller;
 import org.example.library.dto.LikeDto;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +23,14 @@ public class LikeController {
 
     @PostMapping("/add")
     public ResponseEntity<LikeDto> addLike(@RequestParam Long userId, @RequestParam Long postId) {
-        LikeDto likeDto = likeService.addLike(userId, postId);
-        return ResponseEntity.ok(likeDto);
+        try {
+            // Validate userId and postId if necessary
+            LikeDto likeDto = likeService.addLike(userId, postId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(likeDto);
+        } catch (Exception e) {
+            // Log the exception and return an appropriate error response
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @DeleteMapping("/remove")
