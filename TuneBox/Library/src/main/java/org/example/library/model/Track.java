@@ -30,7 +30,7 @@ public class Track {
     private String trackImage;
 
     @Column(columnDefinition = "LONGBLOB")
-    private byte[] trackFile;
+    private String trackFile;
 
     private String description;
 
