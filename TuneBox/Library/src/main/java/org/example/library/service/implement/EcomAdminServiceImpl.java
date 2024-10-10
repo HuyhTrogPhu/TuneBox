@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 
 
 import org.example.library.dto.EcomAdminDTO;
-import org.example.library.dto.UserDto;
 import org.example.library.mapper.EcomAdminMapping;
 import org.example.library.model.EcommerceAdmin;
-import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.EcomAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,11 +76,10 @@ public class EcomAdminServiceImpl implements EcomAdminService {
             adminSaved.setRole(roleRepo.findByName("ECOMADMIN"));
             adminSaved.setPassword(passwordEncoder.encode(admin.getPassword()));
             Repo.save(adminSaved);
-              return EcomAdminMapping.mapToDTO(adminSaved);
+            return EcomAdminMapping.mapToDTO(adminSaved);
         }catch(Exception e){
             e.printStackTrace();
-              return null;
-                           }
+            return null;
         }
+    }
 }
-

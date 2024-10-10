@@ -3,8 +3,6 @@ package org.example.customer.controller;
 
 import lombok.AllArgsConstructor;
 import org.example.library.dto.*;
-import org.example.library.model.CategoryIns;
-import org.example.library.model.Instrument;
 import org.example.library.service.BrandService;
 import org.example.library.service.CategoryService;
 import org.example.library.service.InstrumentService;
@@ -65,8 +63,8 @@ public class ShopController {
         }
     }
 
-//    Get instrument by category id and brand id
-    @GetMapping("/instruments")
+    //   Get instrument by category id and brand id
+    @GetMapping("/detailInstruments/")
     public ResponseEntity<List<InstrumentDto>> getInstrumentsByCategoryAndBrand(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long brandId) {
@@ -86,5 +84,5 @@ public class ShopController {
         }
     }
 
-
+    
 }
