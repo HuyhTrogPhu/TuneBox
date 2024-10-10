@@ -9,6 +9,7 @@ import org.example.library.repository.CommentRepository;
 import org.example.library.repository.PostRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    @Autowired
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentMapper commentMapper;

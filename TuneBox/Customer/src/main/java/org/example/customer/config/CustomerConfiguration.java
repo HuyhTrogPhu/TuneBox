@@ -27,6 +27,7 @@ public class CustomerConfiguration {
         return new CustomerServiceConfig();
     }
 
+
     private BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

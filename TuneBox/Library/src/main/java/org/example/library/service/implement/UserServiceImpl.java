@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public List<User> GetAll(){
+        List<User> fullList = Repo.findAll();
+               return fullList;
+    }
+
+    @Override
     public void CheckLogin(RequestSignUpModel requestSignUpModel) {
         List<User> fullList = Repo.findAll();
 
@@ -216,16 +222,6 @@ public class UserServiceImpl implements UserService {
         Repo.save(user);
     }
 
-    @Override
-    public UserDto getUserById(Long userId) {
-        return null;
-    }
-
-    @Override
-    public User findUserById(Long userId) {
-        return null;
-    }
-
 
     @Override
     public void ForgotPassword(UserDto userdto) {
@@ -255,6 +251,9 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found");
         }
     }
-
+    @Override
+    public long countUser() {
+        return Repo.countByIdNotNull();
+    }
 
 }
