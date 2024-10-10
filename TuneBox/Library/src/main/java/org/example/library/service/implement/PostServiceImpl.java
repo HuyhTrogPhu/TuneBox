@@ -1,12 +1,16 @@
     package org.example.library.service.implement;
 
     import org.example.library.dto.PostDto;
+    import org.example.library.dto.PostReportDto;
     import org.example.library.mapper.PostMapper;
+    import org.example.library.mapper.PostReportMapper;
     import org.example.library.model.Post;
     import org.example.library.model.PostImage;
+    import org.example.library.model.PostReport;
     import org.example.library.model.User;
     import org.example.library.repository.PostRepository;
     import org.example.library.service.PostService;
+    import org.springframework.data.domain.Sort;
     import org.springframework.stereotype.Service;
     import org.springframework.web.multipart.MultipartFile;
 
@@ -73,6 +77,7 @@
 //            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
 //            return PostMapper.toDto(post);
 //        }
+
 
         @Override
         public List<PostDto> getAllPosts() {
@@ -143,5 +148,54 @@
 //        public Post findPostById(Long postId) {
 //            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
 //        }
+        @Override
+        public PostDto findPostById(Long id) {
+            Post post = postRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Post not found"));
+            return PostMapper.toDto(post);
+            }
+
+
+        @Override
+        public List<PostDto> findAllPosts() {
+            List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+            return posts.stream()
+                    .map(PostMapper::toDto) // Chuyển đổi thành PostDto
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<PostDto> findNewPosts() {
+            List<Post> newPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // Sắp xếp bài viết mới nhất lên đầu
+            return newPosts.stream()
+                    .map(PostMapper::toDto)
+                    .collect(Collectors.toList());
+        }
+
+
+        @Override
+        public List<PostDto> findTrendingPosts() {
+            // Giả sử bạn có một cách nào đó để xác định bài viết xu hướng
+            List<Post> trendingPosts = postRepository.findTopTrendingPosts(); // Giả sử bạn đã có phương thức này trong repository
+            return trendingPosts.stream()
+                    .map(PostMapper::toDto)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public List<PostReportDto> findAllReports() {
+            List<PostReport> reports = postRepository.findAllReports(); // Giả sử bạn đã có phương thức này trong repository
+            return reports.stream()
+                    .map(report -> new PostReportDto(
+                            report.getId(),
+                            report.getContent(),
+                            report.getReporter(),
+                            report.getReportedPostId(),
+                            report.getReason(),
+                            report.getDateReported(),
+                            PostReportMapper.checkSensitiveContent(report.getContent()) 
+                    ))
+                    .collect(Collectors.toList());
+        }
 
     }
