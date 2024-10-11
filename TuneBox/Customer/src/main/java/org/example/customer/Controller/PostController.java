@@ -140,16 +140,20 @@ public class PostController {
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
+        // Kiểm tra nếu userId không hợp lệ
         if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        // Lấy danh sách bài viết
         List<PostDto> posts = postService.getPostsByUserId(userId);
+        System.out.println("Posts for user ID " + userId + ": " + posts); // Log các bài viết
+
         if (posts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
 
