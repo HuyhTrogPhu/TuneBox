@@ -21,9 +21,9 @@ public class CartController {
 
     // Add instrument to cart
     @PostMapping("/addToCart")
-    public ShoppingCartDto addToCart(@RequestBody InstrumentDto instrument, @RequestParam int quantity) {
+    public ShoppingCartDto addToCart(@RequestParam Long instrumentId, @RequestParam int quantity) {
         try {
-            return shoppingCartService.addToCart(instrument, quantity);
+            return shoppingCartService.addToCart(instrumentId, quantity);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -31,9 +31,9 @@ public class CartController {
 
     // Update quantity of instrument in cart
     @PutMapping("/updateQuantity")
-    public ShoppingCartDto updateQuantity(@RequestBody InstrumentDto instrument, @RequestParam int quantity) {
+    public ShoppingCartDto updateQuantity(@RequestParam Long instrumentId, @RequestParam int quantity) {
         try {
-            return shoppingCartService.updateCart(instrument, quantity);
+            return shoppingCartService.updateCart(instrumentId, quantity);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -41,9 +41,9 @@ public class CartController {
 
     // Remove instrument from cart
     @DeleteMapping("/removeFromCart")
-    public ShoppingCartDto removeFromCart(@RequestBody InstrumentDto instrument) {
+    public ShoppingCartDto removeFromCart(@RequestParam Long  instrumentId) {
         try {
-            return shoppingCartService.removeFromCart(instrument);
+            return shoppingCartService.removeFromCart(instrumentId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +51,7 @@ public class CartController {
 
     // Get cart by user id
     @GetMapping("/viewCart")
-    public ShoppingCartDto getCartByUserId(@RequestParam Long userId) {
+    public ShoppingCartDto getCartByUserId() {
         try {
             return shoppingCartService.getCart();
         } catch (Exception e) {

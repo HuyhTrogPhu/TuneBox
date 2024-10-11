@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.CartItemDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.dto.ShoppingCartDto;
+import org.example.library.service.InstrumentService;
 import org.example.library.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,44 +19,83 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    InstrumentService instrumentService;
+
+    private static Long shoppingCartCounter = 1L;
+    private static Long cartItemsCounter = 1L;
+
     @Override
-    public ShoppingCartDto addToCart(InstrumentDto instrumentDto, int quantity) {
+    public ShoppingCartDto addToCart(Long instrumentId, int quantity) {
+        // Lấy ShoppingCart từ session
         ShoppingCartDto shoppingCart = (ShoppingCartDto) session.getAttribute("cart");
+
+        // Nếu shoppingCart chưa được khởi tạo, tạo mới nó và khởi tạo cartItems
         if (shoppingCart == null) {
             shoppingCart = new ShoppingCartDto();
+            shoppingCart.setShoppingCartId(shoppingCartCounter++);
+            shoppingCart.setCartItems(new HashSet<>());
             session.setAttribute("cart", shoppingCart);
         }
 
+        // Khởi tạo cartItems từ shoppingCart
         Set<CartItemDto> cartItemDtoSet = shoppingCart.getCartItems();
-        if (cartItemDtoSet == null) {
-            cartItemDtoSet = new HashSet<>();
+
+        // Tìm kiếm sản phẩm từ service
+        InstrumentDto instrumentDto = instrumentService.getInstrumentById(instrumentId);
+        if (instrumentDto == null) {
+            throw new RuntimeException("Instrument not found");
         }
 
-        CartItemDto cartItemDto = findDto(shoppingCart, instrumentDto.getId());
+        // Tìm kiếm CartItemDto dựa trên ID của sản phẩm
+        CartItemDto cartItemDto = findDto(shoppingCart, instrumentId);
         double unitPrice = instrumentDto.getCostPrice();
-        int itemQuantity;
 
+        // Nếu không tìm thấy sản phẩm trong giỏ hàng, tạo mới CartItemDto
         if (cartItemDto == null) {
             cartItemDto = new CartItemDto();
+            cartItemDto.setCartItemId(cartItemsCounter++);
             cartItemDto.setInstrument(instrumentDto);
             cartItemDto.setUnitPrice(unitPrice);
             cartItemDto.setQuantity(quantity);
-            cartItemDtoSet.add(cartItemDto);
+            cartItemDtoSet.add(cartItemDto); // Thêm vào giỏ hàng
         } else {
-            itemQuantity = cartItemDto.getQuantity() + quantity;
+            // Nếu đã tồn tại, cập nhật số lượng
+            int itemQuantity = cartItemDto.getQuantity() + quantity;
             cartItemDto.setQuantity(itemQuantity);
         }
 
+        // Cập nhật cartItemDtoSet vào shoppingCart
         shoppingCart.setCartItems(cartItemDtoSet);
         updateCartDtoTotals(shoppingCart);
-        return shoppingCart;
 
+        // In ra thông tin giỏ hàng
+        System.out.println("Session ID:" + session.getId());
+        System.out.println("Shopping Cart Information:");
+        System.out.println("Shopping Cart ID: " + shoppingCart.getShoppingCartId());
+        System.out.println("Total Quantity: " + shoppingCart.getTotalQuantity());
+        System.out.println("Total Price: " + shoppingCart.getTotalPrice());
+        System.out.println("Cart Items:");
+        for (CartItemDto item : shoppingCart.getCartItems()) {
+            System.out.println(" - Cart Item ID: " + item.getCartItemId());
+            System.out.println("   Instrument ID: " + item.getInstrument().getId());
+            System.out.println("   Instrument Name: " + item.getInstrument().getName());
+            System.out.println("   Quantity: " + item.getQuantity());
+            System.out.println("   Unit Price: " + item.getUnitPrice());
+            System.out.println("   Total Price: " + (item.getQuantity() * item.getUnitPrice()));
+        }
+
+        return shoppingCart;
     }
 
+
     private void updateCartDtoTotals(ShoppingCartDto shoppingCart) {
+        // Đảm bảo cartItems không null trước khi tính toán tổng
         Set<CartItemDto> cartItems = shoppingCart.getCartItems();
-        shoppingCart.setTotalPrice(totalPriceDto(cartItems));
-        shoppingCart.setTotalQuantity(totalItemsDto(cartItems));
+        if (cartItems != null) {
+            shoppingCart.setTotalPrice(totalPriceDto(cartItems));
+            shoppingCart.setTotalQuantity(totalItemsDto(cartItems));
+        }
     }
 
     private int totalItemsDto(Set<CartItemDto> cartItems) {
@@ -75,12 +115,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto updateCart(InstrumentDto instrumentDto, int quantity) {
+    public ShoppingCartDto updateCart(Long instrumentId, int quantity) {
         ShoppingCartDto shoppingCartDto = (ShoppingCartDto) session.getAttribute("cart");
         if (shoppingCartDto == null) {
             return null;
         }
-        CartItemDto cartItemDto = findDto(shoppingCartDto, instrumentDto.getId());
+        CartItemDto cartItemDto = findDto(shoppingCartDto, instrumentId);
         if (cartItemDto != null) {
             cartItemDto.setQuantity(quantity);
         }
@@ -90,15 +130,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto removeFromCart(InstrumentDto instrumentDto) {
+    public ShoppingCartDto removeFromCart(Long instrumentId) {
         ShoppingCartDto shoppingCartDto = (ShoppingCartDto) session.getAttribute("cart");
         if (shoppingCartDto == null) {
             return null;
         }
         Set<CartItemDto> cartItemDtoSet = shoppingCartDto.getCartItems();
-        CartItemDto cartItemDto = findDto(shoppingCartDto, instrumentDto.getId());
+        CartItemDto cartItemDto = findDto(shoppingCartDto, instrumentId);
         if (cartItemDto != null) {
-            cartItemDtoSet.remove(cartItemDto);
+            cartItemDtoSet.remove(cartItemDto); // Xóa sản phẩm khỏi giỏ hàng
         }
         updateCartDtoTotals(shoppingCartDto);
         session.setAttribute("cart", shoppingCartDto);
@@ -107,11 +147,35 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getCart() {
-        return (ShoppingCartDto) session.getAttribute("cart");
+        ShoppingCartDto shoppingCart = (ShoppingCartDto) session.getAttribute("cart");
+
+        // In ra thông tin giỏ hàng để kiểm tra
+        if (shoppingCart == null) {
+            System.out.println("Giỏ hàng trống.");
+        } else {
+            System.out.println("Session ID:" + session.getId());
+            System.out.println("Shopping Cart Information:");
+            System.out.println("Shopping Cart ID: " + shoppingCart.getShoppingCartId());
+            System.out.println("Total Quantity: " + shoppingCart.getTotalQuantity());
+            System.out.println("Total Price: " + shoppingCart.getTotalPrice());
+            System.out.println("Cart Items:");
+
+            for (CartItemDto item : shoppingCart.getCartItems()) {
+                System.out.println(" - Cart Item ID: " + item.getCartItemId());
+                System.out.println("   Instrument ID: " + item.getInstrument().getId());
+                System.out.println("   Instrument Name: " + item.getInstrument().getName());
+                System.out.println("   Quantity: " + item.getQuantity());
+                System.out.println("   Unit Price: " + item.getUnitPrice());
+                System.out.println("   Total Price: " + (item.getQuantity() * item.getUnitPrice()));
+            }
+        }
+
+        return shoppingCart;
     }
 
+
     public CartItemDto findDto(ShoppingCartDto shoppingCartDto, Long instrumentId) {
-        if (shoppingCartDto == null) {
+        if (shoppingCartDto == null || shoppingCartDto.getCartItems() == null) {
             return null;
         } else {
             for (CartItemDto item : shoppingCartDto.getCartItems()) {

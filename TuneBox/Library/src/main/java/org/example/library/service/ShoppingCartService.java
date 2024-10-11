@@ -5,11 +5,11 @@ import org.example.library.dto.ShoppingCartDto;
 
 public interface ShoppingCartService {
 
-    ShoppingCartDto addToCart(InstrumentDto instrumentDto, int quantity);
+    ShoppingCartDto addToCart(Long instrumentId, int quantity);
 
-    ShoppingCartDto updateCart(InstrumentDto instrumentDto, int quantity);
+    ShoppingCartDto updateCart(Long instrumentId, int quantity);
 
-    ShoppingCartDto removeFromCart(InstrumentDto instrumentDto);
+    ShoppingCartDto removeFromCart(Long instrumentId);
 
     ShoppingCartDto getCart();
 }

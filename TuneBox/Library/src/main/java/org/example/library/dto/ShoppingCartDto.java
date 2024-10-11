@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -15,12 +16,12 @@ public class ShoppingCartDto {
 
     private Long shoppingCartId;
 
-    private UserDto user;
+    private Long userId;
 
     private double totalPrice;
 
     private int totalQuantity;
 
-    private Set<CartItemDto> cartItems;
+    private Set<CartItemDto> cartItems = new HashSet<>();
 
 }
