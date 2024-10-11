@@ -22,20 +22,23 @@ public class LikeController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<LikeDto> addLike(@RequestParam Long userId, @RequestParam Long postId) {
+    public ResponseEntity<LikeDto> addLike(@RequestParam Long userId,
+                                           @RequestParam(required = false) Long postId,
+                                           @RequestParam(required = false) Long trackId) {
         try {
-            // Validate userId and postId if necessary
-            LikeDto likeDto = likeService.addLike(userId, postId);
+            // add
+            LikeDto likeDto = likeService.addLike(userId, postId, trackId);
             return ResponseEntity.status(HttpStatus.CREATED).body(likeDto);
         } catch (Exception e) {
-            // Log the exception and return an appropriate error response
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<Void> removeLike(@RequestParam Long userId, @RequestParam Long postId) {
-        likeService.removeLike(userId, postId);
+    public ResponseEntity<Void> removeLike(@RequestParam Long userId,
+                                           @RequestParam(required = false) Long postId,
+                                           @RequestParam(required = false) Long trackId) {
+        likeService.removeLike(userId, postId, trackId);
         return ResponseEntity.ok().build();
     }
 
@@ -44,9 +47,22 @@ public class LikeController {
         List<LikeDto> likes = likeService.getLikesByPostId(postId);
         return ResponseEntity.ok(likes);
     }
+
+    @GetMapping("/track/{trackId}")
+    public ResponseEntity<List<LikeDto>> getLikesByTrackId(@PathVariable Long trackId) {
+        List<LikeDto> likes = likeService.getLikesByTrackId(trackId);
+        return ResponseEntity.ok(likes);
+    }
+
     @GetMapping("/post/{postId}/user/{userId}")
     public ResponseEntity<Boolean> checkUserLike(@PathVariable Long postId, @PathVariable Long userId) {
         boolean hasLiked = likeService.checkUserLike(postId, userId);
+        return ResponseEntity.ok(hasLiked);
+    }
+
+    @GetMapping("/track/{trackId}/user/{userId}")
+    public ResponseEntity<Boolean> checkUserLikeTrack(@PathVariable Long trackId, @PathVariable Long userId) {
+        boolean hasLiked = likeService.checkUserLikeTrack(trackId, userId);
         return ResponseEntity.ok(hasLiked);
     }
 

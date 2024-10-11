@@ -13,6 +13,8 @@ public class LikeDto {
     private Long id;
     private LocalDate createDate;
     private Long userId;
-    private Long postId; // Hoặc trackId nếu bạn muốn thích cho track
+    private Long postId;
+    private Long trackId;
+
 
 }
