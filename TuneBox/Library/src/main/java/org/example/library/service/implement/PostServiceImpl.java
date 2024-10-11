@@ -144,6 +144,12 @@
             postRepository.delete(post);
         }
 
+
+        @Override
+        public long countTotalPosts() {
+            return postRepository.count(); // Sử dụng phương thức count() của PostRepository
+        }
+
 //        @Override
 //        public Post findPostById(Long postId) {
 //            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
@@ -160,7 +166,11 @@
         public List<PostDto> findAllPosts() {
             List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
             return posts.stream()
-                    .map(PostMapper::toDto) // Chuyển đổi thành PostDto
+                    .map(post -> {
+                        PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
+                        postDto.setUserName(post.getUser().getUserName()); // Lấy tên người dùng
+                        return postDto; // Trả về PostDto đã được thiết lập userName
+                    })
                     .collect(Collectors.toList());
         }
 
@@ -168,7 +178,11 @@
         public List<PostDto> findNewPosts() {
             List<Post> newPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // Sắp xếp bài viết mới nhất lên đầu
             return newPosts.stream()
-                    .map(PostMapper::toDto)
+                    .map(post -> {
+                        PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
+                        postDto.setUserName(post.getUser().getUserName()); // Lấy tên người dùng
+                        return postDto; // Trả về PostDto đã được thiết lập userName
+                    })
                     .collect(Collectors.toList());
         }
 
@@ -197,5 +211,7 @@
                     ))
                     .collect(Collectors.toList());
         }
+
+
 
     }

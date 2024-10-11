@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/posts")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class PostAdminController {
 
     @Autowired
@@ -76,6 +77,16 @@ public class PostAdminController {
     }
 
 
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalPosts() {
+        try {
+            long totalPosts = postService.countTotalPosts(); // Gọi phương thức để lấy tổng số bài viết
+            return ResponseEntity.ok(totalPosts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 
     //search theo id
@@ -117,6 +128,8 @@ public class PostAdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting post");
         }
     }
+
+
 
 
 }

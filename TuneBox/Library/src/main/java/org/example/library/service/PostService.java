@@ -32,6 +32,9 @@ public interface PostService {
 
     List<PostReportDto> findAllReports(); // Phương thức lấy danh sách báo cáo
 
+    long countTotalPosts();
+
+
 //    PostDto createPost(PostDto postDto);
 
 //    public Post findPostById(Long postId);
