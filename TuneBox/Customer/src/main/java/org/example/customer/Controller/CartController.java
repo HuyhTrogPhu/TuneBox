@@ -1,60 +1,61 @@
 package org.example.customer.controller;
 
 
-import lombok.AllArgsConstructor;
-import org.example.library.dto.CartRequest;
-import org.example.library.service.CartService;
+import org.example.library.dto.InstrumentDto;
+import org.example.library.dto.ShoppingCartDto;
+import org.example.library.service.InstrumentService;
+import org.example.library.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@AllArgsConstructor
 @RequestMapping("/customer/cart")
 public class CartController {
 
     @Autowired
-    private CartService cartService;
+    ShoppingCartService shoppingCartService;
 
-    // Add to cart
+    @Autowired
+    private InstrumentService instrumentService;
+
+    // Add instrument to cart
     @PostMapping("/addToCart")
-    public ResponseEntity<String> addToCart(@RequestBody CartRequest request) {
+    public ShoppingCartDto addToCart(@RequestBody InstrumentDto instrument, @RequestParam int quantity) {
         try {
-            cartService.addToCart(request.getInstrumentId(), request.getQuantity());
-            return ResponseEntity.ok("Added to cart successfully");
+            return shoppingCartService.addToCart(instrument, quantity);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add to cart: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    //  Update to cart
-    @PutMapping("/updateCart")
-    public ResponseEntity<String> updateCart(@RequestBody CartRequest request) {
-        cartService.updateQuantity(request.getInstrumentId(), request.getQuantity());
-        return ResponseEntity.ok("Updated cart successfully");
+    // Update quantity of instrument in cart
+    @PutMapping("/updateQuantity")
+    public ShoppingCartDto updateQuantity(@RequestBody InstrumentDto instrument, @RequestParam int quantity) {
+        try {
+            return shoppingCartService.updateCart(instrument, quantity);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    // Delete from cart
-    @DeleteMapping("/deleteCart/{instrumentId}")
-    public ResponseEntity<String> deleteFromCart(@PathVariable Long instrumentId) {
-        cartService.removeItem(instrumentId);
-        return ResponseEntity.ok("Deleted from cart successfully");
+    // Remove instrument from cart
+    @DeleteMapping("/removeFromCart")
+    public ShoppingCartDto removeFromCart(@RequestBody InstrumentDto instrument) {
+        try {
+            return shoppingCartService.removeFromCart(instrument);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    // Get cart
-    @GetMapping("/items")
-    public ResponseEntity<Map<Long, Integer>> getCartItems() {
-        return ResponseEntity.ok(cartService.getCart());
-    }
-
-    //  Clear cart
-    @DeleteMapping("/clearCart")
-    public ResponseEntity<String> clearCart() {
-        cartService.clearCart();
-        return ResponseEntity.ok("Cart cleared successfully");
+    // Get cart by user id
+    @GetMapping("/viewCart")
+    public ShoppingCartDto getCartByUserId(@RequestParam Long userId) {
+        try {
+            return shoppingCartService.getCart();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
