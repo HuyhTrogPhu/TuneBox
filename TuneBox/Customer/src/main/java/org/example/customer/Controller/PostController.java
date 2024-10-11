@@ -65,19 +65,19 @@ public class PostController {
 
 
     // Lấy tất cả bài viết của người dùng từ ID
-    @GetMapping("/current-user")
-    public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
-        }
+        @GetMapping("/current-user")
+        public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
+            if (userId == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+            }
 
-        List<PostDto> posts = postService.getPostsByUserId(userId);
-        if (posts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
-        }
+            List<PostDto> posts = postService.getPostsByUserId(userId);
+            if (posts.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+            }
 
-        return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
-    }
+            return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
+        }
 
 
     // Phương thức lấy tất cả các bài viết
@@ -136,6 +136,20 @@ public class PostController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+    // Lấy tất cả bài viết của người dùng từ ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+        }
+
+        List<PostDto> posts = postService.getPostsByUserId(userId);
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+        }
+
+        return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
     }
 
 

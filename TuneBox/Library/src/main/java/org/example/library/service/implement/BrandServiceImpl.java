@@ -9,6 +9,7 @@ import org.example.library.repository.BrandRepository;
 import org.example.library.service.BrandService;
 import org.example.library.utils.ImageUploadBrand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class BrandServiceImpl implements BrandService {
-
-    @Autowired
     public BrandRepository brandRepository;
 
     private final ImageUploadBrand imageUploadBrand;
@@ -30,15 +29,15 @@ public class BrandServiceImpl implements BrandService {
     public BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image) {
         try {
             Brand brand = BrandMapper.maptoBrand(brandsDto);
-            if (image != null) {
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+            if (image != null && !image.isEmpty()) {
+                String imageUrl = imageUploadBrand.uploadFile(image);
+                brand.setBrandImage(imageUrl);
             }
             brand.setStatus(true);
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload image: " + e.getMessage());
+            throw new RuntimeException("Failed to upload image: " + e.getMessage(),e);
         }
     }
 
@@ -59,37 +58,23 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandsDto updateBrand(Long id, BrandsDto brandsDto, MultipartFile image) {
         try {
-            // Tìm thương hiệu cần cập nhật
             Brand brand = brandRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Brand not found")
             );
 
-            System.out.println("Updating brand with ID: " + id);
-            System.out.println("New name: " + brandsDto.getName());
-            System.out.println("New description: " + brandsDto.getDescription());
-            System.out.println("New status: " + brandsDto.getStatus());
-
-            // Cập nhật tên và mô tả
             brand.setName(brandsDto.getName());
             brand.setDescription(brandsDto.getDescription());
             brand.setStatus(brandsDto.getStatus());
 
-            // Kiểm tra xem hình ảnh có được truyền vào không
             if (image != null && !image.isEmpty()) {
-                // Tải lên hình ảnh mới
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                String imageUrl = imageUploadBrand.uploadFile(image);
+                brand.setBrandImage(imageUrl);
             }
 
-            // Lưu thương hiệu đã cập nhật
             Brand saveBrand = brandRepository.save(brand);
             return BrandMapper.maptoBrandsDto(saveBrand);
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException("Failed to update brand image: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("An unexpected error occurred: " + e.getMessage() + ", cause: " + e.getCause());
         }
     }
 
@@ -109,4 +94,11 @@ public class BrandServiceImpl implements BrandService {
         List<Brand> list = brandRepository.findByKeyword(keyword);
         return list.stream().map(BrandMapper::maptoBrandsDto).collect(Collectors.toList());
     }
+    @Override
+    public Brand getManagedBrand(Long id) {
+        return brandRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
+
+
 }

@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
+    //    Search by keyword
     @Query("select b from Brand b where b.name like %?1%")
     public List<Brand> findByKeyword(String keyword);
+
+
 }

@@ -37,4 +37,5 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    private boolean edited;
 }

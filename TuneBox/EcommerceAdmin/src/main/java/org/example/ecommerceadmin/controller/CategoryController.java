@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class CategoryController {
 
     //    Add new category
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
-        CategoryDto saveCategory = categoryService.createCategory(categoryDto);
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto, MultipartFile image) {
+        CategoryDto saveCategory = categoryService.createCategory(categoryDto,image);
         return new ResponseEntity<>(saveCategory, HttpStatus.CREATED);
     }
 
@@ -46,8 +47,8 @@ public class CategoryController {
     //    Update category by id
     @PutMapping("{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("categoryId") Long id,
-                                                      @RequestBody CategoryDto categoryDto) {
-        CategoryDto saveCategory = categoryService.updateCategory(id, categoryDto);
+                                                      @RequestBody CategoryDto categoryDto,MultipartFile image) {
+        CategoryDto saveCategory = categoryService.updateCategory(id, categoryDto,image);
         return ResponseEntity.ok(saveCategory);
     }
 

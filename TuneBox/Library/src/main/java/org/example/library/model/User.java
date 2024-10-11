@@ -79,7 +79,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "user")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")

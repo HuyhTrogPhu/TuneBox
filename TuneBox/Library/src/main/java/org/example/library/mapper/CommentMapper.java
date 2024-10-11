@@ -6,6 +6,8 @@ import org.example.library.model.User;
 import org.example.library.model.Post;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class CommentMapper {
 
@@ -18,8 +20,9 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserName(comment.getUser().getUserName());
+        commentDTO.setUserNickname(comment.getUser().getUserNickname());
         commentDTO.setPostId(comment.getPost().getId());
+        commentDTO.setEdited(comment.isEdited());
 
         return commentDTO;
     }
@@ -28,16 +31,24 @@ public class CommentMapper {
     public Comment toEntity(CommentDTO commentDTO, User user, Post post) {
         Comment comment = new Comment();
         comment.setContent(commentDTO.getContent());
-        comment.setCreationDate(commentDTO.getCreationDate());
+
+        // Nếu creationDate từ DTO là null, đặt giá trị mặc định là thời gian hiện tại
+        if (commentDTO.getCreationDate() == null) {
+            comment.setCreationDate(LocalDateTime.now());
+        } else {
+            comment.setCreationDate(commentDTO.getCreationDate());
+        }
+
         comment.setUser(user);
         comment.setPost(post);
+        comment.setEdited(commentDTO.isEdited());
 
-        // Set parentId nếu có
         if (commentDTO.getParentId() != null) {
-            comment.setParentId(commentDTO.getParentId()); // Bạn cần thêm trường này trong lớp Comment entity
+            comment.setParentId(commentDTO.getParentId());
         }
 
         return comment;
     }
+
 
 }
