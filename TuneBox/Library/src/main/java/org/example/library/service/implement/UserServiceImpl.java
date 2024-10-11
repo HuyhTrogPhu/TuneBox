@@ -12,12 +12,12 @@ import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -43,12 +43,24 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private GenreRepository GenreRepo;
 
+    @Autowired
+    public UserServiceImpl(
+            @Lazy UserService userService,
+            JavaMailSender javaMailSender, // Khởi tạo javaMailSender
+            RoleRepository roleRepository // Khởi tạo roleRepository
+    ) {
+        this.userService = userService;
+        this.javaMailSender = javaMailSender; // Khởi tạo biến
+        this.roleRepository = roleRepository; // Khởi tạo biến
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
 
-    private BCryptPasswordEncoder crypt;
+    private final UserService userService;
 
 
     private final JavaMailSender javaMailSender;
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
@@ -72,7 +84,7 @@ public class UserServiceImpl implements UserService {
         User savedUser = new User();
 
         savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(crypt.encode(requestSignUpModel.getUserDto().getPassword()));
+        savedUser.setPassword(requestSignUpModel.getUserDto().getPassword());
         savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
         savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
 
@@ -139,8 +151,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Username or email cannot be null or empty");
         }
 
-
-        if (userOptional.isPresent() && crypt.matches(userdto.getPassword(), userOptional.get().getPassword())) {
+        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
             return UserMapper.mapToUserDto(userOptional.get());
         } else {
             throw new RuntimeException("Invalid username or password");
@@ -148,11 +159,12 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
     public void resetPassword(String token, String newPassword) {
         Optional<User> userOptional = Repo.findByResetToken(token); // Tìm người dùng theo token
 
         if (userOptional.isPresent()) {
-            userOptional.get().setPassword(crypt.encode(newPassword));
+            userOptional.get().setPassword((newPassword));
             Repo.save(userOptional.get());
         } else {
             throw new RuntimeException("Invalid token");
@@ -174,35 +186,45 @@ public class UserServiceImpl implements UserService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
-
-    @Override
-    public UserDto loginWithGoogle(String email, String name) {
-        Optional<User> userOptional = Repo.findByEmail(email);
-        if (userOptional.isPresent()) {
-
-            return UserMapper.mapToUserDto((userOptional.get()));
-        } else {
-            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
-            User newUser = new User();
-            newUser.setEmail(email);
-            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-            newUser.setPassword(crypt.encode("defaultPassword")); // Hoặc một password mặc định khác
-            User savedUser = Repo.save(newUser);
-
-            return UserMapper.mapToUserDto(savedUser);
-        }
-    }
+//
+//    @Override
+//    public UserDto loginWithGoogle(String email, String name) {
+//        Optional<User> userOptional = Repo.findByEmail(email);
+//        if (userOptional.isPresent()) {
+//
+//            return UserMapper.mapToUserDto((userOptional.get()));
+//        } else {
+//            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
+//            User newUser = new User();
+//            newUser.setEmail(email);
+//            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
+//            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
+//            User savedUser = Repo.save(newUser);
+//
+//            return UserMapper.mapToUserDto(savedUser);
+//        }
+//    }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
         User user = Repo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
 
-        if (!crypt.matches(oldPassword, user.getPassword())) {
+        if (!oldPassword.matches(newPassword)) {
             throw new RuntimeException("Mật khẩu cũ không chính xác");
         }
 
-        user.setPassword(crypt.encode(newPassword));
+        user.setPassword(newPassword);
         Repo.save(user);
+    }
+
+    @Override
+    public UserDto getUserById(Long userId) {
+        return null;
+    }
+
+    @Override
+    public User findUserById(Long userId) {
+        return null;
     }
 
 
