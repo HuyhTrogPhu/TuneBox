@@ -8,12 +8,14 @@ import org.example.library.service.InstrumentService;
 import org.example.library.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Service
+@SessionScope
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
