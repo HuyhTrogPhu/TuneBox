@@ -17,4 +17,6 @@ public interface InstrumentService {
     void deleteInstrument(Long id);
     List<InstrumentDto> getInstrumentsByBrandId(Long brandId);
 
+    List<InstrumentDto> getInstrumentByCategoryId(Long categoryId);
+    List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId);
 }
