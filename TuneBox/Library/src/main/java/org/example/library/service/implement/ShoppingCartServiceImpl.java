@@ -71,22 +71,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCart.setCartItems(cartItemDtoSet);
         updateCartDtoTotals(shoppingCart);
 
-        // In ra thông tin giỏ hàng
-        System.out.println("Session ID:" + session.getId());
-        System.out.println("Shopping Cart Information:");
-        System.out.println("Shopping Cart ID: " + shoppingCart.getShoppingCartId());
-        System.out.println("Total Quantity: " + shoppingCart.getTotalQuantity());
-        System.out.println("Total Price: " + shoppingCart.getTotalPrice());
-        System.out.println("Cart Items:");
-        for (CartItemDto item : shoppingCart.getCartItems()) {
-            System.out.println(" - Cart Item ID: " + item.getCartItemId());
-            System.out.println("   Instrument ID: " + item.getInstrument().getId());
-            System.out.println("   Instrument Name: " + item.getInstrument().getName());
-            System.out.println("   Quantity: " + item.getQuantity());
-            System.out.println("   Unit Price: " + item.getUnitPrice());
-            System.out.println("   Total Price: " + (item.getQuantity() * item.getUnitPrice()));
-        }
-
         return shoppingCart;
     }
 
@@ -150,28 +134,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     public ShoppingCartDto getCart() {
         ShoppingCartDto shoppingCart = (ShoppingCartDto) session.getAttribute("cart");
-
-        // In ra thông tin giỏ hàng để kiểm tra
-        if (shoppingCart == null) {
-            System.out.println("Giỏ hàng trống.");
-        } else {
-            System.out.println("Session ID:" + session.getId());
-            System.out.println("Shopping Cart Information:");
-            System.out.println("Shopping Cart ID: " + shoppingCart.getShoppingCartId());
-            System.out.println("Total Quantity: " + shoppingCart.getTotalQuantity());
-            System.out.println("Total Price: " + shoppingCart.getTotalPrice());
-            System.out.println("Cart Items:");
-
-            for (CartItemDto item : shoppingCart.getCartItems()) {
-                System.out.println(" - Cart Item ID: " + item.getCartItemId());
-                System.out.println("   Instrument ID: " + item.getInstrument().getId());
-                System.out.println("   Instrument Name: " + item.getInstrument().getName());
-                System.out.println("   Quantity: " + item.getQuantity());
-                System.out.println("   Unit Price: " + item.getUnitPrice());
-                System.out.println("   Total Price: " + (item.getQuantity() * item.getUnitPrice()));
-            }
-        }
-
         return shoppingCart;
     }
 
