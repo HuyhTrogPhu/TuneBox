@@ -29,5 +29,6 @@ public class Block {
     @JoinColumn(name = "blocked_id", nullable = false)
     private User blocked;
 
-    private LocalDateTime createBlock;
+    @Column(name = "create_block", nullable = false)
+    private LocalDateTime createBlock = LocalDateTime.now();
 }

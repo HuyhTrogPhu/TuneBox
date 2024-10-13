@@ -103,4 +103,8 @@ public class User {
     private String resetToken;
     private String token;
     private String newPassword;
+
+    public User(Long blockerId) {
+        this.id = blockerId;
+    }
 }

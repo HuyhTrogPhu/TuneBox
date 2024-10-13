@@ -28,5 +28,12 @@ public class Follow {
     @JoinColumn(name = "followed_id", nullable = false)
     private User followed;
 
-    private LocalDateTime createAt;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    // Tự động thêm thời gian khi Follow được tạo
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
