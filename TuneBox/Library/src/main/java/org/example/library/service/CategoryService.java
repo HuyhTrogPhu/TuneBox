@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface CategoryService {
 
+
     CategoryDto createCategory(CategoryDto categoryDto, MultipartFile image);
 
     CategoryDto getCategoryById(Long id);
@@ -22,4 +23,6 @@ public interface CategoryService {
     void deleteCategory(Long id);
 
     CategoryIns getManagedCategory(Long id);
+
+
 }

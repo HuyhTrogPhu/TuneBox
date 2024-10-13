@@ -20,4 +20,7 @@ public interface    BrandService {
     List<BrandsDto> searchBrand(String keyword);
 
     Brand getManagedBrand(Long id);
+
+
+
 }

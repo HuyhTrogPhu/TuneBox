@@ -21,6 +21,7 @@ public class CategoryInsController {
     @Autowired
     private CategoryService categoryService;
 
+
     // Get all categories
     @GetMapping
     public ResponseEntity<List<CategoryDto>> getAllCategories() {

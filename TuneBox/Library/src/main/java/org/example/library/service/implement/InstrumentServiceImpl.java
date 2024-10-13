@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
@@ -36,8 +37,10 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Autowired
     private BrandRepository brandRepository;
+
     @Autowired
     private Cloudinary cloudinary;
+
     private final ImageUploadInstrument imageUploadInstrument;
 
     @Override
@@ -52,7 +55,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 //            }
             Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
             String imageUrl  = (String) uploadResult.get("url");
-            instrumentDto.setImage(imageUrl );
+            instrumentDto.setImage(imageUrl);
 
             Instrument instrument = new Instrument();
             instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
@@ -175,4 +178,6 @@ public class InstrumentServiceImpl implements InstrumentService {
         List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
     }
+
+
 }

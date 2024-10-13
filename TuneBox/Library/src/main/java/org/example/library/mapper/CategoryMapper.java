@@ -8,11 +8,11 @@ public class CategoryMapper {
 
     public static CategoryDto mapperCategoryDto(CategoryIns category) {
         return new CategoryDto(category.getId(), category.getName(),
-                category.getImage(), category.getDescription(), category.getStatus());
+                category.getImage(), category.getDescription(), category.isStatus());
     }
 
     public static CategoryIns mapperCategory(CategoryDto categoryDto) {
         return new CategoryIns(categoryDto.getId(), categoryDto.getName(),
-                categoryDto.getImage(), categoryDto.getDescription(), categoryDto.getStatus());
+                categoryDto.getImage(), categoryDto.getDescription(), categoryDto.isStatus());
     }
 }

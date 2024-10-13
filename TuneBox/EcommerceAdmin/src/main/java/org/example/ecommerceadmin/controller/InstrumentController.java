@@ -6,10 +6,9 @@ import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
-import org.example.library.service.implement.BrandServiceImpl;
-
-import org.example.library.service.implement.CategoryServiceImpl;
-import org.example.library.service.implement.InstrumentServiceImpl;
+import org.example.library.service.BrandService;
+import org.example.library.service.CategoryService;
+import org.example.library.service.InstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +17,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/instrument")
 public class InstrumentController {
 
     @Autowired
-    private InstrumentServiceImpl instrumentService;
+    private InstrumentService instrumentService;
 
     @Autowired
-    private BrandServiceImpl brandService;
+    private BrandService brandService;
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
 
     // Add new instrument
@@ -154,9 +153,6 @@ public class InstrumentController {
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
-
-
-
 
 
     // Delete instrument

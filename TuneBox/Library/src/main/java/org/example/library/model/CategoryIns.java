@@ -27,5 +27,5 @@ public class CategoryIns {
 
     private String description;
 
-    private Boolean status;
+    private boolean status;
 }

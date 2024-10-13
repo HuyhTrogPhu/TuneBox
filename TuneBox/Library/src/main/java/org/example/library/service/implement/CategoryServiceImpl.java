@@ -24,8 +24,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryInsRepository categoryInsRepository;
-@Autowired
-private Cloudinary cloudinary;
+    @Autowired
+    private Cloudinary cloudinary;
     private final ImageUploadCategory imageUploadCategory;
 
     @Override
@@ -75,7 +75,7 @@ private Cloudinary cloudinary;
 
             categoryIns.setName(categoryDto.getName());
             categoryIns.setDescription(categoryDto.getDescription());
-            categoryIns.setStatus(categoryDto.getStatus());
+            categoryIns.setStatus(categoryDto.isStatus());
 
             // Nếu có hình ảnh mới, xóa ảnh cũ và tải ảnh mới
             if (image != null && !image.isEmpty()) {
@@ -114,7 +114,7 @@ private Cloudinary cloudinary;
         CategoryIns categoryIns = categoryInsRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Category not found")
         );
-        categoryIns.setStatus(!categoryIns.getStatus());  // Chuyển đổi trạng thái
+        categoryIns.setStatus(!categoryIns.isStatus());  // Chuyển đổi trạng thái
         categoryInsRepository.save(categoryIns);
     }
 
@@ -132,4 +132,6 @@ private Cloudinary cloudinary;
         return categoryInsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
     }
+
+
 }

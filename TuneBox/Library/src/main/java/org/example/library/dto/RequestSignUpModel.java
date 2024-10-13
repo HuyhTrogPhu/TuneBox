@@ -6,6 +6,7 @@ public class RequestSignUpModel {
     private String[] listTalent;
     private String[] genreBy;
 
+
     public UserDto getUserDto() {
         return userDto;
     }
