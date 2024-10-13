@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    private Date orderDate;
+    private LocalDate orderDate;
 
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
 
     private double tax;
 
@@ -44,8 +45,5 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderDetail> orderDetails;
-
-
-
 
 }

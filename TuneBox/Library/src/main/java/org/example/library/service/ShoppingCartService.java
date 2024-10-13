@@ -1,15 +1,20 @@
 package org.example.library.service;
 
+import jakarta.servlet.http.HttpSession;
+import org.example.library.dto.CartItemDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.dto.ShoppingCartDto;
+import org.example.library.model.Instrument;
+
+import java.util.List;
 
 public interface ShoppingCartService {
 
-    ShoppingCartDto addToCart(Long instrumentId, int quantity);
+    ShoppingCartDto getCart(HttpSession session);
 
-    ShoppingCartDto updateCart(Long instrumentId, int quantity);
+    void addItemToCart(HttpSession session, Instrument newItem, int quantity);
 
-    ShoppingCartDto removeFromCart(Long instrumentId);
+    void updateCart(HttpSession session, List<CartItemDto> items);
 
-    ShoppingCartDto getCart();
+    void removeItemFromCart(HttpSession session, Long itemId);
 }
