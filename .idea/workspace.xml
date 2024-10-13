@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CartController.java" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit edit add del cart">
       <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CategoryController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,6 +156,7 @@
       <workItem from="1728359683470" duration="8086000" />
       <workItem from="1728387912391" duration="2158000" />
       <workItem from="1728448640492" duration="458000" />
+      <workItem from="1728724055620" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -258,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728366320420</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="commit edit add del cart">
+      <option name="closed" value="true" />
+      <created>1728716021349</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1728716021349</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -275,7 +279,8 @@
     <MESSAGE value="commit" />
     <MESSAGE value="commit 10.7" />
     <MESSAGE value="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom" />
-    <option name="LAST_COMMIT_MESSAGE" value="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom" />
+    <MESSAGE value="commit edit add del cart" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit edit add del cart" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
