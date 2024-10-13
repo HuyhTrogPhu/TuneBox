@@ -21,12 +21,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCartDto getCart(HttpSession session) {
-        ShoppingCartDto cart = (ShoppingCartDto) session.getAttribute("shoppingCart");
+        ShoppingCartDto cart = (ShoppingCartDto) session.getAttribute("cart");
 
         if (cart == null) {
             // Tạo giỏ hàng mới với cartId tự động tăng
             cart = new ShoppingCartDto(cartIdCounter++, new ArrayList<>(), 0.0);
-            session.setAttribute("shoppingCart", cart);
+            session.setAttribute("cart", cart);
         }
 
         double totalPrice = cart.getItems().stream().mapToDouble(item -> item.getQuantity() * item.getInstrument().getCostPrice()).sum();
@@ -54,20 +54,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
 
         // Cập nhật lại session với giỏ hàng đã thay đổi
-        session.setAttribute("shoppingCart", cart);
+        session.setAttribute("cart", cart);
     }
     @Override
     public void updateCart(HttpSession session, List<CartItemDto> items) {
         ShoppingCartDto cart = getCart(session);
         cart.setItems(items);
-        session.setAttribute("shoppingCart", cart);
+        session.setAttribute("cart", cart);
     }
     @Override
     public void removeItemFromCart(HttpSession session, Long itemId) {
         ShoppingCartDto cart = getCart(session);
         if (cart != null) {
             cart.getItems().removeIf(item -> item.getInstrument().getId().equals(itemId));
-            session.setAttribute("shoppingCart", cart);
+            session.setAttribute("cart", cart);
         }
     }
 }

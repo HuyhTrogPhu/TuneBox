@@ -19,7 +19,7 @@ public class UserInformation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstName;
+    private String name;
 
     private String gender;
 
