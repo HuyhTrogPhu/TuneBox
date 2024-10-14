@@ -72,11 +72,6 @@
             // Chuyển Post entity thành PostDto và trả về
             return PostMapper.toDto(savedPost);
         }
-//        @Override
-//        public PostDto getPostById(Long id) {
-//            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-//            return PostMapper.toDto(post);
-//        }
 
         @Override
         public List<PostDto> getAllPosts() {

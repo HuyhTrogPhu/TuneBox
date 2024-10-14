@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,6 +58,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @JsonIgnore
     private Set<Genre> genre;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -70,9 +72,11 @@ public class User {
     @OneToMany(mappedBy = "blocked")
     private Set<Block> blocked;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "follower")
     private Set<Follow> following;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "followed")
     private Set<Follow> followers;
 

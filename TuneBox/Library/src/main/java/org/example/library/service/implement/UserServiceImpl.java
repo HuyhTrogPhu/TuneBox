@@ -227,6 +227,19 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public List<UserDto> findAll() {
+        List<User> users = Repo.findAll();  // Lấy tất cả người dùng từ repository
+        List<UserDto> userDto = new ArrayList<>();
+
+        // Chuyển đổi User sang UserDto
+        for (User user : users) {
+            userDto.add(UserMapper.mapToUserDto(user));
+        }
+
+        return userDto;  // Trả về danh sách UserDto
+    }
+
 
     @Override
     public void ForgotPassword(UserDto userdto) {
