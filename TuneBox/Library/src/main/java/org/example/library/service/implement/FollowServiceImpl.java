@@ -30,6 +30,7 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public void followUser(Long followerId, Long followedId) {
+        System.out.println("Following: " + followerId + " is following " + followedId);
         // Kiểm tra nếu follower và followed có tồn tại trong DB
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new RuntimeException("Follower not found"));
@@ -47,22 +48,28 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public void unfollowUser(Long followerId, Long followedId) {
-        // Xóa Follow entity khỏi DB
+        System.out.println("Unfollowing: " + followerId + " is unfollowing " + followedId);
         followRepository.deleteByFollowerIdAndFollowedId(followerId, followedId);
     }
 
     @Override
     public boolean isFollowing(Long followerId, Long followedId) {
+        boolean isFollowing = followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
+        System.out.println("Is " + followerId + " following " + followedId + ": " + isFollowing);
         return followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
     }
 
     @Override
     public int countFollowers(Long userId) {
+        int followersCount = followRepository.countByFollowedId(userId);
+        System.out.println("Followers count for user " + userId + ": " + followersCount);
         return followRepository.countByFollowedId(userId); // Đếm người theo dõi
     }
 
     @Override
     public int countFollowing(Long userId) {
+        int followingCount = followRepository.countByFollowerId(userId);
+        System.out.println("Following count for user " + userId + ": " + followingCount);
         return followRepository.countByFollowerId(userId); // Đếm người đang theo dõi
     }
 
