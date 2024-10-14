@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -22,7 +22,8 @@ public class Chat {
     @Column(name = "chat_id")
     private Long id;
 
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
+
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
@@ -32,7 +33,7 @@ public class Chat {
     @JoinColumn(name = "receiver_id")
     private User receiver;
 
-    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Message> messages;
 
 

@@ -133,6 +133,19 @@ public class UserServiceImpl implements UserService {
         return Repo.findById(userId);
     }
 
+    @Override
+    public List<UserDto> findAll() {
+        List<User> users = Repo.findAll();  // Lấy tất cả người dùng từ repository
+        List<UserDto> userDto = new ArrayList<>();
+
+        // Chuyển đổi User sang UserDto
+        for (User user : users) {
+            userDto.add(UserMapper.mapToUserDto(user));
+        }
+
+        return userDto;  // Trả về danh sách UserDto
+    }
+
     public User updateById(Long userId, UserDto userDto) {
         return Repo.save(UserMapper.mapToUser(userDto));
     }
@@ -219,7 +232,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        return null;
+        Optional<User> userOptional = Repo.findById(userId);
+        if (userOptional.isPresent()) {
+            return UserMapper.mapToUserDto(userOptional.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
     }
 
     @Override
@@ -256,6 +274,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found");
         }
     }
+
 
 
 }

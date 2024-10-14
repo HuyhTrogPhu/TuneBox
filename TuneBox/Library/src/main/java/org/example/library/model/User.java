@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -91,8 +92,8 @@ public class User {
     @OneToMany(mappedBy = "receiver")
     private Set<Chat> receivedChats;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Message> messages;
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages;
 
     @OneToMany(mappedBy = "user")
     private Set<Like> likes;

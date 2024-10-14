@@ -1,6 +1,7 @@
 package org.example.library.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,9 +43,12 @@ public class UserDto {
     private List<Order> orderList;
     private Set<Track> tracks;
     private Set<Albums> albums;
+    @JsonIgnore
     private Set<Chat> sentChats;
+    @JsonIgnore
     private Set<Chat> receivedChats;
-    private Set<Message> messages;
+    @JsonIgnore
+    private List<Message> messages;
     private String resetToken;
     private String token;
     private String newPassword;

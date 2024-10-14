@@ -66,50 +66,50 @@ public class UserMapper {
         user.setPassword(userDto.getPassword());
         user.setReport(userDto.isReport());
         user.setCreateDate(userDto.getCreateDate());
-        user.setReason(userDto.getReason());
+//        user.setReason(userDto.getReason());
 
         // Map Talent from talentIds (map back to Talent objects)
-        if (userDto.getTalentIds() != null && !userDto.getTalentIds().isEmpty()) {
-            Set<Talent> talents = userDto.getTalentIds().stream().map(id -> {
-                Talent talent = new Talent();
-                talent.setId(id);
-                return talent;
-            }).collect(Collectors.toSet());
-            user.setTalent(talents);
-        }
-
-        // Map InspiredBy from inspiredByIds (map back to InspiredBy objects)
-        if (userDto.getInspiredByIds() != null && !userDto.getInspiredByIds().isEmpty()) {
-            Set<InspiredBy> inspiredBys = userDto.getInspiredByIds().stream().map(id -> {
-                InspiredBy inspiredBy = new InspiredBy();
-                inspiredBy.setId(id);
-                return inspiredBy;
-            }).collect(Collectors.toSet());
-            user.setInspiredBy(inspiredBys);
-        }
-
-        // Map Genre from genreIds (map back to Genre objects)
-        if (userDto.getGenreIds() != null && !userDto.getGenreIds().isEmpty()) {
-            Set<Genre> genres = userDto.getGenreIds().stream().map(id -> {
-                Genre genre = new Genre();
-                genre.setId(id);
-                return genre;
-            }).collect(Collectors.toSet());
-            user.setGenre(genres);
-        }
+//        if (userDto.getTalentIds() != null && !userDto.getTalentIds().isEmpty()) {
+//            Set<Talent> talents = userDto.getTalentIds().stream().map(id -> {
+//                Talent talent = new Talent();
+//                talent.setId(id);
+//                return talent;
+//            }).collect(Collectors.toSet());
+//            user.setTalent(talents);
+//        }
+//
+//        // Map InspiredBy from inspiredByIds (map back to InspiredBy objects)
+//        if (userDto.getInspiredByIds() != null && !userDto.getInspiredByIds().isEmpty()) {
+//            Set<InspiredBy> inspiredBys = userDto.getInspiredByIds().stream().map(id -> {
+//                InspiredBy inspiredBy = new InspiredBy();
+//                inspiredBy.setId(id);
+//                return inspiredBy;
+//            }).collect(Collectors.toSet());
+//            user.setInspiredBy(inspiredBys);
+//        }
+//
+//        // Map Genre from genreIds (map back to Genre objects)
+//        if (userDto.getGenreIds() != null && !userDto.getGenreIds().isEmpty()) {
+//            Set<Genre> genres = userDto.getGenreIds().stream().map(id -> {
+//                Genre genre = new Genre();
+//                genre.setId(id);
+//                return genre;
+//            }).collect(Collectors.toSet());
+//            user.setGenre(genres);
+//        }
 
         // Set other fields
-        user.setRole(userDto.getRole());
-        user.setBlocker(userDto.getBlocker());
-        user.setBlocked(userDto.getBlocked());
-        user.setFollowing(userDto.getFollowing());
-        user.setFollowers(userDto.getFollowers());
-        user.setOrderList(userDto.getOrderList());
-        user.setTracks(userDto.getTracks());
-        user.setAlbums(userDto.getAlbums());
-        user.setSentChats(userDto.getSentChats());
-        user.setReceivedChats(userDto.getReceivedChats());
-        user.setMessages(userDto.getMessages());
+//        user.setRole(userDto.getRole());
+//        user.setBlocker(userDto.getBlocker());
+//        user.setBlocked(userDto.getBlocked());
+//        user.setFollowing(userDto.getFollowing());
+//        user.setFollowers(userDto.getFollowers());
+//        user.setOrderList(userDto.getOrderList());
+//        user.setTracks(userDto.getTracks());
+//        user.setAlbums(userDto.getAlbums());
+//        user.setSentChats(userDto.getSentChats());
+//        user.setReceivedChats(userDto.getReceivedChats());
+//        user.setMessages(userDto.getMessages());
         user.setResetToken(userDto.getResetToken());
         user.setToken(userDto.getToken());
         user.setNewPassword(userDto.getNewPassword());
