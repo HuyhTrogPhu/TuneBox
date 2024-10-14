@@ -4,7 +4,6 @@ package org.example.customer.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.ShoppingCartDto;
-import org.example.library.dto.UserDto;
 import org.example.library.model.User;
 import org.example.library.service.implement.OrderServiceImpl;
 import org.example.library.service.implement.UserServiceImpl;

@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;

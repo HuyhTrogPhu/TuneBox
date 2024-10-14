@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.CartItemDto;

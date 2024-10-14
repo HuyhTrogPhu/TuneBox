@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
 import org.example.library.repository.LikeRepository;
@@ -15,7 +15,6 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/posts")
 public class PostController {
 

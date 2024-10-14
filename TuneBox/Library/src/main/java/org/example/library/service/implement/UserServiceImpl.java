@@ -229,7 +229,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll() {
-        List<User> users = Repo.findAll();  // Lấy tất cả người dùng từ repository
+        List<User> users = userRepository.findAll();  // Lấy tất cả người dùng từ repository
         List<UserDto> userDto = new ArrayList<>();
 
         // Chuyển đổi User sang UserDto
