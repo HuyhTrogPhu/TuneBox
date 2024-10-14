@@ -170,6 +170,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserDto loginWithGoogle(String email, String name) {
+        return null;
+    }
+
     private String generateToken() {
         return java.util.UUID.randomUUID().toString();
     }
