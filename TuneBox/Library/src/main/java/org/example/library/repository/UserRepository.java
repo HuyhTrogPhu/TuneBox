@@ -19,9 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
     long countByIdNotNull();
 
-//    @Query("SELECT u FROM User u LEFT JOIN u.post p GROUP BY u ORDER BY COUNT(p) DESC")
-//    List<User> UserOderByPostHightoLow();
-
-
 
 }

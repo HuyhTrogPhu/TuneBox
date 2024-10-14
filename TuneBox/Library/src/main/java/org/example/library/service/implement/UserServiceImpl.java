@@ -23,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static org.example.library.mapper.UserMapper.mapToUser;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -140,7 +142,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User updateById(Long userId, UserDto userDto) {
-        return Repo.save(UserMapper.mapToUser(userDto));
+        return Repo.save(mapToUser(userDto));
     }
 
     @Override
@@ -255,5 +257,27 @@ public class UserServiceImpl implements UserService {
     public long countUser() {
         return Repo.countByIdNotNull();
     }
+
+
+    @Override
+    public UserDto updateUser(Long userId, UserDto userDto) {
+        Optional<User> userOptional = Repo.findById(userId);
+
+        if (!userOptional.isPresent()) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+        User userToUpdate = userOptional.get();
+        User updatedUser = mapToUser(userDto);
+
+
+        updatedUser.setId(userToUpdate.getId()); //ko doi ID
+        updatedUser.setCreateDate(userToUpdate.getCreateDate());
+        updatedUser.setPassword(userToUpdate.getPassword());
+
+
+        User savedUser = Repo.save(updatedUser);
+        return UserMapper.mapToUserDto(savedUser);
+    }
+
 
 }

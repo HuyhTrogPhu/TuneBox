@@ -229,6 +229,22 @@ public class UserController {
         }
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        RespondModel response = new RespondModel();
 
+        try {
+            UserDto updatedUser = UserService.updateUser(id, userDto);
+            response.setMessage("Cập nhật thành công");
+            response.setData(updatedUser);
+            response.setStatus(true);
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            response.setMessage(ex.getMessage());
+            response.setData(null);
+            response.setStatus(false);
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
 
 }

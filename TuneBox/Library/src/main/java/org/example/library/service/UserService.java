@@ -5,9 +5,11 @@ package org.example.library.service;
 import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
 import org.example.library.model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.List;
+
 
 public interface UserService {
     void CheckLogin(RequestSignUpModel requestSignUpModel);
@@ -27,7 +29,7 @@ public interface UserService {
     void changePassword(String email, String oldPassword, String newPassword);
 
      List<User> GetAll();
-
+    public UserDto updateUser(Long userId, UserDto userDto);
 
 
     public long countUser();
