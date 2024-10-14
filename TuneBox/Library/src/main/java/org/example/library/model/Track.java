@@ -26,15 +26,18 @@ public class Track {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String trackImage;
+
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] trackFile;
 
     private String description;
 
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     private boolean report;
 
@@ -52,12 +55,19 @@ public class Track {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "albums_id")
+    @JoinColumn(name = "trackCreator_id", nullable = false)
+    private User creator;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "albums_id", nullable = true)
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
 
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Like> likes;

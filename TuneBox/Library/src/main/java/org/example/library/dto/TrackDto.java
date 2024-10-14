@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,14 +16,35 @@ import java.time.LocalDate;
 public class TrackDto {
 
     private Long id;
+
     private String name;
-    private String trackImage;
+
+    private String imageTrack;
+
+    private byte[] trackFile;
+
     private String description;
+
     private boolean status;
+
     private LocalDate createDate;
+
     private boolean report;
-    private LocalDate reportDate;
+
+    private Date reportDate;
+
     private Long genreId;
-    private Long user;
-    private Long albumsId;
+
+    private Long userId;
+
+    private Long albumId;
+
+    private Set<Long> playlistIds;
+
+    private Set<Long> comments;
+
+    private Set<Long> likes;
+
+
+
 }

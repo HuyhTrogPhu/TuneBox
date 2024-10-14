@@ -8,8 +8,6 @@ import lombok.Setter;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,7 +26,7 @@ public class InstrumentDto {
 
     private boolean status;
 
-    private List<String> image;
+    private String image;
 
     private String description;
 

@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/instrument")
@@ -42,7 +42,7 @@ public class InstrumentController {
                                                           @RequestParam("description") String description,
                                                           @RequestParam("brandId") Brand brand,
                                                           @RequestParam("categoryId") CategoryIns category,
-                                                          @RequestParam(value = "image", required = false) MultipartFile[] image)  {
+                                                          @RequestParam("image") MultipartFile image) {
         try {
             InstrumentDto instrumentDto = new InstrumentDto();
             instrumentDto.setName(name);
@@ -111,7 +111,7 @@ public class InstrumentController {
             @RequestParam("brandId") Long brandId,
             @RequestParam("categoryId") Long categoryId,
             @RequestParam("status") boolean status,
-            @RequestParam(value = "image", required = false) MultipartFile[] image) {
+            @RequestParam(value = "image", required = false) MultipartFile image) {
 
         try {
             // Kiểm tra nếu id là "undefined" hoặc rỗng
@@ -153,9 +153,6 @@ public class InstrumentController {
                     .body("Error updating instrument: " + e.getMessage());
         }
     }
-
-
-
 
 
     // Delete instrument

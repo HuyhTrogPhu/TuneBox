@@ -28,20 +28,20 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository Repo;
+    private UserRepository userRepository;
 
     @Autowired
-    private RoleRepository roleRepo;
+    private RoleRepository roleRepository;
 
     @Autowired
     private InspiredByRepository inspiredByRepository;
 
 
     @Autowired
-    private TalentRepository TalentRepo;
+    private TalentRepository talentRepository;
 
     @Autowired
-    private GenreRepository GenreRepo;
+    private GenreRepository genreRepository;
 
     @Autowired
     public UserServiceImpl(
@@ -59,13 +59,12 @@ public class UserServiceImpl implements UserService {
 
 
     private final JavaMailSender javaMailSender;
-    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
     public void CheckLogin(RequestSignUpModel requestSignUpModel) {
-        List<User> fullList = Repo.findAll();
+        List<User> fullList = userRepository.findAll();
 
         for (User user : fullList) {
             if (user.getEmail().equals(requestSignUpModel.getUserDto().getEmail())) {
@@ -102,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
 
         for (String talentName : requestSignUpModel.getListTalent()) {
-            List<Talent> talent = TalentRepo.findByName(talentName);
+            List<Talent> talent = talentRepository.findByName(talentName);
             if (talent != null) {
                 talentList.addAll(talent);
             }
@@ -110,7 +109,7 @@ public class UserServiceImpl implements UserService {
 
 
         for (String genreName : requestSignUpModel.getGenreBy()) {
-            List<Genre> genre = GenreRepo.findByName(genreName);
+            List<Genre> genre = genreRepository.findByName(genreName);
             if (genre != null) {
                 genreList.addAll(genre);
             }
@@ -121,20 +120,20 @@ public class UserServiceImpl implements UserService {
         savedUser.setTalent(Set.copyOf(talentList));
         savedUser.setGenre(Set.copyOf(genreList));
 
-        savedUser.setRole(roleRepo.findByName("CUSTOMER"));
+        savedUser.setRole(roleRepository.findByName("CUSTOMER"));
 
 
-        Repo.save(savedUser);
+        userRepository.save(savedUser);
         return UserMapper.mapToUserDto(savedUser);
     }
 
     @Override
     public Optional<User> findById(Long userId) {
-        return Repo.findById(userId);
+        return userRepository.findById(userId);
     }
 
     public User updateById(Long userId, UserDto userDto) {
-        return Repo.save(UserMapper.mapToUser(userDto));
+        return userRepository.save(UserMapper.mapToUser(userDto));
     }
 
     @Override
@@ -143,9 +142,9 @@ public class UserServiceImpl implements UserService {
 
         if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
                 (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
-            userOptional = Repo.findByEmail(userdto.getEmail());
+            userOptional = userRepository.findByEmail(userdto.getEmail());
             if (!userOptional.isPresent()) {
-                userOptional = Repo.findByUserName(userdto.getUserName());
+                userOptional = userRepository.findByUserName(userdto.getUserName());
             }
         } else {
             throw new RuntimeException("Username or email cannot be null or empty");
@@ -161,11 +160,11 @@ public class UserServiceImpl implements UserService {
 
 
     public void resetPassword(String token, String newPassword) {
-        Optional<User> userOptional = Repo.findByResetToken(token); // Tìm người dùng theo token
+        Optional<User> userOptional = userRepository.findByResetToken(token); // Tìm người dùng theo token
 
         if (userOptional.isPresent()) {
             userOptional.get().setPassword((newPassword));
-            Repo.save(userOptional.get());
+            userRepository.save(userOptional.get());
         } else {
             throw new RuntimeException("Invalid token");
         }
@@ -206,7 +205,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = Repo.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
 
         if (!oldPassword.matches(newPassword)) {
@@ -214,7 +213,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(newPassword);
-        Repo.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -224,7 +223,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(Long userId) {
-        return null;
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
     }
 
     @Override
@@ -246,9 +246,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional;
 
         if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
-            userOptional = Repo.findByEmail(userdto.getEmail());
+            userOptional = userRepository.findByEmail(userdto.getEmail());
         } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
-            userOptional = Repo.findByUserName(userdto.getUserName());
+            userOptional = userRepository.findByUserName(userdto.getUserName());
         } else {
             throw new RuntimeException("Email or username cannot be null or empty");
         }
@@ -264,7 +264,7 @@ public class UserServiceImpl implements UserService {
                     "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
 
             userOptional.get().setResetToken(token);
-            Repo.save(userOptional.get());
+            userRepository.save(userOptional.get());
         } else {
             throw new RuntimeException("User not found");
         }

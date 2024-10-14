@@ -1,5 +1,7 @@
 package org.example.library.service.implement;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,38 +38,43 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Autowired
     private BrandRepository brandRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     private final ImageUploadInstrument imageUploadInstrument;
 
-    @Autowired
-    private ObjectMapper jacksonObjectMapper;
-
     @Override
-    public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile[] image) {
+    public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image) {
         try {
-            Instrument instrument = InstrumentMapper.mapperInstrument(instrumentDto);
-            if (image == null || image.length == 0) {
-                instrument.setImage(null); // Cập nhật nếu không có hình ảnh
-            } else {
-                String[] base64Images = new String[image.length];
-                for (int i = 0; i < image.length; i++) {
-                    imageUploadInstrument.uploadFile(image[i]);
-                    base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
-                }
-                instrument.setImage(List.of(base64Images)); // Lưu dưới dạng List<String>
-            }
+//            Instrument instrument = InstrumentMapper.mapperInstrument(instrumentDto);
+//            if (image == null){
+//                instrument.setImage(null);
+//            }else {
+//                imageUploadInstrument.uploadFile(image);
+//                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+//            }
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl  = (String) uploadResult.get("url");
+            instrumentDto.setImage(imageUrl);
 
+            Instrument instrument = new Instrument();
             instrument.setCategoryIns(getManagedCategory(instrumentDto.getCategoryIns().getId()));
             instrument.setBrand(getManagedBrand(instrumentDto.getBrand().getId()));
-            instrument.setStatus(true);
-
-            Instrument saveInstrument = instrumentRepository.save(instrument);
-            return InstrumentMapper.mapperInstrumentDto(saveInstrument);
+            instrument.setStatus(false);
+            instrument.setImage(imageUrl);
+            instrument.setDescription(instrumentDto.getDescription());
+            instrument.setName(instrumentDto.getName());
+            instrument.setCostPrice(instrumentDto.getCostPrice());
+            instrument.setQuantity(instrumentDto.getQuantity());
+            instrument.setColor(instrumentDto.getColor());
+            instrumentRepository.save(instrument);
+            return instrumentDto;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
-    }
 
+    }
 
     @Override
     public List<InstrumentDto> getAllInstrument() {
@@ -84,7 +92,7 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile[] image) {
+    public InstrumentDto updateInstrument(Long id, InstrumentDto instrumentDto, MultipartFile image) {
         try {
             Instrument instrument = instrumentRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("Instrument not found")
@@ -101,31 +109,37 @@ public class InstrumentServiceImpl implements InstrumentService {
             instrument.setStatus(instrumentDto.isStatus());
 
             // Kiểm tra hình ảnh mới
-            if (image != null && image.length > 0) {
-                String[] base64Images = new String[image.length];
-                for (int i = 0; i < image.length; i++) {
-                    boolean isUploaded = imageUploadInstrument.uploadFile(image[i]);
-                    if (isUploaded) {
-                        base64Images[i] = Base64.getEncoder().encodeToString(image[i].getBytes());
-                    } else {
-                        throw new RuntimeException("Failed to upload the image");
-                    }
+            if (image != null && !image.isEmpty()) {
+//                // Nếu có hình ảnh mới, upload và lưu lại ảnh
+//                boolean isUploaded = imageUploadInstrument.uploadFile(image);
+//                if (isUploaded) {
+//                    // Lưu ảnh dưới dạng Base64 trong cơ sở dữ liệu
+//                    instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
+//                } else {
+//                    throw new RuntimeException("Failed to upload the image");
+//                }
+                if (instrument.getImage() != null){
+                    String publicId = extractPublicIdFromUrl(instrument.getImage());
+                    cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
                 }
-                instrument.setImage(List.of(base64Images));
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) uploadResult.get("url");
+                instrument.setImage(imageUrl);
             }
-
-
 
             Instrument saveInstrument = instrumentRepository.save(instrument);
             return InstrumentMapper.mapperInstrumentDto(saveInstrument);
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException("Failed to update instrument due to IOException", e);
+            return null; // Có thể trả về một đối tượng phản hồi có lỗi
         }
     }
 
-
-
+    private String extractPublicIdFromUrl(String imageUrl) {
+        String[] parts = imageUrl.split("/");
+        String publicIdWithExtension = parts[parts.length - 1];
+        return publicIdWithExtension.split("\\.")[0];  // Lấy publicId trước phần mở rộng ảnh (ví dụ: .jpg)
+    }
 
 
     @Override
@@ -158,4 +172,12 @@ public class InstrumentServiceImpl implements InstrumentService {
         List<Instrument> instruments = instrumentRepository.findByCategoryInsId(categoryId);
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId) {
+        List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
+        return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
+
+
 }
