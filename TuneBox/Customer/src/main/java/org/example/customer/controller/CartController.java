@@ -1,12 +1,15 @@
 package org.example.customer.Controller;
 
-
-import org.example.library.dto.InstrumentDto;
+import jakarta.servlet.http.HttpSession;
+import org.example.library.dto.CartItemDto;
 import org.example.library.dto.ShoppingCartDto;
-import org.example.library.service.InstrumentService;
+import org.example.library.model.Instrument;
 import org.example.library.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -16,46 +19,27 @@ public class CartController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-    @Autowired
-    private InstrumentService instrumentService;
-
-    // Add instrument to cart
-    @PostMapping("/addToCart")
-    public ShoppingCartDto addToCart(@RequestParam Long instrumentId, @RequestParam int quantity) {
-        try {
-            return shoppingCartService.addToCart(instrumentId, quantity);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping("/add")
+    public ResponseEntity<String> addToCart(@RequestBody Instrument cartItem, @RequestParam int quantity, HttpSession session) {
+        shoppingCartService.addItemToCart(session, cartItem, quantity);
+        return ResponseEntity.ok("Đã thêm vào giỏ hàng.");
     }
 
-    // Update quantity of instrument in cart
-    @PutMapping("/updateQuantity")
-    public ShoppingCartDto updateQuantity(@RequestParam Long instrumentId, @RequestParam int quantity) {
-        try {
-            return shoppingCartService.updateCart(instrumentId, quantity);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping("/sync")
+    public ResponseEntity<String> syncCart(@RequestBody List<CartItemDto> cartItems, HttpSession session) {
+        shoppingCartService.updateCart(session, cartItems);
+        return ResponseEntity.ok("Giỏ hàng đã được đồng bộ.");
     }
 
-    // Remove instrument from cart
-    @DeleteMapping("/removeFromCart")
-    public ShoppingCartDto removeFromCart(@RequestParam Long  instrumentId) {
-        try {
-            return shoppingCartService.removeFromCart(instrumentId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @GetMapping("/items")
+    public ResponseEntity<ShoppingCartDto> getCartItems(HttpSession session) {
+        ShoppingCartDto cartDTO = shoppingCartService.getCart(session);
+        return ResponseEntity.ok(cartDTO);
     }
 
-    // Get cart by user id
-    @GetMapping("/viewCart")
-    public ShoppingCartDto getCartByUserId() {
-        try {
-            return shoppingCartService.getCart();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @DeleteMapping("/remove/{instrumentId}")
+    public ResponseEntity<String> removeItem(@PathVariable Long instrumentId, HttpSession session) {
+        shoppingCartService.removeItemFromCart(session, instrumentId);
+        return ResponseEntity.ok("Đã xóa sản phẩm khỏi giỏ hàng.");
     }
 }
