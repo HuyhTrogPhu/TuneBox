@@ -28,8 +28,7 @@ public class OrderController {
     // Get user information from cookie
     @GetMapping("/getUserById/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        User user = userService.findUserById(userId);
-        return ResponseEntity.ok(user);
+        return null;
     }
 
     // Create a new order

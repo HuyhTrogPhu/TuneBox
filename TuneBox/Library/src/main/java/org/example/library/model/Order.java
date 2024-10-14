@@ -46,4 +46,8 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address", referencedColumnName = "number_id")
+    private Number number;
+
 }

@@ -92,6 +92,9 @@ public class OrderServiceImpl implements OrderService {
                 instrumentRepository.save(instrument);
             }
 
+            // Cập nhật user information
+
+
             // Lưu danh sách chi tiết vào đơn hàng
             order.setOrderDetails(orderDetails);
             // Lưu và trả về đơn hàng

@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.example.library.model.*;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.*;
 
 @Getter
@@ -17,37 +18,50 @@ import java.util.*;
 public class UserDto {
 
     private Long id;
+
     private String email;
+
     private String userName;
-    private String userNickname;
+
     private String password;
+
     private boolean report;
-    private Date createDate;
-    private String reason;
 
-    // Multiple IDs for relationships
-    private UserInformation userInformationIds;
-    private Set<Long> inspiredByIds;
+    private LocalDate createDate = LocalDate.now();
 
-    private Set<Long> talentIds;
-    private Set<Long> genreIds;
+
+    private Long userInformationId;
+
+    private Set<Long> inspiredBy;
+
+    private Set<Long> talent;
+
+    private Set<Long> genre;
 
     @JsonIgnore
     private Collection<Role> role;
 
     private Set<Block> blocker;
+
     private Set<Block> blocked;
+
     private Set<Follow> following;
+
     private Set<Follow> followers;
+
     private List<Order> orderList;
+
     private Set<Track> tracks;
+
     private Set<Albums> albums;
+
     private Set<Chat> sentChats;
+
     private Set<Chat> receivedChats;
+
     private Set<Message> messages;
-    private String resetToken;
-    private String token;
-    private String newPassword;
+
+
 
     public UserDto(Long id, String userName) {
         this.id = id;

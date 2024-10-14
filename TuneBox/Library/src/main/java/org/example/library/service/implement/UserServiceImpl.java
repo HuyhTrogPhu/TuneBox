@@ -1,14 +1,14 @@
 package org.example.library.service.implement;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
+import org.example.library.dto.UserInformationDto;
 import org.example.library.mapper.UserMapper;
-import org.example.library.model.Genre;
-import org.example.library.model.InspiredBy;
-import org.example.library.model.Talent;
-import org.example.library.model.User;
+import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,11 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -44,6 +47,9 @@ public class UserServiceImpl implements UserService {
     private GenreRepository genreRepository;
 
     @Autowired
+    private Cloudinary cloudinary;
+
+    @Autowired
     public UserServiceImpl(
             @Lazy UserService userService,
             JavaMailSender javaMailSender, // Khởi tạo javaMailSender
@@ -63,68 +69,71 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void CheckLogin(RequestSignUpModel requestSignUpModel) {
-        List<User> fullList = userRepository.findAll();
+    public void checkLogin(UserDto userDto) {
 
-        for (User user : fullList) {
-            if (user.getEmail().equals(requestSignUpModel.getUserDto().getEmail())) {
-                System.out.println("trùng Email: " + requestSignUpModel.getUserDto().getEmail());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
-            }
-            if (user.getUserName().equals(requestSignUpModel.getUserDto().getUserName())) {
-                System.out.println("trùng Username: " + requestSignUpModel.getUserDto().getUserName());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username đã tồn tại");
-            }
-        }
     }
 
     @Override
-    public UserDto Register(RequestSignUpModel requestSignUpModel) {
-        User savedUser = new User();
+    public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
+        try {
+            User user = new User();
+            UserInformation userInformation = new UserInformation();
 
-        savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(requestSignUpModel.getUserDto().getPassword());
-        savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
-        savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
+            userInformation.setName(userInformationDto.getName());
 
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userInformation.setGender(userInformationDto.getGender());
+            userInformation.setAbout(userInformationDto.getAbout());
+            userInformation.setBackground(userInformationDto.getBackground());
+            userInformation.setBirthDay(userInformationDto.getBirthDay());
+            userInformation.setPhoneNumber(userInformationDto.getPhoneNumber());
 
-        List<InspiredBy> inspiredByList = new ArrayList<>();
-        List<Talent> talentList = new ArrayList<>();
-        List<Genre> genreList = new ArrayList<>();
+            user.setUserInformation(userInformation);
 
-        for (String inspiredByName1 : requestSignUpModel.getListInspiredBy()) {
-            List<InspiredBy> inspiredBy = inspiredByRepository.findByName(inspiredByName1);
-            if (inspiredBy != null) {
-                inspiredByList.addAll(inspiredBy);
+            user.setRole(roleRepository.findByName("CUSTOMER"));
+            user.setEmail(userDto.getEmail());
+            user.setUserName(userDto.getUserName());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setReport(false);
+            user.setCreateDate(LocalDate.now());
+
+            // Map InspiredBy từ danh sách ID trong DTO
+            Set<InspiredBy> inspiredBySet = new HashSet<>();
+            for (Long inspiredId : userDto.getInspiredBy()) {
+                InspiredBy inspiredBy = inspiredByRepository.findById(inspiredId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspired by not found"));
+                inspiredBySet.add(inspiredBy);
             }
+            user.setInspiredBy(inspiredBySet);
+
+            // Map Talent từ danh sách ID trong DTO
+            Set<Talent> talentSet = new HashSet<>();
+            for (Long talentId : userDto.getTalent()) {
+                Talent talent = talentRepository.findById(talentId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Talent not found"));
+                talentSet.add(talent);
+            }
+            user.setTalent(talentSet);
+
+            // Map Genre từ danh sách ID trong DTO
+            Set<Genre> genreSet = new HashSet<>();
+            for (Long genreId : userDto.getGenre()) {
+                Genre genre = genreRepository.findById(genreId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found"));
+                genreSet.add(genre);
+            }
+            user.setGenre(genreSet);
+
+            userRepository.save(user);
+
+            return UserMapper.mapToUserDto(user);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
         }
 
-
-        for (String talentName : requestSignUpModel.getListTalent()) {
-            List<Talent> talent = talentRepository.findByName(talentName);
-            if (talent != null) {
-                talentList.addAll(talent);
-            }
-        }
-
-
-        for (String genreName : requestSignUpModel.getGenreBy()) {
-            List<Genre> genre = genreRepository.findByName(genreName);
-            if (genre != null) {
-                genreList.addAll(genre);
-            }
-        }
-
-
-        savedUser.setInspiredBy(Set.copyOf(inspiredByList));
-        savedUser.setTalent(Set.copyOf(talentList));
-        savedUser.setGenre(Set.copyOf(genreList));
-
-        savedUser.setRole(roleRepository.findByName("CUSTOMER"));
-
-
-        userRepository.save(savedUser);
-        return UserMapper.mapToUserDto(savedUser);
     }
 
     @Override
@@ -132,12 +141,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId);
     }
 
-    public User updateById(Long userId, UserDto userDto) {
-        return userRepository.save(UserMapper.mapToUser(userDto));
-    }
 
     @Override
-    public UserDto Login(UserDto userdto) {
+    public UserDto loginWithGoogle(UserDto userdto) {
         Optional<User> userOptional;
 
         if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
@@ -159,15 +165,8 @@ public class UserServiceImpl implements UserService {
 
 
 
-    public void resetPassword(String token, String newPassword) {
-        Optional<User> userOptional = userRepository.findByResetToken(token); // Tìm người dùng theo token
+    public void resetPassword(UserDto userdto) {
 
-        if (userOptional.isPresent()) {
-            userOptional.get().setPassword((newPassword));
-            userRepository.save(userOptional.get());
-        } else {
-            throw new RuntimeException("Invalid token");
-        }
     }
 
     private String generateToken() {
@@ -185,24 +184,6 @@ public class UserServiceImpl implements UserService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
-//
-//    @Override
-//    public UserDto loginWithGoogle(String email, String name) {
-//        Optional<User> userOptional = Repo.findByEmail(email);
-//        if (userOptional.isPresent()) {
-//
-//            return UserMapper.mapToUserDto((userOptional.get()));
-//        } else {
-//            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
-//            User newUser = new User();
-//            newUser.setEmail(email);
-//            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-//            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
-//            User savedUser = Repo.save(newUser);
-//
-//            return UserMapper.mapToUserDto(savedUser);
-//        }
-//    }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
         User user = userRepository.findByEmail(email)
@@ -222,14 +203,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
+    public UserDto findUserById(Long userId) {
+       return null;
     }
 
 
     @Override
-    public void ForgotPassword(UserDto userdto) {
+    public void forgotPassword(UserDto userdto) {
         Optional<User> userOptional;
 
         if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
@@ -250,11 +230,15 @@ public class UserServiceImpl implements UserService {
             sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
                     "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
 
-            userOptional.get().setResetToken(token);
             userRepository.save(userOptional.get());
         } else {
             throw new RuntimeException("User not found");
         }
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+
     }
 
 

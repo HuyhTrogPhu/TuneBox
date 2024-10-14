@@ -19,6 +19,13 @@ public class Role {
 
     private String name;
 
-    @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<User> users;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<SocialAdmin> socialAdmins;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<EcommerceAdmin> ecommerceAdmins;
+
 }
