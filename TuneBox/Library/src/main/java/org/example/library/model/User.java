@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,7 +56,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "talent_id", referencedColumnName = "talent_id"))
     private Set<Talent> talent;
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))

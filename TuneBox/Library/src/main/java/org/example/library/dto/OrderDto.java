@@ -35,4 +35,8 @@ public class OrderDto {
     private Long userId;
 
     private List<OrderDetailDto> orderDetails;
+    private String shippingMethod;
+
+    private String address;
+    private String phoneNumber;
 }

@@ -37,9 +37,7 @@ public class UserInformation {
 
     private String about;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", referencedColumnName = "number_id")
-    private Number number;
+
 
     @OneToOne(mappedBy = "userInformation")
     private User user;
