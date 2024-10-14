@@ -1,7 +1,6 @@
 package org.example.library.dto;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,22 +11,14 @@ import org.example.library.model.User;
 
 import java.util.Set;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenreDto {
+public class InspiredByDto {
+
     private Long id;
+
     private String name;
-    private Set<User> user;
-    private Long trackId;
-    private Long albumId;
-
-    public GenreDto(Long id, String name){
-        this.id = id;
-        this.name = name;
-    }
-
 
 }

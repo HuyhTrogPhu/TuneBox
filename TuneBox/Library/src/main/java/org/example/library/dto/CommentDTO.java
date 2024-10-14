@@ -21,5 +21,6 @@ public class CommentDTO {
     private Long postId;
     private Long parentId; // Thêm trường parentId
     private List<CommentDTO> replies;
-    private boolean edited; 
+    private boolean edited;
+    private Long trackId;
 }
