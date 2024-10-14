@@ -53,4 +53,15 @@ public class ReplyController {
         return new ResponseEntity<>(newReply, HttpStatus.CREATED);
     }
 
+    @PutMapping("/reply/{id}")
+    public ResponseEntity<ReplyDto> updateReply(@PathVariable Long id,
+                                                @RequestParam Long userId,
+                                             @RequestBody ReplyDto replyDto){
+        replyDto.setId(id);
+
+        ReplyDto createdReply = replyService.updateReply(userId, replyDto);
+        return new ResponseEntity<>(createdReply, HttpStatus.CREATED);
+    }
+
+
 }

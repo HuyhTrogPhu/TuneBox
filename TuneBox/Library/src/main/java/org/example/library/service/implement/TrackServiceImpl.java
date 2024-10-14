@@ -294,4 +294,12 @@ public class TrackServiceImpl implements TrackService {
     }
 
 
+    @Override
+    public List<TrackDto> getTracksByGenreId(Long genreId) {
+        return trackRepository.findByGenreId(genreId)
+                .stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
+    }
+
 }

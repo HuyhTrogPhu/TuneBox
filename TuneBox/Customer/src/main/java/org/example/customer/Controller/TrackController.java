@@ -126,6 +126,16 @@ public class TrackController {
         return new ResponseEntity<>(trackDto, HttpStatus.OK);
     }
 
+    //get track theo id gênre
+    @GetMapping("/genre/{genreId}")
+    public ResponseEntity<List<TrackDto>> getTracksByGenreId(@PathVariable Long genreId) {
+        List<TrackDto> tracks = trackService.getTracksByGenreId(genreId);
+        if (tracks.isEmpty()) {
+            System.out.println("No tracks found for genreId: " + genreId);
+        } else {
+            System.out.println("Found " + tracks.size() + " tracks for genreId: " + genreId);
+        }
 
-
+        return new ResponseEntity<>(tracks, HttpStatus.OK);
+    }
 }

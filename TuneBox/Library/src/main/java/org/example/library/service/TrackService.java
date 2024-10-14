@@ -19,4 +19,7 @@ public interface TrackService {
         public void deleteTrack(Long trackId);
 
     List<TrackDto> getTracksByUserId(Long userId);
+
+    // get track theo genreId
+    List<TrackDto> getTracksByGenreId(Long genreId);
 }

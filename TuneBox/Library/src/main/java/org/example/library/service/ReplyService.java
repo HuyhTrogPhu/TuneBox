@@ -1,5 +1,6 @@
 package org.example.library.service;
 
+import org.example.library.dto.CommentDTO;
 import org.example.library.dto.ReplyDto;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface ReplyService {
 
     List<ReplyDto> getRepliesByComment(Long commentId);
     void deleteReply(Long replyId);
+
+    ReplyDto updateReply(Long userId, ReplyDto replyDto);
 }

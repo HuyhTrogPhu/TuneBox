@@ -99,4 +99,30 @@ public class ReplyServiceImpl implements ReplyService {
     public void deleteReply(Long replyId) {
         replyRepository.deleteById(replyId);
     }
+
+    @Override
+    public ReplyDto updateReply(Long userId, ReplyDto replyDto) {
+        // Tìm reply theo ID
+        Reply existingReply = replyRepository.findById(replyDto.getId())
+                .orElseThrow(() -> new RuntimeException("Reply not found with ID: " + replyDto.getId()));
+
+        // Kiểm tra xem người dùng có phải là chủ sở hữu của reply không
+        if (!existingReply.getUserId().equals(userId)) {
+            throw new RuntimeException("You do not have permission to update this reply");
+        }
+
+
+        // Cập nhật nội dung của reply
+        existingReply.setContent(replyDto.getContent());
+        // Cập nhật thời gian sửa đổi
+
+        // Lưu lại reply đã cập nhật
+        Reply updatedReply = replyRepository.save(existingReply);
+
+        // Chuyển đổi thành ReplyDto và trả về
+        return replyMapper.toDto(updatedReply);
+    }
+
+
+
 }
