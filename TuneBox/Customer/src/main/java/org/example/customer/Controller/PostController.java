@@ -1,20 +1,21 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import lombok.AllArgsConstructor;
 import org.example.library.dto.PostDto;
+import org.example.library.repository.LikeRepository;
 import org.example.library.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-@CrossOrigin("/*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/posts")
 public class PostController {
 
@@ -23,41 +24,61 @@ public class PostController {
     public PostController(PostService postService) {
         this.postService = postService;
     }
+    @Autowired
+    private LikeRepository likeRepository;
+
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @RequestParam(value = "content", required = false) String content, // Chỉ cần thay đổi 'required' thành false
+            @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
-            HttpServletRequest request) {
+            @RequestParam(value = "createdAt", required = false) String createdAt,
+            @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
-        postDto.setContent(content); // Nội dung có thể là null
+        postDto.setContent(content);
 
         try {
-            // Kiểm tra có ít nhất một hình ảnh hoặc có nội dung không
-            if (images == null || images.length == 0) {
+            // Kiểm tra nếu cả 'content' và 'images' đều trống
+            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
             }
 
-            PostDto savedPost = postService.savePost(postDto, images, request);
+            // Chuyển đổi chuỗi createdAt thành LocalDateTime nếu có
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                LocalDateTime dateTime = LocalDateTime.parse(createdAt); // Chuyển đổi chuỗi thành LocalDateTime
+                postDto.setCreatedAt(dateTime); // Gán giá trị cho createdAt
+            } else {
+                postDto.setCreatedAt(LocalDateTime.now()); // Nếu không có, sử dụng thời gian hiện tại
+            }
+
+            // Gọi service để lưu bài viết
+            PostDto savedPost = postService.savePost(postDto, images, userId);
             return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (DateTimeParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Xử lý lỗi định dạng thời gian
         }
     }
 
 
-    // Lấy tất cả bài viết của người dùng từ session
-    @GetMapping("/current-user")
-    public List<PostDto> getPostsByCurrentUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new RuntimeException("User not logged in");
+    // Lấy tất cả bài viết của người dùng từ ID
+        @GetMapping("/current-user")
+        public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
+            if (userId == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+            }
+
+            List<PostDto> posts = postService.getPostsByUserId(userId);
+            if (posts.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+            }
+
+            return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
         }
-        Long userId = (Long) session.getAttribute("userId");
-        return postService.getPostsByUserId(userId);
-    }
+
 
     // Phương thức lấy tất cả các bài viết
     @GetMapping
@@ -70,22 +91,41 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable Long id,
-            @RequestParam(value = "content") String content,
+            @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
-            HttpServletRequest request) {
+            @RequestParam(value = "createdAt", required = false) String createdAt, // Thêm trường createdAt
+            @RequestParam("userId") Long userId) {
+
         PostDto postDto = new PostDto();
         postDto.setId(id);
-        postDto.setContent(content);
+        postDto.setContent(content); // Nội dung có thể là null
 
         try {
-            PostDto updatedPost = postService.updatePost(postDto, images, request);
+            // Kiểm tra nếu cả 'content' và 'images' đều không có
+            if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
+                throw new IllegalArgumentException("At least one image or content must be provided");
+            }
+
+            // Chuyển đổi chuỗi createdAt thành LocalDateTime nếu có
+            if (createdAt != null && !createdAt.trim().isEmpty()) {
+                LocalDateTime dateTime = LocalDateTime.parse(createdAt); // Chuyển đổi chuỗi thành LocalDateTime
+                postDto.setCreatedAt(dateTime); // Gán giá trị cho createdAt
+            }
+
+            // Gọi service để cập nhật bài post
+            PostDto updatedPost = postService.updatePost(postDto, images, userId);
             return new ResponseEntity<>(updatedPost, HttpStatus.OK);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (DateTimeParseException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Xử lý lỗi định dạng thời gian
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Hoặc sử dụng status khác tùy thuộc vào lỗi
         }
     }
+
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
@@ -97,4 +137,21 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    // Lấy tất cả bài viết của người dùng từ ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
+        }
+
+        List<PostDto> posts = postService.getPostsByUserId(userId);
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+        }
+
+        return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
+    }
+
+
+
 }
