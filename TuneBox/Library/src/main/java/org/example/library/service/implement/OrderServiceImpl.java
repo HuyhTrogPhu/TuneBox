@@ -127,11 +127,16 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setShippingMethod(order.getShippingMethod());
         orderDto.setUserId(order.getUser().getId());
 
+        orderDto.setUsername(order.getUser().getUserName());
+        orderDto.setEmail(order.getUser().getEmail());
         List<OrderDetailDto> orderDetailDtos = order.getOrderDetails().stream().map(detail -> {
             OrderDetailDto detailDto = new OrderDetailDto();
             detailDto.setId(detail.getId());
             detailDto.setQuantity(detail.getQuantity());
             detailDto.setInstrumentId(detail.getInstrument().getId());
+            detailDto.setInstrumentName(detail.getInstrument().getName());
+            detailDto.setImage(detail.getInstrument().getImage());
+            detailDto.setCostPrice(String.valueOf(detail.getInstrument().getCostPrice()));
             return detailDto;
         }).collect(Collectors.toList());
 
