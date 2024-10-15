@@ -26,23 +26,32 @@ public class Track {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String trackImage;
+
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] trackFile;
 
     private String description;
 
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     private boolean report;
 
     private Date reportDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
+    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
+    private User user;
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -50,8 +59,8 @@ public class Track {
     private User creator;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "albums_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "albums_id", nullable = true)
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")

@@ -19,30 +19,27 @@ public class UserInformation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstName;
+    private String name;
 
     private String gender;
 
     private String phoneNumber;
 
-    private Date birthDate;
+    private Date birthDay;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String background;
 
     private String about;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", referencedColumnName = "number_id")
-    private Number number;
+
 
     @OneToOne(mappedBy = "userInformation")
     private User user;
-
 
 }

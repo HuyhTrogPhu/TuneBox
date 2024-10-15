@@ -8,19 +8,19 @@ import java.util.stream.Collectors;
 
 public class UserMapper {
 
-    // Map User to UserDto
     public static UserDto mapToUserDto(User user) {
-        // Extract genre IDs from the Genre Set
+        if (user == null) {
+            return null;
+        }
+
         Set<Long> genreIds = user.getGenre() != null ?
                 user.getGenre().stream().map(Genre::getId).collect(Collectors.toSet()) :
                 null;
 
-        // Extract talent IDs (if Talent is a collection)
         Set<Long> talentIds = user.getTalent() != null ?
                 user.getTalent().stream().map(Talent::getId).collect(Collectors.toSet()) :
                 null;
 
-        // Extract InspiredBy IDs (if InspiredBy is a collection)
         Set<Long> inspiredByIds = user.getInspiredBy() != null ?
                 user.getInspiredBy().stream().map(InspiredBy::getId).collect(Collectors.toSet()) :
                 null;
@@ -29,16 +29,14 @@ public class UserMapper {
                 user.getId(),
                 user.getEmail(),
                 user.getUserName(),
-                user.getUserNickname(),
                 user.getPassword(),
                 user.isReport(),
                 user.getCreateDate(),
-                user.getReason(),
-                user.getUserInformation(),
-                inspiredByIds,   // Multiple InspiredBy IDs
-                talentIds,       // Multiple Talent IDs
-                genreIds,        // Multiple Genre IDs
-                user.getRole(),
+                user.getUserInformation() != null ? user.getUserInformation().getId() : null,
+                inspiredByIds,
+                talentIds,
+                genreIds,
+                null,
                 user.getBlocker(),
                 user.getBlocked(),
                 user.getFollowing(),
@@ -48,58 +46,32 @@ public class UserMapper {
                 user.getAlbums(),
                 user.getSentChats(),
                 user.getReceivedChats(),
-                user.getMessages(),
-                user.getResetToken(),
-                user.getToken(),
-                user.getNewPassword()
+                user.getMessages()
         );
     }
 
-
     // Map UserDto to User
-    public static User mapToUser(UserDto userDto) {
+    public static User mapToUser(UserDto userDto, UserInformation userInformation, Set<InspiredBy> inspiredBy, Set<Talent> talent, Set<Genre> genre, Role role) {
+        if (userDto == null) {
+            return null;
+        }
+
         User user = new User();
         user.setId(userDto.getId());
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
-        user.setUserNickname(userDto.getUserNickname());
         user.setPassword(userDto.getPassword());
         user.setReport(userDto.isReport());
         user.setCreateDate(userDto.getCreateDate());
-        user.setReason(userDto.getReason());
 
-        // Map Talent from talentIds (map back to Talent objects)
-        if (userDto.getTalentIds() != null && !userDto.getTalentIds().isEmpty()) {
-            Set<Talent> talents = userDto.getTalentIds().stream().map(id -> {
-                Talent talent = new Talent();
-                talent.setId(id);
-                return talent;
-            }).collect(Collectors.toSet());
-            user.setTalent(talents);
-        }
+        // Map các đối tượng liên quan
+        user.setUserInformation(userInformation);
+        user.setInspiredBy(inspiredBy);
+        user.setTalent(talent);
+        user.setGenre(genre);
+        user.setRole(role);
 
-        // Map InspiredBy from inspiredByIds (map back to InspiredBy objects)
-        if (userDto.getInspiredByIds() != null && !userDto.getInspiredByIds().isEmpty()) {
-            Set<InspiredBy> inspiredBys = userDto.getInspiredByIds().stream().map(id -> {
-                InspiredBy inspiredBy = new InspiredBy();
-                inspiredBy.setId(id);
-                return inspiredBy;
-            }).collect(Collectors.toSet());
-            user.setInspiredBy(inspiredBys);
-        }
-
-        // Map Genre from genreIds (map back to Genre objects)
-        if (userDto.getGenreIds() != null && !userDto.getGenreIds().isEmpty()) {
-            Set<Genre> genres = userDto.getGenreIds().stream().map(id -> {
-                Genre genre = new Genre();
-                genre.setId(id);
-                return genre;
-            }).collect(Collectors.toSet());
-            user.setGenre(genres);
-        }
-
-        // Set other fields
-        user.setRole(userDto.getRole());
+        // Set các trường khác
         user.setBlocker(userDto.getBlocker());
         user.setBlocked(userDto.getBlocked());
         user.setFollowing(userDto.getFollowing());
@@ -110,12 +82,7 @@ public class UserMapper {
         user.setSentChats(userDto.getSentChats());
         user.setReceivedChats(userDto.getReceivedChats());
         user.setMessages(userDto.getMessages());
-        user.setResetToken(userDto.getResetToken());
-        user.setToken(userDto.getToken());
-        user.setNewPassword(userDto.getNewPassword());
 
         return user;
     }
-
-
 }

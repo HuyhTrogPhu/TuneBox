@@ -1,9 +1,10 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
+import org.example.library.service.InstrumentService;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.example.library.service.implement.CategoryServiceImpl;
 import org.example.library.service.implement.InstrumentServiceImpl;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/customer/instrument")
 public class InstrumentController {
     @Autowired
-    private InstrumentServiceImpl instrumentService;
+    private InstrumentService instrumentService;
 
     @Autowired
     private BrandServiceImpl brandService;
@@ -56,6 +57,7 @@ public class InstrumentController {
         List<InstrumentDto> instruments = instrumentService.getInstrumentByCategoryId(categoryId);
         return ResponseEntity.ok(instruments);
     }
+
 
     // Get all categories
     @GetMapping("/categories")

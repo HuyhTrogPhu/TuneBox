@@ -19,11 +19,11 @@ public class InpiredByServiceImpl implements InspiredByService {
 
 
     @Autowired
-    private InspiredByRepository Inspiredrepo;
+    private InspiredByRepository inheritedByRepository;
 
 
     @Override
     public List<InspiredBy> findAll() {
-        return Inspiredrepo.findAll();
+        return inheritedByRepository.findAll();
     }
 }

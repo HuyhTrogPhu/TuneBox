@@ -1,21 +1,21 @@
 package org.example.library.service.implement;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.mapper.BrandMapper;
 import org.example.library.model.Brand;
 import org.example.library.repository.BrandRepository;
 import org.example.library.service.BrandService;
-import org.example.library.utils.ImageUploadBrand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,20 +24,23 @@ public class BrandServiceImpl implements BrandService {
 
     @Autowired
     public BrandRepository brandRepository;
-
-    private final ImageUploadBrand imageUploadBrand;
-
+    @Autowired
+    private Cloudinary cloudinary;
     @Override
     public BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image) {
         try {
-            Brand brand = BrandMapper.maptoBrand(brandsDto);
-            if (image != null) {
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
-            }
-            brand.setStatus(true);
-            Brand saveBrand = brandRepository.save(brand);
-            return BrandMapper.maptoBrandsDto(saveBrand);
+
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl  = (String) uploadResult.get("url");
+            brandsDto.setBrandImage(imageUrl );
+
+            Brand brand = new Brand();
+            brand.setName(brandsDto.getName());
+            brand.setDescription(brandsDto.getDescription());
+            brand.setBrandImage(imageUrl);
+            brand.setStatus(false);
+            brandRepository.save(brand);
+            return brandsDto;
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload image: " + e.getMessage());
         }
@@ -65,16 +68,32 @@ public class BrandServiceImpl implements BrandService {
                     () -> new RuntimeException("Brand not found")
             );
 
+
             // Cập nhật tên và mô tả
             brand.setName(brandsDto.getName());
             brand.setDescription(brandsDto.getDescription());
             brand.setStatus(brandsDto.getStatus());
 
             // Kiểm tra xem hình ảnh có được truyền vào không
+//            if (image != null && !image.isEmpty()) {
+//                // Tải lên hình ảnh mới
+//                imageUploadBrand.uploadFile(image);
+//                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+//            }
+
             if (image != null && !image.isEmpty()) {
-                // Tải lên hình ảnh mới
-                imageUploadBrand.uploadFile(image);
-                brand.setBrandImage(Base64.getEncoder().encodeToString(image.getBytes()));
+                // Xóa ảnh cũ trên Cloudinary (nếu cần)
+                if (brand.getBrandImage() != null) {
+                    String publicId = extractPublicIdFromUrl(brand.getBrandImage());
+                    cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+                }
+
+                // Tải ảnh mới lên Cloudinary
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+                String imageUrl = (String) uploadResult.get("url");
+
+                // Cập nhật URL của ảnh mới
+                brand.setBrandImage(imageUrl);
             }
 
             // Lưu thương hiệu đã cập nhật
@@ -89,7 +108,11 @@ public class BrandServiceImpl implements BrandService {
         }
     }
 
-
+    private String extractPublicIdFromUrl(String imageUrl) {
+        String[] parts = imageUrl.split("/");
+        String publicIdWithExtension = parts[parts.length - 1];
+        return publicIdWithExtension.split("\\.")[0];  // Lấy publicId trước phần mở rộng ảnh (ví dụ: .jpg)
+    }
 
     @Override
     public void deleteBrand(Long id) {
