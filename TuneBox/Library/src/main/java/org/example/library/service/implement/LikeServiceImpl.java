@@ -12,7 +12,10 @@ import org.example.library.repository.TrackRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +28,7 @@ public class LikeServiceImpl implements LikeService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TrackRepository trackRepository;
+    private LikeServiceImpl likeService;
 
     @Autowired
     public LikeServiceImpl(LikeRepository likeRepository, PostRepository postRepository, UserRepository userRepository, TrackRepository trackRepository) {
@@ -100,6 +104,9 @@ public class LikeServiceImpl implements LikeService {
         // Xóa like
         likeRepository.delete(like);
     }
+    public long countLikesByPostId(Long postId) {
+        return likeRepository.countByPostId(postId); // Giả sử bạn có phương thức này trong repository
+    }
 
     @Override
     public List<LikeDto> getLikesByPostId(Long postId) {
@@ -118,6 +125,7 @@ public class LikeServiceImpl implements LikeService {
                 .map(LikeMapper::toDtoTrack)
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public boolean checkUserLike(Long postId, Long userId) {

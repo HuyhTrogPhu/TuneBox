@@ -38,4 +38,7 @@ public class Post {
     private LocalDateTime createdAt;
 
     private boolean edited;
+
+    public Post(Long postId) {
+    }
 }

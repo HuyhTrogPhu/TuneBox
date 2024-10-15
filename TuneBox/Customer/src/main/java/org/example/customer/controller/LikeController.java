@@ -22,24 +22,39 @@ public class LikeController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<LikeDto> addLike(@RequestParam Long userId,
-                                           @RequestParam(required = false) Long postId,
-                                           @RequestParam(required = false) Long trackId) {
+    public ResponseEntity<LikeDto> addLike(@RequestBody LikeDto likeDto) {
         try {
-            // add
-            LikeDto likeDto = likeService.addLike(userId, postId, trackId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(likeDto);
+            // Kiểm tra nếu likeDto không hợp lệ
+            if (likeDto.getUserId() == null || likeDto.getPostId() == null) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            // Thêm like
+            LikeDto createdLikeDto = likeService.addLike(likeDto.getUserId(), likeDto.getPostId(), likeDto.getTrackId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLikeDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
+
+
+
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
                                            @RequestParam(required = false) Long postId,
                                            @RequestParam(required = false) Long trackId) {
-        likeService.removeLike(userId, postId, trackId);
-        return ResponseEntity.ok().build();
+        try {
+            likeService.removeLike(userId, postId, trackId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Hoặc mã lỗi khác tùy vào trường hợp
+        }
+    }
+    @GetMapping("/post/{postId}/count")
+    public ResponseEntity<Long> getLikesCountByPostId(@PathVariable Long postId) {
+        long count = likeService.countLikesByPostId(postId);
+        return ResponseEntity.ok(count);
     }
 
     @GetMapping("/post/{postId}")

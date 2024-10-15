@@ -26,18 +26,20 @@ public class Reply {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = false)
-    private Comment parentComment; // Bình luận mà reply này thuộc về
+    private Comment parentComment;
 
     @ManyToOne
     @JoinColumn(name = "reply_id") // Khóa ngoại để chỉ định reply cha
     private Reply parentReply;
 
-    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL)
     private List<Reply> replies = new ArrayList<>();
 }
+
 

@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.dto.GenreDto;
 import org.example.library.dto.TrackDto;
@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/customer/tracks")
 public class TrackController {

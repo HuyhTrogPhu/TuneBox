@@ -138,9 +138,11 @@
             postRepository.delete(post);
         }
 
-//        @Override
-//        public Post findPostById(Long postId) {
-//            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-//        }
+
+
+        @Override
+        public Post findPostById(Long postId) {
+            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        }
 
     }
