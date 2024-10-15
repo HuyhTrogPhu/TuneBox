@@ -1,7 +1,6 @@
 package org.example.library.model;
 
-import aj.org.objectweb.asm.commons.Remapper;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

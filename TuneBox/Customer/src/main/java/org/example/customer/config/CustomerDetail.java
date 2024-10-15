@@ -1,6 +1,6 @@
 package org.example.customer.config;
 
-import org.example.library.model.Role;
+
 import org.example.library.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,11 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
+
 
 public class CustomerDetail implements UserDetails {
 
-    private User user;
+    private final User user;
 
     // Constructor nhận User
     public CustomerDetail(User user) {
