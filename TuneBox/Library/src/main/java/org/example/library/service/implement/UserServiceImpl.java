@@ -4,7 +4,6 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
 import org.example.library.mapper.UserMapper;
@@ -12,7 +11,6 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -49,29 +47,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
-    @Autowired
-    public UserServiceImpl(
-            @Lazy UserService userService,
-            JavaMailSender javaMailSender, // Khởi tạo javaMailSender
-            RoleRepository roleRepository // Khởi tạo roleRepository
-    ) {
-        this.userService = userService;
-        this.javaMailSender = javaMailSender; // Khởi tạo biến
-        this.roleRepository = roleRepository; // Khởi tạo biến
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
-
-    private final UserService userService;
-
-
     private final JavaMailSender javaMailSender;
-    private final BCryptPasswordEncoder passwordEncoder;
 
-
-    @Override
-    public void checkLogin(UserDto userDto) {
-
-    }
 
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
@@ -95,7 +72,7 @@ public class UserServiceImpl implements UserService {
             user.setRole(roleRepository.findByName("CUSTOMER"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setPassword(userDto.getPassword());
             user.setReport(false);
             user.setCreateDate(LocalDate.now());
 
@@ -144,23 +121,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto loginWithGoogle(UserDto userdto) {
-        Optional<User> userOptional;
-
-        if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
-                (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
-            userOptional = userRepository.findByEmail(userdto.getEmail());
-            if (!userOptional.isPresent()) {
-                userOptional = userRepository.findByUserName(userdto.getUserName());
-            }
-        } else {
-            throw new RuntimeException("Username or email cannot be null or empty");
-        }
-
-        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
-            return UserMapper.mapToUserDto(userOptional.get());
-        } else {
-            throw new RuntimeException("Invalid username or password");
-        }
+//        Optional<User> userOptional;
+//
+//        if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
+//                (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
+//            userOptional = userRepository.findByEmail(userdto.getEmail());
+//            if (!userOptional.isPresent()) {
+//                userOptional = userRepository.findByUserName(userdto.getUserName());
+//            }
+//        } else {
+//            throw new RuntimeException("Username or email cannot be null or empty");
+//        }
+//
+//        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
+//            return UserMapper.mapToUserDto(userOptional.get());
+//        } else {
+//            throw new RuntimeException("Invalid username or password");
+//        }
+        return null;
     }
 
 
@@ -186,8 +164,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
+        User user = userRepository.findByEmail(email);
 
         if (!oldPassword.matches(newPassword)) {
             throw new RuntimeException("Mật khẩu cũ không chính xác");
@@ -210,30 +187,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forgotPassword(UserDto userdto) {
-        Optional<User> userOptional;
 
-        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
-            userOptional = userRepository.findByEmail(userdto.getEmail());
-        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
-            userOptional = userRepository.findByUserName(userdto.getUserName());
-        } else {
-            throw new RuntimeException("Email or username cannot be null or empty");
-        }
-
-
-        if (userOptional.isPresent()) {
-            String token = generateToken(); // Hàm tạo token
-            //link sẽ chuyển hướng đến trang đổi pass word
-            String resetLink = "http://localhost:3000/reset-password?token=" + token;
-
-            // Gửi email
-            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
-                    "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
-
-            userRepository.save(userOptional.get());
-        } else {
-            throw new RuntimeException("User not found");
-        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,5 +28,6 @@ public class Role {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<EcommerceAdmin> ecommerceAdmins;
+
 
 }

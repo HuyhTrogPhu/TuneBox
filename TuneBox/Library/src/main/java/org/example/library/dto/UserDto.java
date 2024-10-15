@@ -62,9 +62,52 @@ public class UserDto {
     private Set<Message> messages;
 
 
+    public String getUserNameOrEmail() {
+        if ((userName == null || userName.isEmpty()) && (email == null || email.isEmpty())) {
+            throw new IllegalArgumentException("Username or email must not be null or empty");
+        }
+        return (userName != null && !userName.isEmpty()) ? userName : email;
+    }
+
 
     public UserDto(Long id, String userName) {
         this.id = id;
         this.userName = userName;
+    }
+
+
+    // contractor for register
+    public UserDto(String userName, String email, String encodedPassword, List<Long> talents, List<Long> genres, List<Long> inspiredBys) {
+        this.userName = userName;
+        this.email = email;
+        this.password = encodedPassword;
+        this.talent = new HashSet<>(talents);
+        this.genre = new HashSet<>(genres);
+        this.inspiredBy = new HashSet<>(inspiredBys);
+    }
+
+    // contractor for mapper
+    public UserDto(Long id, String email, String userName, String password, boolean report, LocalDate createDate, Long aLong, Set<Long> inspiredByIds, Set<Long> talentIds, Set<Long> genreIds, Object o, Set<Block> blocker, Set<Block> blocked, Set<Follow> following, Set<Follow> followers, List<Order> orderList, Set<Track> tracks, Set<Albums> albums, Set<Chat> sentChats, Set<Chat> receivedChats, Set<Message> messages) {
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.password =  password;
+        this.report = report;
+        this.createDate = createDate;
+        this.userInformationId = aLong;
+        this.inspiredBy = new HashSet<>(inspiredByIds);
+        this.talent = new HashSet<>(talentIds);
+        this.genre = new HashSet<>(genreIds);
+        this.role = (Collection<Role>) o;
+        this.blocker = blocker;
+        this.blocked = blocked;
+        this.following = following;
+        this.followers = followers;
+        this.orderList = orderList;
+        this.tracks = tracks;
+        this.albums = albums;
+        this.sentChats = sentChats;
+        this.receivedChats = receivedChats;
+        this.messages = messages;
     }
 }

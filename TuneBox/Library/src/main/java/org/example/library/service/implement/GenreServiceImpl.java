@@ -19,11 +19,11 @@ public class GenreServiceImpl implements GenreService {
 
 
     @Autowired
-    private GenreRepository GenRepo;
+    private GenreRepository genreRepository;
 
 
     @Override
     public List<Genre> findAll() {
-        return GenRepo.findAll();
+        return genreRepository.findAll();
     }
 }

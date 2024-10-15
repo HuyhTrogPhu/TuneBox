@@ -42,4 +42,8 @@ public class UserInformationDto {
         this.about = about;
         this.userId = null;
     }
+
+    public UserInformationDto(String name) {
+        this.name = name;
+    }
 }

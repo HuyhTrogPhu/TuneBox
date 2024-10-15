@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.List;
 
 public interface UserService {
-    void checkLogin(UserDto userDto);
 
     UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
 
