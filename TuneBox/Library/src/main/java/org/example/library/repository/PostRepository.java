@@ -4,6 +4,7 @@ import org.example.library.model.Post;
 import org.example.library.model.PostReport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,4 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT pr FROM PostReport pr")
     List<PostReport> findAllReports();
 
+    @Query("SELECT p FROM Post p WHERE p.content LIKE %:keyword%")
+    List<Post> findByKeyword(@Param("keyword") String keyword);
 }

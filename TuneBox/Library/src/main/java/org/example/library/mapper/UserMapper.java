@@ -39,13 +39,13 @@ public class UserMapper {
                 talentIds,       // Multiple Talent IDs
                 genreIds,        // Multiple Genre IDs
                 user.getRole(),
-                user.getBlocker(),
-                user.getBlocked(),
-                user.getFollowing(),
-                user.getFollowers(),
-                user.getOrderList(),
-                user.getTracks(),
-                user.getAlbums(),
+//                user.getBlocker(),
+//                user.getBlocked(),
+//                user.getFollowing(),
+//                user.getFollowers(),
+//                user.getOrderList(),
+//                user.getTracks(),
+//                user.getAlbums(),
                 user.getSentChats(),
                 user.getReceivedChats(),
                 user.getMessages(),
@@ -117,6 +117,7 @@ public class UserMapper {
         return user;
     }
     public UserDto toDto(User user) {
-        return new UserDto(user.getId(), user.getUserName());
+        return new UserDto(user.getId());
     }
+
 }

@@ -129,7 +129,15 @@ public class PostAdminController {
         }
     }
 
-
+    @GetMapping("/search")
+    public ResponseEntity<List<PostDto>> searchPostsByKeyword(@RequestParam("keyword") String keyword) {
+        try {
+            List<PostDto> posts = postService.searchPostsByKeyword(keyword);
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
 
 }

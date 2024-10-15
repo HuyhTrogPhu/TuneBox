@@ -212,6 +212,14 @@
                     .collect(Collectors.toList());
         }
 
+        @Override
+        public List<PostDto> searchPostsByKeyword(String keyword) {
+            // Tìm bài viết theo từ khóa
+            List<Post> posts = postRepository.findByKeyword(keyword);
 
-
+            // Chuyển đổi danh sách Post thành PostDto
+            return posts.stream()
+                    .map(PostMapper::toDto)
+                    .collect(Collectors.toList());
+        }
     }

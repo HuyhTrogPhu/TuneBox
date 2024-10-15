@@ -36,13 +36,13 @@ public class UserDto {
     @JsonIgnore
     private Collection<Role> role;
 
-    private Set<Block> blocker;
-    private Set<Block> blocked;
-    private Set<Follow> following;
-    private Set<Follow> followers;
-    private List<Order> orderList;
-    private Set<Track> tracks;
-    private Set<Albums> albums;
+//    private Set<Block> blocker;
+//    private Set<Block> blocked;
+//    private Set<Follow> following;
+//    private Set<Follow> followers;
+//    private List<Order> orderList;
+//    private Set<Track> tracks;
+//    private Set<Albums> albums;
     @JsonIgnore
     private Set<Chat> sentChats;
     @JsonIgnore
@@ -56,5 +56,8 @@ public class UserDto {
     public UserDto(Long id, String userName) {
         this.id = id;
         this.userName = userName;
+    }
+    public UserDto(Long id) {
+        this.id = id;
     }
 }

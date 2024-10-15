@@ -34,6 +34,7 @@ public interface PostService {
 
     long countTotalPosts();
 
+    List<PostDto> searchPostsByKeyword(String keyword);
 
 //    PostDto createPost(PostDto postDto);
 

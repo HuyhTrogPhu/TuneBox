@@ -20,7 +20,8 @@ public class Message {
     @Column(name = "message_id")
     private Long id;
 
-    private String message;
+    @Column(name = "content")
+    private String content;
 
     private LocalDateTime dateTime;
 
@@ -36,6 +37,4 @@ public class Message {
     @JoinColumn(name = "receiver_id")
     private User receiver;
 
-
-    private String userName;
 }

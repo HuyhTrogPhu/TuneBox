@@ -1,14 +1,13 @@
 package org.example.library.service;
 
-import org.example.library.model.Chat;
-import org.example.library.model.User;
+import org.example.library.dto.ChatDTO;
 
 import java.util.List;
 
 public interface ChatService {
-    Chat createChat(User sender, User receiver);
-    Chat getChatById(Long chatId);
-    List<Chat> getChatsByUser(User user);
-    Chat getChatBetweenUsers(User user1, User user2);
+    ChatDTO createChat(Long senderId, Long receiverId);
+    ChatDTO getChatById(Long chatId);
+    List<ChatDTO> getChatsByUser(Long userId);
+    ChatDTO getChatBetweenUsers(Long user1Id, Long user2Id);
     void deleteChat(Long chatId);
 }

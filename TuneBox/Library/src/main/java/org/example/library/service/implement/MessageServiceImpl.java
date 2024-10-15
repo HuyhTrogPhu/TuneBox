@@ -22,12 +22,32 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
 
     @Override
     public Message saveMessage(Message message) {
-        return messageRepository.save(message); // Lưu tin nhắn
+        if (message.getSender() == null || message.getSender().getId() == null) {
+            throw new IllegalArgumentException("Sender cannot be null");
+        }
+        if (message.getReceiver() == null || message.getReceiver().getId() == null) {
+            throw new IllegalArgumentException("Receiver cannot be null");
+        }
+        User sender = userRepository.findById(message.getSender().getId())
+                .orElseThrow(() -> new RuntimeException("Sender not found"));
+        User receiver = userRepository.findById(message.getReceiver().getId())
+                .orElseThrow(() -> new RuntimeException("Receiver not found"));
+
+        message.setSender(sender);
+        message.setReceiver(receiver);
+        message.setDateTime(LocalDateTime.now());
+
+        Message savedMessage = messageRepository.save(message);
+        logger.info("Saved message: {}", savedMessage);
+        return savedMessage;
     }
 
     @Override
