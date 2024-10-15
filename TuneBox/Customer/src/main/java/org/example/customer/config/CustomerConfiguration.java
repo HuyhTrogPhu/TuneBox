@@ -1,11 +1,6 @@
 package org.example.customer.config;
 
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import org.example.library.model.User;
-import org.example.library.repository.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,14 +10,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -52,19 +43,18 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/user/log-in","/user/sign-up","/user/forgot-password",
-                                "/user/reset-password", "/login", "/signup","/createusername",
-                                "/talent","/artist","/categorymusic", "/do-register",
-                                "/product-detail/**").permitAll()
-                        .requestMatchers("/shop/**", "/find-products/**").hasRole("CUSTOMER")
+                        .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
+                                "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
+                                "/customer/category/**", "/customer/instrument/**").permitAll()
+                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
                         .requestMatchers("/oauth2/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                                .loginPage("/login")
-//                        .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("http://localhost:3000/", true)
-                                .permitAll()
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("http://localhost:3000/", true)
+                        .permitAll()
                 )
                 .logout(logout -> logout
                         .invalidateHttpSession(true)

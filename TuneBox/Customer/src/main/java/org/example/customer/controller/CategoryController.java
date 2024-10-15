@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/customer/category")
@@ -36,4 +36,6 @@ public class CategoryController {
                     .body("Instrument not found: " + e.getMessage());
         }
     }
+
+
 }

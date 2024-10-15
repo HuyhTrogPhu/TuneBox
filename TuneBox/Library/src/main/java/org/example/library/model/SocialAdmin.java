@@ -38,9 +38,9 @@ public class SocialAdmin {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String avatar;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "social_admin_role", joinColumns = @JoinColumn(name = "social_admin_id", referencedColumnName = "social_admin_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    private Collection<Role> role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    private Role role;
+
 
 }

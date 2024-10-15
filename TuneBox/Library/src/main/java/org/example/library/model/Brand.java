@@ -23,7 +23,7 @@ public class Brand {
     private String name;
 
     @Lob
-    @Column(length = 1000)
+    @Column(columnDefinition = "LONGBLOB")
     private String brandImage;
 
     @Size(min = 10, max = 1000)

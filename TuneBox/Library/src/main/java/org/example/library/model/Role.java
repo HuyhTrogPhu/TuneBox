@@ -1,6 +1,6 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,14 @@ public class Role {
 
     private String name;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "role", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<User> users;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<SocialAdmin> socialAdmins;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<EcommerceAdmin> ecommerceAdmins;
+
+
 }
