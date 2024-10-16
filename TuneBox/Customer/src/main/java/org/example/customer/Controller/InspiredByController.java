@@ -1,22 +1,21 @@
-package org.example.customer.controller;
-
+package org.example.customer.Controller;
 
 import org.example.library.model.RespondModel;
-
-import org.example.library.service.TalentService;
+import org.example.library.service.InspiredByService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/talent")
-public class TalentController {
+@RequestMapping("/inspired")
+public class InspiredByController {
     @Autowired
-    private TalentService TalentSer;
+    private InspiredByService InsSer;
 
     @GetMapping ("/getall")
     public ResponseEntity<?> FindAll() {
@@ -24,7 +23,7 @@ public class TalentController {
         try {
             response.setStatus(true);
             response.setMessage("succesfull");
-            response.setData(TalentSer.findAll());
+            response.setData(InsSer.findAll());
 
         } catch (Exception ex) {
             response.setMessage(ex.getMessage());

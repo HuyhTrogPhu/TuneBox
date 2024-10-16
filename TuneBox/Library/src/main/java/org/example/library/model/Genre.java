@@ -25,9 +25,11 @@ public class Genre {
     private Set<User> user;
 
     @OneToMany(mappedBy = "genre")
+    @JsonIgnore
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "genre")
+    @JsonIgnore
     private Set<Albums> albums;
 
 

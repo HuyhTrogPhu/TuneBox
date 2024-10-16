@@ -15,6 +15,10 @@ public class UserMapper {
                 user.getGenre().stream().map(Genre::getId).collect(Collectors.toSet()) :
                 null;
 
+        Set<Long> trackByIds = user.getTracks() != null ?
+                user.getTracks().stream().map(Track::getId).collect(Collectors.toSet()) :
+                null;
+
         // Extract talent IDs (if Talent is a collection)
         Set<Long> talentIds = user.getTalent() != null ?
                 user.getTalent().stream().map(Talent::getId).collect(Collectors.toSet()) :
@@ -23,6 +27,10 @@ public class UserMapper {
         // Extract InspiredBy IDs (if InspiredBy is a collection)
         Set<Long> inspiredByIds = user.getInspiredBy() != null ?
                 user.getInspiredBy().stream().map(InspiredBy::getId).collect(Collectors.toSet()) :
+                null;
+
+        Set<Long> albumIds = user.getAlbums() != null ?
+                user.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) :
                 null;
 
         return new UserDto(
@@ -38,14 +46,14 @@ public class UserMapper {
                 inspiredByIds,   // Multiple InspiredBy IDs
                 talentIds,       // Multiple Talent IDs
                 genreIds,        // Multiple Genre IDs
+                albumIds,
+                trackByIds,
                 user.getRole(),
                 user.getBlocker(),
                 user.getBlocked(),
                 user.getFollowing(),
                 user.getFollowers(),
                 user.getOrderList(),
-                user.getTracks(),
-                user.getAlbums(),
                 user.getSentChats(),
                 user.getReceivedChats(),
                 user.getMessages(),
@@ -98,6 +106,24 @@ public class UserMapper {
             user.setGenre(genres);
         }
 
+        // Map Track from trackIds (map back to Track objects)
+        if (userDto.getTrackIds() != null && !userDto.getTrackIds().isEmpty()) {
+            Set<Track> tracks = userDto.getTrackIds().stream().map(id -> {
+                Track track = new Track();
+                track.setId(id);
+                return track;
+            }).collect(Collectors.toSet());
+            user.setTracks(tracks);
+        }
+        if (userDto.getAlbumIds() != null && !userDto.getAlbumIds().isEmpty()) {
+            Set<Albums> albums = userDto.getAlbumIds().stream().map(id -> {
+                Albums album = new Albums();
+                album.setId(id);
+                return album;
+            }).collect(Collectors.toSet());
+            user.setAlbums(albums);
+        }
+
         // Set other fields
         user.setRole(userDto.getRole());
         user.setBlocker(userDto.getBlocker());
@@ -105,8 +131,6 @@ public class UserMapper {
         user.setFollowing(userDto.getFollowing());
         user.setFollowers(userDto.getFollowers());
         user.setOrderList(userDto.getOrderList());
-        user.setTracks(userDto.getTracks());
-        user.setAlbums(userDto.getAlbums());
         user.setSentChats(userDto.getSentChats());
         user.setReceivedChats(userDto.getReceivedChats());
         user.setMessages(userDto.getMessages());

@@ -4,11 +4,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.RequestSignUpModel;
 import org.example.library.dto.UserDto;
+import org.example.library.mapper.UserMapper;
 import org.example.library.model.RespondModel;
+import org.example.library.model.User;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -16,31 +17,33 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService UserService;
 
     @Autowired
-    private UserRepository Repo;
+    private UserService userService;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+
+
 
     //LOGIN
     @PostMapping("/log-in")
     public ResponseEntity<?> login(@RequestBody UserDto user) {
         Map<String, Object> response = new HashMap<>();
-
         try {
-            UserDto loggedInUser = UserService.Login(user);
-
+            UserDto loggedInUser = userService.Login(user);
             response.put("status", true);
             response.put("message", "Đăng nhập thành công");
+            System.out.println("Đang đăng nhập với: " + user.getUserName());
+            System.out.println("Thông tin người dùng đăng nhập: " + loggedInUser);
+
             response.put("data", loggedInUser);
         } catch (Exception e) {
             response.put("status", false);
@@ -50,14 +53,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
     //FORGOT PASSWORD
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody  UserDto user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
-            UserService.ForgotPassword(user);
-
+            userService.ForgotPassword(user);
             return ResponseEntity.ok("Email reset password đã được gửi đến địa chỉ của bạn");
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
@@ -67,45 +68,21 @@ public class UserController {
     // RESET PASSWORD
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody UserDto user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
-            UserService.resetPassword(user.getToken(), user.getNewPassword());
-
+            userService.resetPassword(user.getToken(), user.getNewPassword());
             return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công");
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
     }
 
-
-//Change Password
-//    @PostMapping("/change-password")
-//    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestdto) {
-//
-//        //encode
-//        changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
-//        changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
-//        try {
-//            UserService.changePassword(changePasswordRequestdto.getEmail(),
-//                    changePasswordRequestdto.getOldPassword(),
-//                    changePasswordRequestdto.getNewPassword());
-//            return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
-//        } catch (RuntimeException ex) {
-//            return ResponseEntity.badRequest().body(ex.getMessage());
-//        }
-//    }
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {
-
-            if (!Repo.existsById(id)) {
+            if (!userRepository.existsById(id)) {
                 return ResponseEntity.badRequest().body("Không tìm thấy người dùng với ID này.");
             }
-            Repo.deleteById(id);
-
+            userRepository.deleteById(id);
             return ResponseEntity.ok("Người dùng đã được xóa thành công.");
         } catch (Exception ex) {
             return ResponseEntity.status(500).body("Lỗi khi xóa người dùng: " + ex.getMessage());
@@ -135,7 +112,7 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
 //        }
 //
-//        UserDto userDto = UserService.loginWithGoogle(email, name);
+//        UserDto userDto = userService.loginWithGoogle(email, name);
 //
 //        response.put("status", true);
 //        response.put("message", "Đăng nhập thành công");
@@ -144,27 +121,14 @@ public class UserController {
 //        return ResponseEntity.ok(response);
 //    }
 
-
-
     @PostMapping("/sign-up")
     public ResponseEntity<?> Register(@RequestBody RequestSignUpModel requestSignUpModel,
                                       HttpServletRequest request
     ) {
-
-        String psEncode =passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword());
-        requestSignUpModel.getUserDto().setPassword(psEncode);
         RespondModel response = new RespondModel();
-        if (requestSignUpModel.getUserDto() == null) {
-            response.setMessage("Thông tin người dùng không được cung cấp.");
-            response.setData(null);
-            response.setStatus(false);
-            return ResponseEntity.badRequest().body(response);
-        }
-
         try {
             response.setMessage("Đăng ký thành công");
-            response.setData(UserService.Register(requestSignUpModel));
-
+            response.setData(userService.Register(requestSignUpModel));
             response.setStatus(true);
             HttpSession session = request.getSession(true);
             session.setAttribute("userId", requestSignUpModel.getUserDto().getId());
@@ -182,8 +146,7 @@ public class UserController {
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-
-            response.put("data", UserService.findById(UserId));
+            response.put("data", userService.findById(UserId));
 
         } catch (Exception ex) {
             response.put("status", false);
@@ -220,31 +183,29 @@ public class UserController {
     @PostMapping("/check")
     public ResponseEntity<String> check(@RequestBody RequestSignUpModel requestSignUpModel) {
         try {
-
-            UserService.CheckLogin(requestSignUpModel);
-
+            userService.CheckLogin(requestSignUpModel);
             return ResponseEntity.ok("Check completed successfully");
         } catch (ResponseStatusException ex) {
             return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason()); // Use getStatusCode()
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-        RespondModel response = new RespondModel();
 
-        try {
-            UserDto updatedUser = UserService.updateUser(id, userDto);
-            response.setMessage("Cập nhật thành công");
-            response.setData(updatedUser);
-            response.setStatus(true);
-            return ResponseEntity.ok(response);
-        } catch (Exception ex) {
-            response.setMessage(ex.getMessage());
-            response.setData(null);
-            response.setStatus(false);
-            return ResponseEntity.badRequest().body(response);
+    // Lấy thông tin người dùng hiện tại
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getCurrentUser(@RequestParam("userId") Long userId) {
+        if (userId != null) {
+            Optional<User> user = userService.findById(userId);
+
+            return ResponseEntity.ok(UserMapper.mapToUserDto(user.get()));
         }
+        return ResponseEntity.status(401).body(null); // Trả về 401 nếu không tìm thấy thông tin người dùng
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@RequestParam("userId") Long userId) {
+        Optional<User> user = userService.findById(userId);
+        return ResponseEntity.ok(UserMapper.mapToUserDto(user.get()));
     }
 
 }

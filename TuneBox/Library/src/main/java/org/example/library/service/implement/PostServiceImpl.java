@@ -6,6 +6,7 @@
     import org.example.library.model.PostImage;
     import org.example.library.model.User;
     import org.example.library.repository.PostRepository;
+    import org.example.library.repository.UserRepository;
     import org.example.library.service.PostService;
     import org.springframework.stereotype.Service;
     import org.springframework.web.multipart.MultipartFile;
@@ -21,19 +22,24 @@
     public class PostServiceImpl implements PostService {
 
         private final PostRepository postRepository;
+        private final UserRepository userRepository;
 
-        public PostServiceImpl(PostRepository postRepository) {
+        public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
             this.postRepository = postRepository;
+            this.userRepository = userRepository;
         }
 
 
         @Override
         public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
 
-            // Cập nhật PostDto với tên người dùng
-            postDto.setUserId(userId); // Lưu userId vào PostDto
-            User user = new User();
-            user.setId(userId);
+            // Tìm User từ cơ sở dữ liệu dựa vào userId
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Cập nhật PostDto với userId và userName
+            postDto.setUserId(user.getId());
+            postDto.setUserNickname(user.getUserNickname());
 
             Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
             post.setUser(user); // Gán User vào bài đăng
@@ -66,8 +72,6 @@
             // Chuyển Post entity thành PostDto và trả về
             return PostMapper.toDto(savedPost);
         }
-
-
 //        @Override
 //        public PostDto getPostById(Long id) {
 //            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));

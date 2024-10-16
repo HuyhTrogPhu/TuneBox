@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,7 @@ public class Albums {
 
     @ManyToOne
     @JoinColumn(name = "albumCreator_id", nullable = false)
+    @JsonIgnore
     private User creator;
 
     @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)

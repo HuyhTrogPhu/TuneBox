@@ -1,6 +1,7 @@
 package org.example.ecommerceadmin.controller;
 
 import org.example.library.dto.EcomAdminDTO;
+import org.example.library.service.AlbumService;
 import org.example.library.service.PostService;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class StaticsEcomAdminAPI {
 
     @Autowired
     PostService postService;
+
+    @Autowired
+    AlbumService albumService;
 
     @GetMapping("/countUser")
     public ResponseEntity<?> getCountUser() {
@@ -78,6 +82,23 @@ public class StaticsEcomAdminAPI {
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", "Fail");
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getUserAlbums/{id}")
+    public ResponseEntity<?> GetUserAlbum(@PathVariable("id") Long UserId){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", albumService.getbyUserId(UserId));
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
             response.put("data", null);
         }
 

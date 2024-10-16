@@ -82,10 +82,6 @@ public class ReplyServiceImpl implements ReplyService {
         return replyMapper.toDto(savedReply); // Chuyển đổi thành ReplyDto để trả về
     }
 
-
-
-
-
     @Override
     public List<ReplyDto> getRepliesByComment(Long commentId) {
         // Tìm comment cha

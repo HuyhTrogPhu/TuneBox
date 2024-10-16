@@ -10,6 +10,7 @@ import org.example.library.model.InspiredBy;
 import org.example.library.model.Talent;
 import org.example.library.model.User;
 import org.example.library.repository.*;
+import org.example.library.service.UserInforService;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +30,7 @@ import static org.example.library.mapper.UserMapper.mapToUser;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static UserRepository RepoStatic;
     @Autowired
     private UserRepository Repo;
 
@@ -258,26 +260,6 @@ public class UserServiceImpl implements UserService {
         return Repo.countByIdNotNull();
     }
 
-
-    @Override
-    public UserDto updateUser(Long userId, UserDto userDto) {
-        Optional<User> userOptional = Repo.findById(userId);
-
-        if (!userOptional.isPresent()) {
-            throw new RuntimeException("User not found with id: " + userId);
-        }
-        User userToUpdate = userOptional.get();
-        User updatedUser = mapToUser(userDto);
-
-
-        updatedUser.setId(userToUpdate.getId()); //ko doi ID
-        updatedUser.setCreateDate(userToUpdate.getCreateDate());
-        updatedUser.setPassword(userToUpdate.getPassword());
-
-
-        User savedUser = Repo.save(updatedUser);
-        return UserMapper.mapToUserDto(savedUser);
-    }
 
 
 }

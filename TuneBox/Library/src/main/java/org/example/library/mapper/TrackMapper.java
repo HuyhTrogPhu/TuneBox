@@ -1,73 +1,102 @@
+
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
-import org.example.library.model.Track;
-import org.example.library.model.Genre;
-import org.example.library.repository.GenreRepository; // Nhập repo
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.example.library.model.*;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Component
 public class TrackMapper {
 
-    private final GenreRepository genreRepository;
+    public static TrackDto mapperTrackDto(Track track) {
 
-    @Autowired
-    public TrackMapper(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
+        Set<Long> playlist = track.getPlaylists() != null ? track.getPlaylists().stream()
+                .map(Playlist::getId).collect(Collectors.toSet()) : null;
+
+        Set<Long> comments = track.getComments() != null ? track.getComments().stream()
+                .map(Comment::getId).collect(Collectors.toSet()) : null;
+
+        Set<Long> likes = track.getLikes() != null ? track.getLikes().stream()
+                .map(Like::getId).collect(Collectors.toSet()) : null;
+
+        return new TrackDto(
+                track.getId(),
+                track.getName(),
+                track.getTrackImage(),
+                track.getTrackFile(),
+                track.getDescription(),
+                track.isStatus(),
+                track.getCreateDate(),
+                track.isReport(),
+                track.getReportDate(),
+                track.getGenre() != null ? track.getGenre().getId() : null,
+                track.getGenre() != null ? track.getGenre().getName() : null,
+                track.getCreator() != null ? track.getCreator().getId() : null,
+                track.getCreator() != null ? track.getCreator().getUserName() : null,
+                track.getAlbums()!= null? track.getAlbums().getId() : null,
+                playlist,
+                comments,
+                likes
+        );
     }
 
-    public TrackDto toDto(Track track) {
-        if (track == null) {
-            return null;
-        }
-
-        TrackDto dto = new TrackDto();
-        dto.setId(track.getId());
-        dto.setName(track.getName());
-        dto.setTrackImage(track.getTrackImage());
-        dto.setDescription(track.getDescription());
-        dto.setStatus(track.isStatus());
-        dto.setCreateDate(track.getCreateDate());
-        dto.setReport(track.isReport());
-        dto.setReportDate(track.getReportDate() != null ? LocalDate.from(track.getReportDate().toInstant().atZone(ZoneId.systemDefault())) : null);
-        dto.setGenreId(track.getGenre() != null ? track.getGenre().getId() : null); // Kiểm tra Genre
-        dto.setUser(track.getUser() != null ? track.getUser().getId() : null); // Kiểm tra User
-        dto.setAlbumsId(track.getAlbums() != null ? track.getAlbums().getId() : null); // Kiểm tra Albums
-
-        return dto;
-    }
-
-    public Track toEntity(TrackDto dto) {
-        if (dto == null) {
-            return null;
-        }
-
+    public static Track mapperTrack(TrackDto trackDto) {
         Track track = new Track();
-        track.setId(dto.getId());
-        track.setName(dto.getName());
-        track.setTrackImage(dto.getTrackImage());
-        track.setDescription(dto.getDescription());
-        track.setStatus(dto.isStatus());
-        track.setCreateDate(dto.getCreateDate());
-        track.setReport(dto.isReport());
+        track.setId(trackDto.getId());
+        track.setName(trackDto.getName());
+        track.setTrackImage(trackDto.getImageTrack());
+        track.setTrackFile(trackDto.getTrackFile());
+        track.setDescription(trackDto.getDescription());
+        track.setStatus(trackDto.isStatus()); // Convert Long to boolean
+        track.setCreateDate(trackDto.getCreateDate());
+        track.setReport(trackDto.isReport());
+        track.setReportDate(trackDto.getReportDate());
 
-        // Ánh xạ Genre từ genreId
-        if (dto.getGenreId() != null) {
-            Genre genre = new Genre();
-            genre.setId(dto.getGenreId());
-            track.setGenre(genre);
-        } else {
-            throw new IllegalArgumentException("Genre must not be null");
-        }
+        // Set the genre, user (creator), and albums using IDs from trackDto
+        Genre genre = new Genre();
+        genre.setId(trackDto.getGenreId());
+        genre.setName(trackDto.getGenreName());
+        track.setGenre(genre);  // Assume genre is already fetched or managed elsewhere
 
-        track.setReportDate(dto.getReportDate() != null ? Date.from(dto.getReportDate().atStartOfDay(ZoneId.systemDefault()).toInstant()) : null);
+        User creator = new User();
+        creator.setId(trackDto.getUserId());
+        creator.setUserName(trackDto.getUserName());
+        track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
+
+        Albums albums = new Albums();
+        albums.setId(trackDto.getAlbumId());
+        track.setAlbums(albums);  // Assume albums is already fetched or managed elsewhere
+
+        // Set playlists (if necessary)
+        Set<Playlist> playlists = trackDto.getPlaylistIds() != null ?
+                trackDto.getPlaylistIds().stream().map(id -> {
+                    Playlist playlist = new Playlist();
+                    playlist.setId(id);
+                    return playlist;
+                }).collect(Collectors.toSet()) : null;
+        track.setPlaylists(playlists);
+
+        // Set comments (if necessary)
+        Set<Comment> comments = trackDto.getComments() != null ?
+                trackDto.getComments().stream().map(id -> {
+                    Comment comment = new Comment();
+                    comment.setId(id);
+                    return comment;
+                }).collect(Collectors.toSet()) : null;
+        track.setComments(comments);
+
+        // Set likes (if necessary)
+        Set<Like> likes = trackDto.getLikes() != null ?
+                trackDto.getLikes().stream().map(id -> {
+                    Like like = new Like();
+                    like.setId(id);
+                    return like;
+                }).collect(Collectors.toSet()) : null;
+        track.setLikes(likes);
 
         return track;
     }
+
 
 }

@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,38 +27,44 @@ public class Track {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGBLOB")
     private String trackImage;
+
+    @Column(columnDefinition = "LONGBLOB")
+    private String trackFile;
 
     private String description;
 
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate;
+    private LocalDate createDate = LocalDate.now();
 
     private boolean report;
 
     private Date reportDate;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
-    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
-    private User user;
-
-
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "albums_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User creator;
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "albums_id", nullable = true)
+    @JsonIgnore
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
 
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Like> likes;

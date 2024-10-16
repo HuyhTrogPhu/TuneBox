@@ -29,7 +29,8 @@ public interface UserService {
     void changePassword(String email, String oldPassword, String newPassword);
 
      List<User> GetAll();
-    public UserDto updateUser(Long userId, UserDto userDto);
+
+
 
 
     public long countUser();
