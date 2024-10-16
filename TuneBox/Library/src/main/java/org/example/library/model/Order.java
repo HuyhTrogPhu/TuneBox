@@ -50,5 +50,7 @@ public class Order {
 
     private List<OrderDetail> orderDetails;
 
+    private String paymentStatus;
+
 
 }

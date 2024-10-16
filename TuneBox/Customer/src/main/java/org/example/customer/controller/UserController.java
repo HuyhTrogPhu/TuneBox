@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -155,6 +157,14 @@ public class UserController {
             return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @RequestMapping("/logout/success")
+    public String logout(Model model) {
+        model.addAttribute("message", "đăng xuất thành công");
+
+        return "login/login";
+    }
+
+
 
 
 }

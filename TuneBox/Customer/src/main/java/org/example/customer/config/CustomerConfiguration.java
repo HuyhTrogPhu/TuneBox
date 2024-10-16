@@ -57,12 +57,12 @@ public class CustomerConfiguration {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
+                        .logoutUrl("/user/logout")
+                        .logoutSuccessUrl("/user/logout/success")
+                        .invalidateHttpSession(true)  // Xóa session
+                        .deleteCookies("JSESSIONID") // Nếu bạn có sử dụng JSESSIONID
                 )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
