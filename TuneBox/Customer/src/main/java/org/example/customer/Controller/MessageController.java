@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import org.example.library.dto.MessageDTO;
 import org.example.library.dto.UserDto;
+import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.service.MessageService;
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private ChatMessageMapper messageMapper;
 
 
     @GetMapping("/between")
@@ -32,21 +35,18 @@ public class MessageController {
         try {
             // Lấy danh sách Message từ service
             List<Message> messages = messageService.getMessagesBetween(userId1, userId2);
-
             // Chuyển đổi danh sách Message thành danh sách MessageDTO
             List<MessageDTO> messageDTOs = messages.stream().map(message -> {
                 MessageDTO messageDTO = new MessageDTO();
                 messageDTO.setId(message.getId());
 
-                UserDto senderDto = new UserDto();
-                senderDto.setId(message.getSender().getId());
+                if (message.getSender() != null) {
+                    messageDTO.setSenderId(message.getSender().getId());
+                }
 
-                messageDTO.setSenderId(senderDto);
-
-                UserDto receiverDto = new UserDto();
-                receiverDto.setId(message.getReceiver().getId());
-
-                messageDTO.setReceiverId(receiverDto);
+                if (message.getReceiver() != null) {
+                    messageDTO.setReceiverId(message.getReceiver().getId());
+                }
 
 
                 messageDTO.setContent(message.getContent());

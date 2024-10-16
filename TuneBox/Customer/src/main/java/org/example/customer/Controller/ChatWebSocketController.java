@@ -1,8 +1,9 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.MessageDTO;
+import org.example.library.dto.MessageWebSocketDTO;
 import org.example.library.dto.UserDto;
-import org.example.library.mapper.MessageMapper;
+import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,53 +26,58 @@ public class ChatWebSocketController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-
+    @Autowired
+    private ChatMessageMapper messageMapper;
 
     @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload MessageDTO messageDTO) {
-        Message message = MessageMapper.INSTANCE.toModel(messageDTO);
-        Message savedMessage = messageService.saveMessage(message);
-        MessageDTO savedMessageDTO = MessageMapper.INSTANCE.toDTO(savedMessage);
+    public void sendMessage(@Payload MessageWebSocketDTO messageWebSocketDTO) {
+        try {
+            // Chuyển đổi MessageWebSocketDTO thành Message
+            Message message = messageMapper.toModel(messageWebSocketDTO); // Giả sử bạn đã điều chỉnh để hỗ trợ MessageWebSocketDTO
 
-        // Send to sender
-        messagingTemplate.convertAndSendToUser(
-                String.valueOf(savedMessage.getSender().getId()),
-                "/queue/messages",
-                savedMessageDTO
-        );
+            Message savedMessage = messageService.saveMessage(message);
+            MessageWebSocketDTO savedMessageDTO = new MessageWebSocketDTO();
+            savedMessageDTO.setId(savedMessage.getId());
+            savedMessageDTO.setSenderId(new UserDto(savedMessage.getSender().getId())); // Giả sử sender là một đối tượng UserDto
+            savedMessageDTO.setReceiverId(new UserDto(savedMessage.getReceiver().getId())); // Giả sử receiver là một đối tượng UserDto
+            savedMessageDTO.setContent(savedMessage.getContent());
+            savedMessageDTO.setCreationDate(savedMessage.getDateTime());
 
-        // Send to receiver
-        messagingTemplate.convertAndSendToUser(
-                String.valueOf(savedMessage.getReceiver().getId()),
-                "/queue/messages",
-                savedMessageDTO
-        );
+            // Gửi tin nhắn cho người gửi
+            messagingTemplate.convertAndSendToUser(
+                    String.valueOf(savedMessageDTO.getSenderId().getId()),
+                    "/queue/messages",
+                    savedMessageDTO
+            );
+
+            // Gửi tin nhắn cho người nhận
+            messagingTemplate.convertAndSendToUser(
+                    String.valueOf(savedMessageDTO.getReceiverId().getId()),
+                    "/queue/messages",
+                    savedMessageDTO
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Bạn có thể muốn gửi thông báo lỗi lại cho client
+        }
     }
 
-    private MessageDTO convertToDTO(Message message) {
-        MessageDTO dto = new MessageDTO();
-        dto.setId(message.getId());
-        dto.setContent(message.getContent());
-
-        UserDto senderDto = new UserDto();
-        senderDto.setId(message.getSender().getId());
-        dto.setSenderId(senderDto);
-
-        UserDto receiverDto = new UserDto();
-        receiverDto.setId(message.getReceiver().getId());
-        dto.setReceiverId(receiverDto);
-
-        dto.setCreationDate(message.getDateTime());
-        return dto;
-    }
+//    private MessageDTO convertToDTO(Message message) {
+//        MessageDTO dto = new MessageDTO();
+//        dto.setId(message.getId());
+//        dto.setContent(message.getContent());
+//        dto.setSenderId(message.getSender().getId());
+//        dto.setReceiverId(message.getReceiver().getId());
+//        dto.setCreationDate(message.getDateTime());
+//        return dto;
+//    }
 
 
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/chat/{chatId}")
     public MessageDTO addUser(@Payload MessageDTO messageDTO, SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long chatId) {
-        headerAccessor.getSessionAttributes().put("username", messageDTO.getSenderId().getUserName());
-        headerAccessor.getSessionAttributes().put("userId", messageDTO.getSenderId().getId());
+        headerAccessor.getSessionAttributes().put("userId", messageDTO.getSenderId());
         return messageDTO;
     }
 }

@@ -29,4 +29,7 @@ public interface UserService {
     UserDto getUserById(Long userId);
 
     UserDto findUserById(Long userId);
+
+    List<UserDto> findAllUser();
+
 }

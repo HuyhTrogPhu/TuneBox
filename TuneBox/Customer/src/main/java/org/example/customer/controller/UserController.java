@@ -121,5 +121,10 @@ public class UserController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.findAllUser();
+        return ResponseEntity.ok(users);
+    }
 
 }
