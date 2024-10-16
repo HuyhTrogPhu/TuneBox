@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -39,15 +38,17 @@ public class Order {
 
     private String status;
 
+    private String address;
+    private String phoneNumber;
+
+    private String shippingMethod;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+
     private List<OrderDetail> orderDetails;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", referencedColumnName = "number_id")
-    private Number number;
 
 }

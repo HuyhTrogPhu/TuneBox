@@ -17,4 +17,7 @@ public class OrderDetailDto {
     private int quantity;
 
     private Long instrumentId;
+    private String instrumentName;
+    private String image;
+    private String costPrice;
 }
