@@ -166,5 +166,20 @@ public class UserController {
 
 
 
+    // log-out
+    @GetMapping("/log-out")
+    public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Cookie cookie = new Cookie("userId", null);
+            cookie.setMaxAge(0); // Thiết lập tuổi thọ cookie về 0 để xóa
+            cookie.setPath("/");  // Đảm bảo xóa cookie cho toàn bộ domain
+            response.addCookie(cookie);
+            return ResponseEntity.ok("Logged out successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
+        }
+    }
+
 
 }
