@@ -42,7 +42,7 @@ public class Albums {
 
     private Date reportDate;
 
-    private String status;
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)

@@ -1,16 +1,17 @@
 package org.example.library.service.implement;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.ReplyDto;
 import org.example.library.mapper.ReplyMapper;
 import org.example.library.model.Comment;
 import org.example.library.model.Reply;
+import org.example.library.model.User;
 import org.example.library.repository.CommentRepository;
 import org.example.library.repository.ReplyRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.ReplyService;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,12 +40,18 @@ public class ReplyServiceImpl implements ReplyService {
         Comment parentComment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("Comment not found"));
 
+        // Tìm user bằng userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         // Tạo mới một reply
         Reply reply = new Reply();
         reply.setContent(replyDto.getContent());
         reply.setCreationDate(LocalDateTime.now());
-        reply.setUserId(userId);
+        reply.setUser(user); // Gán user cho reply
         reply.setParentComment(parentComment); // Gán comment cha cho reply
+
+        // Không cần gán userNickname
 
         // Nếu parentReplyId không null, tìm reply cha và gán
         if (parentReplyId != null) {
@@ -60,27 +67,28 @@ public class ReplyServiceImpl implements ReplyService {
         return replyMapper.toDto(savedReply);
     }
 
-
-
     @Override
-    public ReplyDto addReplyToReply(Long parentReplyId, Long userId, ReplyDto replyDto) {
-        // Kiểm tra xem reply cha có tồn tại hay không
+    public ReplyDto addReplyToReply(Long parentReplyId, Long userId, ReplyDto replyDto, Long commentId) {
         Reply parentReply = replyRepository.findById(parentReplyId)
-                .orElseThrow(() -> new ResolutionException("Reply not found with ID: " + parentReplyId));
+                .orElseThrow(() -> new EntityNotFoundException("Reply not found"));
 
-        // Tạo mới reply
-        Reply newReply = new Reply();
-        newReply.setContent(replyDto.getContent());
-        newReply.setCreationDate(LocalDateTime.now()); // Sử dụng LocalDateTime
-        newReply.setUserId(userId);
-        newReply.setParentReply(parentReply); // Liên kết với reply cha
-        newReply.setParentComment(parentReply.getParentComment()); // Liên kết với bình luận cha
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Lưu reply mới vào cơ sở dữ liệu
-        Reply savedReply = replyRepository.save(newReply);
+        Reply newReply = replyMapper.toEntity(replyDto, user, commentId); // Truyền commentId vào đây
 
-        return replyMapper.toDto(savedReply); // Chuyển đổi thành ReplyDto để trả về
+        newReply.setParentReply(parentReply); // Thiết lập reply cha
+
+        replyRepository.save(newReply);
+
+        parentReply.getReplies().add(newReply);
+        replyRepository.save(parentReply); // Cập nhật reply gốc
+
+        return replyMapper.toDto(newReply); // Chuyển đổi sang DTO và trả về
     }
+
+
+
 
     @Override
     public List<ReplyDto> getRepliesByComment(Long commentId) {
@@ -95,34 +103,40 @@ public class ReplyServiceImpl implements ReplyService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public void deleteReply(Long replyId) {
-        replyRepository.deleteById(replyId);
-    }
+    public ReplyDto updateReply(Long replyId, Long userId, ReplyDto replyDto) {
+        // Tìm reply bằng replyId
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("Reply not found"));
 
-    @Override
-    public ReplyDto updateReply(Long userId, ReplyDto replyDto) {
-        // Tìm reply theo ID
-        Reply existingReply = replyRepository.findById(replyDto.getId())
-                .orElseThrow(() -> new RuntimeException("Reply not found with ID: " + replyDto.getId()));
-
-        // Kiểm tra xem người dùng có phải là chủ sở hữu của reply không
-        if (!existingReply.getUserId().equals(userId)) {
-            throw new RuntimeException("You do not have permission to update this reply");
+        // Kiểm tra quyền chỉnh sửa (có thể kiểm tra userId)
+        if (!reply.getUser().getId().equals(userId)) {
+            throw new RuntimeException("User not authorized to update this reply");
         }
 
-
         // Cập nhật nội dung của reply
-        existingReply.setContent(replyDto.getContent());
-        // Cập nhật thời gian sửa đổi
+        reply.setContent(replyDto.getContent());
 
-        // Lưu lại reply đã cập nhật
-        Reply updatedReply = replyRepository.save(existingReply);
+        // Lưu lại reply đã được cập nhật
+        Reply updatedReply = replyRepository.save(reply);
 
-        // Chuyển đổi thành ReplyDto và trả về
+        // Chuyển đổi thành ReplyDto để trả về
         return replyMapper.toDto(updatedReply);
     }
 
 
+    @Override
+    public void deleteReply(Long replyId, Long userId) {
+        // Tìm reply bằng replyId
+        Reply reply = replyRepository.findById(replyId)
+                .orElseThrow(() -> new RuntimeException("Reply not found"));
+
+        // Kiểm tra quyền xóa (tùy vào logic của bạn, có thể kiểm tra userId)
+        if (!reply.getUser().getId().equals(userId)) {
+            throw new RuntimeException("User not authorized to delete this reply");
+        }
+
+        // Xóa reply
+        replyRepository.delete(reply);
+    }
 
 }

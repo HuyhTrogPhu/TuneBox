@@ -1,15 +1,25 @@
 package org.example.library.mapper;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.ReplyDto;
 import org.example.library.model.Reply;
 import org.example.library.model.User;
 import org.example.library.model.Comment;
+
+import org.example.library.repository.CommentRepository;
 import org.springframework.stereotype.Component;
+
 
 import java.time.LocalDateTime;
 
 @Component
 public class ReplyMapper {
+
+    private final CommentRepository commentRepository;
+
+    public ReplyMapper(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     // Chuyển từ Reply Entity sang ReplyDTO
     public ReplyDto toDto(Reply reply) {
@@ -19,11 +29,12 @@ public class ReplyMapper {
         replyDTO.setId(reply.getId());
         replyDTO.setContent(reply.getContent());
         replyDTO.setCreationDate(reply.getCreationDate()); // Trực tiếp sử dụng LocalDateTime
-        replyDTO.setUserId(reply.getUserId());
+        replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
+        replyDTO.setUserNickname(reply.getUser().getUserNickname()); // Nickname của người reply
 
-        // Lấy tên người dùng từ thông tin User nếu cần
+        // Lấy nickname của người bình luận gốc (người được reply)
         if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
-            replyDTO.setUserNickname(reply.getParentComment().getUser().getUserNickname());
+            replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserNickname()); // Gán nickname của người bình luận gốc
         }
 
         // Set commentId từ parentComment
@@ -40,18 +51,24 @@ public class ReplyMapper {
     }
 
     // Chuyển từ ReplyDTO sang Reply Entity
-    public Reply toEntity(ReplyDto replyDTO, User user, Comment parentComment) {
+    public Reply toEntity(ReplyDto replyDTO, User user, Long parentCommentId) {
         Reply reply = new Reply();
         reply.setContent(replyDTO.getContent());
-        reply.setCreationDate(LocalDateTime.now()); // Sử dụng LocalDateTime trực tiếp
-        reply.setUserId(user.getId());
-        reply.setParentComment(parentComment); // Thiết lập bình luận cha cho reply
+        reply.setCreationDate(LocalDateTime.now());
+        reply.setUser(user); // Assign user to the reply
 
-        // Nếu có parentReplyId thì thiết lập parentReply
+        // If parentCommentId is provided, find the parent comment
+        if (parentCommentId != null) {
+            Comment parentComment = commentRepository.findById(parentCommentId)
+                    .orElseThrow(() -> new EntityNotFoundException("Parent comment not found"));
+            reply.setParentComment(parentComment);
+        }
+
+        // If parentReplyId is provided, set the parent reply
         if (replyDTO.getParentReplyId() != null) {
             Reply parentReply = new Reply();
             parentReply.setId(replyDTO.getParentReplyId());
-            reply.setParentReply(parentReply); // Thiết lập reply cha cho reply
+            reply.setParentReply(parentReply);
         }
 
         return reply;
