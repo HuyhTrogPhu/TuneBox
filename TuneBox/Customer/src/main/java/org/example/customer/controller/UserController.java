@@ -1,7 +1,9 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.BasicUserDto;
-import org.example.library.dto.LoginUserDto;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
 import org.example.library.model.Genre;
@@ -20,10 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -118,6 +119,56 @@ public class UserController {
             }
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+        }
+    }
+
+    // Phương thức để lấy userId từ cookie
+    private String getUserIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ID not found in cookie");
+    }
+
+    // Get user avatar by userId
+    @GetMapping("/{userId}/avatar")
+    public ResponseEntity<String> getUserAvatar(@PathVariable Long userId) {
+        try {
+            String avatar = userService.getUserAvatar(userId);
+            return ResponseEntity.ok(avatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting user avatar");
+        }
+    }
+
+    // get user profile by userId
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserProfileDto> getProfileUser(@PathVariable Long userId) {
+        try {
+            UserProfileDto profileUser = userService.getProfileUserById(userId);
+            return ResponseEntity.ok(profileUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // log-out
+    @GetMapping("/log-out")
+    public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Cookie cookie = new Cookie("userId", null);
+            cookie.setMaxAge(0); // Thiết lập tuổi thọ cookie về 0 để xóa
+            cookie.setPath("/");  // Đảm bảo xóa cookie cho toàn bộ domain
+            response.addCookie(cookie);
+            return ResponseEntity.ok("Logged out successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
         }
     }
 

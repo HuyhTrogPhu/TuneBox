@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.library.dto.CartItemDto;
+import org.example.library.dto.OrderDetailDto;
 import org.example.library.dto.ShoppingCartDto;
 import org.example.library.model.Instrument;
 import org.example.library.service.ShoppingCartService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -42,4 +44,5 @@ public class CartController {
         shoppingCartService.removeItemFromCart(session, instrumentId);
         return ResponseEntity.ok("Đã xóa sản phẩm khỏi giỏ hàng.");
     }
+    private List<OrderDetailDto> orderDetails = new ArrayList<>();
 }

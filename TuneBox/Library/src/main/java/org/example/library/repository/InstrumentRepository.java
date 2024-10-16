@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
 
-    @Query("select i from Instrument i join i.brand join i.categoryIns " +
-            "where i.name like %?1% or i.brand.name like %?1% " +
-            "or i.categoryIns.name like %?1%")
+    @Query("select i from Instrument i where i.brand.id = ?1")
     List<Instrument> findByBrandId(Long brandId);
 
     List<Instrument> findByCategoryInsId(Long categoryId);
