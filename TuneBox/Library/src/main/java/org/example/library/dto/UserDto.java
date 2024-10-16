@@ -74,6 +74,7 @@ public class UserDto {
     }
 
 
+
     public String getUserNameOrEmail() {
         if ((userName == null || userName.isEmpty()) && (email == null || email.isEmpty())) {
             throw new IllegalArgumentException("Username or email must not be null or empty");

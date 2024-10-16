@@ -3,6 +3,7 @@ package org.example.library.service.implement;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.CartItemDto;
+import org.example.library.dto.OrderDetailDto;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.ShoppingCartDto;
 import org.example.library.model.Instrument;
@@ -15,11 +16,15 @@ import org.example.library.repository.OrderRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,73 +42,6 @@ public class OrderServiceImpl implements OrderService {
     private UserRepository userRepository;
 
 
-    @Override
-    public Order saveOrder(ShoppingCartDto shoppingCartDto, OrderDto orderDto, HttpServletRequest request) {
-
-        try {
-            // Lấy userId từ Cookie
-            Long userId = null;
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if ("userId".equals(cookie.getName())) {
-                        userId = Long.valueOf(cookie.getValue());
-                        break;
-                    }
-                }
-            }
-
-            if (userId == null) {
-                throw new IllegalArgumentException("User ID not found in cookies");
-            }
-
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found with id"));
-
-            // Tạo mới đơn hàng
-            Order order = new Order();
-            order.setOrderDate(LocalDate.now());
-            order.setDeliveryDate(null);  // Chưa có ngày giao hàng
-            order.setTotalItems(shoppingCartDto.getItems().size());
-            order.setTotalPrice(shoppingCartDto.getTotalPrice());
-            order.setPaymentMethod(orderDto.getPaymentMethod());
-            order.setStatus("Pending");
-            order.setUser(user);
-
-            // Tạo danh sách chi tiết đơn hàng
-            List<OrderDetail> orderDetails = new ArrayList<>();
-
-            for (CartItemDto item : shoppingCartDto.getItems()) {
-                // Tạo chi tiết đơn hàng
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setQuantity(item.getQuantity());
-                orderDetail.setOrder(order);
-                orderDetail.setInstrument(item.getInstrument());
-
-                // Lưu chi tiết đơn hàng
-                orderDetailRepository.save(orderDetail);
-                orderDetails.add(orderDetail);
-
-                // Cập nhật số lượng nhạc cụ sau khi thanh toán
-                Instrument instrument = instrumentRepository.findById(item.getInstrument().getId())
-                        .orElseThrow(() -> new IllegalArgumentException("Instrument not found with id: " + item.getInstrument().getId()));
-                int updatedQuantity = instrument.getQuantity() - item.getQuantity();
-                instrument.setQuantity(updatedQuantity);
-                instrumentRepository.save(instrument);
-            }
-
-            // Cập nhật user information
-
-
-            // Lưu danh sách chi tiết vào đơn hàng
-            order.setOrderDetails(orderDetails);
-            // Lưu và trả về đơn hàng
-            return orderRepository.save(order);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Override
     public List<Order> getOrderList() {
@@ -117,20 +55,95 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
-        Order order = orderRepository.findById(orderId).orElse(null);
-        if (order == null) {
-            throw new IllegalArgumentException("Order not found with id: " + orderId);
-        }
-        return order;
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found with id: " + orderId));
     }
+
 
     @Override
-    public Order updateOrder(OrderDto orderDto) {
-        Order order = orderRepository.findById(orderDto.getOrderId())
-               .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + orderDto.getOrderId()));
+    public OrderDto createOrder(OrderDto orderDto, Long userId) {
+        System.out.println("Creating order for user ID: " + userId);
+        System.out.println("Order data: " + orderDto);
 
+        // Lấy thông tin người dùng
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Tạo đơn hàng mới
+        Order order = new Order();
+        order.setOrderDate(orderDto.getOrderDate());
         order.setDeliveryDate(orderDto.getDeliveryDate());
+        order.setTax(orderDto.getTax());
+        order.setTotalPrice(orderDto.getTotalPrice());
+        order.setTotalItems(orderDto.getTotalItem());
+        order.setPaymentMethod(orderDto.getPaymentMethod());
         order.setStatus(orderDto.getStatus());
-        return orderRepository.save(order);
+        order.setAddress(orderDto.getAddress());
+        order.setShippingMethod(orderDto.getShippingMethod());
+        order.setPhoneNumber(orderDto.getPhoneNumber());
+        order.setUser(user);
+
+        try {
+            // Xử lý các chi tiết đơn hàng
+            List<OrderDetail> orderDetails = orderDto.getOrderDetails().stream().map(detailDto -> {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setQuantity(detailDto.getQuantity());
+
+                // Lấy nhạc cụ từ database
+                Instrument instrument = instrumentRepository.findById(detailDto.getInstrumentId())
+                        .orElseThrow(() -> new RuntimeException("Instrument not found with ID: " + detailDto.getInstrumentId()));
+                orderDetail.setInstrument(instrument);
+                orderDetail.setOrder(order);
+                return orderDetail;
+            }).collect(Collectors.toList());
+
+            order.setOrderDetails(orderDetails);
+
+            // Lưu đơn hàng vào cơ sở dữ liệu
+            Order savedOrder = orderRepository.save(order);
+
+            // Chuyển đổi dữ liệu để trả về DTO
+            return mapToDto(savedOrder);
+        } catch (RuntimeException e) {
+            // Ghi lại lỗi vào log để kiểm tra
+            System.err.println("Error creating order: " + e.getMessage());
+            throw new RuntimeException("Error creating order: " + e.getMessage());
+        }
     }
+
+    // Hàm hỗ trợ chuyển đổi từ Order sang OrderDto
+    public OrderDto mapToDto(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderId(order.getId());
+        orderDto.setOrderDate(order.getOrderDate());
+        orderDto.setDeliveryDate(order.getDeliveryDate());
+        orderDto.setTax(order.getTax());
+        orderDto.setTotalPrice(order.getTotalPrice());
+        orderDto.setTotalItem(order.getTotalItems());
+        orderDto.setPaymentMethod(order.getPaymentMethod());
+        orderDto.setPhoneNumber(order.getPhoneNumber());
+        orderDto.setStatus(order.getStatus());
+        orderDto.setAddress(order.getAddress());
+        orderDto.setShippingMethod(order.getShippingMethod());
+        orderDto.setUserId(order.getUser().getId());
+
+        orderDto.setUsername(order.getUser().getUserName());
+        orderDto.setEmail(order.getUser().getEmail());
+        List<OrderDetailDto> orderDetailDtos = order.getOrderDetails().stream().map(detail -> {
+            OrderDetailDto detailDto = new OrderDetailDto();
+            detailDto.setId(detail.getId());
+            detailDto.setQuantity(detail.getQuantity());
+            detailDto.setInstrumentId(detail.getInstrument().getId());
+            detailDto.setInstrumentName(detail.getInstrument().getName());
+            detailDto.setImage(detail.getInstrument().getImage());
+            detailDto.setCostPrice(String.valueOf(detail.getInstrument().getCostPrice()));
+            return detailDto;
+        }).collect(Collectors.toList());
+
+        orderDto.setOrderDetails(orderDetailDtos);
+
+        return orderDto;
+    }
+
+
 }

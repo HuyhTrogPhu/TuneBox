@@ -4,6 +4,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
 import org.example.library.mapper.UserMapper;
@@ -12,10 +13,7 @@ import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -114,85 +112,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long userId) {
-        return userRepository.findById(userId);
-    }
-
-
-    @Override
-    public UserDto loginWithGoogle(UserDto userdto) {
-//        Optional<User> userOptional;
-//
-//        if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
-//                (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
-//            userOptional = userRepository.findByEmail(userdto.getEmail());
-//            if (!userOptional.isPresent()) {
-//                userOptional = userRepository.findByUserName(userdto.getUserName());
-//            }
-//        } else {
-//            throw new RuntimeException("Username or email cannot be null or empty");
-//        }
-//
-//        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
-//            return UserMapper.mapToUserDto(userOptional.get());
-//        } else {
-//            throw new RuntimeException("Invalid username or password");
-//        }
-        return null;
-    }
-
-
-
-    public void resetPassword(UserDto userdto) {
-
-    }
-
-    private String generateToken() {
-        return java.util.UUID.randomUUID().toString();
-    }
-
-    private void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        try {
-            javaMailSender.send(message);
-        } catch (MailException e) {
-            System.out.println("Error sending email: " + e.getMessage());
-        }
-    }
-
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = userRepository.findByEmail(email);
-
-        if (!oldPassword.matches(newPassword)) {
-            throw new RuntimeException("Mật khẩu cũ không chính xác");
-        }
-
-        user.setPassword(newPassword);
-        userRepository.save(user);
+    public String getUserAvatar(Long userId) {
+        return userRepository.findUserAvatarByUserId(userId);
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
-        return null;
-    }
+    public UserProfileDto getProfileUserById(Long userId) {
+        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
 
-    @Override
-    public UserDto findUserById(Long userId) {
-       return null;
-    }
+        // Lấy danh sách talent, inspiredBy và genre
+        List<String> talents = userRepository.findTalentByUserId(userId);
+        List<String> inspiredBys = userRepository.findInspiredByByUserId(userId);
+        List<String> genres = userRepository.findGenreByUserId(userId);
 
+        // Set các danh sách này vào DTO
+        userProfile.setTalent(talents);
+        userProfile.setInspiredBy(inspiredBys);
+        userProfile.setGenre(genres);
 
-    @Override
-    public void forgotPassword(UserDto userdto) {
-
-    }
-
-    @Override
-    public void resetPassword(String token, String newPassword) {
-
+        return userProfile;
     }
 
 
