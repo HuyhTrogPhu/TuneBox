@@ -19,9 +19,13 @@ import java.util.Set;
 @NoArgsConstructor
 public class GenreDto {
     private Long id;
+
     private String name;
+
     private Set<User> user;
+
     private Set<Track> tracks;
+
     private Set<Albums> albums;
 
 

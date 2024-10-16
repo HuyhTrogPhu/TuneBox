@@ -25,24 +25,19 @@ public class UserInformation {
 
     private String phoneNumber;
 
-    private Date birthDate;
+    private Date birthDay;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String background;
 
     private String about;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", referencedColumnName = "number_id")
-    private Number number;
-
     @OneToOne(mappedBy = "userInformation")
     private User user;
-
 
 }

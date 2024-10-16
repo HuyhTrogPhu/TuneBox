@@ -2,8 +2,11 @@ package org.example.library.dto;
 
 public class RequestSignUpModel {
     private UserDto userDto;
+
     private String[] listInspiredBy;
+
     private String[] listTalent;
+    
     private String[] genreBy;
 
 

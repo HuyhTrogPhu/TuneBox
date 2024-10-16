@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,5 +29,5 @@ public class Follow {
     @JoinColumn(name = "followed_id", nullable = false)
     private User followed;
 
-    private LocalDateTime createAt;
+    private LocalDate createAt = LocalDate.now();
 }

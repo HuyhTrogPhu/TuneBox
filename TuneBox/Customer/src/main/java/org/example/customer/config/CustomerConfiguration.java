@@ -1,7 +1,6 @@
 package org.example.customer.config;
 
 
-
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,7 +26,8 @@ public class CustomerConfiguration {
         return new CustomerServiceConfig();
     }
 
-    private BCryptPasswordEncoder passwordEncoder() {
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -43,19 +43,18 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/user/log-in","/user/sign-up","/user/forgot-password",
-                                "/user/reset-password", "/login", "/signup","/createusername",
-                                "/talent","/artist","/categorymusic", "/do-register",
-                                "/product-detail/**").permitAll()
-                        .requestMatchers("/shop/**", "/find-products/**").hasRole("CUSTOMER")
+                        .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
+                                "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
+                                "/customer/category/**", "/customer/instrument/**").permitAll()
+                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
                         .requestMatchers("/oauth2/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                                .loginPage("/login")
-//                        .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("http://localhost:3000/", true)
-                                .permitAll()
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("http://localhost:3000/", true)
+                        .permitAll()
                 )
                 .logout(logout -> logout
                         .invalidateHttpSession(true)

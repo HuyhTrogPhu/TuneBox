@@ -1,26 +1,25 @@
 package org.example.library.service.implement;
 
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.RequestSignUpModel;
+import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
+import org.example.library.dto.UserInformationDto;
 import org.example.library.mapper.UserMapper;
-import org.example.library.model.Genre;
-import org.example.library.model.InspiredBy;
-import org.example.library.model.Talent;
-import org.example.library.model.User;
+import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -44,217 +43,94 @@ public class UserServiceImpl implements UserService {
     private GenreRepository genreRepository;
 
     @Autowired
-    public UserServiceImpl(
-            @Lazy UserService userService,
-            JavaMailSender javaMailSender, // Khởi tạo javaMailSender
-            RoleRepository roleRepository // Khởi tạo roleRepository
-    ) {
-        this.userService = userService;
-        this.javaMailSender = javaMailSender; // Khởi tạo biến
-        this.roleRepository = roleRepository; // Khởi tạo biến
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
-
-    private final UserService userService;
-
+    private Cloudinary cloudinary;
 
     private final JavaMailSender javaMailSender;
-    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Override
-    public void CheckLogin(RequestSignUpModel requestSignUpModel) {
-        List<User> fullList = userRepository.findAll();
-
-        for (User user : fullList) {
-            if (user.getEmail().equals(requestSignUpModel.getUserDto().getEmail())) {
-                System.out.println("trùng Email: " + requestSignUpModel.getUserDto().getEmail());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
-            }
-            if (user.getUserName().equals(requestSignUpModel.getUserDto().getUserName())) {
-                System.out.println("trùng Username: " + requestSignUpModel.getUserDto().getUserName());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username đã tồn tại");
-            }
-        }
-    }
-
-    @Override
-    public UserDto Register(RequestSignUpModel requestSignUpModel) {
-        User savedUser = new User();
-
-        savedUser.setEmail(requestSignUpModel.getUserDto().getEmail());
-        savedUser.setPassword(requestSignUpModel.getUserDto().getPassword());
-        savedUser.setUserName(requestSignUpModel.getUserDto().getUserName());
-        savedUser.setUserNickname(requestSignUpModel.getUserDto().getUserNickname());
-
-
-        List<InspiredBy> inspiredByList = new ArrayList<>();
-        List<Talent> talentList = new ArrayList<>();
-        List<Genre> genreList = new ArrayList<>();
-
-        for (String inspiredByName1 : requestSignUpModel.getListInspiredBy()) {
-            List<InspiredBy> inspiredBy = inspiredByRepository.findByName(inspiredByName1);
-            if (inspiredBy != null) {
-                inspiredByList.addAll(inspiredBy);
-            }
-        }
-
-
-        for (String talentName : requestSignUpModel.getListTalent()) {
-            List<Talent> talent = talentRepository.findByName(talentName);
-            if (talent != null) {
-                talentList.addAll(talent);
-            }
-        }
-
-
-        for (String genreName : requestSignUpModel.getGenreBy()) {
-            List<Genre> genre = genreRepository.findByName(genreName);
-            if (genre != null) {
-                genreList.addAll(genre);
-            }
-        }
-
-
-        savedUser.setInspiredBy(Set.copyOf(inspiredByList));
-        savedUser.setTalent(Set.copyOf(talentList));
-        savedUser.setGenre(Set.copyOf(genreList));
-
-        savedUser.setRole(roleRepository.findByName("CUSTOMER"));
-
-
-        userRepository.save(savedUser);
-        return UserMapper.mapToUserDto(savedUser);
-    }
-
-    @Override
-    public Optional<User> findById(Long userId) {
-        return userRepository.findById(userId);
-    }
-
-    public User updateById(Long userId, UserDto userDto) {
-        return userRepository.save(UserMapper.mapToUser(userDto));
-    }
-
-    @Override
-    public UserDto Login(UserDto userdto) {
-        Optional<User> userOptional;
-
-        if ((userdto.getEmail() != null && !userdto.getEmail().isEmpty()) ||
-                (userdto.getUserName() != null && !userdto.getUserName().isEmpty())) {
-            userOptional = userRepository.findByEmail(userdto.getEmail());
-            if (!userOptional.isPresent()) {
-                userOptional = userRepository.findByUserName(userdto.getUserName());
-            }
-        } else {
-            throw new RuntimeException("Username or email cannot be null or empty");
-        }
-
-        if (userOptional.isPresent() && passwordEncoder.matches(userdto.getPassword(), userOptional.get().getPassword())) {
-            return UserMapper.mapToUserDto(userOptional.get());
-        } else {
-            throw new RuntimeException("Invalid username or password");
-        }
-    }
-
-
-
-    public void resetPassword(String token, String newPassword) {
-        Optional<User> userOptional = userRepository.findByResetToken(token); // Tìm người dùng theo token
-
-        if (userOptional.isPresent()) {
-            userOptional.get().setPassword((newPassword));
-            userRepository.save(userOptional.get());
-        } else {
-            throw new RuntimeException("Invalid token");
-        }
-    }
-
-    private String generateToken() {
-        return java.util.UUID.randomUUID().toString();
-    }
-
-    private void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+    public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
         try {
-            javaMailSender.send(message);
-        } catch (MailException e) {
-            System.out.println("Error sending email: " + e.getMessage());
+            User user = new User();
+            UserInformation userInformation = new UserInformation();
+
+            userInformation.setName(userInformationDto.getName());
+
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userInformation.setGender(userInformationDto.getGender());
+            userInformation.setAbout(userInformationDto.getAbout());
+            userInformation.setBackground(userInformationDto.getBackground());
+            userInformation.setBirthDay(userInformationDto.getBirthDay());
+            userInformation.setPhoneNumber(userInformationDto.getPhoneNumber());
+
+            user.setUserInformation(userInformation);
+
+            user.setRole(roleRepository.findByName("CUSTOMER"));
+            user.setEmail(userDto.getEmail());
+            user.setUserName(userDto.getUserName());
+            user.setPassword(userDto.getPassword());
+            user.setReport(false);
+            user.setCreateDate(LocalDate.now());
+
+            // Map InspiredBy từ danh sách ID trong DTO
+            Set<InspiredBy> inspiredBySet = new HashSet<>();
+            for (Long inspiredId : userDto.getInspiredBy()) {
+                InspiredBy inspiredBy = inspiredByRepository.findById(inspiredId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspired by not found"));
+                inspiredBySet.add(inspiredBy);
+            }
+            user.setInspiredBy(inspiredBySet);
+
+            // Map Talent từ danh sách ID trong DTO
+            Set<Talent> talentSet = new HashSet<>();
+            for (Long talentId : userDto.getTalent()) {
+                Talent talent = talentRepository.findById(talentId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Talent not found"));
+                talentSet.add(talent);
+            }
+            user.setTalent(talentSet);
+
+            // Map Genre từ danh sách ID trong DTO
+            Set<Genre> genreSet = new HashSet<>();
+            for (Long genreId : userDto.getGenre()) {
+                Genre genre = genreRepository.findById(genreId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found"));
+                genreSet.add(genre);
+            }
+            user.setGenre(genreSet);
+
+            userRepository.save(user);
+
+            return UserMapper.mapToUserDto(user);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
         }
-    }
-//
-//    @Override
-//    public UserDto loginWithGoogle(String email, String name) {
-//        Optional<User> userOptional = Repo.findByEmail(email);
-//        if (userOptional.isPresent()) {
-//
-//            return UserMapper.mapToUserDto((userOptional.get()));
-//        } else {
-//            // Nếu người dùng chưa tồn tại, bạn có thể tạo một tài khoản mới
-//            User newUser = new User();
-//            newUser.setEmail(email);
-//            newUser.setUserName(name); // Hoặc có thể tạo một username mặc định
-//            newUser.setPassword(passwordEncoder.encode("defaultPassword")); // Hoặc một password mặc định khác
-//            User savedUser = Repo.save(newUser);
-//
-//            return UserMapper.mapToUserDto(savedUser);
-//        }
-//    }
 
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản với email này"));
-
-        if (!oldPassword.matches(newPassword)) {
-            throw new RuntimeException("Mật khẩu cũ không chính xác");
-        }
-
-        user.setPassword(newPassword);
-        userRepository.save(user);
     }
 
     @Override
-    public UserDto getUserById(Long userId) {
-        return null;
+    public String getUserAvatar(Long userId) {
+        return userRepository.findUserAvatarByUserId(userId);
     }
 
     @Override
-    public User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("User not found"));
-    }
+    public UserProfileDto getProfileUserById(Long userId) {
+        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
 
+        // Lấy danh sách talent, inspiredBy và genre
+        List<String> talents = userRepository.findTalentByUserId(userId);
+        List<String> inspiredBys = userRepository.findInspiredByByUserId(userId);
+        List<String> genres = userRepository.findGenreByUserId(userId);
 
-    @Override
-    public void ForgotPassword(UserDto userdto) {
-        Optional<User> userOptional;
+        // Set các danh sách này vào DTO
+        userProfile.setTalent(talents);
+        userProfile.setInspiredBy(inspiredBys);
+        userProfile.setGenre(genres);
 
-        if (userdto.getEmail() != null && !userdto.getEmail().isEmpty()) {
-            userOptional = userRepository.findByEmail(userdto.getEmail());
-        } else if (userdto.getUserName() != null && !userdto.getUserName().isEmpty()) {
-            userOptional = userRepository.findByUserName(userdto.getUserName());
-        } else {
-            throw new RuntimeException("Email or username cannot be null or empty");
-        }
-
-
-        if (userOptional.isPresent()) {
-            String token = generateToken(); // Hàm tạo token
-            //link sẽ chuyển hướng đến trang đổi pass word
-            String resetLink = "http://localhost:3000/reset-password?token=" + token;
-
-            // Gửi email
-            sendEmail(userOptional.get().getEmail(), "Đặt lại mật khẩu của bạn",
-                    "Nhấn vào đường dẫn để đặt lại mật khẩu " + resetLink);
-
-            userOptional.get().setResetToken(token);
-            userRepository.save(userOptional.get());
-        } else {
-            throw new RuntimeException("User not found");
-        }
+        return userProfile;
     }
 
 

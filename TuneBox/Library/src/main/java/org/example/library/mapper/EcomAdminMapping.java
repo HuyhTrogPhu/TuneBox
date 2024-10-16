@@ -16,7 +16,7 @@ public class EcomAdminMapping {
                 admin.getPhoneNumber(),
                 admin.getAddress(),
                 admin.getAvatar(),
-                admin.getRole()
+                null
         );
     }
     public static  EcommerceAdmin mapToEntity(EcomAdminDTO admin){
@@ -29,7 +29,7 @@ public class EcomAdminMapping {
                 admin.getPhoneNumber(),
                 admin.getAddress(),
                 admin.getAvatar(),
-                admin.getRole()
+                null
         );
     }
 }

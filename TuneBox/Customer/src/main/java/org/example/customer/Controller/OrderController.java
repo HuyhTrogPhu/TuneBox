@@ -1,14 +1,13 @@
 package org.example.customer.controller;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.OrderDto;
-import org.example.library.dto.ShoppingCartDto;
-import org.example.library.dto.UserDto;
+import org.example.library.model.Order;
 import org.example.library.model.User;
 import org.example.library.service.implement.OrderServiceImpl;
 import org.example.library.service.implement.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,22 +27,34 @@ public class OrderController {
     // Get user information from cookie
     @GetMapping("/getUserById/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        User user = userService.findUserById(userId);
-        return ResponseEntity.ok(user);
+        return null;
     }
 
-    // Create a new order
-    @PostMapping("/createOrder")
-    public ResponseEntity<String> createOrder(@RequestBody ShoppingCartDto shoppingCartDto, OrderDto orderDto, HttpServletRequest request) {
-        orderService.saveOrder(shoppingCartDto, orderDto, request);
-        return ResponseEntity.ok("Order created successfully!");
+    @PostMapping("/create")
+    public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto,
+                                                @CookieValue(value = "userId", required = false) String userIdCookie) {
+        if (userIdCookie == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Hoặc xử lý lỗi theo yêu cầu của bạn
+        }
+
+        Long userId = Long.valueOf(userIdCookie);
+        OrderDto createdOrder = orderService.createOrder(orderDto, userId);
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
+
 
 
     @GetMapping("/getOrdersByUserId/{userId}")
     public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable Long userId) {
         List<OrderDto> orders = null;
         return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/getOrderById/{orderId}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId);
+        OrderDto orderDto = orderService.mapToDto(order);
+        return ResponseEntity.ok(orderDto);
     }
 
 }
