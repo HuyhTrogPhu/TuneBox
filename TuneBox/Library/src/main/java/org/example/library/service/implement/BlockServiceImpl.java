@@ -63,4 +63,5 @@ public class BlockServiceImpl implements BlockService {
         List<Block> blockedUsers = blockRepository.findByBlocker_Id(blockerId);
         return blockMapper.toDTOList(blockedUsers); // Sử dụng mapper để convert entity sang DTO
     }
+
 }

@@ -1,6 +1,7 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,11 +79,21 @@ public class PostController {
             return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
         }
 
+    @PutMapping("/{id}/visibility")
+    public ResponseEntity<Void> changePostVisibility(@PathVariable Long id, @RequestParam("hidden") boolean hidden) {
+        try {
+            postService.changePostVisibility(id, hidden);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     // Phương thức lấy tất cả các bài viết
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts();
+    @GetMapping("/all")
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
+        List<PostDto> posts = postService.getAllPosts(currentUserId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
@@ -154,7 +165,6 @@ public class PostController {
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
-
 
 
 }

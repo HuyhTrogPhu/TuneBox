@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,10 +23,12 @@ public class Block {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "blocker_id", nullable = false)
     private User blocker;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "blocked_id", nullable = false)
     private User blocked;
 

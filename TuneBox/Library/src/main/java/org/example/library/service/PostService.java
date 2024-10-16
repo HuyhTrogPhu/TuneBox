@@ -14,7 +14,7 @@ public interface PostService {
 
 //    PostDto getPostById(Long id);
 
-    List<PostDto> getAllPosts();
+    List<PostDto> getAllPosts(Long currentUserId);
 
     List<PostDto> getPostsByUserId(Long userId);
 
@@ -23,6 +23,10 @@ public interface PostService {
     void deletePost(Long id);
 
     Post findPostById(Long postId);
+
+    void changePostVisibility(Long id, boolean hidden);
+
+    List<Post> getFilteredPosts(Long currentUserId);
 
 //    public Post findPostById(Long postId);
 }

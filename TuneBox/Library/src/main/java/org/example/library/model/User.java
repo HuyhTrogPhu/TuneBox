@@ -65,9 +65,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
     private Collection<Role> role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "blocker")
     private Set<Block> blocker;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "blocked")
     private Set<Block> blocked;
 

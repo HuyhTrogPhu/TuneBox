@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Reply {
     private LocalDateTime creationDate;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

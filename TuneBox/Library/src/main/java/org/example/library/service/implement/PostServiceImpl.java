@@ -74,10 +74,11 @@
         }
 
         @Override
-        public List<PostDto> getAllPosts() {
-            List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+        public List<PostDto> getAllPosts(Long currentUserId) {
+            // Retrieve all posts excluding those from blocked users or users who have blocked the current user
+            List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
             return posts.stream()
-                    .map(PostMapper::toDto) // Chuyển đổi thành PostDto
+                    .map(PostMapper::toDto) // Convert to PostDto
                     .collect(Collectors.toList());
         }
 
@@ -137,12 +138,20 @@
             // Xóa bài viết khỏi cơ sở dữ liệu
             postRepository.delete(post);
         }
-
-
-
+        public void changePostVisibility(Long postId, boolean hidden) {
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
+            post.setHidden(hidden);
+            postRepository.save(post);
+        }
         @Override
         public Post findPostById(Long postId) {
             return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        }
+
+        @Override
+        public List<Post> getFilteredPosts(Long currentUserId) {
+            return postRepository.findPostsExcludingBlockedUsers(currentUserId);
         }
 
     }

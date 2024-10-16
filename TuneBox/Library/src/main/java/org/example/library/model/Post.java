@@ -22,6 +22,8 @@ public class Post {
 
     private String content;
 
+    private boolean isHidden;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<PostImage> images;
 
@@ -31,9 +33,10 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Like> likes;
 
-    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
-    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
+
 
     private LocalDateTime createdAt;
 
