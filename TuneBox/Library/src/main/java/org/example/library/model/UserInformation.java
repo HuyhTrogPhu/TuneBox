@@ -25,14 +25,14 @@ public class UserInformation {
 
     private String phoneNumber;
 
-    private Date birthDate;
+    private Date birthDay;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String background;
 
     private String about;
@@ -41,6 +41,5 @@ public class UserInformation {
 
     @OneToOne(mappedBy = "userInformation")
     private User user;
-
 
 }

@@ -1,29 +1,23 @@
 package org.example.library.service;
 
 
-
-import org.example.library.dto.RequestSignUpModel;
+import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
-import org.example.library.model.User;
+import org.example.library.dto.UserInformationDto;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
 import java.util.List;
 
 public interface UserService {
-    void CheckLogin(RequestSignUpModel requestSignUpModel);
-    UserDto Register(RequestSignUpModel requestSignUpModel);
-    Optional<User> findById(Long userId);
 
-    void ForgotPassword(UserDto user);
+    UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
 
-    void resetPassword(String token, String newPassword);
+    // get user avatar by userId
+    String getUserAvatar(Long userId);
 
-//    UserDto loginWithGoogle(String email , String name);
-    UserDto Login(UserDto user);
+    // get profile user by userId
+    UserProfileDto getProfileUserById(Long userId);
 
-    void changePassword(String email, String oldPassword, String newPassword);
 
-    UserDto getUserById(Long userId);
 
-    User findUserById(Long userId);
 }

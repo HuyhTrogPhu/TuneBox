@@ -1,12 +1,12 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -29,43 +29,39 @@ public class User {
 
     private String userName;
 
-    private String userNickname;
-
     private String password;
 
     private boolean report;
 
-    private Date createDate;
+    private LocalDate createDate;
 
-    private String reason;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_inspired_by",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id"))
     private Set<InspiredBy> inspiredBy;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_talent",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "talent_id", referencedColumnName = "talent_id"))
     private Set<Talent> talent;
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<Genre> genre;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    private Collection<Role> role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    private Role role;
 
     @OneToMany(mappedBy = "blocker")
     private Set<Block> blocker;
@@ -103,7 +99,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
-    private String resetToken;
-    private String token;
-    private String newPassword;
+
+
 }

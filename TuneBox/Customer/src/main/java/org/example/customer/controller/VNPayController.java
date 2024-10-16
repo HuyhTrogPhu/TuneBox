@@ -1,13 +1,11 @@
 package org.example.customer.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.customer.config.VNPayConfig;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.PaymentRestDTO;
-import org.example.library.model.Order;
 import org.example.library.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
