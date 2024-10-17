@@ -137,6 +137,13 @@ public class UserServiceImpl implements UserService {
     public void changePassword(String email, String oldPassword, String newPassword) {
 
     }
-
+    public UserDto getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    System.out.println("User ID: " + user.getId() + ", User Name: " + user.getUserName());
+                    return new UserDto(user.getId(), user.getUserName());
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
 }

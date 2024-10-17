@@ -175,6 +175,14 @@ public ResponseEntity<List<GenreDto>> listGenre() {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
         }
     }
-
+    // Lấy thông tin người dùng hiện tại
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getCurrentUser(@RequestParam("userId") Long userId) {
+        if (userId != null) {
+            UserDto userDto = userService.getUserById(userId);
+            return ResponseEntity.ok(userDto);
+        }
+        return ResponseEntity.status(401).body(null); // Trả về 401 nếu không tìm thấy thông tin người dùng
+    }
 
 }
