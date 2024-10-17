@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
 
         // Cập nhật PostDto với userId và userName
         postDto.setUserId(user.getId());
-        postDto.setUserName(user.getUserInformation().getName());
+        postDto.setUserNickname(user.getUserInformation().getName());
 
         Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
         post.setUser(user); // Gán User vào bài đăng

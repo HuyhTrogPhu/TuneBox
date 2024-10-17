@@ -9,5 +9,6 @@ import org.example.library.model.Talent;
 import java.util.List;
 
 public interface GenreService {
-    List<GenreDto> findAll();
+    List<Genre> findAll();
+
 }

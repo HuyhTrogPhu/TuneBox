@@ -47,7 +47,7 @@ public class TrackMapper {
         track.setId(trackDto.getId());
         track.setName(trackDto.getName());
         track.setTrackImage(trackDto.getImageTrack());
-        track.setTrackFile(Arrays.toString(trackDto.getTrackFile()));
+        track.setTrackFile(Arrays.toString(trackDto.getTrackFile().getBytes()));
         track.setDescription(trackDto.getDescription());
         track.setStatus(trackDto.isStatus()); // Convert Long to boolean
         track.setCreateDate(trackDto.getCreateDate());

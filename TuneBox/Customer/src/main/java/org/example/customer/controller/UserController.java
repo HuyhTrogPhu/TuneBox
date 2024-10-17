@@ -27,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -89,10 +90,13 @@ public class UserController {
     }
 
     @GetMapping("/list-genre")
-    public ResponseEntity<List<GenreDto>> listGenre() {
-       List<GenreDto> genreList = genreService.findAll();
-       return ResponseEntity.ok(genreList);
-    }
+public ResponseEntity<List<GenreDto>> listGenre() {
+   List<Genre> genreList = genreService.findAll();
+   List<GenreDto> genreDtoList = genreList.stream()
+       .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+       .collect(Collectors.toList());
+   return ResponseEntity.ok(genreDtoList);
+}
 
     // get list inspired by
     @GetMapping("/list-inspired-by")

@@ -19,4 +19,7 @@ public class GenreDto {
     private Set<Long> userIds;
     private Set<Long> trackIds;
     private Set<Long> albumIds;
+
+    public GenreDto(Long id, String name) {
+    }
 }

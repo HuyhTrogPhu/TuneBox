@@ -29,11 +29,11 @@ public class ReplyMapper {
         replyDTO.setContent(reply.getContent());
         replyDTO.setCreationDate(reply.getCreationDate());
         replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
-        replyDTO.setUserNickname(reply.getUser().getUserNickname()); // Nickname của người reply
+        replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
 
         // Lấy nickname của người bình luận gốc (người được reply)
         if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
-            replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserNickname()); // Gán nickname của người bình luận gốc
+            replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserInformation().getName()); // Gán nickname của người bình luận gốc
         }
 
         // Set commentId từ parentComment nếu có

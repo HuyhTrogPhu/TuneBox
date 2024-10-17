@@ -72,4 +72,6 @@ public class TrackDto {
         this.likes = likes;
     }
 
+    public TrackDto(Long id, String name, String trackImage, byte[] bytes, String description, boolean status, LocalDate createDate, boolean report, Date reportDate, Long aLong, String s, Long aLong1, String s1, Long aLong2, Set<Long> playlist, Set<Long> comments, Set<Long> likes) {
+    }
 }
