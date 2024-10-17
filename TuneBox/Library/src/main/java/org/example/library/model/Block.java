@@ -22,11 +22,11 @@ public class Block {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "blocker_id", nullable = false)
+    @JoinColumn(name = "blocker_id",referencedColumnName = "user_id", nullable = false)
     private User blocker;
 
     @ManyToOne
-    @JoinColumn(name = "blocked_id", nullable = false)
+    @JoinColumn(name = "blocked_id",referencedColumnName = "user_id", nullable = false)
     private User blocked;
 
     private LocalDateTime createBlock;

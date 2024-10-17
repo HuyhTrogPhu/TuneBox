@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class Track {
     private String trackImage;
 
     @Column(columnDefinition = "LONGBLOB")
-    private byte[] trackFile;
+    private String trackFile;
 
     private String description;
 
@@ -43,21 +44,16 @@ public class Track {
 
     private Date reportDate;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id", nullable = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY) // Thiết lập mối quan hệ với User
-    @JoinColumn(name = "user_id") // Tên cột trong bảng Post
-    private User user;
-
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "trackCreator_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User creator;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "albums_id", nullable = true)
@@ -66,6 +62,7 @@ public class Track {
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 

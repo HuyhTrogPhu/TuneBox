@@ -133,5 +133,10 @@ public class UserServiceImpl implements UserService {
         return userProfile;
     }
 
+    @Override
+    public void changePassword(String email, String oldPassword, String newPassword) {
+
+    }
+
 
 }
