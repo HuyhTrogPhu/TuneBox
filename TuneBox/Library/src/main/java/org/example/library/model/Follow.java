@@ -28,11 +28,12 @@ public class Follow {
     @JoinColumn(name = "followed_id", nullable = false)
     private User followed;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt; // Đổi từ LocalDate thành LocalDateTime
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
 
+    // Tự động thêm thời gian khi Follow được tạo
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 }

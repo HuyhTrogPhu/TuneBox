@@ -1,3 +1,4 @@
+
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
@@ -31,8 +32,10 @@ public class TrackMapper {
                 track.isReport(),
                 track.getReportDate(),
                 track.getGenre() != null ? track.getGenre().getId() : null,
+                track.getGenre() != null ? track.getGenre().getName() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
-                track.getAlbums() != null ? track.getAlbums().getId() : null,
+                track.getCreator() != null ? track.getCreator().getUserName() : null,
+                track.getAlbums()!= null? track.getAlbums().getId() : null,
                 playlist,
                 comments,
                 likes
@@ -54,10 +57,12 @@ public class TrackMapper {
         // Set the genre, user (creator), and albums using IDs from trackDto
         Genre genre = new Genre();
         genre.setId(trackDto.getGenreId());
+        genre.setName(trackDto.getGenreName());
         track.setGenre(genre);  // Assume genre is already fetched or managed elsewhere
 
         User creator = new User();
         creator.setId(trackDto.getUserId());
+        creator.setUserName(trackDto.getUserName());
         track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
         Albums albums = new Albums();

@@ -1,4 +1,4 @@
-package org.example.customer.controller;
+package org.example.customer.Controller;
 
 import org.example.library.dto.ChangePasswordRequestDto;
 import org.example.library.service.UserService;
