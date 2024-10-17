@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.library.dto.GenreDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -87,10 +88,9 @@ public class UserController {
        return ResponseEntity.ok(talentList);
     }
 
-    // get list genres
     @GetMapping("/list-genre")
-    public ResponseEntity<List<Genre>> listGenre() {
-       List<Genre> genreList = genreService.findAll();
+    public ResponseEntity<List<GenreDto>> listGenre() {
+       List<GenreDto> genreList = genreService.findAll();
        return ResponseEntity.ok(genreList);
     }
 
