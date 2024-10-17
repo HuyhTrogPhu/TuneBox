@@ -39,15 +39,16 @@ public class Order {
     private String status;
 
     private String address;
+
     private String phoneNumber;
 
     private String shippingMethod;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
-
     private List<OrderDetail> orderDetails;
 
 

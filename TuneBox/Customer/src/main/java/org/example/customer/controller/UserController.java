@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.library.dto.ProfileSettingDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -11,10 +12,7 @@ import org.example.library.model.InspiredBy;
 import org.example.library.model.Talent;
 import org.example.library.model.User;
 import org.example.library.repository.UserRepository;
-import org.example.library.service.GenreService;
-import org.example.library.service.InspiredByService;
-import org.example.library.service.TalentService;
-import org.example.library.service.UserService;
+import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -38,6 +36,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserInformationService userInformationService;
 
     @Autowired
     private TalentService talentService;
@@ -169,6 +170,18 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
+        }
+    }
+
+    // get user information in profile page
+    @GetMapping("/{userId}/settingProfile")
+    public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
+        try {
+            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
