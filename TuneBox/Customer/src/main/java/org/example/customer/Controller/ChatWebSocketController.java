@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import org.example.library.dto.MessageDTO;
 import org.example.library.dto.MessageWebSocketDTO;
 import org.example.library.dto.UserDto;
+import org.example.library.dto.UserMessageDTO;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.service.MessageService;
@@ -38,8 +39,8 @@ public class ChatWebSocketController {
             Message savedMessage = messageService.saveMessage(message);
             MessageWebSocketDTO savedMessageDTO = new MessageWebSocketDTO();
             savedMessageDTO.setId(savedMessage.getId());
-            savedMessageDTO.setSenderId(new UserDto(savedMessage.getSender().getId())); // Giả sử sender là một đối tượng UserDto
-            savedMessageDTO.setReceiverId(new UserDto(savedMessage.getReceiver().getId())); // Giả sử receiver là một đối tượng UserDto
+            savedMessageDTO.setSenderId(new UserMessageDTO(savedMessage.getSender().getId())); // Giả sử sender là một đối tượng UserDto
+            savedMessageDTO.setReceiverId(new UserMessageDTO(savedMessage.getReceiver().getId())); // Giả sử receiver là một đối tượng UserDto
             savedMessageDTO.setContent(savedMessage.getContent());
             savedMessageDTO.setCreationDate(savedMessage.getDateTime());
 

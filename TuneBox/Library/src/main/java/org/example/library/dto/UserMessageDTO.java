@@ -11,10 +11,15 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageWebSocketDTO {
+public class UserMessageDTO {
+
     private Long id;
-    private UserMessageDTO senderId;  // Sử dụng Long ở đây
-    private UserMessageDTO receiverId; // Sử dụng Long ở đây
     private String content;
+    private UserDto senderId;
+    private UserDto receiverId;
     private LocalDateTime creationDate;
+
+    public UserMessageDTO(Long id) {
+        this.id = id;
+    }
 }

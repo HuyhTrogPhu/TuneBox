@@ -63,15 +63,9 @@ public class UserDto {
     @JsonIgnore
     private List<Message> messages;
 
-    private String content;
-    private UserDto senderId;
-    private UserDto receiverId;
-    private LocalDateTime creationDate;
 
 
-    public UserDto(Long id) {
-        this.id = id;
-    }
+
 
 
 

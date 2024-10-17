@@ -3,6 +3,7 @@ package org.example.library.mapper;
 import org.example.library.dto.MessageDTO;
 import org.example.library.dto.MessageWebSocketDTO;
 import org.example.library.dto.UserDto;
+import org.example.library.dto.UserMessageDTO;
 import org.example.library.model.Message;
 import org.example.library.model.User;
 import org.mapstruct.Mapper;
@@ -32,12 +33,12 @@ public interface ChatMessageMapper {
     @Mapping(target = "dateTime", source = "creationDate")
     Message toModel(MessageWebSocketDTO messageWebSocketDTO);
 
-    default User map(UserDto userDto) {
-        if (userDto == null) {
+    default User map(UserMessageDTO userMessageDTO) {
+        if (userMessageDTO == null) {
             return null;
         }
         User user = new User();
-        user.setId(userDto.getId());
+        user.setId(userMessageDTO.getId());
         // Ánh xạ các trường khác nếu cần
         return user;
     }
