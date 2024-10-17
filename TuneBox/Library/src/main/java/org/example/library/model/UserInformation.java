@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class UserInformation {
 
     private String location;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "userInformation")
     private User user;
 
