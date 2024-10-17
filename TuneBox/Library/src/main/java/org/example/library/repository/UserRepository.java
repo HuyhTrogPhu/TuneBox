@@ -1,5 +1,7 @@
 package org.example.library.repository;
 
+import org.example.library.dto.UserFollowDto;
+import org.example.library.dto.UserLoginDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +16,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     // get user by username or email
-    Optional<User> findByUserNameOrEmail(String userName, String email);
+    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password) " +
+            "FROM User u WHERE u.userName = :userName OR u.email = :email")
+    Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
+
+    // get followers and following by user id
+    @Query("select size(u.followers), size(u.following) from User u where u.id = :userId")
+    Optional<UserFollowDto> getFollowCount(@Param("userId") Long userId);
 
     // get avatar user
     @Query("SELECT ui.avatar FROM UserInformation ui JOIN ui.user u WHERE u.id = :userId")
@@ -36,5 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Lấy danh sách genre của người dùng
     @Query("select ge.name from User u join u.genre ge where u.id = :userId")
     List<String> findGenreByUserId(@Param("userId") Long userId);
+
+
 
 }

@@ -38,4 +38,8 @@ public class Post {
     private LocalDateTime createdAt;
 
     private boolean edited;
+
+    @Column(name = "is_hidden", nullable = false, columnDefinition = "boolean default false")
+    private boolean hidden = false;
+
 }

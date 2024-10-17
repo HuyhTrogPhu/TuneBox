@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Message {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User user;

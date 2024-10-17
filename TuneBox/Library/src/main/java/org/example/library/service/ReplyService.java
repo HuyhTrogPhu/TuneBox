@@ -8,8 +8,11 @@ public interface ReplyService {
 
     ReplyDto addReply(Long commentId, Long userId, ReplyDto replyDto, Long parentReplyId);
 
-    ReplyDto addReplyToReply(Long parentReplyId, Long userId, ReplyDto replyDto);
+    ReplyDto addReplyToReply(Long parentReplyId, Long userId, ReplyDto replyDto, Long commentId);
 
     List<ReplyDto> getRepliesByComment(Long commentId);
-    void deleteReply(Long replyId);
+
+    void deleteReply(Long replyId, Long userId);
+
+    ReplyDto updateReply(Long replyId, Long userId, ReplyDto replyDto);
 }

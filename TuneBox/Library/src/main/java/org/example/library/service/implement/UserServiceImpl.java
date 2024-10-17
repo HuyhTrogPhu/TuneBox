@@ -4,6 +4,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.UserFollowDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -45,7 +46,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final JavaMailSender javaMailSender;
 
 
     @Override
@@ -131,6 +131,16 @@ public class UserServiceImpl implements UserService {
         userProfile.setGenre(genres);
 
         return userProfile;
+    }
+
+    @Override
+    public Optional<UserFollowDto> getUserFollowById(Long userId) {
+        return userRepository.getFollowCount(userId);
+    }
+
+    @Override
+    public void changePassword(String email, String oldPassword, String newPassword) {
+
     }
 
 
