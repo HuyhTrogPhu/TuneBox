@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +22,12 @@ public class Block {
     @Column(name = "block_id")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "blocker_id",referencedColumnName = "user_id", nullable = false)
     private User blocker;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "blocked_id",referencedColumnName = "user_id", nullable = false)
     private User blocked;
