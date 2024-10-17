@@ -36,7 +36,6 @@ public class PostController {
             @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
-
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {

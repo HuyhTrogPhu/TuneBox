@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import org.example.library.dto.GenreDto;
 import org.example.library.dto.TrackDto;
+import org.example.library.mapper.GenreMapper;
 import org.example.library.model.Genre;
 import org.example.library.model.Track;
 import org.example.library.model.User;
@@ -114,9 +115,16 @@ public class TrackController {
     //get tat ca cac theloai
     @GetMapping("/getAllGenre")
     public ResponseEntity<List<GenreDto>> getAllGenres() {
-        List<GenreDto> genres = genreService.findAll();
-        return ResponseEntity.ok(genres);
+        List<Genre> genres = genreService.findAll();
+
+        // Sử dụng mapper để chuyển đổi danh sách Genre thành GenreDto
+        List<GenreDto> genreDtos = genres.stream()
+                .map(GenreMapper::mapToGenreDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(genreDtos);
     }
+
 
     //get track theo id track
     @GetMapping("/{trackId}")

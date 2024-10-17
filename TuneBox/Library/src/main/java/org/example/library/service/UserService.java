@@ -19,5 +19,5 @@ public interface UserService {
     UserProfileDto getProfileUserById(Long userId);
 
 
-
+    void changePassword(String email, String oldPassword, String newPassword);
 }

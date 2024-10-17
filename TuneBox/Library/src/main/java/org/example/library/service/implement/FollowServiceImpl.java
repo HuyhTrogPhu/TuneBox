@@ -41,8 +41,7 @@ public class FollowServiceImpl implements FollowService {
         Follow follow = new Follow();
         follow.setFollower(follower);
         follow.setFollowed(followed);
-        follow.setCreatedAt(LocalDateTime.now());
-
+        
         followRepository.save(follow); // Lưu vào cơ sở dữ liệu
     }
 

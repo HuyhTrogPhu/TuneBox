@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BlockServiceImpl implements BlockService {
@@ -45,12 +46,18 @@ public class BlockServiceImpl implements BlockService {
         blockRepository.save(block);
     }
 
+
     @Override
     public void unblockUser(Long blockerId, Long blockedId) {
-        // Tìm kiếm bản ghi block và xóa nó
-        Block block = blockRepository.findByBlocker_IdAndBlocked_Id(blockerId, blockedId)
-                .orElseThrow(() -> new RuntimeException("Block record not found."));
-        blockRepository.delete(block);
+        // Kiểm tra nếu có tồn tại quan hệ block giữa hai người dùng
+        Optional<Block> blockOptional = blockRepository.findByBlocker_IdAndBlocked_Id(blockerId, blockedId);
+
+        if (blockOptional.isPresent()) {
+            // Xóa quan hệ block nếu tồn tại
+            blockRepository.deleteByBlocker_IdAndBlocked_Id(blockerId, blockedId);
+        } else {
+            throw new RuntimeException("Block relation does not exist between these users.");
+        }
     }
 
     @Override

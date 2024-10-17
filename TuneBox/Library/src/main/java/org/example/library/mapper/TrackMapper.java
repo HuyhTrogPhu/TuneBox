@@ -3,6 +3,7 @@ package org.example.library.mapper;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.*;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public class TrackMapper {
                 track.getId(),
                 track.getName(),
                 track.getTrackImage(),
-                track.getTrackFile(),
+                track.getTrackFile().getBytes(),
                 track.getDescription(),
                 track.isStatus(),
                 track.getCreateDate(),
@@ -43,7 +44,7 @@ public class TrackMapper {
         track.setId(trackDto.getId());
         track.setName(trackDto.getName());
         track.setTrackImage(trackDto.getImageTrack());
-        track.setTrackFile(trackDto.getTrackFile());
+        track.setTrackFile(Arrays.toString(trackDto.getTrackFile()));
         track.setDescription(trackDto.getDescription());
         track.setStatus(trackDto.isStatus()); // Convert Long to boolean
         track.setCreateDate(trackDto.getCreateDate());

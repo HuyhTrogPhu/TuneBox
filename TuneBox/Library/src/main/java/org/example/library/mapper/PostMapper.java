@@ -10,6 +10,7 @@ public class PostMapper {
 
         PostDto dto = new PostDto();
         dto.setId(post.getId());
+        dto.setHidden(post.isHidden());
         dto.setContent(post.getContent());
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
@@ -22,6 +23,7 @@ public class PostMapper {
 
         Post entity = new Post();
         entity.setId(postDto.getId());
+        entity.setHidden(postDto.isHidden());
         entity.setContent(postDto.getContent());
         entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
         entity.setCreatedAt(postDto.getCreatedAt());

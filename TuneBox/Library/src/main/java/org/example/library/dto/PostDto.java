@@ -20,4 +20,7 @@ public class PostDto {
     private String userName; // Thêm trường username
     private Set<PostImageDto> images;
     private LocalDateTime createdAt;
+    private boolean hidden;
+
+
 }

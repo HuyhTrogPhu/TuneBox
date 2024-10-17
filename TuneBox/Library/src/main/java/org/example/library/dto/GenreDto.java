@@ -1,17 +1,11 @@
 package org.example.library.dto;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Albums;
-import org.example.library.model.Track;
-import org.example.library.model.User;
 
 import java.util.Set;
-
 
 @Getter
 @Setter
@@ -19,15 +13,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class GenreDto {
     private Long id;
-
     private String name;
 
-    private Set<User> user;
-
-    private Set<Track> tracks;
-
-    private Set<Albums> albums;
-
-
-
+    // Chỉ lưu trữ danh sách ID của các đối tượng liên quan thay vì lưu trữ toàn bộ đối tượng
+    private Set<Long> userIds;
+    private Set<Long> trackIds;
+    private Set<Long> albumIds;
 }
