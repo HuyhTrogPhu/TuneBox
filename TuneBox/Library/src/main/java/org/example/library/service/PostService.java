@@ -1,6 +1,7 @@
 
 package org.example.library.service;
 
+import jakarta.transaction.Transactional;
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,7 @@ public interface PostService {
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
+    @Transactional
     void deletePost(Long id);
 
     Post findPostById(Long postId);

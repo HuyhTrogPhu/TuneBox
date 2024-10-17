@@ -1,5 +1,6 @@
 package org.example.library.service.implement;
 
+import jakarta.transaction.Transactional;
 import org.example.library.dto.BlockDto; // Thay đổi import cho DTO mới
 import org.example.library.mapper.BlockMapper; // Thay đổi import cho mapper mới
 import org.example.library.model.Block; // Thay đổi import cho entity mới
@@ -48,6 +49,7 @@ public class BlockServiceImpl implements BlockService {
 
 
     @Override
+    @Transactional
     public void unblockUser(Long blockerId, Long blockedId) {
         // Kiểm tra nếu có tồn tại quan hệ block giữa hai người dùng
         Optional<Block> blockOptional = blockRepository.findByBlocker_IdAndBlocked_Id(blockerId, blockedId);
