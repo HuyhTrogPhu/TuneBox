@@ -85,24 +85,24 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-       List<Talent> talentList = talentService.findAll();
-       return ResponseEntity.ok(talentList);
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
     }
 
     @GetMapping("/list-genre")
-public ResponseEntity<List<GenreDto>> listGenre() {
-   List<Genre> genreList = genreService.findAll();
-   List<GenreDto> genreDtoList = genreList.stream()
-       .map(genre -> new GenreDto(genre.getId(), genre.getName()))
-       .collect(Collectors.toList());
-   return ResponseEntity.ok(genreDtoList);
-}
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
+    }
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-       List<InspiredBy> inspiredByList = inspiredByService.findAll();
-       return ResponseEntity.ok(inspiredByList);
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
