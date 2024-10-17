@@ -127,15 +127,15 @@ public ResponseEntity<List<GenreDto>> listGenre() {
     }
 
     // Phương thức để lấy userId từ cookie
-    private String getUserIdFromCookie(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if ("userId".equals(cookie.getName())) {
-                return cookie.getValue();
-            }
-        }
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ID not found in cookie");
-    }
+//    private String getUserIdFromCookie(HttpServletRequest request) {
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie cookie : cookies) {
+//            if ("userId".equals(cookie.getName())) {
+//                return cookie.getValue();
+//            }
+//        }
+//        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ID not found in cookie");
+//    }
 
     // Get user avatar by userId
     @GetMapping("/{userId}/avatar")
