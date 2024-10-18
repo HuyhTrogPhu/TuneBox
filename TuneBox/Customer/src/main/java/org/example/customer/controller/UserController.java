@@ -3,21 +3,16 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.library.dto.UserProfileDto;
-import org.example.library.dto.UserDto;
-import org.example.library.dto.UserInformationDto;
+import org.example.library.dto.*;
 import org.example.library.model.Genre;
 import org.example.library.model.InspiredBy;
 import org.example.library.model.Talent;
-import org.example.library.model.User;
 import org.example.library.repository.UserRepository;
-import org.example.library.service.GenreService;
-import org.example.library.service.InspiredByService;
-import org.example.library.service.TalentService;
-import org.example.library.service.UserService;
+import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
@@ -27,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -39,6 +35,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserInformationService userInformationService;
 
     @Autowired
     private TalentService talentService;
@@ -84,33 +83,36 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-       List<Talent> talentList = talentService.findAll();
-       return ResponseEntity.ok(talentList);
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
     }
 
     // get list genres
     @GetMapping("/list-genre")
-    public ResponseEntity<List<Genre>> listGenre() {
-       List<Genre> genreList = genreService.findAll();
-       return ResponseEntity.ok(genreList);
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
     }
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-       List<InspiredBy> inspiredByList = inspiredByService.findAll();
-       return ResponseEntity.ok(inspiredByList);
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
-        Optional<User> optionalUser = userRepository.findByUserNameOrEmail(userDto.getUserName(), userDto.getEmail());
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto) {
+        Optional<UserLoginDto> optionalUser = userRepository.findByUserNameOrEmail(userLoginDto.getUserName(), userLoginDto.getEmail());
 
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+            UserLoginDto user = optionalUser.get();
 
-            if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
                 // Trả về userId thay vì toàn bộ thông tin user
                 Long userId = user.getId();
                 System.out.println("userId: " + userId);
@@ -178,6 +180,30 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
+        }
+    }
+
+    // get user information in profile page
+    @GetMapping("/{userId}/settingProfile")
+    public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
+        try {
+            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // get follower and following user by user id
+    @GetMapping("/{userId}/followCount")
+    public ResponseEntity<Optional<UserFollowDto>> getFollowCount(@PathVariable Long userId) {
+        try {
+            Optional<UserFollowDto> followCount = userService.getUserFollowById(userId);
+            return ResponseEntity.ok(followCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
 

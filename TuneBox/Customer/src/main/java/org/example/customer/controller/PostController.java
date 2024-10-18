@@ -1,6 +1,7 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/posts")
 public class PostController {
 
@@ -36,7 +36,6 @@ public class PostController {
             @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
-
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
@@ -79,11 +78,21 @@ public class PostController {
             return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
         }
 
+    @PutMapping("/{id}/visibility")
+    public ResponseEntity<Void> changePostVisibility(@PathVariable Long id, @RequestParam("hidden") boolean hidden) {
+        try {
+            postService.changePostVisibility(id, hidden);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     // Phương thức lấy tất cả các bài viết
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts();
+    @GetMapping("/all")
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
+        List<PostDto> posts = postService.getAllPosts(currentUserId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
@@ -137,7 +146,24 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    // Lấy tất cả bài viết của người dùng từ ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
+        // Kiểm tra nếu userId không hợp lệ
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
+        // Lấy danh sách bài viết
+        List<PostDto> posts = postService.getPostsByUserId(userId);
+        System.out.println("Posts for user ID " + userId + ": " + posts); // Log các bài viết
+
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
 
 
 }

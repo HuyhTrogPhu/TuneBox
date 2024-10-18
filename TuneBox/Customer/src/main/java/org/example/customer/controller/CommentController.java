@@ -56,4 +56,43 @@ public class CommentController {
     }
 
 
+
+    // --------------------------------Comment Track -----------------------
+    // Thêm comment vào track
+    @PostMapping("/track/{trackId}/user/{userId}")
+    public ResponseEntity<CommentDTO> addCommentTrack(@PathVariable Long trackId, @PathVariable Long userId,
+                                                 @RequestParam(value = "createdAt", required = false) String createdAt,
+                                                 @RequestBody CommentDTO commentDTO) {
+        // Nếu createdAt được truyền từ request, chuyển đổi nó sang LocalDateTime
+        if (createdAt != null && !createdAt.isEmpty()) {
+            commentDTO.setCreationDate(LocalDateTime.parse(createdAt));
+        }
+
+        CommentDTO createdComment = commentService.addCommentTrack(trackId, userId, commentDTO);
+        return ResponseEntity.ok(createdComment);
+    }
+
+    // Xóa comment
+    @DeleteMapping("/track/{commentId}")
+    public ResponseEntity<Void> deleteCommentTrack(@PathVariable Long commentId) {
+        commentService.deleteCommentTrack(commentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Cập nhật comment
+    @PutMapping("track/{commentId}")
+    public ResponseEntity<CommentDTO> updateCommentTrack(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
+        CommentDTO updatedComment = commentService.updateCommentTrack(commentId, commentDTO);
+        return ResponseEntity.ok(updatedComment);
+    }
+
+    // Lấy tất cả các comment của một track
+    @GetMapping("/track/{trackId}")
+    public ResponseEntity<List<CommentDTO>> getCommentsByTrack(@PathVariable Long trackId) {
+        List<CommentDTO> comments = commentService.getCommentsByTrack(trackId);
+        return ResponseEntity.ok(comments);
+    }
+
+
+
 }

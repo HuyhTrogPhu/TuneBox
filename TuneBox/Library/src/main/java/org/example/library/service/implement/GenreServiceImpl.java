@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 
 import lombok.AllArgsConstructor;
+import org.example.library.dto.GenreDto;
 import org.example.library.model.Genre;
 import org.example.library.model.Talent;
 import org.example.library.repository.GenreRepository;

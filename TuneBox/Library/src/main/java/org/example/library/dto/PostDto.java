@@ -17,7 +17,10 @@ public class PostDto {
     private Long id;
     private String content;
     private Long userId; // Trường userId
-    private String userName; // Thêm trường username
+    private String userNickname;
     private Set<PostImageDto> images;
     private LocalDateTime createdAt;
+    private boolean hidden;
+
+
 }
