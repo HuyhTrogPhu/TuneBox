@@ -81,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(orderDto.getAddress());
         order.setShippingMethod(orderDto.getShippingMethod());
         order.setPhoneNumber(orderDto.getPhoneNumber());
+        order.setPaymentStatus(orderDto.getPaymentStatus());
         order.setUser(user);
 
         try {
@@ -144,6 +145,17 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDto;
     }
+    public boolean updatePaymentStatus(Long orderId, String paymentStatus) {
+        // Logic cập nhật trạng thái thanh toán vào CSDL
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId)); // Sử dụng orElseThrow để lấy giá trị
+
+        // Cập nhật trạng thái thanh toán
+        order.setPaymentStatus(paymentStatus);
+        orderRepository.save(order);
+        return true;
+    }
+
 
 
 }

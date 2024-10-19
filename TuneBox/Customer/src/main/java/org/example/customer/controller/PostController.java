@@ -16,6 +16,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/posts")
 public class PostController {
 
@@ -36,6 +37,7 @@ public class PostController {
             @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
+
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
@@ -90,9 +92,9 @@ public class PostController {
 
 
     // Phương thức lấy tất cả các bài viết
-    @GetMapping("/all")
-    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-        List<PostDto> posts = postService.getAllPosts(currentUserId);
+    @GetMapping
+    public ResponseEntity<List<PostDto>> getAllPosts() {
+        List<PostDto> posts = postService.getAllPosts();
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 

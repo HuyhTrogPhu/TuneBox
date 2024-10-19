@@ -7,7 +7,9 @@ import org.example.customer.config.VNPayConfig;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.PaymentRestDTO;
 import org.example.library.service.OrderService;
+import org.example.library.service.implement.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,8 @@ import java.util.*;
 public class VNPayController {
     @Autowired
     private OrderService orderService;
-
+@Autowired
+private OrderServiceImpl orderServiceImpl;
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment(@RequestBody  OrderDto orderDto, @CookieValue(value = "userId", required = false) String userIdCookie
             , HttpServletRequest request) throws UnsupportedEncodingException {
@@ -95,50 +98,28 @@ public class VNPayController {
         return ResponseEntity.ok(paymentRestDTO);
     }
 
-    @GetMapping("/vnpay_return")
-    public String vnPayReturn(HttpServletRequest request, HttpSession session, Model model) throws UnsupportedEncodingException {
-        Map<String, String> fields = new HashMap<>();
-        for (Enumeration<String> params = request.getParameterNames(); params.hasMoreElements();) {
-            String fieldName = (String) params.nextElement();
-            String fieldValue = request.getParameter(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                fields.put(fieldName, fieldValue);
-            }
+    @PostMapping("/update_payment_status")
+    public ResponseEntity<?> updatePaymentStatus(@RequestBody Map<String, String> request) {
+        String orderIdString = request.get("orderId");
+        String paymentStatus = request.get("paymentStatus");
+
+        // Chuyển đổi orderId từ String sang Long
+        Long orderId;
+        try {
+            orderId = Long.parseLong(orderIdString);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order ID không hợp lệ");
         }
 
-        String vnp_SecureHash = request.getParameter("vnp_SecureHash");
-        fields.remove("vnp_SecureHash");
+        // Cập nhật trạng thái thanh toán
+        boolean success = orderServiceImpl.updatePaymentStatus(orderId, paymentStatus);
 
-        String signValue = VNPayConfig.hashAllFields(fields);
-
-        String paymentStatus;
-        String message;
-
-        if (signValue.equals(vnp_SecureHash)) {
-            String responseCode = fields.get("vnp_ResponseCode");
-            if ("00".equals(responseCode)) {
-                paymentStatus = "success";
-                message = "Payment Successful!";
-
-
-            } else {
-                paymentStatus = "failure";
-                message = "Payment Failed: " + responseCode;
-            }
+        if (success) {
+            return ResponseEntity.ok("Cập nhật trạng thái thanh toán thành công");
         } else {
-            paymentStatus = "failure";
-            message = "Invalid signature";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cập nhật trạng thái thanh toán thất bại");
         }
-
-        // Sử dụng UriComponentsBuilder để xây dựng URL
-        String redirectUrl = UriComponentsBuilder.fromUriString("/customer/cart")
-                .queryParam("paymentStatus", paymentStatus)
-                .queryParam("message", message)
-                .build()
-                .encode(StandardCharsets.UTF_8)
-                .toUriString();
-
-        // Chuyển hướng đến trang checkout
-        return "redirect:" + redirectUrl;
     }
+
+
 }
