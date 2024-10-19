@@ -1,4 +1,4 @@
-    package org.example.customer.controller;
+package org.example.customer.controller;
 
     import jakarta.servlet.http.HttpServletRequest;
     import jakarta.servlet.http.HttpSession;
@@ -27,18 +27,57 @@
         @Autowired
         private UserService UserService;
 
-        @Autowired
-        private UserRepository Repo;
+    @Autowired
+    private GenreService genreService;
 
-        @Autowired
-        private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private InspiredByService inspiredByService;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    // Register
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("name") String name,
+            @RequestParam("talent") List<Long> talents,
+            @RequestParam("genre") List<Long> genres,
+            @RequestParam("inspiredBy") List<Long> inspiredBys,
+            @RequestParam("image") MultipartFile image) {
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
+        // Mã hóa mật khẩu
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // Gọi service để thực hiện đăng ký
+        UserDto userDto = new UserDto(userName, email, encodedPassword, talents, genres, inspiredBys);
+        UserInformationDto userInformationDto = new UserInformationDto(name);
+
+        UserDto registeredUser = userService.register(userDto, userInformationDto, image);
+        return ResponseEntity.ok(registeredUser);
+    }
 
         @GetMapping
         public List<UserDto> getAllUsers() {
             return UserService.findAll();
         }
 
+    // get list genres
+    @GetMapping("/list-genre")
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
+    }
 
         //LOGIN
         @PostMapping("/log-in")
