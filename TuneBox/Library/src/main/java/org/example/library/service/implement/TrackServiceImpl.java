@@ -287,10 +287,10 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public TrackDto getTrackById(Long trackId) {
-       Track track = trackRepository.findById(trackId).orElseThrow(
-               () -> new RuntimeException("Track not found")
-       );
-       return TrackMapper.mapperTrackDto(track);
+        Track track = trackRepository.findById(trackId).orElseThrow(
+                () -> new RuntimeException("Track not found")
+        );
+        return TrackMapper.mapperTrackDto(track);
     }
 
 

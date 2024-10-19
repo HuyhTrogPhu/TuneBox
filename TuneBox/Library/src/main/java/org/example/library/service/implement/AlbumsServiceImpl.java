@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,6 +54,7 @@ public class AlbumsServiceImpl implements AlbumsService {
 
     @Override
     public AlbumsDto createAlbums(AlbumsDto albumsDto, MultipartFile imageAlbums, Long userId, Long genreId, Long albumstyleId){
+
         try {
             // Lấy thể loại từ cơ sở dữ liệu
             Genre genre = genreRepository.findById(genreId).orElseThrow(
@@ -99,18 +101,24 @@ public class AlbumsServiceImpl implements AlbumsService {
 
             // Xử lý danh sách track
             if (albumsDto.getTracks() != null) {
-                Set<Track> tracks = albumsDto.getTracks().stream()
-                        .map(trackId -> {
-                            // Tìm kiếm track từ cơ sở dữ liệu
-                            Track track = trackRepository.findById(trackId).orElseThrow(
-                                    () -> new RuntimeException("Track not found with ID: " + trackId)
-                            );
-                            return track; // Trả về track đã được quản lý
-                        }).collect(Collectors.toSet());
-                albums.setTracks(tracks);
+                Set<Track> trackSet = new HashSet<>();
+                for (Long trackId : albumsDto.getTracks()) {
+                    Track track = trackRepository.findById(trackId).orElseThrow(
+                            () -> new RuntimeException("Track not found with ID: " + trackId)
+                    );
+                    track.setAlbums(albums); // Liên kết track với album
+                    trackSet.add(track); // Chỉ thêm track đã được quản lý
+                }
+                albums.setTracks(trackSet); // Thiết lập danh sách track cho album
             }
 
             albumsRepository.save(albums);
+
+            Albums savedAlbum = albumsRepository.findById(albums.getId()).orElse(null);
+            if (savedAlbum != null) {
+                System.out.println("Album saved successfully with ID: " + savedAlbum.getId());
+            }
+
 
             return AlbumsMapper.mapperAlbumsDto(albums);
 

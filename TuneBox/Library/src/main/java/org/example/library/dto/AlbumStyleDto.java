@@ -19,4 +19,9 @@ public class AlbumStyleDto {
     private String name;
 
     private Set<Albums> albums;
+
+    public AlbumStyleDto(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

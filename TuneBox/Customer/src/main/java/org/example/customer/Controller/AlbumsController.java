@@ -1,14 +1,18 @@
 package org.example.customer.Controller;
 
+import org.example.library.dto.AlbumStyleDto;
 import org.example.library.dto.AlbumsDto;
 import org.example.library.dto.GenreDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.AlbumStyle;
 import org.example.library.model.Genre;
 import org.example.library.model.User;
+import org.example.library.repository.AlbumStyleRepository;
+import org.example.library.service.AlbumStyleService;
 import org.example.library.service.AlbumsService;
 import org.example.library.service.GenreService;
 import org.example.library.service.TrackService;
+import org.example.library.service.implement.AlbumStyleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +34,13 @@ public class AlbumsController {
 
     @Autowired
     private GenreService genreService;
+    @Autowired
+    private AlbumStyleServiceImpl albumStyleServiceImpl;
+    @Autowired
+    private AlbumStyleRepository albumStyleRepository;
 
+    @Autowired
+    private AlbumStyleService albumStyleService;
 
     //creat Track
     @PostMapping
@@ -37,9 +48,9 @@ public class AlbumsController {
                                                   @RequestParam("description") String description,
                                                   @RequestParam("status") boolean status,
                                                   @RequestParam("report") boolean report,
-                                                  @RequestParam("genre") Genre genre, @RequestParam("user") User user,
-                                                  @RequestParam("albumStyle")AlbumStyle albumStyle,
-                                                  @RequestParam(value = "trackIds", required = false) Set<Long> trackIds) {
+                                                  @RequestParam("genre") Long genreId, @RequestParam("user") Long userId, @RequestParam("albumStyle") Long albumStyleId,
+                                                  @RequestParam(value = "trackIds", required = false) List<Long> trackIds) {
+        Set<Long> trackIdSet = new HashSet<>(trackIds);
 
         try {
             AlbumsDto albumsDto = new AlbumsDto();
@@ -48,13 +59,14 @@ public class AlbumsController {
             albumsDto.setStatus(status);
             albumsDto.setReport(report);
             albumsDto.setCreateDate(LocalDate.now());
-            albumsDto.setTracks(trackIds);
+            albumsDto.setTracks(trackIdSet);
 
-            AlbumsDto createAlbums = albumsService.createAlbums(albumsDto,albumImage, user.getId(), genre.getId(), albumStyle.getId());
+            AlbumsDto createAlbums = albumsService.createAlbums(albumsDto,albumImage, genreId, userId, albumStyleId);
             return new ResponseEntity<>(createAlbums, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Failed to create album: " + e.getMessage(), e);
+
         }
     }
 
@@ -109,5 +121,12 @@ public class AlbumsController {
 
         return new ResponseEntity<>(albums, HttpStatus.OK);
     }
+
+    @GetMapping("/getAllAlbumStyle")
+    public ResponseEntity<List<AlbumStyleDto>> getAllAlbumStyle() {
+        List<AlbumStyleDto> albumStyleDto = albumStyleService.findAll();
+        return ResponseEntity.ok(albumStyleDto);
+    }
+
 
 }
