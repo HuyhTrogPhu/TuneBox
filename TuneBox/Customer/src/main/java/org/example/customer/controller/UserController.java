@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,25 +84,37 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-       List<Talent> talentList = talentService.findAll();
-       return ResponseEntity.ok(talentList);
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
     }
 
     // get list genres
     @GetMapping("/list-genre")
-public ResponseEntity<List<GenreDto>> listGenre() {
-   List<Genre> genreList = genreService.findAll();
-   List<GenreDto> genreDtoList = genreList.stream()
-       .map(genre -> new GenreDto(genre.getId(), genre.getName()))
-       .collect(Collectors.toList());
-   return ResponseEntity.ok(genreDtoList);
-}
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
+    }
+
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
+        try {
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-       List<InspiredBy> inspiredByList = inspiredByService.findAll();
-       return ResponseEntity.ok(inspiredByList);
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
@@ -174,27 +188,83 @@ public ResponseEntity<List<GenreDto>> listGenre() {
         }
     }
 
-    // get user information in profile page
+    // get user in profile page
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
-            return ResponseEntity.ok(userInfo);
+            ProfileSettingDto profileUser = userService.getUserProfileSetting(userId);
+            return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
             return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+
+    // get user in account page
+    @GetMapping("/{userId}/accountSetting")
+    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
+        try {
+            AccountSettingDto userAccount = userService.getAccountSetting(userId);
+            return ResponseEntity.ok(userAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // get follower and following user by user id
     @GetMapping("/{userId}/followCount")
-    public ResponseEntity<Optional<UserFollowDto>> getFollowCount(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Long>> getFollowCount(@PathVariable Long userId) {
         try {
-            Optional<UserFollowDto> followCount = userService.getUserFollowById(userId);
-            return ResponseEntity.ok(followCount);
+            Long followersCount = userService.getFollowersCount(userId);
+            Long followingCount = userService.getFollowingCount(userId);
+            Map<String, Long> followCounts = new HashMap<>();
+            followCounts.put("followers", followersCount);
+            followCounts.put("following", followingCount);
+            return ResponseEntity.ok(followCounts);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    // set password in account page
+    @PutMapping("/{userId}/password")
+    public ResponseEntity<String> setPassword(@PathVariable Long userId, @RequestParam String newPassword) {
+        try {
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
+
+            userService.setPassword(userId, encodedNewPassword);
+            return ResponseEntity.ok("Mật khẩu đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating password");
+        }
+    }
+
+
+    // set username in account page
+    @PutMapping("/{userId}/username")
+    public ResponseEntity<String> setUsername(@PathVariable Long userId, @RequestParam String newUsername) {
+        try {
+            userService.updateUserName(userId, newUsername);
+            return ResponseEntity.ok("Tên đăng nhập đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating username");
+        }
+    }
+
+    // set email in account page
+    @PutMapping("/{userId}/email")
+    public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestParam String newEmail) {
+        try {
+            userService.updateEmail(userId, newEmail);
+            return ResponseEntity.ok("Email đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
         }
     }
 

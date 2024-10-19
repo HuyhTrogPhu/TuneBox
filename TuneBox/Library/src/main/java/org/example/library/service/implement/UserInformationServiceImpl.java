@@ -12,8 +12,5 @@ public class UserInformationServiceImpl implements UserInformationService {
     @Autowired
     private UserInformationRepository userInformationRepository;
 
-    @Override
-    public ProfileSettingDto getUserInformation(Long userId) {
-        return userInformationRepository.findUserProfileByUserId(userId);
-    }
+
 }

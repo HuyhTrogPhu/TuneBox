@@ -1,10 +1,7 @@
 package org.example.library.service;
 
 
-import org.example.library.dto.UserFollowDto;
-import org.example.library.dto.UserProfileDto;
-import org.example.library.dto.UserDto;
-import org.example.library.dto.UserInformationDto;
+import org.example.library.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -21,5 +18,24 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
-    void changePassword(String email, String oldPassword, String newPassword);
+    // get user in profile page
+    ProfileSettingDto getUserProfileSetting(Long userId);
+
+    // Lấy số lượng followers của user
+    Long getFollowersCount(Long userId);
+
+    // Lấy số lượng following của user
+    Long getFollowingCount(Long userId);
+
+    // update userName by userId
+    void updateUserName(Long userId, String newUserName);
+
+    // update email in account page
+    void updateEmail(Long userId, String newEmail);
+
+    // set password in account page
+    void setPassword(Long userId, String newPassword);
+
+    AccountSettingDto getAccountSetting(Long userId);
+
 }
