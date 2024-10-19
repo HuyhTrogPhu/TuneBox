@@ -1,5 +1,6 @@
 package org.example.customer.controller;
 
+import org.example.library.dto.FollowCountsDto;
 import org.example.library.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,15 +42,19 @@ public class FollowController {
         return ResponseEntity.ok(isFollowing);
     }
 
-    @GetMapping("/followers-count")
-    public ResponseEntity<Integer> getFollowersCount(@RequestParam Long userId) {
-        int followersCount = followService.countFollowers(userId);
-        return ResponseEntity.ok(followersCount);
+    // get follower and following count by userId
+    @GetMapping("/{userId}/followCounts")
+    public ResponseEntity<FollowCountsDto> getFollowCounts(@PathVariable Long userId) {
+        try {
+            int followersCount = followService.countFollowers(userId);
+            int followingCount = followService.countFollowing(userId);
+
+            FollowCountsDto followCountsDto = new FollowCountsDto(followersCount, followingCount);
+            return ResponseEntity.ok(followCountsDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    @GetMapping("/following-count")
-    public ResponseEntity<Integer> getFollowingCount(@RequestParam Long userId) {
-        int followingCount = followService.countFollowing(userId);
-        return ResponseEntity.ok(followingCount);
-    }
 }

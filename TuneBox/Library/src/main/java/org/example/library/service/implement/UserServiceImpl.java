@@ -118,7 +118,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getProfileUserById(Long userId) {
-        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lấy thông tin cần thiết từ User
+        UserProfileDto userProfile = new UserProfileDto();
+        userProfile.setAvatar(user.getUserInformation().getAvatar());
+        userProfile.setBackground(user.getUserInformation().getBackground());
+        userProfile.setName(user.getUserInformation().getName());
+        userProfile.setUserName(user.getUserName());
+
+        // Tính toán số lượng followers và following
+        int followersCount = user.getFollowers().size();  // Số lượng followers
+        int followingCount = user.getFollowing().size();  // Số lượng following
+
+        userProfile.setFollowersCount(followersCount);
+        userProfile.setFollowingCount(followingCount);
 
         // Lấy danh sách talent, inspiredBy và genre
         List<String> talents = userRepository.findTalentByUserId(userId);
@@ -132,6 +147,7 @@ public class UserServiceImpl implements UserService {
 
         return userProfile;
     }
+
 
     @Override
     public Optional<UserFollowDto> getUserFollowById(Long userId) {
@@ -150,5 +166,7 @@ public class UserServiceImpl implements UserService {
                 })
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+
 
 }

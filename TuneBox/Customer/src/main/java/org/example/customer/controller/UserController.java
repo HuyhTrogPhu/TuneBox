@@ -155,7 +155,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Trả về null hoặc thông điệp lỗi cụ thể
         }
     }
 
