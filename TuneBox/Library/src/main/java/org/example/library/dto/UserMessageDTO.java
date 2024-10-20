@@ -15,11 +15,17 @@ public class UserMessageDTO {
 
     private Long id;
     private String content;
-    private UserDto senderId;
-    private UserDto receiverId;
+    private Long senderId;
+    private Long receiverId;
     private LocalDateTime creationDate;
 
     public UserMessageDTO(Long id) {
         this.id = id;
+    }
+
+    public UserMessageDTO(Long id,Long senderId, Long receiverId) {
+        this.id = id;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 }

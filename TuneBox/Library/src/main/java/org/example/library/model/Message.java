@@ -25,15 +25,15 @@ public class Message {
 
     private LocalDateTime dateTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "sender_id")
     private User sender;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
 

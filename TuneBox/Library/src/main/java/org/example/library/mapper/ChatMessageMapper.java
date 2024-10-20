@@ -43,13 +43,13 @@ public interface ChatMessageMapper {
         return user;
     }
 
-    default UserDto map(User user) {
-        if (user == null) {
-            return null;
-        }
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        // Ánh xạ các trường khác nếu cần
-        return userDto;
-    }
+//    default UserDto map(User user) {
+//        if (user == null) {
+//            return null;
+//        }
+//        UserDto userDto = new UserDto();
+//        userDto.setId(user.getId());
+//        // Ánh xạ các trường khác nếu cần
+//        return userDto;
+//    }
 }

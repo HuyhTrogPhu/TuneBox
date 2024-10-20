@@ -4,7 +4,6 @@ import org.example.library.Exception.PostNotFoundException;
 import org.example.library.dto.PostDto;
 import org.example.library.dto.PostReportDto;
 import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
-import org.example.library.service.SensitiveContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,27 +53,27 @@ public class PostAdminController {
     }
 
 
-    @GetMapping("/reports")
-    public ResponseEntity<List<PostReportDto>> getPostReports() {
-        try {
-            // Lấy danh sách báo cáo
-            List<PostReportDto> reports = postService.findAllReports();
-            SensitiveContentService sensitiveContentService = new SensitiveContentService();
-
-            for (PostReportDto report : reports) {
-                if (sensitiveContentService.containsSensitiveContent(report.getContent())) {
-                    report.setSensitive(true); // Đánh dấu bài đăng có nội dung nhạy cảm
-                } else {
-                    report.setSensitive(false); // Bài đăng không có nội dung nhạy cảm
-                }
-            }
-
-            // Trả về danh sách báo cáo đã được đánh dấu
-            return ResponseEntity.ok(reports);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/reports")
+//    public ResponseEntity<List<PostReportDto>> getPostReports() {
+//        try {
+//            // Lấy danh sách báo cáo
+//            List<PostReportDto> reports = postService.findAllReports();
+//            SensitiveContentService sensitiveContentService = new SensitiveContentService();
+//
+//            for (PostReportDto report : reports) {
+//                if (sensitiveContentService.containsSensitiveContent(report.getContent())) {
+//                    report.setSensitive(true); // Đánh dấu bài đăng có nội dung nhạy cảm
+//                } else {
+//                    report.setSensitive(false); // Bài đăng không có nội dung nhạy cảm
+//                }
+//            }
+//
+//            // Trả về danh sách báo cáo đã được đánh dấu
+//            return ResponseEntity.ok(reports);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
 
     @GetMapping("/total")

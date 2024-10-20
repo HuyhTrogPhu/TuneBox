@@ -34,13 +34,16 @@ public class ChatWebSocketController {
     public void sendMessage(@Payload MessageWebSocketDTO messageWebSocketDTO) {
         try {
             // Chuyển đổi MessageWebSocketDTO thành Message
-            Message message = messageMapper.toModel(messageWebSocketDTO); // Giả sử bạn đã điều chỉnh để hỗ trợ MessageWebSocketDTO
+            Message message = messageMapper.toModel(messageWebSocketDTO);
 
             Message savedMessage = messageService.saveMessage(message);
+
             MessageWebSocketDTO savedMessageDTO = new MessageWebSocketDTO();
             savedMessageDTO.setId(savedMessage.getId());
-            savedMessageDTO.setSenderId(new UserMessageDTO(savedMessage.getSender().getId())); // Giả sử sender là một đối tượng UserDto
-            savedMessageDTO.setReceiverId(new UserMessageDTO(savedMessage.getReceiver().getId())); // Giả sử receiver là một đối tượng UserDto
+            savedMessageDTO.setSenderId
+                    (new UserMessageDTO(savedMessage.getSender().getId()));
+            savedMessageDTO.setReceiverId
+                    (new UserMessageDTO(savedMessage.getReceiver().getId()));
             savedMessageDTO.setContent(savedMessage.getContent());
             savedMessageDTO.setCreationDate(savedMessage.getDateTime());
 
