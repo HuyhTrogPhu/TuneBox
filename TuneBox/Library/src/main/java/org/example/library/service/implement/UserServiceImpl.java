@@ -169,4 +169,17 @@ public class UserServiceImpl implements UserService {
 
 
 
+    @Override
+    public List<UserDto> findAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
 }

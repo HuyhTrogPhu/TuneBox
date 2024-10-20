@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -103,8 +104,8 @@ public class User {
     private Set<Chat> receivedChats;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user")
-    private Set<Message> messages;
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Message> messages;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user")

@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -124,6 +126,11 @@ public class UserController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.findAllUser();
+        return ResponseEntity.ok(users);
+    }
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();

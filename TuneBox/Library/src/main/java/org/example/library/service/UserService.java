@@ -5,9 +5,11 @@ import org.example.library.dto.UserFollowDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
+import org.example.library.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface UserService {
 
@@ -22,6 +24,7 @@ public interface UserService {
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
     void changePassword(String email, String oldPassword, String newPassword);
+    List<UserDto> findAllUser();
 
     UserDto getUserById(Long userId);
 }

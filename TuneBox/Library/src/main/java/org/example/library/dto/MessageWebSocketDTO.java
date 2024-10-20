@@ -6,20 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDto {
+public class MessageWebSocketDTO {
     private Long id;
+    private UserMessageDTO senderId;
+    private UserMessageDTO receiverId;
     private String content;
-    private Long userId; // Trường userId
-    private String userNickname;
-    private Set<PostImageDto> images;
-    private LocalDateTime createdAt;
-    private boolean hidden;
-
-
+    private LocalDateTime creationDate;
 }
