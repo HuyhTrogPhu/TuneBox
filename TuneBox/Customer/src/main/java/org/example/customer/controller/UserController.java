@@ -44,7 +44,6 @@ public class UserController {
     @Autowired
     private GenreService genreService;
 
-
     @Autowired
     private InspiredByService inspiredByService;
 
@@ -91,13 +90,11 @@ public class UserController {
     @GetMapping("/list-genre")
     public ResponseEntity<List<GenreDto>> listGenre() {
         List<Genre> genreList = genreService.findAll();
-        genreList.forEach(genre -> System.out.println(genre.getId() + " - " + genre.getName())); // Log dữ liệu
         List<GenreDto> genreDtoList = genreList.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(genreDtoList);
     }
-
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
