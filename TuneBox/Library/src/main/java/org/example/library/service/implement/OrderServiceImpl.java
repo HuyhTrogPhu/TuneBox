@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
         // Tạo đơn hàng mới
         Order order = new Order();
         order.setOrderDate(orderDto.getOrderDate());
-        order.setDeliveryDate(orderDto.getDeliveryDate());
+        order.setDeliveryDate(null);
         order.setTax(orderDto.getTax());
         order.setTotalPrice(orderDto.getTotalPrice());
         order.setTotalItems(orderDto.getTotalItem());

@@ -111,6 +111,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserCheckOut getUserCheckoutInfo(Long userId) {
+        return userRepository.getUserCheckOut(userId);
+    }
+
+    @Override
     public String getUserAvatar(Long userId) {
         return userRepository.findUserAvatarByUserId(userId);
     }
@@ -183,6 +188,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
        return userRepository.findAccountSettingProfile(userId);
+    }
+
+    @Override
+    public List<EcommerceUserDto> getAllUsersEcommerce() {
+        return userRepository.getAllUsersEcommerce();
+    }
+
+    @Override
+    public UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId) {
+        return userRepository.getUserDetailEcommerceAdmin(userId);
     }
 
 

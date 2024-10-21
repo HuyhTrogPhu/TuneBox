@@ -16,7 +16,6 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/posts")
 public class PostController {
 
@@ -37,7 +36,6 @@ public class PostController {
             @RequestParam("userId") Long userId) {
         PostDto postDto = new PostDto();
         postDto.setContent(content);
-
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
@@ -66,19 +64,19 @@ public class PostController {
 
 
     // Lấy tất cả bài viết của người dùng từ ID
-        @GetMapping("/current-user")
-        public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
-            if (userId == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
-            }
-
-            List<PostDto> posts = postService.getPostsByUserId(userId);
-            if (posts.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
-            }
-
-            return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
+    @GetMapping("/current-user")
+    public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
+        if (userId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
         }
+
+        List<PostDto> posts = postService.getPostsByUserId(userId);
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Không có bài viết nào cho user này
+        }
+
+        return new ResponseEntity<>(posts, HttpStatus.OK); // Trả về danh sách bài viết
+    }
 
     @PutMapping("/{id}/visibility")
     public ResponseEntity<Void> changePostVisibility(@PathVariable Long id, @RequestParam("hidden") boolean hidden) {
@@ -92,9 +90,9 @@ public class PostController {
 
 
     // Phương thức lấy tất cả các bài viết
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts();
+    @GetMapping("/all")
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
+        List<PostDto> posts = postService.getAllPosts(currentUserId);
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 

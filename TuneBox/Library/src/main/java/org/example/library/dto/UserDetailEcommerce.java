@@ -1,35 +1,35 @@
 package org.example.library.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Role;
 
-import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EcommerceAdminDto {
-
-    private Long id;
-
-    private String email;
-
-    private String password;
+public class UserDetailEcommerce {
 
     private String name;
 
     private String gender;
 
-    private String phoneNumber;
+    private String phone;
 
-    private String address;
+    private Date birthday;
 
     private String avatar;
 
-    private Collection<Role> role;
+    private String background;
+
+    private String location;
+
+    private String about;
+
+    private String userName;
+
+    private String email;
 }

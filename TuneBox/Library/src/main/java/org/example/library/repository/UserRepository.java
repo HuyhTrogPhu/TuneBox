@@ -19,6 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM User u WHERE u.userName = :userName OR u.email = :email")
     Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
 
+    // get user check out info
+    @Query("select new org.example.library.dto.UserCheckOut(u.id, u.email, u.userName) " +
+            "from User u WHERE u.id = :userId")
+    UserCheckOut getUserCheckOut(@Param("userId") Long userId);
+
     // get followers and following by user id
     @Query("select size(u.followers), size(u.following) from User u where u.id = :userId")
     Optional<UserFollowDto> getFollowCount(@Param("userId") Long userId);
@@ -67,5 +72,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("update User u set u.password = :newPassword where u.id = :userId")
     void updatePasswordById(@Param("userId") Long userId, @Param("newPassword") String newPassword);
+
+    // get user ecommerce admin
+    @Query("select new org.example.library.dto.EcommerceUserDto(u.id, u.userName, u.email, COUNT(o.id), SUM(o.totalPrice)) " +
+            "from User u " +
+            "join u.orderList o " +
+            "group by u.id, u.userName, u.email")
+    List<EcommerceUserDto> getAllUsersEcommerce();
+
+    // get user detail ecommerce admin
+    @Query("SELECT new org.example.library.dto.UserDetailEcommerce( ui.name, ui.gender, ui.phoneNumber, ui.birthDay, ui.avatar," +
+            "ui.background, ui.location, ui.about, u.userName, u.email)" +
+            "from UserInformation ui join ui.user u where u.id = :userId")
+    UserDetailEcommerce getUserDetailEcommerceAdmin(@Param("userId") Long userId);
 
 }

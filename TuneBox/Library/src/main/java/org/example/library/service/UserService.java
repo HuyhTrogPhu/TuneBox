@@ -4,11 +4,15 @@ package org.example.library.service;
 import org.example.library.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
 
     UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
+
+    // get user checkout information
+    UserCheckOut getUserCheckoutInfo(Long userId);
 
     // get user avatar by userId
     String getUserAvatar(Long userId);
@@ -38,4 +42,9 @@ public interface UserService {
 
     AccountSettingDto getAccountSetting(Long userId);
 
+    // get all user in ecommerce customer page
+    List<EcommerceUserDto> getAllUsersEcommerce();
+
+    // get user details ecommerce customer page
+    UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
 }
