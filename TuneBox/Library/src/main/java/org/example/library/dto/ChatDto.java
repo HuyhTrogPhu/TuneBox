@@ -9,6 +9,8 @@ import org.example.library.model.Message;
 import org.example.library.model.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,12 +20,8 @@ import java.util.Set;
 public class ChatDto {
 
     private Long id;
-
-    private LocalDate creationDate;
-
-    private User sender;
-
-    private User receiver;
-
-    private Set<Message> messages;
+    private LocalDateTime creationDate;
+    private Long senderId;
+    private Long receiverId;
+    private List<MessageDto> messages;
 }

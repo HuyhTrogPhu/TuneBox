@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.model.RespondModel;
 import org.example.library.service.GenreService;

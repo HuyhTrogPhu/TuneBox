@@ -106,7 +106,7 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/chat/{chatId}")
-    public MessageDTO addUser(@Payload MessageDTO messageDTO, SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long chatId) {
+    public MessageDto addUser(@Payload MessageDto messageDTO, SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long chatId) {
         headerAccessor.getSessionAttributes().put("userId", messageDTO.getSenderId());
         return messageDTO;
     }

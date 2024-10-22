@@ -13,6 +13,7 @@ import org.example.library.model.Chat;
 import org.example.library.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,13 +22,11 @@ import java.time.LocalDateTime;
 public class MessageDto {
 
     private Long id;
-
-    private String message;
-
-    private LocalDateTime dateTime;
-
-    private Chat chat;
-
-    private User user;
+    private String content;
+    private LocalDateTime creationDate;
+    private Long senderId;
+    private Long receiverId;
+    private Long chatId;
+    private List<OtherAttachmentDto> attachments;
 
 }

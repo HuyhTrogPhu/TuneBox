@@ -1,6 +1,6 @@
 package org.example.library.service.implement;
 
-import org.example.library.dto.ChatDTO;
+import org.example.library.dto.ChatDto;
 import org.example.library.model.Chat;
 import org.example.library.model.User;
 import org.example.library.repository.ChatRepository;
@@ -24,7 +24,7 @@ public class ChatServiceImpl implements ChatService {
     private UserRepository userRepository;
 
     @Override
-    public ChatDTO createChat(Long senderId, Long receiverId) {
+    public ChatDto createChat(Long senderId, Long receiverId) {
         User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new RuntimeException("Sender not found"));
         User receiver = userRepository.findById(receiverId)
@@ -39,14 +39,14 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatDTO getChatById(Long chatId) {
+    public ChatDto getChatById(Long chatId) {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
         return convertToDTO(chat);
     }
 
     @Override
-    public List<ChatDTO> getChatsByUser(Long userId) {
+    public List<ChatDto> getChatsByUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         List<Chat> chats = chatRepository.findBySenderOrReceiverOrderByCreationDateDesc(user, user);
@@ -54,7 +54,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatDTO getChatBetweenUsers(Long user1Id, Long user2Id) {
+    public ChatDto getChatBetweenUsers(Long user1Id, Long user2Id) {
         User user1 = userRepository.findById(user1Id)
                 .orElseThrow(() -> new RuntimeException("User 1 not found"));
         User user2 = userRepository.findById(user2Id)
@@ -73,8 +73,8 @@ public class ChatServiceImpl implements ChatService {
         chatRepository.deleteById(chatId);
     }
 
-    private ChatDTO convertToDTO(Chat chat) {
-        ChatDTO dto = new ChatDTO();
+    private ChatDto convertToDTO(Chat chat) {
+        ChatDto dto = new ChatDto();
         dto.setId(chat.getId());
         dto.setCreationDate(chat.getCreationDate());
         dto.setSenderId(chat.getSender().getId());

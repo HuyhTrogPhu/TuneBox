@@ -10,5 +10,4 @@ import java.util.List;
 
 public interface GenreService {
     List<Genre> findAll();
-
 }

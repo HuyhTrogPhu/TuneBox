@@ -15,7 +15,11 @@ public class PostMapper {
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
 
         // Kiểm tra post.getUser() không null trước khi lấy userName
-        dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
+        if (post.getUser() != null && post.getUser().getUserInformation() != null) {
+            dto.setUserNickname(post.getUser().getUserInformation().getName());
+        } else {
+            dto.setUserNickname(null);  // Hoặc giá trị mặc định nếu cần
+        }
 
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
         dto.setCreatedAt(post.getCreatedAt());

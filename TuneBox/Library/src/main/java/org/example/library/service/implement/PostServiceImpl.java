@@ -22,25 +22,25 @@
     @Service
     public class PostServiceImpl implements PostService {
 
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
+        private final PostRepository postRepository;
+        private final UserRepository userRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
+        public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+            this.postRepository = postRepository;
+            this.userRepository = userRepository;
+        }
 
 
         @Override
         public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
 
-        // Tìm User từ cơ sở dữ liệu dựa vào userId
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+            // Tìm User từ cơ sở dữ liệu dựa vào userId
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Cập nhật PostDto với userId và userName
-        postDto.setUserId(user.getId());
-        postDto.setUserNickname(user.getUserInformation().getName());
+            // Cập nhật PostDto với userId và userName
+            postDto.setUserId(user.getId());
+            postDto.setUserNickname(user.getUserInformation().getName());
 
             Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
             post.setUser(user); // Gán User vào bài đăng
@@ -74,14 +74,14 @@
             return PostMapper.toDto(savedPost);
         }
 
-    @Override
-    public List<PostDto> getAllPosts(Long currentUserId) {
-        // Retrieve all posts excluding those from blocked users or users who have blocked the current user
-        List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
-        return posts.stream()
-                .map(PostMapper::toDto) // Convert to PostDto
-                .collect(Collectors.toList());
-    }
+        @Override
+        public List<PostDto> getAllPosts(Long currentUserId) {
+            // Retrieve all posts excluding those from blocked users or users who have blocked the current user
+            List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
+            return posts.stream()
+                    .map(PostMapper::toDto) // Convert to PostDto
+                    .collect(Collectors.toList());
+        }
 
         @Override
         public List<PostDto> getPostsByUserId(Long userId) {
@@ -92,43 +92,43 @@
         }
 
         @Override
-            public PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
+        public PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
 
-                // Kiểm tra xem bài viết có tồn tại không
-                Post post = postRepository.findById(postDto.getId())
-                        .orElseThrow(() -> new RuntimeException("Post not found"));
+            // Kiểm tra xem bài viết có tồn tại không
+            Post post = postRepository.findById(postDto.getId())
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
 
-                // Kiểm tra quyền sở hữu bài viết
-                if (!post.getUser().getId().equals(userId)) {
-                    throw new RuntimeException("User does not have permission to update this post");
-                }
-
-                // Cập nhật nội dung bài viết
-                if (postDto.getContent() != null && !postDto.getContent().isEmpty()) {
-                    post.setContent(postDto.getContent());
-                }
-
-                // Cập nhật hình ảnh nếu có
-                if (images != null && images.length > 0) {
-                    Set<PostImage> postImages = new HashSet<>();
-                    for (MultipartFile image : images) {
-                        if (image != null && !image.isEmpty()) {
-                            PostImage postImage = new PostImage();
-                            postImage.setPost(post);  // Thiết lập quan hệ với Post
-                            postImage.setPostImage(image.getBytes()); // Lưu hình ảnh dưới dạng byte[]
-                            postImages.add(postImage);
-                        }
-                    }
-                    post.setImages(postImages);
-                }
-
-                // Lưu bài viết đã cập nhật vào database
-                Post updatedPost = postRepository.save(post);
-                updatedPost.setEdited(true);
-
-                // Chuyển Post entity thành PostDto và trả về
-                return PostMapper.toDto(updatedPost);
+            // Kiểm tra quyền sở hữu bài viết
+            if (!post.getUser().getId().equals(userId)) {
+                throw new RuntimeException("User does not have permission to update this post");
             }
+
+            // Cập nhật nội dung bài viết
+            if (postDto.getContent() != null && !postDto.getContent().isEmpty()) {
+                post.setContent(postDto.getContent());
+            }
+
+            // Cập nhật hình ảnh nếu có
+            if (images != null && images.length > 0) {
+                Set<PostImage> postImages = new HashSet<>();
+                for (MultipartFile image : images) {
+                    if (image != null && !image.isEmpty()) {
+                        PostImage postImage = new PostImage();
+                        postImage.setPost(post);  // Thiết lập quan hệ với Post
+                        postImage.setPostImage(image.getBytes()); // Lưu hình ảnh dưới dạng byte[]
+                        postImages.add(postImage);
+                    }
+                }
+                post.setImages(postImages);
+            }
+
+            // Lưu bài viết đã cập nhật vào database
+            Post updatedPost = postRepository.save(post);
+            updatedPost.setEdited(true);
+
+            // Chuyển Post entity thành PostDto và trả về
+            return PostMapper.toDto(updatedPost);
+        }
 
         @Override
         public void deletePost(Long id) {
@@ -136,17 +136,18 @@
             Post post = postRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        // Xóa bài viết khỏi cơ sở dữ liệu
-        postRepository.delete(post);
-    }
-    public void changePostVisibility(Long postId, boolean hidden) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+            // Xóa bài viết khỏi cơ sở dữ liệu
+            postRepository.delete(post);
+        }
 
-        // Cập nhật thuộc tính hidden
-        post.setHidden(hidden);
-        postRepository.save(post);
-    }
+        public void changePostVisibility(Long postId, boolean hidden) {
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
+
+            // Cập nhật thuộc tính hidden
+            post.setHidden(hidden);
+            postRepository.save(post);
+        }
 
 
         @Override
@@ -154,16 +155,16 @@
             return postRepository.count(); // Sử dụng phương thức count() của PostRepository
         }
 
-//        @Override
+        //        @Override
 //        public Post findPostById(Long postId) {
 //            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
 //        }
         @Override
         public PostDto findPostById(Long id) {
             Post post = postRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Post not found"));
+                    .orElseThrow(() -> new RuntimeException("Post not found"));
             return PostMapper.toDto(post);
-            }
+        }
 
 
         @Override

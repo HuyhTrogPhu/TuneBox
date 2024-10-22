@@ -20,6 +20,7 @@ import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -110,14 +111,17 @@ public class UserController {
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
-        Optional<User> optionalUser = userRepository.findByUserNameOrEmail(userDto.getUserName(), userDto.getEmail());
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
+        String email = loginRequest.get("email");
+        String password = loginRequest.get("password");
+        String userName = loginRequest.get("userName");
+
+        Optional<User> optionalUser = userRepository.findByUserNameOrEmail(userName, email);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
 
-            if (passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
-                // Trả về userId thay vì toàn bộ thông tin user
+            if (passwordEncoder.matches(password, user.getPassword())) {
                 Long userId = user.getId();
                 System.out.println("userId: " + userId);
                 return ResponseEntity.ok(userId);
