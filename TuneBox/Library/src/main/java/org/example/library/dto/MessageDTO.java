@@ -10,6 +10,7 @@ import org.example.library.model.User;
 import org.example.library.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -23,4 +24,5 @@ public class MessageDTO {
     private Long senderId;
     private Long receiverId;
     private Long chatId;
+    private List <OtherAttachmentDto> attachments;
 }

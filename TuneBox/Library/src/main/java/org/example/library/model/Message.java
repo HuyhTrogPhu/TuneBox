@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 public class Message {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "message_id")
@@ -36,5 +36,8 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private User receiver;
+
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OtherAttachment> attachments;
 
 }

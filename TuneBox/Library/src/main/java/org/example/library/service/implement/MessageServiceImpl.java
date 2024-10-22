@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import org.example.library.model.Chat;
 import org.example.library.model.Message;
+import org.example.library.model.OtherAttachment;
 import org.example.library.model.User;
 import org.example.library.repository.ChatRepository;
 import org.example.library.repository.MessageRepository;
@@ -27,7 +28,6 @@ public class MessageServiceImpl implements MessageService {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
-
     @Override
     public Message saveMessage(Message message) {
         if (message.getSender() == null || message.getSender().getId() == null) {
@@ -45,6 +45,11 @@ public class MessageServiceImpl implements MessageService {
         message.setReceiver(receiver);
         message.setDateTime(LocalDateTime.now());
 
+        if (message.getAttachments() != null) {
+            for (OtherAttachment attachment : message.getAttachments()) {
+                attachment.setMessage(message); // Thiết lập quan hệ với tin nhắn
+            }
+        }
         Message savedMessage = messageRepository.save(message);
         logger.info("Saved message: {}", savedMessage);
         return savedMessage;

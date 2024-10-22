@@ -1,13 +1,14 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.MessageDTO;
-import org.example.library.dto.MessageWebSocketDTO;
-import org.example.library.dto.UserDto;
-import org.example.library.dto.UserMessageDTO;
+import org.example.library.dto.*;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
+import org.example.library.model.OtherAttachment;
+import org.example.library.service.FileStorageService;
 import org.example.library.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -16,10 +17,19 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class ChatWebSocketController {
+
+
 
     @Autowired
     private MessageService messageService;
@@ -38,7 +48,7 @@ public class ChatWebSocketController {
 
             Message savedMessage = messageService.saveMessage(message);
 
-            MessageWebSocketDTO savedMessageDTO = new MessageWebSocketDTO();
+            MessageWebSocketDTO savedMessageDTO = messageMapper.toDto(savedMessage);
             savedMessageDTO.setId(savedMessage.getId());
             savedMessageDTO.setSenderId
                     (new UserMessageDTO(savedMessage.getSender().getId()));
@@ -46,6 +56,22 @@ public class ChatWebSocketController {
                     (new UserMessageDTO(savedMessage.getReceiver().getId()));
             savedMessageDTO.setContent(savedMessage.getContent());
             savedMessageDTO.setCreationDate(savedMessage.getDateTime());
+
+            if (messageWebSocketDTO.getAttachments() != null && !messageWebSocketDTO.getAttachments().isEmpty()) {
+                List<OtherAttachment> attachments = messageWebSocketDTO.getAttachments().stream()
+                        .map(attachmentDto -> {
+                            OtherAttachment attachment = new OtherAttachment();
+                            attachment.setFileName(attachmentDto.getFileName());
+                            attachment.setFileUrl(attachmentDto.getFileUrl());
+                            attachment.setMimeType(attachmentDto.getMimeType());
+                            attachment.setSize(attachmentDto.getSize());
+                            attachment.setMessage(message);
+                            return attachment;
+                        })
+                        .collect(Collectors.toList());
+                message.setAttachments(attachments);
+            }
+
 
             // Gửi tin nhắn cho người gửi
             messagingTemplate.convertAndSendToUser(

@@ -1,20 +1,20 @@
 package org.example.library.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class MessageWebSocketDTO {
     private Long id;
     private UserMessageDTO senderId;
     private UserMessageDTO receiverId;
     private String content;
     private LocalDateTime creationDate;
+    private List<OtherAttachmentDto> attachments;
 }
