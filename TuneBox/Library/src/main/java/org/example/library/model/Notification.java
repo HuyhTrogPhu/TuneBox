@@ -25,4 +25,8 @@ public class Notification {
     private Long userId;
 
     private LocalDateTime createdAt;
+
+    private boolean isRead = false;
+
+    private Long postId;
 }

@@ -32,7 +32,7 @@ public interface PostService {
 
 
     //ADMIN
-    PostDto findPostById(Long id);
+    PostDto findPostByIdadmin(Long id);
 
     List<PostDto> findAllPosts();
 
@@ -46,7 +46,9 @@ public interface PostService {
 
     List<PostDto> searchPostsByKeyword(String keyword);
 
+    PostDto getPostByPostId(Long postId);
+
 //    PostDto createPost(PostDto postDto);
 
-//    public Post findPostById(Long postId);
+
 }

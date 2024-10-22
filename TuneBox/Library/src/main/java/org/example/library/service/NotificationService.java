@@ -2,11 +2,16 @@ package org.example.library.service;
 
 import org.example.library.dto.NotificationDTO;
 import org.example.library.model.Post;
-import org.example.library.model.User;
 
 import java.util.List;
 
 public interface NotificationService {
-    void notifyFollowers(User user, Post post);
-    List<NotificationDTO> getNotificationsByUserId(Long userId);
+    void sendNotificationToFollowers(NotificationDTO notificationDTO, Long targetUserId);
+
+    void notifyFollowersOfNewPost(Long postId, Long userId); // Thay đổi ở đây
+
+    List<NotificationDTO> getUserNotifications(Long userId);
+
+    void markNotificationAsRead(Long notificationId);
 }
+

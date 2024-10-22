@@ -16,4 +16,7 @@ public class NotificationDTO {
     private String message; // Nội dung thông báo
     private LocalDateTime createdAt; // Thời gian tạo thông báo
     private Long userId; // ID người nhận thông báo
+    private String avatarUrl; // Đường dẫn đến avatar của người nhận thông báo
+    private boolean isRead; // Trạng thái đã đọc thông báo
+    private Long postId; // ID của bài viết mà thông báo này liên quan đến
 }
