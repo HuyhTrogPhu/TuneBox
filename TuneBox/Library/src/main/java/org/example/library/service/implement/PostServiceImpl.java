@@ -1,14 +1,12 @@
     package org.example.library.service.implement;
 
     import org.example.library.dto.PostDto;
-    import org.example.library.dto.PostReportDto;
     import org.example.library.mapper.PostMapper;
-    import org.example.library.mapper.PostReportMapper;
     import org.example.library.model.Post;
     import org.example.library.model.PostImage;
-    import org.example.library.model.PostReport;
     import org.example.library.model.User;
     import org.example.library.repository.PostRepository;
+    import org.example.library.repository.UserRepository;
     import org.example.library.service.PostService;
     import org.springframework.data.domain.Sort;
     import org.springframework.stereotype.Service;
@@ -24,20 +22,25 @@
     @Service
     public class PostServiceImpl implements PostService {
 
-        private final PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-        public PostServiceImpl(PostRepository postRepository) {
-            this.postRepository = postRepository;
-        }
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 
 
         @Override
         public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
 
-            // Cập nhật PostDto với tên người dùng
-            postDto.setUserId(userId); // Lưu userId vào PostDto
-            User user = new User();
-            user.setId(userId);
+        // Tìm User từ cơ sở dữ liệu dựa vào userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Cập nhật PostDto với userId và userName
+        postDto.setUserId(user.getId());
+        postDto.setUserNickname(user.getUserInformation().getName());
 
             Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
             post.setUser(user); // Gán User vào bài đăng
@@ -71,21 +74,14 @@
             return PostMapper.toDto(savedPost);
         }
 
-
-//        @Override
-//        public PostDto getPostById(Long id) {
-//            Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
-//            return PostMapper.toDto(post);
-//        }
-
-
-        @Override
-        public List<PostDto> getAllPosts() {
-            List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
-            return posts.stream()
-                    .map(PostMapper::toDto) // Chuyển đổi thành PostDto
-                    .collect(Collectors.toList());
-        }
+    @Override
+    public List<PostDto> getAllPosts(Long currentUserId) {
+        // Retrieve all posts excluding those from blocked users or users who have blocked the current user
+        List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
+        return posts.stream()
+                .map(PostMapper::toDto) // Convert to PostDto
+                .collect(Collectors.toList());
+    }
 
         @Override
         public List<PostDto> getPostsByUserId(Long userId) {
@@ -140,9 +136,17 @@
             Post post = postRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
 
-            // Xóa bài viết khỏi cơ sở dữ liệu
-            postRepository.delete(post);
-        }
+        // Xóa bài viết khỏi cơ sở dữ liệu
+        postRepository.delete(post);
+    }
+    public void changePostVisibility(Long postId, boolean hidden) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        // Cập nhật thuộc tính hidden
+        post.setHidden(hidden);
+        postRepository.save(post);
+    }
 
 
         @Override
@@ -168,7 +172,7 @@
             return posts.stream()
                     .map(post -> {
                         PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                        postDto.setUserName(post.getUser().getUserName()); // Lấy tên người dùng
+                        postDto.setUserNickname(post.getUser().getUserName()); // Lấy tên người dùng
                         return postDto; // Trả về PostDto đã được thiết lập userName
                     })
                     .collect(Collectors.toList());
@@ -180,46 +184,18 @@
             return newPosts.stream()
                     .map(post -> {
                         PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                        postDto.setUserName(post.getUser().getUserName()); // Lấy tên người dùng
+                        postDto.setUserNickname(post.getUser().getUserName()); // Lấy tên người dùng
                         return postDto; // Trả về PostDto đã được thiết lập userName
                     })
                     .collect(Collectors.toList());
         }
+//    @Override
+//    public Post findPostById(Long postId) {
+//        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+//    }
 
-
-        @Override
-        public List<PostDto> findTrendingPosts() {
-            // Giả sử bạn có một cách nào đó để xác định bài viết xu hướng
-            List<Post> trendingPosts = postRepository.findTopTrendingPosts(); // Giả sử bạn đã có phương thức này trong repository
-            return trendingPosts.stream()
-                    .map(PostMapper::toDto)
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public List<PostReportDto> findAllReports() {
-            List<PostReport> reports = postRepository.findAllReports(); // Giả sử bạn đã có phương thức này trong repository
-            return reports.stream()
-                    .map(report -> new PostReportDto(
-                            report.getId(),
-                            report.getContent(),
-                            report.getReporter(),
-                            report.getReportedPostId(),
-                            report.getReason(),
-                            report.getDateReported(),
-                            PostReportMapper.checkSensitiveContent(report.getContent()) 
-                    ))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public List<PostDto> searchPostsByKeyword(String keyword) {
-            // Tìm bài viết theo từ khóa
-            List<Post> posts = postRepository.findByKeyword(keyword);
-
-            // Chuyển đổi danh sách Post thành PostDto
-            return posts.stream()
-                    .map(PostMapper::toDto)
-                    .collect(Collectors.toList());
-        }
+    @Override
+    public List<Post> getFilteredPosts(Long currentUserId) {
+        return postRepository.findPostsExcludingBlockedUsers(currentUserId);
     }
+}

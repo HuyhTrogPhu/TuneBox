@@ -1,7 +1,10 @@
+
 package org.example.customer.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.library.dto.GenreDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -84,22 +88,24 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-       List<Talent> talentList = talentService.findAll();
-       return ResponseEntity.ok(talentList);
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
     }
 
-    // get list genres
     @GetMapping("/list-genre")
-    public ResponseEntity<List<Genre>> listGenre() {
-       List<Genre> genreList = genreService.findAll();
-       return ResponseEntity.ok(genreList);
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
     }
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-       List<InspiredBy> inspiredByList = inspiredByService.findAll();
-       return ResponseEntity.ok(inspiredByList);
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
@@ -160,6 +166,21 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // log-out
+    @GetMapping("/log-out")
+    public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            Cookie cookie = new Cookie("userId", null);
+            cookie.setMaxAge(0); // Thiết lập tuổi thọ cookie về 0 để xóa
+            cookie.setPath("/");  // Đảm bảo xóa cookie cho toàn bộ domain
+            response.addCookie(cookie);
+            return ResponseEntity.ok("Logged out successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
         }
     }
 

@@ -79,7 +79,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "creator")
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")
@@ -100,6 +100,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
-
+    public User(Long blockerId) {
+        this.id = blockerId;
+    }
 
 }

@@ -37,8 +37,6 @@ public class UserInformation {
 
     private String about;
 
-
-
     @OneToOne(mappedBy = "userInformation")
     private User user;
 
