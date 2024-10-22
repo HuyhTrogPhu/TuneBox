@@ -13,7 +13,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostDto {
-
     private Long id;
     private String content;
     private Long userId; // Trường userId

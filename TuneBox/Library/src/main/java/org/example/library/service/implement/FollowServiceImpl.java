@@ -54,24 +54,28 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public boolean isFollowing(Long followerId, Long followedId) {
+        // Kiểm tra và chỉ trả về kết quả một lần
         boolean isFollowing = followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
         System.out.println("Is " + followerId + " following " + followedId + ": " + isFollowing);
-        return followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
+        return isFollowing;
     }
+
 
     @Override
     public int countFollowers(Long userId) {
         int followersCount = followRepository.countByFollowedId(userId);
         System.out.println("Followers count for user " + userId + ": " + followersCount);
-        return followRepository.countByFollowedId(userId); // Đếm người theo dõi
+        return followersCount;
     }
 
     @Override
     public int countFollowing(Long userId) {
         int followingCount = followRepository.countByFollowerId(userId);
         System.out.println("Following count for user " + userId + ": " + followingCount);
-        return followRepository.countByFollowerId(userId); // Đếm người đang theo dõi
+        return followingCount;
     }
+
+
 
     @Override
     public List<FollowDto> getFollowers(Long userId) {

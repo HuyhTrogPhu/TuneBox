@@ -12,6 +12,7 @@ import org.example.library.service.EcomAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,16 +20,23 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class EcomAdminServiceImpl implements EcomAdminService {
-    @Autowired
-    private EcommerceAdminRepository Repo;
+    private final EcommerceAdminRepository Repo;
+
+    private final RoleRepository roleRepo;
+
+    private final PasswordEncoder passwordEncoder; // Thay đổi kiểu biến ở đây
 
     @Autowired
-    private RoleRepository roleRepo;
+    public EcomAdminServiceImpl(PasswordEncoder passwordEncoder,
+                                EcommerceAdminRepository Repo,
+                                RoleRepository roleRepo) {
+        this.Repo = Repo;
+        this.roleRepo = roleRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public EcomAdminDTO login(EcomAdminDTO admin) {

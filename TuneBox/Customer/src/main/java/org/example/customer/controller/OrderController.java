@@ -19,7 +19,7 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private OrderServiceImpl orderService;

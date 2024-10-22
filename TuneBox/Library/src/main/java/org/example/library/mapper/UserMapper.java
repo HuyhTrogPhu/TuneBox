@@ -3,6 +3,7 @@ package org.example.library.mapper;
 import org.example.library.dto.UserDto;
 import org.example.library.model.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class UserMapper {
                 user.getAlbums(),
                 user.getSentChats(),
                 user.getReceivedChats(),
-                user.getMessages()
+                user.getMessages() // Sử dụng Set<Message>
         );
     }
 
@@ -81,7 +82,7 @@ public class UserMapper {
         user.setAlbums(userDto.getAlbums());
         user.setSentChats(userDto.getSentChats());
         user.setReceivedChats(userDto.getReceivedChats());
-        user.setMessages(userDto.getMessages());
+        user.setMessages(userDto.getMessages()); // Sử dụng Set<Message>
 
         return user;
     }

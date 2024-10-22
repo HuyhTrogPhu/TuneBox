@@ -4,6 +4,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.UserFollowDto;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -45,7 +46,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final JavaMailSender javaMailSender;
 
 
     @Override
@@ -118,7 +118,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getProfileUserById(Long userId) {
-        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lấy thông tin cần thiết từ User
+        UserProfileDto userProfile = new UserProfileDto();
+        userProfile.setAvatar(user.getUserInformation().getAvatar());
+        userProfile.setBackground(user.getUserInformation().getBackground());
+        userProfile.setName(user.getUserInformation().getName());
+        userProfile.setUserName(user.getUserName());
+
+        // Tính toán số lượng followers và following
+        int followersCount = user.getFollowers().size();  // Số lượng followers
+        int followingCount = user.getFollowing().size();  // Số lượng following
+
+        userProfile.setFollowersCount(followersCount);
+        userProfile.setFollowingCount(followingCount);
 
         // Lấy danh sách talent, inspiredBy và genre
         List<String> talents = userRepository.findTalentByUserId(userId);
@@ -133,10 +148,38 @@ public class UserServiceImpl implements UserService {
         return userProfile;
     }
 
+
+    @Override
+    public Optional<UserFollowDto> getUserFollowById(Long userId) {
+        return userRepository.getFollowCount(userId);
+    }
+
     @Override
     public void changePassword(String email, String oldPassword, String newPassword) {
 
     }
+    public UserDto getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    System.out.println("User ID: " + user.getId() + ", User Name: " + user.getUserName());
+                    return new UserDto(user.getId(), user.getUserName());
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
+
+
+    @Override
+    public List<UserDto> findAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
 
 }
