@@ -101,15 +101,20 @@ public class AlbumsServiceImpl implements AlbumsService {
 
             // Xử lý danh sách track
             if (albumsDto.getTracks() != null) {
-                Set<Track> trackSet = new HashSet<>();
                 for (Long trackId : albumsDto.getTracks()) {
                     Track track = trackRepository.findById(trackId).orElseThrow(
                             () -> new RuntimeException("Track not found with ID: " + trackId)
                     );
-                    track.setAlbums(albums); // Liên kết track với album
-                    trackSet.add(track); // Chỉ thêm track đã được quản lý
+                    // Thêm track vào tập hợp tracks của album
+                    albums.getTracks().add(track);
+
+                    // Nếu albums chưa được khởi tạo trong track, khởi tạo nó
+                    if (track.getAlbums() == null) {
+                        track.setAlbums(new HashSet<>());
+                    }
+                    // Thêm album vào tập hợp albums của track
+                    track.getAlbums().add(albums);
                 }
-                albums.setTracks(trackSet); // Thiết lập danh sách track cho album
             }
 
             albumsRepository.save(albums);
@@ -119,7 +124,6 @@ public class AlbumsServiceImpl implements AlbumsService {
                 System.out.println("Album saved successfully with ID: " + savedAlbum.getId());
             }
 
-
             return AlbumsMapper.mapperAlbumsDto(albums);
 
         }catch (Exception e) {
@@ -127,7 +131,14 @@ public class AlbumsServiceImpl implements AlbumsService {
             return null;
         }
     }
-    
+
+    @Override
+    public AlbumsDto getAlbumsById(Long albumId) {
+        Albums album = albumsRepository.findById(albumId).orElseThrow(
+                () -> new RuntimeException("Album not found")
+        );
+        return AlbumsMapper.mapperAlbumsDto(album);
+    }
 
     @Override
     public AlbumsDto updateAlbums(Long albumsId, AlbumsDto albumsDto, MultipartFile imageAlbums, Long userId, Long genreId, Long albumstyleId) {

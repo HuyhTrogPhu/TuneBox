@@ -1,5 +1,7 @@
 package org.example.customer.Controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.library.dto.AlbumStyleDto;
 import org.example.library.dto.AlbumsDto;
 import org.example.library.dto.GenreDto;
@@ -77,30 +79,40 @@ public class AlbumsController {
                                                   @RequestParam(value = "description", required = false) String description,
                                                   @RequestParam(value = "status", required = false) boolean status,
                                                   @RequestParam(value = "report", required = false) boolean report,
-                                                  @RequestParam(value = "genreId", required = false)  Long genreId,
+                                                  @RequestParam(value = "genreId", required = false) Long genreId,
                                                   @RequestParam(value = "userId", required = false) Long userId,
                                                   @RequestParam(value = "albumstyleId", required = false) Long albumstyleId,
-                                                  @RequestParam(value = "trackIds", required = false) Set<Long> trackIds) {
+                                                  @RequestParam(value = "trackIds", required = false) List<Long> trackIds) {
 
         try {
-           // Tạo đối tượng AlbumsDto từ các tham số được truyền vào
+            // Tạo đối tượng AlbumsDto từ các tham số được truyền vào
             AlbumsDto albumsDto = new AlbumsDto();
             albumsDto.setTitle(title);
             albumsDto.setDescription(description);
             albumsDto.setStatus(status);
             albumsDto.setReport(report);
             albumsDto.setCreateDate(LocalDate.now());
-            albumsDto.setTracks(trackIds);
+            albumsDto.setTracks(new HashSet<>(trackIds)); // Chuyển đổi List thành Set
 
             // Gọi service để cập nhật album
             AlbumsDto updatedAlbum = albumsService.updateAlbums(albumsId, albumsDto, albumImage, userId, genreId, albumstyleId);
 
+            // In ra thông tin để kiểm tra
+            System.out.println("title: " + title);
+            System.out.println("description: " + description);
+            System.out.println("status: " + status);
+            System.out.println("report: " + report);
+            System.out.println("genreId: " + genreId);
+            System.out.println("userId: " + userId);
+            System.out.println("albumstyleId: " + albumstyleId);
+            System.out.println("trackIds: " + trackIds);
+
             // Trả về phản hồi thành công với album đã cập nhật
             return ResponseEntity.ok(updatedAlbum);
         } catch (Exception e) {
+            e.printStackTrace(); // In ra thông báo lỗi
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
     }
 
     @DeleteMapping("/{albumsId}")
@@ -122,6 +134,15 @@ public class AlbumsController {
         return new ResponseEntity<>(albums, HttpStatus.OK);
     }
 
+
+    //    get album by id
+    @GetMapping("/{albumId}")
+    public ResponseEntity<AlbumsDto> getAlbumById(@PathVariable Long albumId) {
+        AlbumsDto albumsDto = albumsService.getAlbumsById(albumId);
+        return new ResponseEntity<>(albumsDto, HttpStatus.OK);
+    }
+
+    // get the album style
     @GetMapping("/getAllAlbumStyle")
     public ResponseEntity<List<AlbumStyleDto>> getAllAlbumStyle() {
         List<AlbumStyleDto> albumStyleDto = albumStyleService.findAll();

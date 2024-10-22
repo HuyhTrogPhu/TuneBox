@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -52,8 +53,13 @@ public class Albums {
     @JoinColumn(name = "albumCreator_id", nullable = false)
     private User creator;
 
-    @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)
-    private Set<Track> tracks;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "album_track",
+            joinColumns = @JoinColumn(name = "albums_id"),
+            inverseJoinColumns = @JoinColumn(name = "track_id")
+    )
+    private Set<Track> tracks = new HashSet<>(); //tao 1 tap hop rong
 
     @ManyToOne
     @JoinColumn(name = "album_style_id")
