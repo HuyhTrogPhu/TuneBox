@@ -4,10 +4,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.UserFollowDto;
-import org.example.library.dto.UserProfileDto;
-import org.example.library.dto.UserDto;
-import org.example.library.dto.UserInformationDto;
+import org.example.library.dto.*;
 import org.example.library.mapper.UserMapper;
 import org.example.library.model.*;
 import org.example.library.repository.*;
@@ -36,6 +33,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private InspiredByRepository inspiredByRepository;
 
+    @Autowired
+    private FollowRepository followRepository;
 
     @Autowired
     private TalentRepository talentRepository;
@@ -112,6 +111,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserCheckOut getUserCheckoutInfo(Long userId) {
+        return userRepository.getUserCheckOut(userId);
+    }
+
+    @Override
     public String getUserAvatar(Long userId) {
         return userRepository.findUserAvatarByUserId(userId);
     }
@@ -139,8 +143,61 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(String email, String oldPassword, String newPassword) {
+    public ProfileSettingDto getUserProfileSetting(Long userId) {
+        // Lấy thông tin cơ bản của người dùng
+        ProfileSettingDto basicProfile = userRepository.findUserSettingProfile(userId);
 
+        // Lấy danh sách inspiredBy, genre, và talent
+        List<String> inspiredByList = userRepository.findInspiredByByUserId(userId);
+        List<String> genreList = userRepository.findGenreByUserId(userId);
+        List<String> talentList = userRepository.findTalentByUserId(userId);
+
+        // Cập nhật danh sách vào DTO
+        basicProfile.setInspiredBy(inspiredByList);
+        basicProfile.setGenre(genreList);
+        basicProfile.setTalent(talentList);
+
+        return basicProfile;
+    }
+
+    @Override
+    public Long getFollowersCount(Long userId) {
+        return followRepository.countFollowersByUserId(userId);
+    }
+
+    @Override
+    public Long getFollowingCount(Long userId) {
+        return followRepository.countFollowingByUserId(userId);
+    }
+
+    @Override
+    public void updateUserName(Long userId, String newUserName) {
+        userRepository.updateUserNameById(userId, newUserName);
+    }
+
+    @Override
+    public void updateEmail(Long userId, String newEmail) {
+        userRepository.updateEmailById(userId, newEmail);
+    }
+
+    @Override
+    public void setPassword(Long userId, String newPassword) {
+        userRepository.updatePasswordById(userId, newPassword);
+    }
+
+    @Override
+    public AccountSettingDto getAccountSetting(Long userId) {
+       return userRepository.findAccountSettingProfile(userId);
+    }
+
+    @Override
+    public List<EcommerceUserDto> getAllUsersEcommerce() {
+        return userRepository.getAllUsersEcommerce();
+    }
+
+    @Override
+    public UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId) {
+        return userRepository.getUserDetailEcommerceAdmin(userId);
     }
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
