@@ -22,7 +22,7 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
-    void changePassword(String email, String oldPassword, String newPassword);
+//    void changePassword(String email, String oldPassword, String newPassword);
 
     UserDto getUserById(Long userId);
     // get user in profile page
