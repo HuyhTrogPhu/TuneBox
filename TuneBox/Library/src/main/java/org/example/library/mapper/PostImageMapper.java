@@ -3,7 +3,6 @@ package org.example.library.mapper;
 import org.example.library.dto.PostImageDto;
 import org.example.library.model.PostImage;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,16 +13,16 @@ public class PostImageMapper {
 
         PostImageDto dto = new PostImageDto();
         dto.setId(postImage.getId());
-        dto.setPostImage(postImage.getPostImage().getBytes());
+        dto.setPostImage(postImage.getPostImage());
         return dto;
     }
 
     public static PostImage toEntity(PostImageDto postImageDto) {
         if (postImageDto == null) return null;
-
+        
         PostImage entity = new PostImage();
         entity.setId(postImageDto.getId());
-        entity.setPostImage(Arrays.toString(postImageDto.getPostImage()));
+        entity.setPostImage(postImageDto.getPostImage());
         return entity;
     }
 
