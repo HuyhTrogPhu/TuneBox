@@ -1,7 +1,8 @@
 package org.example.library.service.implement;
 
-import org.example.library.dto.FollowDto;
+import org.example.library.dto.UserDto;
 import org.example.library.mapper.FollowMapper;
+import org.example.library.mapper.UserMapper;
 import org.example.library.model.Follow;
 import org.example.library.model.User;
 import org.example.library.repository.FollowRepository;
@@ -74,22 +75,22 @@ public class FollowServiceImpl implements FollowService {
         System.out.println("Following count for user " + userId + ": " + followingCount);
         return followingCount;
     }
-
-
-
     @Override
-    public List<FollowDto> getFollowers(Long userId) {
+    public List<UserDto> getFollowers(Long userId) {
         List<Follow> followers = followRepository.findByFollowedId(userId);
         return followers.stream()
-                .map(followMapper::toDto)
+                .map(follow -> follow.getFollower()) // Lấy User từ Follow
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<FollowDto> getFollowing(Long userId) {
+    public List<UserDto> getFollowing(Long userId) {
         List<Follow> followings = followRepository.findByFollowerId(userId);
         return followings.stream()
-                .map(followMapper::toDto)
+                .map(follow -> follow.getFollowed()) // Lấy User từ Follow
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
+
 }
