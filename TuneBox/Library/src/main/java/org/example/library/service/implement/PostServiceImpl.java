@@ -1,5 +1,7 @@
 package org.example.library.service.implement;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
 import org.example.library.dto.PostReportDto;
 import org.example.library.mapper.PostMapper;
@@ -11,6 +13,7 @@ import org.example.library.model.User;
 import org.example.library.repository.PostRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,7 +36,8 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
-
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
@@ -54,13 +59,23 @@ public class PostServiceImpl implements PostService {
             Set<PostImage> postImages = new HashSet<>();
             for (MultipartFile image : images) {
                 if (image != null && !image.isEmpty()) {
-                    PostImage postImage = new PostImage();
+                    try {
+                        // Upload ảnh lên Cloudinary
+                        Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+                        String imageUrl = (String) uploadResult.get("url");
+
+                        // Tạo đối tượng PostImage và gán URL từ Cloudinary
+                        PostImage postImage = new PostImage();
                         postImage.setPost(post);  // Thiết lập quan hệ với Post
-                    postImage.setPostImage(image.getBytes()); // Lưu hình ảnh dưới dạng byte[]
-                    postImages.add(postImage);
+                        postImage.setPostImage(imageUrl); // Lưu URL của hình ảnh
+                        postImages.add(postImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("Failed to upload image");
+                    }
                 }
             }
-            post.setImages(postImages);
+            post.setImages(postImages); // Gán tập hình ảnh vào bài viết
         }
 
         // Nếu không có nội dung, có thể để trống
@@ -76,6 +91,7 @@ public class PostServiceImpl implements PostService {
         // Chuyển Post entity thành PostDto và trả về
         return PostMapper.toDto(savedPost);
     }
+
 
     @Override
     public List<PostDto> getAllPosts(Long currentUserId) {
@@ -116,22 +132,33 @@ public class PostServiceImpl implements PostService {
             Set<PostImage> postImages = new HashSet<>();
             for (MultipartFile image : images) {
                 if (image != null && !image.isEmpty()) {
-                    PostImage postImage = new PostImage();
-                    postImage.setPost(post);  // Thiết lập quan hệ với Post
-                    postImage.setPostImage(image.getBytes()); // Lưu hình ảnh dưới dạng byte[]
-                    postImages.add(postImage);
+                    try {
+                        // Upload ảnh lên Cloudinary
+                        Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+                        String imageUrl = (String) uploadResult.get("url");
+
+                        // Tạo đối tượng PostImage và gán URL từ Cloudinary
+                        PostImage postImage = new PostImage();
+                        postImage.setPost(post);  // Thiết lập quan hệ với Post
+                        postImage.setPostImage(imageUrl); // Lưu URL của hình ảnh
+                        postImages.add(postImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("Failed to upload image");
+                    }
                 }
             }
-            post.setImages(postImages);
+            post.setImages(postImages); // Gán tập hình ảnh mới vào bài viết
         }
 
         // Lưu bài viết đã cập nhật vào database
         Post updatedPost = postRepository.save(post);
-        updatedPost.setEdited(true);
+        updatedPost.setEdited(true); // Đánh dấu bài viết đã chỉnh sửa
 
         // Chuyển Post entity thành PostDto và trả về
         return PostMapper.toDto(updatedPost);
     }
+
 
     @Override
     public void deletePost(Long id) {
