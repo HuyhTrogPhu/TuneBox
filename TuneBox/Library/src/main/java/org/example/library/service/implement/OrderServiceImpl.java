@@ -2,10 +2,7 @@ package org.example.library.service.implement;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import org.example.library.dto.CartItemDto;
-import org.example.library.dto.OrderDetailDto;
-import org.example.library.dto.OrderDto;
-import org.example.library.dto.ShoppingCartDto;
+import org.example.library.dto.*;
 import org.example.library.model.Instrument;
 import org.example.library.model.Order;
 import org.example.library.model.OrderDetail;
@@ -44,12 +41,12 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<Order> getOrderList() {
-        return orderRepository.findAll();
+    public List<OrderListDto> getOrderList() {
+        return orderRepository.getAllOrderList();
     }
 
     @Override
-    public List<Order> getOrderByUserId(Long userId) {
+    public List<UserIsInvoice> getOrderByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }
 
@@ -72,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
         // Tạo đơn hàng mới
         Order order = new Order();
         order.setOrderDate(orderDto.getOrderDate());
-        order.setDeliveryDate(orderDto.getDeliveryDate());
+        order.setDeliveryDate(null);
         order.setTax(orderDto.getTax());
         order.setTotalPrice(orderDto.getTotalPrice());
         order.setTotalItems(orderDto.getTotalItem());
@@ -81,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(orderDto.getAddress());
         order.setShippingMethod(orderDto.getShippingMethod());
         order.setPhoneNumber(orderDto.getPhoneNumber());
+        order.setPaymentStatus(orderDto.getPaymentStatus());
         order.setUser(user);
 
         try {
@@ -110,6 +108,21 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Error creating order: " + e.getMessage());
         }
     }
+
+    @Override
+    public OrderDetailInfoDto getOrderDetailByOrderId(Long orderId) {
+        // Lấy thông tin chi tiết của đơn hàng (không bao gồm sản phẩm)
+        OrderDetailInfoDto orderDetailInfoDto = orderRepository.findOrderDetailByOrderId(orderId);
+
+        // Lấy danh sách sản phẩm của đơn hàng
+        List<OrderItemsDto> orderItems = orderRepository.findOrderItemsByOrderId(orderId);
+
+        // Gán danh sách sản phẩm vào DTO
+        orderDetailInfoDto.setOrderItems(orderItems);
+
+        return orderDetailInfoDto;
+    }
+
 
     // Hàm hỗ trợ chuyển đổi từ Order sang OrderDto
     public OrderDto mapToDto(Order order) {
@@ -144,6 +157,17 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDto;
     }
+    public boolean updatePaymentStatus(Long orderId, String paymentStatus) {
+        // Logic cập nhật trạng thái thanh toán vào CSDL
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId)); // Sử dụng orElseThrow để lấy giá trị
+
+        // Cập nhật trạng thái thanh toán
+        order.setPaymentStatus(paymentStatus);
+        orderRepository.save(order);
+        return true;
+    }
+
 
 
 }

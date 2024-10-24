@@ -1,6 +1,7 @@
 package org.example.library.service.implement;
 
 import org.example.library.dto.CommentDTO;
+import org.example.library.dto.NotificationDTO;
 import org.example.library.mapper.CommentMapper;
 import org.example.library.model.Comment;
 import org.example.library.model.Post;
@@ -11,6 +12,7 @@ import org.example.library.repository.PostRepository;
 import org.example.library.repository.TrackRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.CommentService;
+import org.example.library.service.NotificationService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,13 +27,15 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
     private final CommentMapper commentMapper;
     private final TrackRepository trackRepository;
+    private final NotificationService notificationService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper commentMapper, TrackRepository trackRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, CommentMapper commentMapper, TrackRepository trackRepository,NotificationService notificationService) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentMapper = commentMapper;
         this.trackRepository = trackRepository;
+        this.notificationService = notificationService;
     }
 
     // add comment to post
@@ -53,11 +57,23 @@ public class CommentServiceImpl implements CommentService {
             Comment comment = commentMapper.toEntity(commentDTO, user.get(), post.get());
             comment.setCreationDate(LocalDateTime.now());
             comment = commentRepository.save(comment);
+
+            // Gửi thông báo cho người dùng đã tạo bài viết
+            Long postOwnerId = post.get().getUser().getId(); // Lấy ID của người tạo bài viết
+            String notificationMessage = user.get().getUserInformation().getName() + " đã bình luận vào bài viết của bạn."; // Nội dung thông báo
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println(user.get().getUserInformation().getName());
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
+            notificationService.sendNotificationcomment(postOwnerId, notificationMessage, postId); // Gửi thông báo
+
             return commentMapper.toDto(comment);
         } else {
             throw new IllegalArgumentException("Post or User not found");
         }
     }
+
 
 
     @Override

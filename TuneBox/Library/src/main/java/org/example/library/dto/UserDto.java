@@ -9,6 +9,7 @@ import org.example.library.model.*;
 
 import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -55,11 +56,16 @@ public class UserDto {
 
     private Set<Albums> albums;
 
+    @JsonIgnore
     private Set<Chat> sentChats;
-
+    @JsonIgnore
     private Set<Chat> receivedChats;
+    @JsonIgnore
+    private List<Message> messages;
 
-    private Set<Message> messages;
+
+
+
 
 
 
@@ -88,7 +94,7 @@ public class UserDto {
     }
 
     // contractor for mapper
-    public UserDto(Long id, String email, String userName, String password, boolean report, LocalDate createDate, Long aLong, Set<Long> inspiredByIds, Set<Long> talentIds, Set<Long> genreIds, Object o, Set<Block> blocker, Set<Block> blocked, Set<Follow> following, Set<Follow> followers, List<Order> orderList, Set<Track> tracks, Set<Albums> albums, Set<Chat> sentChats, Set<Chat> receivedChats, Set<Message> messages) {
+    public UserDto(Long id, String email, String userName, String password, boolean report, LocalDate createDate, Long aLong, Set<Long> inspiredByIds, Set<Long> talentIds, Set<Long> genreIds, Object o, Set<Block> blocker, Set<Block> blocked, Set<Follow> following, Set<Follow> followers, List<Order> orderList, Set<Track> tracks, Set<Albums> albums, Set<Chat> sentChats, Set<Chat> receivedChats, List<Message> messages) {
         this.id = id;
         this.email = email;
         this.userName = userName;
