@@ -124,11 +124,6 @@ public class UserController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.findAllUser();
-        return ResponseEntity.ok(users);
-    }
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -183,7 +178,7 @@ public class UserController {
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();

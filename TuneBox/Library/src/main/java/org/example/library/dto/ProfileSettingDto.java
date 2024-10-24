@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,11 +18,23 @@ public class ProfileSettingDto {
 
     private String name;
 
+    private String userName;
+
     private String location;
 
-    private String gender;
-
-    private Date birthDate;
-
     private String about;
+
+    private List<String> inspiredBy;
+
+    private List<String> genre;
+
+    private List<String> talent;
+
+    public ProfileSettingDto(String avatar, String name, String userName, String location, String about) {
+        this.avatar = avatar;
+        this.name = name;
+        this.userName = userName;
+        this.location = location;
+        this.about = about;
+    }
 }

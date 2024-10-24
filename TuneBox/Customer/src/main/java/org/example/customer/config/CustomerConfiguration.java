@@ -63,6 +63,7 @@ public class CustomerConfiguration {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )

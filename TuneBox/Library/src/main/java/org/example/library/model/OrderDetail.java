@@ -29,8 +29,4 @@ public class OrderDetail {
     @JoinColumn(name = "instrument_id", referencedColumnName = "instrument_id")
     private Instrument instrument;
 
-
-
-
-
 }

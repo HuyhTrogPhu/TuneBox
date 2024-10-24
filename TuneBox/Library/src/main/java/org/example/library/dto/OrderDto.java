@@ -20,7 +20,7 @@ public class OrderDto {
 
     private LocalDate orderDate = LocalDate.now();
 
-    private LocalDate deliveryDate = LocalDate.now();
+    private LocalDate deliveryDate;
 
     private double tax;
 
@@ -40,5 +40,6 @@ public class OrderDto {
     private String address;
     private String phoneNumber;
     private String email;
+    private String paymentStatus;
 
 }

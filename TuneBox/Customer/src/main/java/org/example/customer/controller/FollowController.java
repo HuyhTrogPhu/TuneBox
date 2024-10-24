@@ -1,15 +1,11 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.FollowCountsDto;
-import org.example.library.dto.FollowDto;
-import org.example.library.dto.UserDto;
 import org.example.library.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/follow")
@@ -60,29 +56,5 @@ public class FollowController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-    // Add these methods to your FollowController
-
-    @GetMapping("/{userId}/followers")
-    public ResponseEntity<List<UserDto>> getFollowers(@PathVariable Long userId) {
-        try {
-            List<UserDto> followers = followService.getFollowers(userId); // Đảm bảo gọi đúng phương thức
-            return ResponseEntity.ok(followers);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @GetMapping("/{userId}/following")
-    public ResponseEntity<List<UserDto>> getFollowing(@PathVariable Long userId) {
-        try {
-            List<UserDto> following = followService.getFollowing(userId); // Đảm bảo gọi đúng phương thức
-            return ResponseEntity.ok(following);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
 
 }
