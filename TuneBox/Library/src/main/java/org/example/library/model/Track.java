@@ -67,6 +67,7 @@ public class Track {
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Like> likes;
 
 }

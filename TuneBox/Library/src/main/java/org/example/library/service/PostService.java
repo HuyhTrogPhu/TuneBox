@@ -14,7 +14,11 @@ public interface PostService {
 
     List<PostDto> getAllPosts();
 
+    public List<PostDto> get5Posts();
+
     List<PostDto> getPostsByUserId(Long userId);
+
+    public PostDto getPostById(Long PostId);
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 

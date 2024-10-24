@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackStatus;
 import org.example.library.model.Track;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,4 +20,7 @@ public interface TrackService {
         public void deleteTrack(Long trackId);
 
     List<TrackDto> getTracksByUserId(Long userId);
+    public TrackStatus getTrackCountCommentandLike(Long Id);
+
+    public List<TrackDto> getAll();
 }

@@ -15,6 +15,7 @@
     import java.time.LocalDateTime;
     import java.util.HashSet;
     import java.util.List;
+    import java.util.Optional;
     import java.util.Set;
     import java.util.stream.Collectors;
 
@@ -86,6 +87,22 @@
                     .collect(Collectors.toList());
         }
 
+
+        @Override
+        public List<PostDto> get5Posts() {
+            List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+            List<Post> last5Posts = posts.size() > 5 ? posts.subList(posts.size() - 5, posts.size()) : posts;
+
+            return last5Posts.stream()
+                    .map(PostMapper::toDto)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public PostDto getPostById(Long PostId) {
+            Optional<Post> post = postRepository.findById(PostId);
+            return PostMapper.toDto(post.get());
+        }
         @Override
         public List<PostDto> getPostsByUserId(Long userId) {
             List<Post> posts = postRepository.findByUserId(userId);  // Lấy tất cả các bài đăng của userId

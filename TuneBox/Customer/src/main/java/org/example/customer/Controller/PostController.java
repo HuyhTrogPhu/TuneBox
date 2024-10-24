@@ -137,6 +137,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {

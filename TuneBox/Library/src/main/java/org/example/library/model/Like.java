@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "track_id")
+    @JsonIgnore
     private Track track;
 
     @ManyToOne
@@ -41,5 +43,6 @@ public class Like {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 }

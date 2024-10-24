@@ -4,14 +4,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackStatus;
 import org.example.library.dto.UserDto;
 import org.example.library.mapper.TrackMapper;
 import org.example.library.model.Genre;
 import org.example.library.model.Track;
 import org.example.library.model.User;
-import org.example.library.repository.GenreRepository;
-import org.example.library.repository.TrackRepository;
-import org.example.library.repository.UserRepository;
+import org.example.library.repository.*;
 import org.example.library.service.TrackService;
 import org.example.library.utils.ImageUploadTrack;
 import org.example.library.utils.Mp3UploadTrack;
@@ -33,6 +32,11 @@ public class TrackServiceImpl implements TrackService {
     @Autowired
     private TrackRepository trackRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private LikeRepository  likeRepository;
     @Autowired
     private GenreRepository genreRepository;
 
@@ -292,6 +296,22 @@ public class TrackServiceImpl implements TrackService {
        );
        return TrackMapper.mapperTrackDto(track);
     }
+
+    @Override
+    public TrackStatus getTrackCountCommentandLike(Long Id) {
+        TrackStatus trackStatus = new TrackStatus();
+        trackStatus.setCommentCount(commentRepository.countByTrackId(Id));
+        trackStatus.setLikeCount(likeRepository.countByTrackId(Id));
+
+        return trackStatus;
+    }
+@Override
+    public List<TrackDto> getAll(){
+        return trackRepository.findAll()
+                .stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
+}
 
 
 }

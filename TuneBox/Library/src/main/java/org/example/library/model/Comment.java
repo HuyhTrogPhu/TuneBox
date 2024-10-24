@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "track_id")
+    @JsonIgnore
     private Track track;
 
     @ManyToOne
@@ -41,6 +43,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     private Long parentId;

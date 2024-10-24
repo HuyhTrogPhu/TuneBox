@@ -55,6 +55,7 @@ public class Albums {
     private User creator;
 
     @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Track> tracks;
 
     @ManyToOne
