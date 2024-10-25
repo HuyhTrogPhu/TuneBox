@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
+import org.example.library.dto.InstrumentSalesDto;
+import org.example.library.dto.StatisticalInstrumentDto;
 import org.example.library.mapper.InstrumentMapper;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
@@ -174,9 +176,44 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<StatisticalInstrumentDto> getIdAndNameInstrument() {
+        return instrumentRepository.getStatisticalInstruments();
+    }
+
+    @Override
     public List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId) {
         List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheMostOfDay() {
+        return instrumentRepository.getInstrumentSalesTheMostOfDay();
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheMostOfWeek() {
+        return instrumentRepository.getInstrumentSalesTheMostOfWeek();
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheMostOfMonth() {
+        return instrumentRepository.getInstrumentSalesTheMostOfMonth();
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheLeastOfDay() {
+        return instrumentRepository.getInstrumentSalesTheLeastOfDay();
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheLeastOfWeek() {
+        return instrumentRepository.getInstrumentSalesTheLeastOfWeek();
+    }
+
+    @Override
+    public InstrumentSalesDto instrumentSalesTheLeastOfMonth() {
+        return instrumentRepository.getInstrumentSalesTheLeastOfMonth();
     }
 
 

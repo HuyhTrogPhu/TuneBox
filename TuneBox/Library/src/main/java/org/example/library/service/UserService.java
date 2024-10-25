@@ -2,6 +2,7 @@ package org.example.library.service;
 
 
 import org.example.library.dto.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -47,4 +48,20 @@ public interface UserService {
 
     // get user details ecommerce customer page
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
+
+    // get user sell the most
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    UserSell getTop1UserRevenueInfo();
+
+
+    // get user buy the least
+    List<UserSell> getUserBuyTheLeast();
+
+    // get top 1 user buy the least
+    UserSell getTop1UserBuyTheLeast();
+
+    // get user not sell
+    List<UserSell> getUserNotSell();
 }

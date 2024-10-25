@@ -48,6 +48,24 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<OrderItemsDto> findOrderItemsByOrderId(@Param("orderId") Long orderId);
 
 
+    // revenue of day
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate = CURRENT_DATE")
+    Double getRevenueOfDay();
+
+    // Revenue of week
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('WEEK', o.orderDate) " +
+            "= FUNCTION('WEEK', CURRENT_DATE) AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
+    Double getRevenueOfWeek();
+
+    // Revenue of month
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('MONTH', o.orderDate) " +
+            "= FUNCTION('MONTH', CURRENT_DATE) AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
+    Double getRevenueOfMonth();
+
+    // Revenue of year
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
+    Double getRevenueOfYear();
+
 
 
 

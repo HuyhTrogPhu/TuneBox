@@ -17,4 +17,13 @@ public interface OrderService {
     OrderDto createOrder(OrderDto orderDto, Long userId);
 
     OrderDetailInfoDto getOrderDetailByOrderId(Long orderId);
+
+    Double revenueOfDay();
+
+    Double revenueOfWeek();
+
+    Double revenueOfMonth();
+
+    Double revenueOfYear();
+
 }
