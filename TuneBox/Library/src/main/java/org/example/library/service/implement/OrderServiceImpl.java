@@ -139,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setAddress(order.getAddress());
         orderDto.setShippingMethod(order.getShippingMethod());
         orderDto.setUserId(order.getUser().getId());
+        orderDto.setPaymentStatus(order.getPaymentStatus());
 
         orderDto.setUsername(order.getUser().getUserName());
         orderDto.setEmail(order.getUser().getEmail());
