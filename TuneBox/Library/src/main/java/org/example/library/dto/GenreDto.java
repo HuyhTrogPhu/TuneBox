@@ -21,5 +21,7 @@ public class GenreDto {
     private Set<Long> albumIds;
 
     public GenreDto(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 }

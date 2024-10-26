@@ -23,4 +23,5 @@ public class CommentDTO {
     private List<CommentDTO> replies;
     private boolean edited;
     private Long trackId;
+    private String icon;
 }
