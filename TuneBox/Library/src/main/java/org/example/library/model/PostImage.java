@@ -19,7 +19,7 @@ public class PostImage {
     private Long id;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String postImage;
 
     @ManyToOne

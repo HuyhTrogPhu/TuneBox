@@ -64,4 +64,6 @@ public interface UserService {
 
     // get user not sell
     List<UserSell> getUserNotSell();
+
+    List<UserDto> findAllUser();
 }

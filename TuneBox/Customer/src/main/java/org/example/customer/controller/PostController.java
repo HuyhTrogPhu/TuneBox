@@ -174,6 +174,22 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostDto> getPostByPostId(@PathVariable Long postId) {
+        // Kiểm tra nếu postId là null
+        if (postId == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
+        // Gọi service để lấy bài viết theo postId
+        PostDto postDto = postService.getPostByPostId(postId);
+
+        // Kiểm tra xem bài viết có tồn tại không
+        if (postDto == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Nếu không tìm thấy bài viết
+        }
+
+        return new ResponseEntity<>(postDto, HttpStatus.OK); // Trả về bài viết với trạng thái 200 OK
+    }
 
 }

@@ -19,3 +19,4 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     // Đếm số lượng bạn bè từ phía người khác
     Long countByFriendAndStatus(User friend, String status);
 }
+

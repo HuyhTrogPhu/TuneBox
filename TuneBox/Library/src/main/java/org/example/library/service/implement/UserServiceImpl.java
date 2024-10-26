@@ -12,7 +12,6 @@ import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -122,7 +121,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getProfileUserById(Long userId) {
-        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lấy thông tin cần thiết từ User
+        UserProfileDto userProfile = new UserProfileDto();
+        userProfile.setAvatar(user.getUserInformation().getAvatar());
+        userProfile.setBackground(user.getUserInformation().getBackground());
+        userProfile.setName(user.getUserInformation().getName());
+        userProfile.setUserName(user.getUserName());
+
+        // Tính toán số lượng followers và following
+        int followersCount = user.getFollowers().size();  // Số lượng followers
+        int followingCount = user.getFollowing().size();  // Số lượng following
+
+        userProfile.setFollowersCount(followersCount);
+        userProfile.setFollowingCount(followingCount);
 
         // Lấy danh sách talent, inspiredBy và genre
         List<String> talents = userRepository.findTalentByUserId(userId);
@@ -136,6 +150,7 @@ public class UserServiceImpl implements UserService {
 
         return userProfile;
     }
+
 
     @Override
     public Optional<UserFollowDto> getUserFollowById(Long userId) {
@@ -199,6 +214,14 @@ public class UserServiceImpl implements UserService {
     public UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId) {
         return userRepository.getUserDetailEcommerceAdmin(userId);
     }
+    public UserDto getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    System.out.println("User ID: " + user.getId() + ", User Name: " + user.getUserName());
+                    return new UserDto(user.getId(), user.getUserName());
+                })
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 
     @Override
     public List<UserSell> getUserSellTheMost() {
@@ -234,5 +257,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.getUserNotSell();
     }
 
+
+
+    @Override
+    public List<UserDto> findAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
 
 }
