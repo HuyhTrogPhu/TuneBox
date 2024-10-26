@@ -50,8 +50,7 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserInformationService userInformationService;
+
 
     // Register
     @PostMapping("/register")
@@ -193,7 +192,7 @@ public class UserController {
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
