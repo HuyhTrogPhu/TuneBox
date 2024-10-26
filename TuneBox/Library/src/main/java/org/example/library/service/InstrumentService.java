@@ -27,26 +27,26 @@ public interface InstrumentService {
     // get id and name instrument
     List<StatisticalInstrumentDto> getIdAndNameInstrument();
 
-    //    Get list instrument by category id anh brand id
+    // Get list instrument by category id anh brand id
     List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId);
 
     // get instrument sale the most of day
-    InstrumentSalesDto instrumentSalesTheMostOfDay();
+    List<InstrumentSalesDto> instrumentSalesTheMostOfDay();
 
     // get instrument sale the most of week
-    InstrumentSalesDto instrumentSalesTheMostOfWeek();
+    List<InstrumentSalesDto> instrumentSalesTheMostOfWeek();
 
     // get instrument sale the most of month
-    InstrumentSalesDto instrumentSalesTheMostOfMonth();
+    List<InstrumentSalesDto> instrumentSalesTheMostOfMonth();
 
     // get instrument sale the least of day
-    InstrumentSalesDto instrumentSalesTheLeastOfDay();
+    List<InstrumentSalesDto> instrumentSalesTheLeastOfDay();
 
     // get instrument sale the least of week
-    InstrumentSalesDto instrumentSalesTheLeastOfWeek();
+    List<InstrumentSalesDto> instrumentSalesTheLeastOfWeek();
 
     // get instrument sale the least of month
-    InstrumentSalesDto instrumentSalesTheLeastOfMonth();
+    List<InstrumentSalesDto> instrumentSalesTheLeastOfMonth();
 
 }
 

@@ -26,4 +26,12 @@ public interface OrderService {
 
     Double revenueOfYear();
 
+    Double revenueBeforeOfDay();
+
+    Double revenueBeforeOfWeek();
+
+    Double revenueBeforeOfMonth();
+
+    Double revenueBeforeOfYear();
+
 }

@@ -187,33 +187,69 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheMostOfDay() {
-        return instrumentRepository.getInstrumentSalesTheMostOfDay();
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheMostOfWeek() {
-        return instrumentRepository.getInstrumentSalesTheMostOfWeek();
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheMostOfMonth() {
-        return instrumentRepository.getInstrumentSalesTheMostOfMonth();
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheLeastOfDay() {
-        return instrumentRepository.getInstrumentSalesTheLeastOfDay();
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheLeastOfWeek() {
-        return instrumentRepository.getInstrumentSalesTheLeastOfWeek();
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
-    public InstrumentSalesDto instrumentSalesTheLeastOfMonth() {
-        return instrumentRepository.getInstrumentSalesTheLeastOfMonth();
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 

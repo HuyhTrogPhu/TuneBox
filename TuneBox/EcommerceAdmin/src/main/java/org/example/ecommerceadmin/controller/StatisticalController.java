@@ -118,40 +118,56 @@ public class StatisticalController {
         }
     }
 
-
-    // statistical instrument
-    @GetMapping("/instrument")
-    public ResponseEntity<?> getStatisticalInstrument(){
+    // statistical revenue before currently
+    @GetMapping("/revenue-before-currently")
+    public ResponseEntity<?> getRevenueBeforeCurrently() {
         try {
-
-            // get id and name instrument
-            List<StatisticalInstrumentDto> statisticalInstruments = instrumentService.getIdAndNameInstrument();
-
-            // Tạo object hoặc Map chứa kết quả trả về
-            Map<String, List<StatisticalInstrumentDto>> statisticalInstrument = new HashMap<>();
-            statisticalInstrument.put("statisticalInstrument", statisticalInstruments);
-
-
-            InstrumentSalesDto instrumentSalesTheMostOfDay = instrumentService.instrumentSalesTheMostOfDay();
-            InstrumentSalesDto instrumentSalesTheMostOfWeek = instrumentService.instrumentSalesTheMostOfWeek();
-            InstrumentSalesDto instrumentSalesTheMostOfMonth = instrumentService.instrumentSalesTheMostOfMonth();
-            InstrumentSalesDto instrumentSalesTheLeastOfDay = instrumentService.instrumentSalesTheLeastOfDay();
-            InstrumentSalesDto instrumentSalesTheLeastOfWeek = instrumentService.instrumentSalesTheLeastOfWeek();
-            InstrumentSalesDto instrumentSalesTheLeastOfMonth = instrumentService.instrumentSalesTheLeastOfMonth();
+            Double revenueBeforeOfDay = orderService.revenueBeforeOfDay();
+            Double revenueBeforeOfWeek = orderService.revenueBeforeOfWeek();
+            Double revenueBeforeOfMonth = orderService.revenueBeforeOfMonth();
+            Double revenueBeforeOfYear = orderService.revenueBeforeOfYear();
 
             // Tạo object hoặc Map chứa kết quả trả về
-            Map<String, InstrumentSalesDto> instrumentSales = new HashMap<>();
-            instrumentSales.put("instrumentSalesTheMostOfDay", instrumentSalesTheMostOfDay);
-            instrumentSales.put("instrumentSalesTheMostOfWeek", instrumentSalesTheMostOfWeek);
-            instrumentSales.put("instrumentSalesTheMostOfMonth", instrumentSalesTheMostOfMonth);
-            instrumentSales.put("instrumentSalesTheLeastOfDay", instrumentSalesTheLeastOfDay);
-            instrumentSales.put("instrumentSalesTheLeastOfWeek", instrumentSalesTheLeastOfWeek);
-            instrumentSales.put("instrumentSalesTheLeastOfMonth", instrumentSalesTheLeastOfMonth);
+            Map<String, Double> revenue = new HashMap<>();
+            revenue.put("revenueBeforeOfDay", revenueBeforeOfDay != null ? revenueBeforeOfDay : 0.0);
+            revenue.put("revenueBeforeOfWeek", revenueBeforeOfWeek != null ? revenueBeforeOfWeek : 0.0);
+            revenue.put("revenueBeforeOfMonth", revenueBeforeOfMonth != null ? revenueBeforeOfMonth : 0.0);
+            revenue.put("revenueAfterOfYear", revenueBeforeOfYear != null ? revenueBeforeOfYear : 0.0);
 
-            return (ResponseEntity<?>) ResponseEntity.ok();
-        }catch (Exception e) {
+            return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    @GetMapping("/instrument")
+    public ResponseEntity<?> getStatisticalInstrument() {
+        try {
+            // Get id and name instrument
+            List<StatisticalInstrumentDto> statisticalInstruments = instrumentService.getIdAndNameInstrument();
+
+            List<InstrumentSalesDto> mostSoldToday = instrumentService.instrumentSalesTheMostOfDay();
+            List<InstrumentSalesDto> leastSoldToday = instrumentService.instrumentSalesTheLeastOfDay();
+            List<InstrumentSalesDto> mostSoldThisWeek = instrumentService.instrumentSalesTheMostOfWeek();
+            List<InstrumentSalesDto> leastSoldThisWeek = instrumentService.instrumentSalesTheLeastOfWeek();
+            List<InstrumentSalesDto> mostSoldThisMonth = instrumentService.instrumentSalesTheMostOfMonth();
+            List<InstrumentSalesDto> leastSoldThisMonth = instrumentService.instrumentSalesTheLeastOfMonth();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("statisticalInstruments", statisticalInstruments);
+
+            response.put("mostSoldToday", mostSoldToday);
+            response.put("leastSoldToday", leastSoldToday);
+            response.put("mostSoldThisWeek", mostSoldThisWeek);
+            response.put("leastSoldThisWeek", leastSoldThisWeek);
+            response.put("mostSoldThisMonth", mostSoldThisMonth);
+            response.put("leastSoldThisMonth", leastSoldThisMonth);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error retrieving data: " + e.getMessage());
         }
     }
 

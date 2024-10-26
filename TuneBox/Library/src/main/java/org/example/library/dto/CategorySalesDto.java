@@ -9,12 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InstrumentSalesDto {
-    
-    private Long instrumentId;
+public class CategorySalesDto {
 
-    private String instrumentName;
+    private Long categoryId;
 
-    // để chứa tổng số lượng instrument đã bán
-    private Long totalSold;
+    private String categoryName;
+
+    private int totalSold;
 }

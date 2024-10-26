@@ -52,20 +52,43 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate = CURRENT_DATE")
     Double getRevenueOfDay();
 
+    // Revenue of before day
+    @Query(value = "SELECT SUM(o.totalPrice) FROM orders o WHERE o.orderDate = DATE_SUB(CURDATE(), INTERVAL 1 DAY)", nativeQuery = true)
+    Double getRevenueOfBeforeDay();
+
+
     // Revenue of week
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('WEEK', o.orderDate) " +
             "= FUNCTION('WEEK', CURRENT_DATE) AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
     Double getRevenueOfWeek();
+
+    // revenue of before week
+    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('WEEK', o.orderDate) = FUNCTION('WEEK', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 WEEK)) " +
+            "AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 WEEK))", nativeQuery = true)
+    Double getRevenueOfBeforeWeek();
+
 
     // Revenue of month
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('MONTH', o.orderDate) " +
             "= FUNCTION('MONTH', CURRENT_DATE) AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
     Double getRevenueOfMonth();
 
+
+    // revenue of before month
+    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE FUNCTION('MONTH', o.orderDate) = FUNCTION('MONTH', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 MONTH)) " +
+            "AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 MONTH))", nativeQuery = true)
+    Double getRevenueOfBeforeMonth();
+
+
     // Revenue of year
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
     Double getRevenueOfYear();
 
+    // revenue of before year
+    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 YEAR))", nativeQuery = true)
+    Double getRevenueOfBeforeYear();
 
 
 

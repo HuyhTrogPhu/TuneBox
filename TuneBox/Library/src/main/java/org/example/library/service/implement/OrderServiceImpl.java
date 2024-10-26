@@ -153,6 +153,26 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getRevenueOfYear();
     }
 
+    @Override
+    public Double revenueBeforeOfDay() {
+        return orderRepository.getRevenueOfBeforeDay();
+    }
+
+    @Override
+    public Double revenueBeforeOfWeek() {
+        return orderRepository.getRevenueOfBeforeWeek();
+    }
+
+    @Override
+    public Double revenueBeforeOfMonth() {
+        return orderRepository.getRevenueOfBeforeMonth();
+    }
+
+    @Override
+    public Double revenueBeforeOfYear() {
+        return orderRepository.getRevenueOfBeforeYear();
+    }
+
 
     // Hàm hỗ trợ chuyển đổi từ Order sang OrderDto
     public OrderDto mapToDto(Order order) {
