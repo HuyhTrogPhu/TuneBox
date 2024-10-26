@@ -48,5 +48,17 @@ public interface InstrumentService {
     // get instrument sale the least of month
     List<InstrumentSalesDto> instrumentSalesTheLeastOfMonth();
 
+    // get revenue instrument of day by instrumentId
+    Double getRevenueInstrumentOfDay(Long instrumentId);
+
+    // get revenue instrument of week by instrumentId
+    Double getRevenueInstrumentOfWeek(Long instrumentId);
+
+    // get revenue instrument of month by instrumentId
+    Double getRevenueInstrumentOfMonth(Long instrumentId);
+
+    // get revenue instrument of year by instrumentId
+    Double getRevenueInstrumentOfYear(Long instrumentId);
+
 }
 

@@ -53,7 +53,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Double getRevenueOfDay();
 
     // Revenue of before day
-    @Query(value = "SELECT SUM(o.totalPrice) FROM orders o WHERE o.orderDate = DATE_SUB(CURDATE(), INTERVAL 1 DAY)", nativeQuery = true)
+    @Query(value = "SELECT SUM(o.total_price) FROM orders o WHERE o.order_date = DATE_SUB(CURDATE(), INTERVAL 1 DAY)", nativeQuery = true)
     Double getRevenueOfBeforeDay();
 
 
@@ -63,8 +63,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Double getRevenueOfWeek();
 
     // revenue of before week
-    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o WHERE FUNCTION('WEEK', o.orderDate) = FUNCTION('WEEK', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 WEEK)) " +
-            "AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 WEEK))", nativeQuery = true)
+    @Query(value = "SELECT SUM(o.total_price) FROM orders o WHERE WEEK(o.order_date) = WEEK(DATE_SUB(CURDATE(), INTERVAL 1 WEEK)) " +
+            "AND YEAR(o.order_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 WEEK))", nativeQuery = true)
     Double getRevenueOfBeforeWeek();
 
 
@@ -75,9 +75,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
     // revenue of before month
-    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o " +
-            "WHERE FUNCTION('MONTH', o.orderDate) = FUNCTION('MONTH', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 MONTH)) " +
-            "AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 MONTH))", nativeQuery = true)
+    @Query(value = "SELECT SUM(o.total_price) FROM orders o " +
+            "WHERE MONTH(o.order_date) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH)) " +
+            "AND YEAR(o.order_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))", nativeQuery = true)
     Double getRevenueOfBeforeMonth();
 
 
@@ -86,11 +86,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Double getRevenueOfYear();
 
     // revenue of before year
-    @Query(value = "SELECT SUM(o.totalPrice) FROM Order o " +
-            "WHERE FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', FUNCTION('DATE_SUB', CURRENT_DATE, INTERVAL 1 YEAR))", nativeQuery = true)
+    @Query(value = "SELECT SUM(o.total_price) FROM orders o " +
+            "WHERE YEAR(o.order_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
     Double getRevenueOfBeforeYear();
-
-
 
 
 

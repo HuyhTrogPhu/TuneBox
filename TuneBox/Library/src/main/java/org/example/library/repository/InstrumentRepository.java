@@ -5,6 +5,7 @@ import org.example.library.dto.StatisticalInstrumentDto;
 import org.example.library.model.Instrument;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -87,6 +88,36 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
             "GROUP BY i.id, i.name " +
             "ORDER BY SUM(od.quantity) ASC")
     List<InstrumentSalesDto> getInstrumentSalesTheLeastOfMonth();
+
+
+    // Doanh thu của instrument theo ngày hiện tại
+    @Query("SELECT SUM(oi.quantity * i.costPrice) FROM Order o " +
+            "JOIN o.orderDetails oi " +
+            "JOIN oi.instrument i " +
+            "WHERE i.id = :instrumentId AND o.orderDate = CURRENT_DATE")
+    Double getTotalRevenueInstrumentOfDay(@Param("instrumentId") Long instrumentId);
+
+    // Doanh thu của instrument theo tuần hiện tại
+    @Query("SELECT SUM(oi.quantity * i.costPrice) FROM Order o " +
+            "JOIN o.orderDetails oi " +
+            "JOIN oi.instrument i " +
+            "WHERE i.id = :instrumentId AND FUNCTION('YEARWEEK', o.orderDate, 1) = FUNCTION('YEARWEEK', CURRENT_DATE, 1)")
+    Double getTotalRevenueInstrumentOfWeek(@Param("instrumentId") Long instrumentId);
+
+    // Doanh thu của instrument theo tháng hiện tại
+    @Query("SELECT SUM(oi.quantity * i.costPrice) FROM Order o " +
+            "JOIN o.orderDetails oi " +
+            "JOIN oi.instrument i " +
+            "WHERE i.id = :instrumentId AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE) " +
+            "AND FUNCTION('MONTH', o.orderDate) = FUNCTION('MONTH', CURRENT_DATE)")
+    Double getTotalRevenueInstrumentOfMonth(@Param("instrumentId") Long instrumentId);
+
+    // Doanh thu của instrument theo năm hiện tại
+    @Query("SELECT SUM(oi.quantity * i.costPrice) FROM Order o " +
+            "JOIN o.orderDetails oi " +
+            "JOIN oi.instrument i " +
+            "WHERE i.id = :instrumentId AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
+    Double getTotalRevenueInstrumentOfYear(@Param("instrumentId") Long instrumentId);
 
 
 

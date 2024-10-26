@@ -141,12 +141,24 @@ public class StatisticalController {
         }
     }
 
-
-    @GetMapping("/instrument")
-    public ResponseEntity<?> getStatisticalInstrument() {
+    // get instrument name and id
+    @GetMapping("/instrumentForSta")
+    public ResponseEntity<?> getNameAndIdInstrument() {
         try {
             // Get id and name instrument
             List<StatisticalInstrumentDto> statisticalInstruments = instrumentService.getIdAndNameInstrument();
+            return ResponseEntity.ok(statisticalInstruments);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // statistical instrument
+    @GetMapping("/instrument")
+    public ResponseEntity<?> getStatisticalInstrument() {
+        try {
+
 
             List<InstrumentSalesDto> mostSoldToday = instrumentService.instrumentSalesTheMostOfDay();
             List<InstrumentSalesDto> leastSoldToday = instrumentService.instrumentSalesTheLeastOfDay();
@@ -156,7 +168,7 @@ public class StatisticalController {
             List<InstrumentSalesDto> leastSoldThisMonth = instrumentService.instrumentSalesTheLeastOfMonth();
 
             Map<String, Object> response = new HashMap<>();
-            response.put("statisticalInstruments", statisticalInstruments);
+
 
             response.put("mostSoldToday", mostSoldToday);
             response.put("leastSoldToday", leastSoldToday);
@@ -168,6 +180,29 @@ public class StatisticalController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error retrieving data: " + e.getMessage());
+        }
+    }
+
+
+    // get revenue instrument by instrument id
+    @GetMapping("/revenue-instrument/{instrumentId}")
+    public ResponseEntity<?> getRevenueInstrument(@PathVariable Long instrumentId) {
+        try {
+            Double revenueOfDay = instrumentService.getRevenueInstrumentOfDay(instrumentId);
+            Double revenueOfWeek = instrumentService.getRevenueInstrumentOfWeek(instrumentId);
+            Double revenueOfMonth = instrumentService.getRevenueInstrumentOfMonth(instrumentId);
+            Double revenueOfYear = instrumentService.getRevenueInstrumentOfYear(instrumentId);
+
+            Map<String, Double> revenue = new HashMap<>();
+            revenue.put("revenueOfDay", revenueOfDay!= null? revenueOfDay : 0.0);
+            revenue.put("revenueOfWeek", revenueOfWeek!= null? revenueOfWeek : 0.0);
+            revenue.put("revenueOfMonth", revenueOfMonth!= null? revenueOfMonth : 0.0);
+            revenue.put("revenueOfYear", revenueOfYear!= null? revenueOfYear : 0.0);
+
+            return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 
