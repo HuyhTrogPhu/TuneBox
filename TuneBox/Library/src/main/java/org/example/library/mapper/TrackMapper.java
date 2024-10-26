@@ -20,8 +20,11 @@ public class TrackMapper {
                 .map(Like::getId).collect(Collectors.toSet()) : null;
 
         // Lấy ID của album
-        Set<Long> albumIds = track.getAlbums() != null ?
-                track.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) : null;
+        Set<Long> albumIds = (track.getAlbums() != null)
+                ? track.getAlbums().stream()
+                .map(Albums::getId)  // Lấy ID từ mỗi album
+                .collect(Collectors.toSet())  // Thu thập thành Set<Long>
+                : Set.of();  // Trả về một tập hợp rỗng nếu không có albums
 
         return new TrackDto(
                 track.getId(),

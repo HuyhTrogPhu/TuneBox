@@ -10,8 +10,19 @@ public class LikeMapper {
         dto.setId(like.getId());
         dto.setCreateDate(like.getCreateDate());
         dto.setUserId(like.getUser().getId());
-        dto.setPostId(like.getPost().getId());
-        dto.setTrackId(like.getTrack().getId());// Nếu bạn muốn thêm trackId cũng có thể thêm ở đây
+
+        if (like.getPost() != null) {
+            dto.setPostId(like.getPost().getId());
+        }
+
+        if (like.getTrack() != null) {
+            dto.setTrackId(like.getTrack().getId());
+        }
+
+//        if (like.getComment() != null) {
+//            dto.setCommentId(like.getComment().getId());
+//        }
+
         return dto;
     }
 

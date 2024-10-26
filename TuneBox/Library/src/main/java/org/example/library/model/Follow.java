@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,13 +21,22 @@ public class Follow {
     @Column(name = "follow_id")
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "follower_id", nullable = false)
     private User follower;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "followed_id", nullable = false)
     private User followed;
 
-    private LocalDateTime createAt;
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    // Tự động thêm thời gian khi Follow được tạo
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

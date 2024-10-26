@@ -10,7 +10,7 @@ public class PostImageMapper {
 
     public static PostImageDto toDto(PostImage postImage) {
         if (postImage == null) return null;
-        
+
         PostImageDto dto = new PostImageDto();
         dto.setId(postImage.getId());
         dto.setPostImage(postImage.getPostImage());
@@ -28,7 +28,7 @@ public class PostImageMapper {
 
     public static Set<PostImageDto> toDtoSet(Set<PostImage> postImages) {
         if (postImages == null) return null;
-        
+
         return postImages.stream()
                 .map(PostImageMapper::toDto)
                 .collect(Collectors.toSet());
@@ -36,7 +36,7 @@ public class PostImageMapper {
 
     public static Set<PostImage> toEntitySet(Set<PostImageDto> postImageDtos) {
         if (postImageDtos == null) return null;
-        
+
         return postImageDtos.stream()
                 .map(PostImageMapper::toEntity)
                 .collect(Collectors.toSet());

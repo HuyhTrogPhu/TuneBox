@@ -5,10 +5,8 @@ import org.example.library.dto.ReplyDto;
 import org.example.library.model.Reply;
 import org.example.library.model.User;
 import org.example.library.model.Comment;
-
-import org.example.library.repository.CommentRepository;
+import org.example.library.repository.CommentRepository; // Importing necessary repository
 import org.springframework.stereotype.Component;
-
 
 import java.time.LocalDateTime;
 
@@ -30,11 +28,11 @@ public class ReplyMapper {
         replyDTO.setContent(reply.getContent());
         replyDTO.setCreationDate(reply.getCreationDate()); // Trực tiếp sử dụng LocalDateTime
         replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
-        replyDTO.setUserNickname(reply.getUser().getUserNickname()); // Nickname của người reply
+        replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
 
         // Lấy nickname của người bình luận gốc (người được reply)
         if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
-            replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserNickname()); // Gán nickname của người bình luận gốc
+            replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserInformation().getName()); // Gán nickname của người bình luận gốc
         }
 
         // Set commentId từ parentComment
@@ -42,7 +40,7 @@ public class ReplyMapper {
             replyDTO.setCommentId(reply.getParentComment().getId());
         }
 
-        // Set parentReplyId từ parentReply
+        // Set parentReplyId từ parentReply nếu có
         if (reply.getParentReply() != null) {
             replyDTO.setParentReplyId(reply.getParentReply().getId());
         }

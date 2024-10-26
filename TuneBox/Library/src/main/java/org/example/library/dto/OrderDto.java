@@ -1,16 +1,12 @@
 package org.example.library.dto;
 
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.OrderDetail;
-import org.example.library.model.Street;
-import org.example.library.model.User;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -20,23 +16,30 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDto {
 
-    private Long id;
+    private Long orderId;
 
-    private Date orderDate;
+    private LocalDate orderDate = LocalDate.now();
 
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
 
     private double tax;
 
     private double totalPrice;
 
-    private int totalItems;
+    private  int totalItem;
 
     private String paymentMethod;
 
     private String status;
 
-    private User user;
+    private Long userId;
 
-    private List<OrderDetail> orderDetails;
+    private List<OrderDetailDto> orderDetails;
+    private String shippingMethod;
+    private String username;
+    private String address;
+    private String phoneNumber;
+    private String email;
+    private String paymentStatus;
+
 }

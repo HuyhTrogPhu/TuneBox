@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,22 +44,26 @@ public class Track {
 
     private Date reportDate;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")
     private Genre genre;
 
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User creator;
 
 
-    @ManyToMany(mappedBy = "tracks")
-    private Set<Albums> albums;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "albums_id", nullable = true)
+    private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 

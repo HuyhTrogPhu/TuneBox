@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Entity
@@ -27,6 +28,7 @@ public class Reply {
     private LocalDateTime creationDate;
 
     @ManyToOne
+//    @JsonManagedReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
