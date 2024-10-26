@@ -40,7 +40,6 @@ public class UserInformation {
 
     private String location;
 
-    @JsonBackReference
     @OneToOne(mappedBy = "userInformation")
     private User user;
 

@@ -1,9 +1,13 @@
 package org.example.library.service;
 
 
+import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.UserInformation;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,4 +53,12 @@ public interface UserService {
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
 
     List<UserDto> findAllUser();
+
+    @Transactional
+    void updateBirthday(Long userId, Date newBirthday);
+
+    @Transactional
+    void updateGender(Long userId, String newGender);
+
+    void updateUserInformation(Long userId, String name, String location, String about);
 }
