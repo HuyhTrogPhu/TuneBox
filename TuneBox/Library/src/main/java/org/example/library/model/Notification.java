@@ -1,28 +1,33 @@
 package org.example.library.model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class PostImage {
+@Table(name = "notifications")
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "image_id")
     private Long id;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String postImage;
+    private String message;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    private Long userId;
+
+    private LocalDateTime createdAt;
+
+    private boolean isRead = false;
+
+    private Long postId;
 }

@@ -3,6 +3,7 @@ package org.example.library.service;
 
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
@@ -20,6 +21,7 @@ public interface PostService {
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
+    @Transactional
     void deletePost(Long id);
 
     Post findPostById(Long postId);
@@ -27,6 +29,4 @@ public interface PostService {
     void changePostVisibility(Long id, boolean hidden);
 
     List<Post> getFilteredPosts(Long currentUserId);
-
-//    public Post findPostById(Long postId);
 }
