@@ -96,6 +96,18 @@ public class UserController {
         return ResponseEntity.ok(genreDtoList);
     }
 
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
+        try {
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
