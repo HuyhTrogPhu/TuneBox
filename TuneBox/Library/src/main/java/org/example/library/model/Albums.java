@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,8 @@ public class Albums {
     @JoinColumn(name = "genre_id", nullable = false)
     private Genre genre;
 
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "albumCreator_id", nullable = false)
     private User creator;
