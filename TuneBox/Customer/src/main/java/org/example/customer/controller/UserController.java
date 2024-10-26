@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -88,25 +89,25 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-        List<Talent> talentList = talentService.findAll();
-        return ResponseEntity.ok(talentList);
+       List<Talent> talentList = talentService.findAll();
+       return ResponseEntity.ok(talentList);
     }
 
     // get list genres
     @GetMapping("/list-genre")
-    public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
-        List<GenreDto> genreDtoList = genreList.stream()
-                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(genreDtoList);
-    }
+public ResponseEntity<List<GenreDto>> listGenre() {
+   List<Genre> genreList = genreService.findAll();
+   List<GenreDto> genreDtoList = genreList.stream()
+       .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+       .collect(Collectors.toList());
+   return ResponseEntity.ok(genreDtoList);
+}
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-        List<InspiredBy> inspiredByList = inspiredByService.findAll();
-        return ResponseEntity.ok(inspiredByList);
+       List<InspiredBy> inspiredByList = inspiredByService.findAll();
+       return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
