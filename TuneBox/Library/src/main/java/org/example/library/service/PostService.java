@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 import org.example.library.dto.PostDto;
+import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -20,7 +21,10 @@ public interface PostService {
 
     void deletePost(Long id);
 
-//    Post findPostById(Long postId);
+    void updateReportPost(Post post);
+
+
+    Post findThisPostById(Long postId);
 
     void changePostVisibility(Long id, boolean hidden);
 
@@ -39,5 +43,6 @@ public interface PostService {
 
     long countTotalPosts();
 
+    List<ReportDto> getReportedPosts(); // Lấy danh sách các bài viết bị báo cáo
 
 }

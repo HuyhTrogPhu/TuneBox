@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Post {
     private Set<PostImage> images;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
@@ -41,5 +43,9 @@ public class Post {
 
     @Column(name = "is_hidden", nullable = false, columnDefinition = "boolean default false")
     private boolean hidden = false;
+
+    private String description;
+
+
 
 }

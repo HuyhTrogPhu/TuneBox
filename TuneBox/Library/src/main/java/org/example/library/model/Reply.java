@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class Reply {
     private LocalDateTime creationDate;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore // Loại bỏ vòng lặp JSON bằng cách bỏ qua trường này trong deserialization
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

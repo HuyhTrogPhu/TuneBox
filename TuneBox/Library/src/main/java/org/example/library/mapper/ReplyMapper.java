@@ -28,11 +28,16 @@ public class ReplyMapper {
         replyDTO.setId(reply.getId());
         replyDTO.setContent(reply.getContent());
         replyDTO.setCreationDate(reply.getCreationDate());
-        replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
-        replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
+//        replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
 
-        // Lấy nickname của người bình luận gốc (người được reply)
-        if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
+        if (reply.getUser() != null && reply.getUser().getUserInformation() != null) {
+            replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
+            replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
+        }
+
+        // Kiểm tra parentComment và user của parentComment trước khi truy cập
+        if (reply.getParentComment() != null && reply.getParentComment().getUser() != null
+                && reply.getParentComment().getUser().getUserInformation() != null) {
             replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserInformation().getName()); // Gán nickname của người bình luận gốc
         }
 
@@ -45,6 +50,7 @@ public class ReplyMapper {
         if (reply.getParentReply() != null) {
             replyDTO.setParentReplyId(reply.getParentReply().getId());
         }
+
 
         return replyDTO;
     }

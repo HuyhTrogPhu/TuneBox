@@ -17,4 +17,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "AND p.hidden = false") // Thêm điều kiện này để lọc các bài viết bị ẩn
     List<Post> findPostsExcludingBlockedUsers(@Param("currentUserId") Long currentUserId);
 
+//    @Query("SELECT p FROM Post p JOIN Report r ON p.id = r.post.id WHERE r.status = 'PENDING'")
+//    List<Post> findReportedPosts(); // Truy vấn các bài đăng có báo cáo đang chờ xử lý
+
+
 }

@@ -13,4 +13,7 @@ public interface NotificationService {
     List<NotificationDTO> getUserNotifications(Long userId);
 
     void markNotificationAsRead(Long notificationId);
+
+    void sendWarningToUser(Long userId, String title, String message);
+    void notifyReporter(Long userId, String title, String message);
 }

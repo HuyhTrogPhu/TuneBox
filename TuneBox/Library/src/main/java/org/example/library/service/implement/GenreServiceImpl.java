@@ -25,6 +25,10 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public List<Genre> findAll() {
-        return genreRepository.findAll();
+        List<Genre> genres = genreRepository.findAll();
+        if(genres.isEmpty()) {
+            throw new RuntimeException("No genres found");
+        }
+        return genres;
     }
 }

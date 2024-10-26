@@ -1,6 +1,9 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,11 +22,14 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
+
     private Long id;
 
     private String email;
@@ -62,7 +68,13 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @JsonBackReference
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Report> reports;
+
 
     @OneToMany(mappedBy = "blocker")
     private Set<Block> blocker;

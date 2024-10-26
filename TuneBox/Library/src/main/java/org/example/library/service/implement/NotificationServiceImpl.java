@@ -112,4 +112,40 @@ public class NotificationServiceImpl implements NotificationService {
             notificationRepository.save(notification); // Lưu cập nhật vào cơ sở dữ liệu
         }
     }
+
+    @Override
+    public void sendWarningToUser(Long userId, String title, String message) {
+        // Tạo đối tượng NotificationDTO cho cảnh báo
+        NotificationDTO warningNotification = new NotificationDTO();
+        warningNotification.setUserId(userId);
+        warningNotification.setMessage(message); // Nội dung cảnh báo
+        warningNotification.setCreatedAt(LocalDateTime.now());
+
+        // Lưu cảnh báo vào cơ sở dữ liệu
+        Notification notification = notificationMapper.toEntity(warningNotification);
+        notificationRepository.save(notification);
+
+        // Gửi cảnh báo qua WebSocket đến người dùng
+        messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/notifications", warningNotification);
+
+    }
+
+
+
+    @Override
+    public void notifyReporter(Long userId, String title, String message) {
+        // Tạo đối tượng NotificationDTO cho người báo cáo
+        NotificationDTO reportNotification = new NotificationDTO();
+        reportNotification.setUserId(userId);
+        reportNotification.setMessage(message); // Nội dung thông báo
+        reportNotification.setCreatedAt(LocalDateTime.now());
+
+        // Lưu thông báo vào cơ sở dữ liệu
+        Notification notification = notificationMapper.toEntity(reportNotification);
+        notificationRepository.save(notification);
+
+        // Gửi thông báo qua WebSocket cho người báo cáo
+        messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/notifications", reportNotification);
+    }
+
 }

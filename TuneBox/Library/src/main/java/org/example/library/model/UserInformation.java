@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class UserInformation {
     private String about;
 
     @OneToOne(mappedBy = "userInformation")
+    @JsonIgnore
     private User user;
 
 }

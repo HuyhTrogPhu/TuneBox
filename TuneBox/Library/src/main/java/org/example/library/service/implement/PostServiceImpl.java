@@ -1,11 +1,15 @@
     package org.example.library.service.implement;
 
     import org.example.library.dto.PostDto;
+    import org.example.library.dto.ReportDto;
     import org.example.library.mapper.PostMapper;
     import org.example.library.model.Post;
     import org.example.library.model.PostImage;
+    import org.example.library.model.Report;
     import org.example.library.model.User;
+    import org.example.library.model_enum.ReportStatus;
     import org.example.library.repository.PostRepository;
+    import org.example.library.repository.ReportRepository;
     import org.example.library.repository.UserRepository;
     import org.example.library.service.PostService;
     import org.springframework.data.domain.Sort;
@@ -24,10 +28,12 @@
 
         private final PostRepository postRepository;
         private final UserRepository userRepository;
+        private final ReportRepository reportRepository;
 
-        public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+        public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ReportRepository  reportRepository) {
             this.postRepository = postRepository;
             this.userRepository = userRepository;
+            this.reportRepository = reportRepository;
         }
 
 
@@ -45,7 +51,6 @@
             Post post = PostMapper.toEntity(postDto); // Chuyển đổi PostDto thành Post entity
             post.setUser(user); // Gán User vào bài đăng
             post.setCreatedAt(LocalDateTime.now());
-
             // Xử lý hình ảnh nếu có
             if (images != null && images.length > 0) {
                 Set<PostImage> postImages = new HashSet<>();
@@ -140,6 +145,19 @@
             postRepository.delete(post);
         }
 
+        @Override
+        public void updateReportPost(Post post) {
+            List<Report> reports = reportRepository.findByPost(post);
+
+            if (reports.isEmpty()) {
+                throw new RuntimeException("No reports found for the post with ID: " + post.getId());
+            }
+            for (Report report : reports) {
+                report.setStatus(ReportStatus.RESOLVED);
+                reportRepository.save(report);
+            }
+        }
+
         public void changePostVisibility(Long postId, boolean hidden) {
             Post post = postRepository.findById(postId)
                     .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -155,10 +173,12 @@
             return postRepository.count(); // Sử dụng phương thức count() của PostRepository
         }
 
-        //        @Override
-//        public Post findPostById(Long postId) {
-//            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-//        }
+                @Override
+        public Post findThisPostById(Long postId) {
+            return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        }
+
+
         @Override
         public PostDto findPostById(Long id) {
             Post post = postRepository.findById(id)
@@ -190,13 +210,32 @@
                     })
                     .collect(Collectors.toList());
         }
-//    @Override
-//    public Post findPostById(Long postId) {
-//        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-//    }
 
-    @Override
-    public List<Post> getFilteredPosts(Long currentUserId) {
-        return postRepository.findPostsExcludingBlockedUsers(currentUserId);
+
+        @Override
+        public List<Post> getFilteredPosts(Long currentUserId) {
+            return postRepository.findPostsExcludingBlockedUsers(currentUserId);
+        }
+//        List<Post> reportedPosts = postRepository.findReportedPosts(); // Lấy các bài viết bị báo cáo
+
+        @Override
+        public List<ReportDto> getReportedPosts() {
+            // Lấy danh sách các report từ reportRepository thay vì postRepository
+            List<Report> reports = reportRepository.findAll(); // Lấy tất cả các báo cáo
+
+            return reports.stream()
+                    .map(report -> {
+                        ReportDto reportDto = new ReportDto();
+                        // Set các thuộc tính của ReportDto từ Report entity
+                        reportDto.setId(report.getId()); // ID của báo cáo
+                        reportDto.setPostId(report.getPost()); // ID của bài viết bị báo cáo
+                        reportDto.setUserId(report.getUser().getId()); // ID của người dùng đã báo cáo
+                        reportDto.setReason(report.getReason()); // Lý do báo cáo
+                        reportDto.setCreateDate(report.getCreateDate()); // Ngày tạo báo cáo
+                        reportDto.setStatus(report.getStatus()); // Trạng thái báo cáo
+
+                        return reportDto; // Trả về ReportDto
+                    })
+                    .collect(Collectors.toList());
+        }
     }
-}
