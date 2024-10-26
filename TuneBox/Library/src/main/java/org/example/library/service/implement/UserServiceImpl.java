@@ -3,6 +3,8 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.*;
 import org.example.library.mapper.UserMapper;
@@ -45,6 +47,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
+    @Autowired
+    private UserInformationRepository userInformationRepository;
 
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
@@ -186,11 +190,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserName(Long userId, String newUserName) {
-        userRepository.updateUserNameById(userId, newUserName);
+    public void updateUserName(Long userId, String userName) {
+        // Tìm người dùng theo userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        // Cập nhật tên người dùng
+        if (userName != null && !userName.isEmpty()) {
+            user.setUserName(userName);
+        }
+
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
     }
 
+
     @Override
+    @Transactional
     public void updateEmail(Long userId, String newEmail) {
         userRepository.updateEmailById(userId, newEmail);
     }
@@ -270,6 +286,44 @@ public class UserServiceImpl implements UserService {
         }
 
         return userDtos;
+    }
+    @Override
+    @Transactional
+    public void updateBirthday(Long userId, Date birthday) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.getUserInformation().setBirthDay(birthday); // Cập nhật ngày sinh
+        userRepository.save(user);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateGender(Long userId, String newGender) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserInformation userInfo = user.getUserInformation();
+        userInfo.setGender(newGender.trim()); // Cắt bỏ khoảng trắng nếu có
+        userInformationRepository.save(userInfo); // Lưu lại thay đổi
+    }
+
+    @Override
+    public void updateUserInformation(Long userId, String name, String location, String about) {
+        // Tìm người dùng theo userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        UserInformation userInfo = user.getUserInformation();
+        if (userInfo != null) {
+            userInfo.setName(name);
+            userInfo.setLocation(location);
+            userInfo.setAbout(about);
+        } else {
+            throw new RuntimeException("Thông tin người dùng không tồn tại");
+        }
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
     }
 
 }

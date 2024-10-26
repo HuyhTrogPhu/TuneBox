@@ -66,8 +66,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // update email
     @Modifying
-    @Query("update User u set u.email = :newEmail where u.id = :userId")
+    @Query("UPDATE User u SET u.email = :newEmail WHERE u.id = :userId")
     void updateEmailById(@Param("userId") Long userId, @Param("newEmail") String newEmail);
+
 
     // Cập nhật mật khẩu mới cho user
     @Modifying
@@ -87,6 +88,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from UserInformation ui join ui.user u where u.id = :userId")
     UserDetailEcommerce getUserDetailEcommerceAdmin(@Param("userId") Long userId);
 
+    boolean existsByUserName(String userName);
 
     // get list user sell the most
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
