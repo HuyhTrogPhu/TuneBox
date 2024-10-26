@@ -138,4 +138,15 @@ public class TrackController {
 
         return new ResponseEntity<>(tracks, HttpStatus.OK);
     }
+
+    // API tìm kiếm track
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<TrackDto>> searchTracks(@PathVariable String keyword) {
+        // Gọi service để tìm kiếm track theo từ khóa
+        List<TrackDto> result = trackService.searchTracks(keyword);
+
+        // Trả về danh sách track
+        return ResponseEntity.ok(result);
+    }
+
 }

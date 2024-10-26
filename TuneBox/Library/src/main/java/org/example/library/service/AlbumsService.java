@@ -12,10 +12,9 @@ public interface AlbumsService {
     AlbumsDto updateAlbums(Long albumsId,AlbumsDto albumsDto, MultipartFile imageAlbums, Long userId, Long genreId, Long albumstyleId );
     void deleteAlbums(Long id);
     List<AlbumsDto> getAlbumsByUserId(Long userId);
-
-    //  List<AlbumsDto> getAllAlbums();
-   // List<TrackDto> getTracksByAlbumId(Long albumId);
-   // List<AlbumsDto> searchAlbums(String keyword);
+    List<AlbumsDto> searchAlbums(String keyword);
+    List<AlbumsDto> getAllAlbums();
+    //List<TrackDto> getTracksByAlbumId(Long albumId);
    // AlbumsDto getAlbumsByLabelId(Long labelId);
   //  AlbumsDto getAlbumsByLikeId(Long likeId);
 }

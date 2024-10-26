@@ -253,4 +253,21 @@ public class AlbumsServiceImpl implements AlbumsService {
                 .map(AlbumsMapper::mapperAlbumsDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<AlbumsDto> searchAlbums(String keyword) {
+        List<Albums> albums = albumsRepository.searchByKeywords(keyword);
+
+        // Chuyển đổi danh sách Track thành TrackDto
+        return albums.stream()
+                .map(AlbumsMapper::mapperAlbumsDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AlbumsDto> getAllAlbums() {
+        List<Albums> albums = albumsRepository.findAll();
+        return albums.stream().map(AlbumsMapper::mapperAlbumsDto).collect(Collectors.toList());
+    }
+
 }

@@ -2,10 +2,7 @@ package org.example.customer.Controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.library.dto.AlbumStyleDto;
-import org.example.library.dto.AlbumsDto;
-import org.example.library.dto.GenreDto;
-import org.example.library.dto.TrackDto;
+import org.example.library.dto.*;
 import org.example.library.model.AlbumStyle;
 import org.example.library.model.Genre;
 import org.example.library.model.User;
@@ -33,13 +30,6 @@ public class AlbumsController {
 
     @Autowired
     private AlbumsService albumsService;
-
-    @Autowired
-    private GenreService genreService;
-    @Autowired
-    private AlbumStyleServiceImpl albumStyleServiceImpl;
-    @Autowired
-    private AlbumStyleRepository albumStyleRepository;
 
     @Autowired
     private AlbumStyleService albumStyleService;
@@ -149,5 +139,12 @@ public class AlbumsController {
         return ResponseEntity.ok(albumStyleDto);
     }
 
+    // tìm kiếm Album
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<AlbumsDto>> searchAlbums(@PathVariable String keyword) {
+        List<AlbumsDto> result = albumsService.searchAlbums(keyword);
 
+        // Trả về danh sách
+        return ResponseEntity.ok(result);
+    }
 }
