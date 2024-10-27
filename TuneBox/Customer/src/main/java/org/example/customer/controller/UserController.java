@@ -91,7 +91,7 @@ public class UserController {
     // get list genres
     @GetMapping("/list-genre")
     public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreList = genreService.findAll();
         List<GenreDto> genreDtoList = genreList.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());

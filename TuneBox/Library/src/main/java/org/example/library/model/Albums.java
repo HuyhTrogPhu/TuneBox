@@ -65,4 +65,5 @@ public class Albums {
     @JoinColumn(name = "album_style_id")
     private AlbumStyle albumStyle;
 
+
 }

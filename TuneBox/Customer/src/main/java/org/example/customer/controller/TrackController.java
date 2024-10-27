@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.dto.GenreDto;
 import org.example.library.dto.TrackDto;
@@ -147,6 +147,13 @@ public class TrackController {
 
         // Trả về danh sách track
         return ResponseEntity.ok(result);
+    }
+
+//    get all track
+    @GetMapping("/allTrack")
+    public ResponseEntity<List<TrackDto>> getAllTracks() {
+         List<TrackDto> tracks = trackService.getAllTracks();
+         return ResponseEntity.ok(tracks);
     }
 
 }

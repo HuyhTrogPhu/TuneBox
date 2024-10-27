@@ -43,4 +43,26 @@ public class LikeMapper {
         // Set user và post dựa trên id từ dto, có thể sử dụng UserRepository và PostRepository
         return like;
     }
+
+
+    // với cả Track và Post
+    public static LikeDto PostAndTrack(Like like) {
+        LikeDto dto = new LikeDto();
+        dto.setId(like.getId());
+        dto.setCreateDate(like.getCreateDate());
+        dto.setUserId(like.getUser().getId());
+
+        // Thiết lập ID bài viết nếu có
+        if (like.getPost() != null) {
+            dto.setPostId(like.getPost().getId());
+        }
+
+        // Thiết lập ID track nếu có
+        if (like.getTrack() != null) {
+            dto.setTrackId(like.getTrack().getId());
+        }
+
+        return dto;
+    }
+
 }
