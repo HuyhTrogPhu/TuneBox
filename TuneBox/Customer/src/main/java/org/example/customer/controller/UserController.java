@@ -7,6 +7,7 @@ import org.example.library.dto.*;
 import org.example.library.model.Genre;
 import org.example.library.model.InspiredBy;
 import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -39,9 +43,6 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserInformationService userInformationService;
-
-    @Autowired
     private TalentService talentService;
 
     @Autowired
@@ -52,6 +53,9 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserInformationService userInformationService;
 
     // Register
     @PostMapping("/register")
@@ -85,37 +89,25 @@ public class UserController {
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
-       List<Talent> talentList = talentService.findAll();
-       return ResponseEntity.ok(talentList);
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
     }
 
     // get list genres
     @GetMapping("/list-genre")
-public ResponseEntity<List<GenreDto>> listGenre() {
-   List<Genre> genreList = genreService.findAll();
-   List<GenreDto> genreDtoList = genreList.stream()
-       .map(genre -> new GenreDto(genre.getId(), genre.getName()))
-       .collect(Collectors.toList());
-   return ResponseEntity.ok(genreDtoList);
-}
-
-    // get list name genre
-    @GetMapping("/listNameGenre")
-    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
-        try {
-            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
-            return ResponseEntity.ok(listNameGenres);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
     }
 
     // get list inspired by
     @GetMapping("/list-inspired-by")
     public ResponseEntity<List<InspiredBy>> listInspiredBy() {
-       List<InspiredBy> inspiredByList = inspiredByService.findAll();
-       return ResponseEntity.ok(inspiredByList);
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
     // Login
@@ -170,7 +162,7 @@ public ResponseEntity<List<GenreDto>> listGenre() {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Trả về null hoặc thông điệp lỗi cụ thể
         }
     }
 
@@ -189,85 +181,29 @@ public ResponseEntity<List<GenreDto>> listGenre() {
         }
     }
 
-    // get user in profile page
+    // get user information in profile page
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto profileUser = userService.getUserProfileSetting(userId);
-            return ResponseEntity.ok(profileUser);
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
+            return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
             return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
-    // get user in account page
-    @GetMapping("/{userId}/accountSetting")
-    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
-        try {
-            AccountSettingDto userAccount = userService.getAccountSetting(userId);
-            return ResponseEntity.ok(userAccount);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     // get follower and following user by user id
     @GetMapping("/{userId}/followCount")
-    public ResponseEntity<Map<String, Long>> getFollowCount(@PathVariable Long userId) {
+    public ResponseEntity<Optional<UserFollowDto>> getFollowCount(@PathVariable Long userId) {
         try {
-            Long followersCount = userService.getFollowersCount(userId);
-            Long followingCount = userService.getFollowingCount(userId);
-            Map<String, Long> followCounts = new HashMap<>();
-            followCounts.put("followers", followersCount);
-            followCounts.put("following", followingCount);
-            return ResponseEntity.ok(followCounts);
+            Optional<UserFollowDto> followCount = userService.getUserFollowById(userId);
+            return ResponseEntity.ok(followCount);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    // set password in account page
-    @PutMapping("/{userId}/password")
-    public ResponseEntity<String> setPassword(@PathVariable Long userId, @RequestParam String newPassword) {
-        try {
-            String encodedNewPassword = passwordEncoder.encode(newPassword);
-
-            userService.setPassword(userId, encodedNewPassword);
-            return ResponseEntity.ok("Mật khẩu đã thay đổi thành công");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating password");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
 
 
-    // set username in account page
-    @PutMapping("/{userId}/username")
-    public ResponseEntity<String> setUsername(@PathVariable Long userId, @RequestParam String newUsername) {
-        try {
-            userService.updateUserName(userId, newUsername);
-            return ResponseEntity.ok("Tên đăng nhập đã thay đổi thành công");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating username");
-        }
     }
-
-    // set email in account page
-    @PutMapping("/{userId}/email")
-    public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestParam String newEmail) {
-        try {
-            userService.updateEmail(userId, newEmail);
-            return ResponseEntity.ok("Email đã thay đổi thành công");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
-        }
-    }
-
-
-}

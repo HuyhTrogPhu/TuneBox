@@ -13,5 +13,5 @@ import org.example.library.model.Post;
 @NoArgsConstructor
 public class PostImageDto {
     private Long id;
-    private byte[] postImage;
+    private String postImage;
 }

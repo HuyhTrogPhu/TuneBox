@@ -88,6 +88,15 @@ public class OrderServiceImpl implements OrderService {
                         .orElseThrow(() -> new RuntimeException("Instrument not found with ID: " + detailDto.getInstrumentId()));
                 orderDetail.setInstrument(instrument);
                 orderDetail.setOrder(order);
+
+                // Cập nhật số lượng của nhạc cụ
+                int newQuantity = instrument.getQuantity() - detailDto.getQuantity();
+                if (newQuantity < 0) {
+                    throw new RuntimeException("Not enough quantity for instrument ID: " + detailDto.getInstrumentId());
+                }
+                instrument.setQuantity(newQuantity);
+                instrumentRepository.save(instrument); // Lưu nhạc cụ với số lượng mới vào cơ sở dữ liệu
+
                 return orderDetail;
             }).collect(Collectors.toList());
 
@@ -105,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+
     @Override
     public OrderDetailInfoDto getOrderDetailByOrderId(Long orderId) {
         // Lấy thông tin chi tiết của đơn hàng (không bao gồm sản phẩm)
@@ -117,6 +127,46 @@ public class OrderServiceImpl implements OrderService {
         orderDetailInfoDto.setOrderItems(orderItems);
 
         return orderDetailInfoDto;
+    }
+
+    @Override
+    public Double revenueOfDay() {
+        return orderRepository.getRevenueOfDay();
+    }
+
+    @Override
+    public Double revenueOfWeek() {
+        return orderRepository.getRevenueOfWeek();
+    }
+
+    @Override
+    public Double revenueOfMonth() {
+        return orderRepository.getRevenueOfMonth();
+    }
+
+    @Override
+    public Double revenueOfYear() {
+        return orderRepository.getRevenueOfYear();
+    }
+
+    @Override
+    public Double revenueBeforeOfDay() {
+        return orderRepository.getRevenueOfBeforeDay();
+    }
+
+    @Override
+    public Double revenueBeforeOfWeek() {
+        return orderRepository.getRevenueOfBeforeWeek();
+    }
+
+    @Override
+    public Double revenueBeforeOfMonth() {
+        return orderRepository.getRevenueOfBeforeMonth();
+    }
+
+    @Override
+    public Double revenueBeforeOfYear() {
+        return orderRepository.getRevenueOfBeforeYear();
     }
 
 

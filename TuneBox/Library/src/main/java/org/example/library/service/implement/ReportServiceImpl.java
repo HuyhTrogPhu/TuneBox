@@ -35,15 +35,16 @@ public class ReportServiceImpl implements ReportService {
         Report report = reportMapper.toEntity(reportDto);
 
         report.setCreateDate(LocalDate.now());
+        report.setStatus(ReportStatus.PENDING);
 
-        report.setStatus(ReportStatus.valueOf("PENDING"));
+        // Lấy userId của người dùng hiện tại
+        Long currentUserId = reportDto.getUserId(); // Giả sử bạn gửi userId từ front-end hoặc lấy từ token
 
-        // Kiểm tra xem userId có trong report hay không
-        if (report.getUser() != null && report.getUser().getId() == null) {
-            // Nếu userId chưa có, cần phải lưu User
-            User user = report.getUser();
-            userRepository.save(user); // Lưu User
-        }
+        // Kiểm tra xem userId đã tồn tại hay chưa
+        User user = userRepository.findById(currentUserId).orElseThrow(() -> new RuntimeException("User không tồn tại"));
+
+        // Set user vào report
+        report.setUser(user);
 
         // Lưu báo cáo
         Report savedReport = reportRepository.save(report);
@@ -51,7 +52,6 @@ public class ReportServiceImpl implements ReportService {
         // Chuyển đổi từ Entity sang DTO
         return reportMapper.toDto(savedReport);
     }
-
 
     @Override
     public ReportDto getReportById(Long id) {

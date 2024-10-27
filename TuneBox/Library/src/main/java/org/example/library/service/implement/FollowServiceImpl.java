@@ -1,7 +1,8 @@
 package org.example.library.service.implement;
 
-import org.example.library.dto.FollowDto;
+import org.example.library.dto.UserDto;
 import org.example.library.mapper.FollowMapper;
+import org.example.library.mapper.UserMapper;
 import org.example.library.model.Follow;
 import org.example.library.model.User;
 import org.example.library.repository.FollowRepository;
@@ -54,38 +55,42 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public boolean isFollowing(Long followerId, Long followedId) {
+        // Kiểm tra và chỉ trả về kết quả một lần
         boolean isFollowing = followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
         System.out.println("Is " + followerId + " following " + followedId + ": " + isFollowing);
-        return followRepository.existsByFollowerIdAndFollowedId(followerId, followedId);
+        return isFollowing;
     }
+
 
     @Override
     public int countFollowers(Long userId) {
         int followersCount = followRepository.countByFollowedId(userId);
         System.out.println("Followers count for user " + userId + ": " + followersCount);
-        return followRepository.countByFollowedId(userId); // Đếm người theo dõi
+        return followersCount;
     }
 
     @Override
     public int countFollowing(Long userId) {
         int followingCount = followRepository.countByFollowerId(userId);
         System.out.println("Following count for user " + userId + ": " + followingCount);
-        return followRepository.countByFollowerId(userId); // Đếm người đang theo dõi
+        return followingCount;
     }
-
     @Override
-    public List<FollowDto> getFollowers(Long userId) {
+    public List<UserDto> getFollowers(Long userId) {
         List<Follow> followers = followRepository.findByFollowedId(userId);
         return followers.stream()
-                .map(followMapper::toDto)
+                .map(follow -> follow.getFollower()) // Lấy User từ Follow
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<FollowDto> getFollowing(Long userId) {
+    public List<UserDto> getFollowing(Long userId) {
         List<Follow> followings = followRepository.findByFollowerId(userId);
         return followings.stream()
-                .map(followMapper::toDto)
+                .map(follow -> follow.getFollowed()) // Lấy User từ Follow
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
+
 }

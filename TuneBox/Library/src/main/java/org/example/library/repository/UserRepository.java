@@ -2,6 +2,7 @@ package org.example.library.repository;
 
 import org.example.library.dto.*;
 import org.example.library.model.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -65,8 +66,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // update email
     @Modifying
-    @Query("update User u set u.email = :newEmail where u.id = :userId")
+    @Query("UPDATE User u SET u.email = :newEmail WHERE u.id = :userId")
     void updateEmailById(@Param("userId") Long userId, @Param("newEmail") String newEmail);
+
 
     // Cập nhật mật khẩu mới cho user
     @Modifying
@@ -85,5 +87,79 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ui.background, ui.location, ui.about, u.userName, u.email)" +
             "from UserInformation ui join ui.user u where u.id = :userId")
     UserDetailEcommerce getUserDetailEcommerceAdmin(@Param("userId") Long userId);
+
+    boolean existsByUserName(String userName);
+
+    // get list user sell the most
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    Optional<UserSell> getTopUserBuyTheMost();
+
+
+    // get user revenue of day
+    @Query("select sum(o.totalPrice) " +
+            "from Order o " +
+            "where o.user.id = ?1 and o.orderDate = CURRENT_DATE")
+    Double getTotalRevenueTodayByTopUser(Long userId);
+
+
+    // get user revenue of week
+    @Query("select sum(o.totalPrice) " +
+            "from Order o " +
+            "where o.user.id = ?1 and function('YEAR', o.orderDate) = function('YEAR', CURRENT_DATE) " +
+            "and function('WEEK', o.orderDate) = function('WEEK', CURRENT_DATE)")
+    Double getTotalRevenueThisWeekByTopUser(Long userId);
+
+
+    // get user revenue of month
+    @Query("select sum(o.totalPrice) " +
+            "from Order o " +
+            "where o.user.id = ?1 and function('YEAR', o.orderDate) = function('YEAR', CURRENT_DATE) " +
+            "and function('MONTH', o.orderDate) = function('MONTH', CURRENT_DATE)")
+    Double getTotalRevenueThisMonthByTopUser(Long userId);
+
+
+    // get user revenue of year
+    @Query("select sum(o.totalPrice) " +
+            "from Order o " +
+            "where o.user.id = ?1 and function('YEAR', o.orderDate) = function('YEAR', CURRENT_DATE)")
+    Double getTotalRevenueThisYearByTopUser(Long userId);
+
+
+
+    // get list user buy the least
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) asc")
+    List<UserSell> getUserBuyTheLeast();
+
+
+    // get top 1 user buy the least
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) asc")
+    Optional<UserSell> getTopUserBuyTheLeast();
+
+
+    // get user not sell
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, cast(0 as long), cast(0.0 as double)) " +
+            "from UserInformation ui join ui.user u left join u.orderList o " +
+            "where o.id is null")
+    List<UserSell> getUserNotSell();
+
+
+
+
 
 }

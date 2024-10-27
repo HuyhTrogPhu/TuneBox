@@ -21,4 +21,21 @@ public interface OrderService {
 
     void updateOrderStatus(Long orderId, String status, LocalDate deliveryDate, String paymentStatus );
 
+
+    Double revenueOfDay();
+
+    Double revenueOfWeek();
+
+    Double revenueOfMonth();
+
+    Double revenueOfYear();
+
+    Double revenueBeforeOfDay();
+
+    Double revenueBeforeOfWeek();
+
+    Double revenueBeforeOfMonth();
+
+    Double revenueBeforeOfYear();
+
 }

@@ -3,6 +3,8 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.*;
 import org.example.library.mapper.UserMapper;
@@ -10,8 +12,8 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -45,7 +47,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private Cloudinary cloudinary;
 
-
+    @Autowired
+    private UserInformationRepository userInformationRepository;
 
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
@@ -122,7 +125,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDto getProfileUserById(Long userId) {
-        UserProfileDto userProfile = userRepository.findUserProfileByUserId(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Lấy thông tin cần thiết từ User
+        UserProfileDto userProfile = new UserProfileDto();
+        userProfile.setAvatar(user.getUserInformation().getAvatar());
+        userProfile.setBackground(user.getUserInformation().getBackground());
+        userProfile.setName(user.getUserInformation().getName());
+        userProfile.setUserName(user.getUserName());
+
+        // Tính toán số lượng followers và following
+        int followersCount = user.getFollowers().size();  // Số lượng followers
+        int followingCount = user.getFollowing().size();  // Số lượng following
+
+        userProfile.setFollowersCount(followersCount);
+        userProfile.setFollowingCount(followingCount);
 
         // Lấy danh sách talent, inspiredBy và genre
         List<String> talents = userRepository.findTalentByUserId(userId);
@@ -136,6 +154,7 @@ public class UserServiceImpl implements UserService {
 
         return userProfile;
     }
+
 
     @Override
     public Optional<UserFollowDto> getUserFollowById(Long userId) {
@@ -171,11 +190,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserName(Long userId, String newUserName) {
-        userRepository.updateUserNameById(userId, newUserName);
+    public void updateUserName(Long userId, String userName) {
+        // Tìm người dùng theo userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        // Cập nhật tên người dùng
+        if (userName != null && !userName.isEmpty()) {
+            user.setUserName(userName);
+        }
+
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
     }
 
+
     @Override
+    @Transactional
     public void updateEmail(Long userId, String newEmail) {
         userRepository.updateEmailById(userId, newEmail);
     }
@@ -187,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
-       return userRepository.findAccountSettingProfile(userId);
+        return userRepository.findAccountSettingProfile(userId);
     }
 
     @Override
@@ -206,6 +237,93 @@ public class UserServiceImpl implements UserService {
                     return new UserDto(user.getId(), user.getUserName());
                 })
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserSell> getUserSellTheMost() {
+        return userRepository.getUserSellTheMost();
+    }
+
+    @Override
+    public UserSell getTop1UserRevenueInfo() {
+        List<UserSell> topUser = userRepository.getUserSellTheMost();
+        if (!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<UserSell> getUserBuyTheLeast() {
+        return userRepository.getUserBuyTheLeast();
+    }
+
+    @Override
+    public UserSell getTop1UserBuyTheLeast() {
+        List<UserSell> topUser = userRepository.getUserBuyTheLeast();
+        if(!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserSell> getUserNotSell() {
+        return userRepository.getUserNotSell();
+    }
+
+
+
+    @Override
+    public List<UserDto> findAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+    @Override
+    @Transactional
+    public void updateBirthday(Long userId, Date birthday) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.getUserInformation().setBirthDay(birthday); // Cập nhật ngày sinh
+        userRepository.save(user);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateGender(Long userId, String newGender) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        UserInformation userInfo = user.getUserInformation();
+        userInfo.setGender(newGender.trim()); // Cắt bỏ khoảng trắng nếu có
+        userInformationRepository.save(userInfo); // Lưu lại thay đổi
+    }
+
+    @Override
+    public void updateUserInformation(Long userId, String name, String location, String about) {
+        // Tìm người dùng theo userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        UserInformation userInfo = user.getUserInformation();
+        if (userInfo != null) {
+            userInfo.setName(name);
+            userInfo.setLocation(location);
+            userInfo.setAbout(about);
+        } else {
+            throw new RuntimeException("Thông tin người dùng không tồn tại");
+        }
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
     }
 
 }

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -21,25 +23,33 @@ public class ReportController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<ReportDto> createReport(@RequestBody ReportDto reportDto) {
+    public ResponseEntity<ReportDto> createReport(
+            @RequestBody ReportDto reportDto,
+            @CookieValue(value = "userId", defaultValue = "0") Long currentUserId // Lấy giá trị currentUserId từ cookie
+    ) {
+        // Kiểm tra nếu userId từ cookie không hợp lệ
+        if (currentUserId == 0) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu không có userId hợp lệ
+        }
+
         // Kiểm tra xem bài viết có tồn tại hay không
         Post post = postService.findPostById(reportDto.getPostId());
         if (post == null) {
-            // Trả về ResponseEntity với một ReportDto rỗng hoặc thông điệp lỗi thích hợp
-            return ResponseEntity.badRequest().body(null); // Hoặc bạn có thể trả về một ReportDto mới với thông tin chi tiết
+            return ResponseEntity.badRequest().body(null);
         }
 
         // Kiểm tra lý do báo cáo
         if (reportDto.getReason() == null || reportDto.getReason().isEmpty()) {
-            // Trả về ResponseEntity với một ReportDto rỗng hoặc thông điệp lỗi thích hợp
-            return ResponseEntity.badRequest().body(null); // Hoặc bạn có thể trả về một ReportDto mới với thông tin chi tiết
+            return ResponseEntity.badRequest().body(null);
         }
+
+        // Set userId hiện tại cho reportDto
+        reportDto.setUserId(currentUserId);
 
         // Tiến hành tạo báo cáo
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-
 
 
     @GetMapping("/{id}")

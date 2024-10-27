@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
+import org.example.library.dto.InstrumentSalesDto;
+import org.example.library.dto.StatisticalInstrumentDto;
 import org.example.library.mapper.InstrumentMapper;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
@@ -54,7 +56,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 //                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
 //            }
             Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-            String imageUrl  = (String) uploadResult.get("url");
+            String imageUrl = (String) uploadResult.get("url");
             instrumentDto.setImage(imageUrl);
 
             Instrument instrument = new Instrument();
@@ -118,7 +120,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 //                } else {
 //                    throw new RuntimeException("Failed to upload the image");
 //                }
-                if (instrument.getImage() != null){
+                if (instrument.getImage() != null) {
                     String publicId = extractPublicIdFromUrl(instrument.getImage());
                     cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
                 }
@@ -151,7 +153,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrumentRepository.save(instrument);
     }
 
-    public CategoryIns getManagedCategory(Long id){
+    public CategoryIns getManagedCategory(Long id) {
         return categoryInsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
     }
@@ -174,9 +176,122 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<StatisticalInstrumentDto> getIdAndNameInstrument() {
+        return instrumentRepository.getStatisticalInstruments();
+    }
+
+    @Override
     public List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId) {
         List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfDay(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfDay(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfWeek(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfWeek(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfMonth(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfMonth(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfYear(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfYear(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+
     }
 
 

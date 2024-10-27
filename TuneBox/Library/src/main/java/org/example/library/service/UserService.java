@@ -1,9 +1,14 @@
 package org.example.library.service;
 
 
+import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.UserInformation;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,4 +55,30 @@ public interface UserService {
 
     // get user details ecommerce customer page
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
+
+    // get user sell the most
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    UserSell getTop1UserRevenueInfo();
+
+
+    // get user buy the least
+    List<UserSell> getUserBuyTheLeast();
+
+    // get top 1 user buy the least
+    UserSell getTop1UserBuyTheLeast();
+
+    // get user not sell
+    List<UserSell> getUserNotSell();
+
+    List<UserDto> findAllUser();
+
+    @Transactional
+    void updateBirthday(Long userId, Date newBirthday);
+
+    @Transactional
+    void updateGender(Long userId, String newGender);
+
+    void updateUserInformation(Long userId, String name, String location, String about);
 }
