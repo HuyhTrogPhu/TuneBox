@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // get all order list
     @Query("select new org.example.library.dto.OrderListDto(o.id, o.orderDate, o.deliveryDate, o.tax, o.totalPrice," +
-            "o.totalItems, o.paymentMethod, o.status, o.shippingMethod )" +
+            "o.totalItems, o.paymentMethod, o.status, o.shippingMethod, o.paymentStatus )" +
             "from Order o")
     List<OrderListDto> getAllOrderList();
 

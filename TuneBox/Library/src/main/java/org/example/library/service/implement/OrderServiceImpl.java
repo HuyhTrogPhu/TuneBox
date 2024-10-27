@@ -1,7 +1,5 @@
 package org.example.library.service.implement;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.*;
 import org.example.library.model.Instrument;
 import org.example.library.model.Order;
@@ -15,11 +13,9 @@ import org.example.library.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -124,6 +120,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+
+    @Override
+    public void updateOrderStatus(Long orderId, String status, LocalDate deliveryDate, String paymentStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(status);
+        order.setDeliveryDate(deliveryDate);
+        order.setPaymentStatus(paymentStatus);// Cập nhật deliveryDate
+        orderRepository.save(order);
+    }
+
+
     // Hàm hỗ trợ chuyển đổi từ Order sang OrderDto
     public OrderDto mapToDto(Order order) {
         OrderDto orderDto = new OrderDto();
@@ -158,7 +166,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDto;
     }
-    public boolean updatePaymentStatus(Long orderId, String paymentStatus) {
+    public boolean updatePaymentStatus(Long orderId, String paymentStatus ) {
         // Logic cập nhật trạng thái thanh toán vào CSDL
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId)); // Sử dụng orElseThrow để lấy giá trị
