@@ -1,8 +1,7 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.MessageDto;
+import org.example.library.dto.MessageDTO;
 import org.example.library.dto.OtherAttachmentDto;
-import org.example.library.dto.UserDto;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.service.FileStorageService;
@@ -42,11 +41,11 @@ public class MessageController {
     private String uploadDir;
 
     @GetMapping("/between")
-    public ResponseEntity<List<MessageDto>> getMessagesBetween(@RequestParam Long userId1, @RequestParam Long userId2) {
+    public ResponseEntity<List<MessageDTO>> getMessagesBetween(@RequestParam Long userId1, @RequestParam Long userId2) {
         try {
             List<Message> messages = messageService.getMessagesBetween(userId1, userId2);
-            List<MessageDto> messageDTOs = messages.stream().map(message -> {
-                MessageDto messageDTO = new MessageDto();
+            List<MessageDTO> messageDTOs = messages.stream().map(message -> {
+                MessageDTO messageDTO = new MessageDTO();
                 messageDTO.setId(message.getId());
                 if (message.getSender() != null) {
                     messageDTO.setSenderId(message.getSender().getId());

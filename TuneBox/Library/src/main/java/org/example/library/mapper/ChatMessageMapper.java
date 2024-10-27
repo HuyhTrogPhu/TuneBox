@@ -12,19 +12,21 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public interface ChatMessageMapper {
 
-
-    // Thêm phương thức để chuyển đổi từ MessageWebSocketDTO sang Message
-    @Mapping(target = "sender.id", source = "senderId.id")
-    @Mapping(target = "receiver.id", source = "receiverId.id")
-    @Mapping(target = "dateTime", source = "creationDate")
+    @Mappings({
+            @Mapping(target = "sender.id", source = "senderId.id"),
+            @Mapping(target = "receiver.id", source = "receiverId.id"),
+            @Mapping(target = "dateTime", source = "creationDate")
+    })
     Message toModel(MessageWebSocketDTO messageWebSocketDTO);
 
-    @Mapping(source = "sender.id", target = "senderId.id")
-    @Mapping(source = "receiver.id", target = "receiverId.id")
-    @Mapping(source = "dateTime", target = "creationDate")
+    @Mappings({
+            @Mapping(source = "sender.id", target = "senderId.id"),
+            @Mapping(source = "receiver.id", target = "receiverId.id"),
+            @Mapping(source = "dateTime", target = "creationDate")
+    })
     MessageWebSocketDTO toDto(Message message);
 
-
+    // Các ánh xạ khác cho OtherAttachment
     OtherAttachment attachmentDtoToModel(OtherAttachmentDto dto);
     OtherAttachmentDto attachmentModelToDto(OtherAttachment attachment);
 

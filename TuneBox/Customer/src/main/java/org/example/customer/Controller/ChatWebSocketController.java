@@ -4,11 +4,8 @@ import org.example.library.dto.*;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.model.OtherAttachment;
-import org.example.library.service.FileStorageService;
 import org.example.library.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,11 +14,7 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +36,9 @@ public class ChatWebSocketController {
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload MessageWebSocketDTO messageWebSocketDTO) {
         try {
-            // Chuyển đổi MessageWebSocketDTO thành Message
+            if (messageWebSocketDTO.getSenderId() == null) {
+                throw new IllegalArgumentException("Sender ID cannot be null");
+            }
             Message message = messageMapper.toModel(messageWebSocketDTO);
 
             Message savedMessage = messageService.saveMessage(message);
@@ -106,7 +101,7 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat.addUser")
     @SendTo("/topic/chat/{chatId}")
-    public MessageDto addUser(@Payload MessageDto messageDTO, SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long chatId) {
+    public MessageDTO addUser(@Payload MessageDTO messageDTO, SimpMessageHeaderAccessor headerAccessor, @DestinationVariable Long chatId) {
         headerAccessor.getSessionAttributes().put("userId", messageDTO.getSenderId());
         return messageDTO;
     }
