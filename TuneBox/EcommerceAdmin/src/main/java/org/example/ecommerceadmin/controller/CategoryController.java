@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/e-comAdmin/category")
@@ -22,7 +22,8 @@ public class CategoryController {
 
     //    Add new category
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto, MultipartFile image) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto,
+                                                      MultipartFile image) {
         CategoryDto saveCategory = categoryService.createCategory(categoryDto,image);
         return new ResponseEntity<>(saveCategory, HttpStatus.CREATED);
     }

@@ -1,14 +1,12 @@
 package org.example.library.dto;
 
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.AlbumStyle;
-import org.example.library.model.Genre;
-import org.example.library.model.Track;
-import org.example.library.model.User;
+import org.example.library.dto.TrackDto;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -24,13 +22,15 @@ public class AlbumsDto {
     private String title;
     private String albumImage;
     private String description;
-    private Date releaseDate;
     private LocalDate createDate;
-    private boolean report;
-    private Date reportDate;
-    private String status;
-    private Genre genre;
-    private User creator;
-    private Set<Track> tracks;
-    private AlbumStyle albumStyle;
+    private boolean report; //false
+    private boolean status;
+    private Long genreId;
+    private Long creatorId;
+    private Long albumStyleId;
+
+    private Set<Long> tracks;
+
+
+
 }

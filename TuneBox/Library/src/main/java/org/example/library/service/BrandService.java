@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public interface  BrandService {
+public interface    BrandService {
     BrandsDto createBrand(BrandsDto brandsDto, MultipartFile image);
 
     BrandsDto getBrandById(Long id);
@@ -20,5 +20,7 @@ public interface  BrandService {
     List<BrandsDto> searchBrand(String keyword);
 
     Brand getManagedBrand(Long id);
+
+
 
 }

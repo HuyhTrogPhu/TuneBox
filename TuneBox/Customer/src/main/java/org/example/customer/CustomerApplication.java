@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @SpringBootApplication(scanBasePackages = {"org.example.library.*", "org.example.*"})
 @EnableJpaRepositories(value = "org.example.library.repository")
 @EntityScan(value = "org.example.library.model")
-
 public class CustomerApplication {
 
     public static void main(String[] args) {

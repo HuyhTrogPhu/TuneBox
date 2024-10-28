@@ -37,10 +37,8 @@ public class EcommerceAdmin {
     @Column(columnDefinition = "MEDIUMBLOB")
     private String avatar;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "ecom_admin_role", joinColumns = @JoinColumn(name = "ecom_admin_id", referencedColumnName = "ecom_admin_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    private Collection<Role> role;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    private Role role;
 
 }

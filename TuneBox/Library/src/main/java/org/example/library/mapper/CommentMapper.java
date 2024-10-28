@@ -21,7 +21,7 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserNickname(comment.getUser().getUserNickname());
+        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
         commentDTO.setPostId(comment.getPost().getId());
         commentDTO.setEdited(comment.isEdited());
 
@@ -37,7 +37,7 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserNickname(comment.getUser().getUserNickname());
+        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
         commentDTO.setEdited(comment.isEdited());
 
         commentDTO.setTrackId(comment.getTrack().getId());

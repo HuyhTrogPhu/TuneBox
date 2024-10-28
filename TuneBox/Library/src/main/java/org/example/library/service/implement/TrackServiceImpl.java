@@ -130,6 +130,8 @@ public class TrackServiceImpl implements TrackService {
         }
     }
 
+
+
     @Override
     public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId) {
         try {
@@ -287,10 +289,36 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public TrackDto getTrackById(Long trackId) {
-       Track track = trackRepository.findById(trackId).orElseThrow(
-               () -> new RuntimeException("Track not found")
-       );
-       return TrackMapper.mapperTrackDto(track);
+        Track track = trackRepository.findById(trackId).orElseThrow(
+                () -> new RuntimeException("Track not found")
+        );
+        return TrackMapper.mapperTrackDto(track);
+    }
+
+
+    @Override
+    public List<TrackDto> getTracksByGenreId(Long genreId) {
+        return trackRepository.findByGenreId(genreId)
+                .stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public  List<TrackDto> getAllTracks() {
+        List<Track> tracks = trackRepository.findAll();
+        return tracks.stream().map(TrackMapper::mapperTrackDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<TrackDto> searchTracks(String keywords) {
+        List<Track> tracks = trackRepository.searchByKeywords(keywords);
+
+        // Chuyển đổi danh sách Track thành TrackDto
+        return tracks.stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
     }
 
 
