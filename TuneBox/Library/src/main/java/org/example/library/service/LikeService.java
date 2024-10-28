@@ -17,4 +17,7 @@ public interface LikeService {
 
     List<LikeDto> getAllByUserId(Long userId);
 
+
+    List<LikeDto> getAllAlbumByUserId(Long userId);
+    List<LikeDto> getAllPlayListByUserId(Long userId);
 }

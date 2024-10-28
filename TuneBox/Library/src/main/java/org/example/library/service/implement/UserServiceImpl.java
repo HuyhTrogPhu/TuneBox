@@ -292,4 +292,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public List<SearchDto> searchUser(String keyword) {
+        return userRepository.searchUser(keyword);
+    }
+
+    @Override
+    public List<SearchDto> searchTrack(String keyword) {
+        return userRepository.searchTrack(keyword);
+    }
+
+    @Override
+    public List<SearchDto> searchAlbum(String keyword) {
+        return userRepository.searchAlbum(keyword);
+    }
+
+    @Override
+    public List<SearchDto> searchPlaylist(String keyword) {
+        return userRepository.searchPlaylist(keyword);
+    }
+
 }

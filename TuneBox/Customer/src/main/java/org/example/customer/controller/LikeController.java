@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins ="http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -86,5 +87,31 @@ public class LikeController {
         List<LikeDto> liked = likeService.getAllByUserId(userId);
         return ResponseEntity.ok(liked);
     }
+
+//    album
+    @GetMapping("/allAlbums/{userId}")
+    public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
+        List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
+
+        // Lọc ra các LikeDto có albumId khác null
+        List<LikeDto> filteredLikes = liked.stream()
+                .filter(likeDto -> likeDto.getAlbumId() != null)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredLikes);
+    }
+
+    @GetMapping("/allPlaylist/{userId}")
+    public ResponseEntity<List<LikeDto>> getAllPlayListByUserId(@PathVariable Long userId) {
+        List<LikeDto> liked = likeService.getAllPlayListByUserId(userId);
+
+        // Lọc ra các LikeDto có albumId khác null
+        List<LikeDto> filteredLikes = liked.stream()
+                .filter(likeDto -> likeDto.getPlaylistId() != null)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredLikes);
+    }
+
 
 }
