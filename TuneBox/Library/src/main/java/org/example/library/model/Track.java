@@ -61,13 +61,13 @@ public class Track {
     private Albums albums;
 
     @ManyToMany(mappedBy = "tracks")
+    @JsonIgnore
     private Set<Playlist> playlists;
 
     @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
-    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany(mappedBy = "track", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Set<Like> likes;
 
 }

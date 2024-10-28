@@ -2,7 +2,9 @@ package org.example.library.service.implement;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.AlbumsDto;
+import org.example.library.dto.PlaylistDto;
 import org.example.library.mapper.AlbumMapper;
+import org.example.library.mapper.PlayListMapper;
 import org.example.library.model.Albums;
 import org.example.library.repository.AlbumsRepository;
 import org.example.library.service.AlbumService;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 @Service
 public class AlbumServiceImplement implements AlbumService {
     @Autowired
@@ -25,5 +30,17 @@ public class AlbumServiceImplement implements AlbumService {
         }
         Albums albums = albumsList.get(0);
         return AlbumMapper.mapToDTO(albums);
+    }
+    @Override
+    public List<AlbumsDto> getAll(){
+        return albumsRepository.findAll()
+        .stream()
+        .map(AlbumMapper::mapToDTO)
+        .collect(Collectors.toList());
+    }
+    @Override
+    public AlbumsDto findByAlbumsByID(Long id) {
+        AlbumsDto albumsDto = AlbumMapper.mapToDTO(albumsRepository.findById(id).get());
+        return albumsDto;
     }
 }

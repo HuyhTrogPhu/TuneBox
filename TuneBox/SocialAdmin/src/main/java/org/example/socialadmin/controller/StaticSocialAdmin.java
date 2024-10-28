@@ -1,14 +1,15 @@
 package org.example.socialadmin.controller;
 
-import org.example.library.service.AlbumService;
-import org.example.library.service.PostService;
-import org.example.library.service.TrackService;
-import org.example.library.service.UserService;
+import org.example.library.dto.CommentDTO;
+import org.example.library.dto.ReplyDto;
+import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -25,6 +26,15 @@ public class StaticSocialAdmin {
 
     @Autowired
     TrackService trackService;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
+    PlayListService playlistService;
+
+    @Autowired
+    ReplyService replyService;
 
 
     @GetMapping("/countUser")
@@ -135,6 +145,38 @@ public class StaticSocialAdmin {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/getAlbums/{id}")
+    public ResponseEntity<?> GetAlbmumById(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", albumService.findByAlbumsByID(Id));
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/getAllAlbums")
+    public ResponseEntity<?> GetAllAlbum(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", albumService.getAll());
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/getDetailTrack/{id}")
     public ResponseEntity<?> GetDetailTrack(@PathVariable("id") Long Id){
@@ -166,6 +208,40 @@ public class StaticSocialAdmin {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/getAllPlayList")
+    public ResponseEntity<?> GetAllPlayList(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", playlistService.findAll());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+//get PLayList by ID
+    @GetMapping("/getPLayList/{id}")
+    public ResponseEntity<?> GetPLayListById(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",playlistService.findByPlaylistId(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/getTrack/{id}")
     public ResponseEntity<?> GetTrackById(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
@@ -179,7 +255,18 @@ public class StaticSocialAdmin {
             response.put("data", null);
         }
 
+
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getTrackCommentbyId/{trackId}")
+    public ResponseEntity<List<CommentDTO>> getCommentsByTrack(@PathVariable Long trackId) {
+        List<CommentDTO> comments = commentService.getCommentsByTrack(trackId);
+        return ResponseEntity.ok(comments);
+    }
+    @GetMapping("/comment/{commentId}")
+    public ResponseEntity<List<ReplyDto>> getRepliesByComment(@PathVariable Long commentId) {
+        List<ReplyDto> replies = replyService.getRepliesByComment(commentId);
+        return new ResponseEntity<>(replies, HttpStatus.OK);
+    }
 }
