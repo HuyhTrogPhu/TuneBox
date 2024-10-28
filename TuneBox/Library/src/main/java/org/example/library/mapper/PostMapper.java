@@ -3,6 +3,7 @@ package org.example.library.mapper;
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
 
+
 public class PostMapper {
 
     public static PostDto toDto(Post post) {
@@ -13,7 +14,7 @@ public class PostMapper {
         dto.setHidden(post.isHidden());
         dto.setContent(post.getContent());
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
-
+        dto.setAvatar(post.getUser().getUserInformation().getAvatar());
         // Kiểm tra post.getUser() không null trước khi lấy userName
         dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
 

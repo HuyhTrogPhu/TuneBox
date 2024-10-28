@@ -292,4 +292,47 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    @Transactional
+    public void updateUserProfile(Long userId, UserUpdateInspiredBytalentgenre userUpdateInspiredBytalentgenre) {
+        // Tìm người dùng theo userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        // Cập nhật InspiredBy
+        if (userUpdateInspiredBytalentgenre.getInspiredBy() != null) {
+            Set<InspiredBy> inspiredBySet = new HashSet<>();
+            for (Long inspiredId : userUpdateInspiredBytalentgenre.getInspiredBy()) {
+                InspiredBy inspiredBy = inspiredByRepository.findById(inspiredId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspired by not found"));
+                inspiredBySet.add(inspiredBy);
+            }
+            user.setInspiredBy(inspiredBySet);
+        }
+
+        // Cập nhật Talent
+        if (userUpdateInspiredBytalentgenre.getTalent() != null) {
+            Set<Talent> talentSet = new HashSet<>();
+            for (Long talentId : userUpdateInspiredBytalentgenre.getTalent()) {
+                Talent talent = talentRepository.findById(talentId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Talent not found"));
+                talentSet.add(talent);
+            }
+            user.setTalent(talentSet);
+        }
+
+        // Cập nhật Genre
+        if (userUpdateInspiredBytalentgenre.getGenre() != null) {
+            Set<Genre> genreSet = new HashSet<>();
+            for (Long genreId : userUpdateInspiredBytalentgenre.getGenre()) {
+                Genre genre = genreRepository.findById(genreId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found"));
+                genreSet.add(genre);
+            }
+            user.setGenre(genreSet);
+        }
+
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
+    }
 }
