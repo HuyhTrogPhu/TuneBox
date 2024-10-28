@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // get order by user id
-    @Query("select new org.example.library.dto.UserIsInvoice(o.orderDate, o.deliveryDate, o.tax, o.totalPrice," +
+    @Query("select new org.example.library.dto.UserIsInvoice(o.id ,o.orderDate, o.deliveryDate, o.tax, o.totalPrice," +
             "o.totalItems, o.paymentMethod, o.status, o.shippingMethod)" +
             "from User u join u.orderList o where u.id = :userId")
     List<UserIsInvoice> findByUserId(Long userId);
