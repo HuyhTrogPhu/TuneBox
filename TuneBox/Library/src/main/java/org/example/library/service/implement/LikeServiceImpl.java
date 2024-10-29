@@ -112,6 +112,11 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.countByPostId(postId); // Giả sử bạn có phương thức này trong repository
     }
 
+    @Override
+    public long countLikesByTrackId(Long trackId) {
+        return likeRepository.countByTrackId(trackId);
+    }
+
 
     @Override
     public List<LikeDto> getLikesByPostId(Long postId) {
