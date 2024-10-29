@@ -58,6 +58,12 @@ public class LikeController {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/track/{trackId}/count")
+    public ResponseEntity<Long> getLikesCountByTrackId(@PathVariable Long trackId) {
+        long count = likeService.countLikesByTrackId(trackId);
+        return ResponseEntity.ok(count);
+    }
+
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<LikeDto>> getLikesByPostId(@PathVariable Long postId) {
         List<LikeDto> likes = likeService.getLikesByPostId(postId);
