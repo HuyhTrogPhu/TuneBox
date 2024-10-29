@@ -16,5 +16,8 @@ public class LikeDto {
     private Long postId;
     private Long trackId;
 
+    private Long albumId;
+    private Long playlistId;
+
 
 }

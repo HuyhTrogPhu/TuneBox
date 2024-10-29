@@ -118,7 +118,7 @@ public class LikeServiceImpl implements LikeService {
 
         List<Like> likes = likeRepository.findByPostId(postId);
         return likes.stream()
-                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId()))
+                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId(), like.getAlbums().getId(),like.getPlaylist().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -150,6 +150,18 @@ public class LikeServiceImpl implements LikeService {
     public List<LikeDto> getAllByUserId(Long userId) {
         List<Like> liked = likeRepository.findByUserId(userId);
         return liked.stream().map(LikeMapper::PostAndTrack).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllAlbumByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toAlbumDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllPlayListByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toPlayListDto).collect(Collectors.toList());
     }
 
 }
