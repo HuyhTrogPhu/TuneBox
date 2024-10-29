@@ -37,8 +37,8 @@ public class UserConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/register", "/user/login", "/user/list-genre", "/user/list-inspired-by",
                                 "/user/list-talent", "/customer/shop/**", "/customer/brand/**", "/customer/category/**",
-                                "/customer/**").permitAll()
-                        .requestMatchers("/customer/cart/**", "/user/{userId}/**").hasRole("CUSTOMER")
+                                "/customer/**", "/user/**", "/api/**").permitAll()
+                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
