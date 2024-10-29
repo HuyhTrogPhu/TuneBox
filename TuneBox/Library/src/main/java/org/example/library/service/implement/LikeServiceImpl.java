@@ -112,13 +112,18 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.countByPostId(postId); // Giả sử bạn có phương thức này trong repository
     }
 
+    @Override
+    public long countLikesByTrackId(Long trackId) {
+        return likeRepository.countByTrackId(trackId);
+    }
+
 
     @Override
     public List<LikeDto> getLikesByPostId(Long postId) {
 
         List<Like> likes = likeRepository.findByPostId(postId);
         return likes.stream()
-                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId()))
+                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId(), like.getAlbums().getId(),like.getPlaylist().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -150,6 +155,18 @@ public class LikeServiceImpl implements LikeService {
     public List<LikeDto> getAllByUserId(Long userId) {
         List<Like> liked = likeRepository.findByUserId(userId);
         return liked.stream().map(LikeMapper::PostAndTrack).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllAlbumByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toAlbumDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllPlayListByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toPlayListDto).collect(Collectors.toList());
     }
 
 }

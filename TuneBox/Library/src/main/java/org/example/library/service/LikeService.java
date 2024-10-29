@@ -15,6 +15,10 @@ public interface LikeService {
 
     long countLikesByPostId(Long postId);
 
+    long countLikesByTrackId(Long trackId);
     List<LikeDto> getAllByUserId(Long userId);
 
+
+    List<LikeDto> getAllAlbumByUserId(Long userId);
+    List<LikeDto> getAllPlayListByUserId(Long userId);
 }

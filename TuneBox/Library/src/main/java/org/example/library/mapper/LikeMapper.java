@@ -1,7 +1,10 @@
 package org.example.library.mapper;
 
 import org.example.library.dto.LikeDto;
+import org.example.library.model.Albums;
 import org.example.library.model.Like;
+import org.example.library.model.Playlist;
+import org.example.library.model.User;
 
 
 public class LikeMapper {
@@ -63,6 +66,74 @@ public class LikeMapper {
         }
 
         return dto;
+    }
+
+// thiet lap Album
+    public static LikeDto toAlbumDto(Like like) {
+        LikeDto dto = new LikeDto();
+        dto.setId(like.getId());
+        dto.setCreateDate(like.getCreateDate());
+        dto.setUserId(like.getUser().getId());
+
+        if (like.getAlbums() != null) {
+            dto.setAlbumId(like.getAlbums().getId());
+        }
+
+        return dto;
+    }
+
+    public static Like toAlbum(LikeDto dto) {
+        Like like = new Like();
+        like.setId(dto.getId());
+        like.setCreateDate(dto.getCreateDate());
+
+        if (dto.getUserId() != null) {
+            User user = new User();
+            user.setId(dto.getUserId());
+            like.setUser(user); // Thiết lập user cho Like
+        }
+
+        if (dto.getAlbumId() != null) {
+            Albums album = new Albums();
+            album.setId(dto.getAlbumId());
+            like.setAlbums(album); // Thiết lập album cho Like
+        }
+
+        return like;
+    }
+
+    // thiet lap playlist
+    public static LikeDto toPlayListDto(Like like) {
+        LikeDto dto = new LikeDto();
+        dto.setId(like.getId());
+        dto.setCreateDate(like.getCreateDate());
+        dto.setUserId(like.getUser().getId());
+
+        if (like.getPlaylist() != null) {
+            dto.setPlaylistId(like.getPlaylist().getId());
+        }
+
+        return dto;
+    }
+
+    public static Like toPlayList(LikeDto dto) {
+        Like like = new Like();
+        like.setId(dto.getId());
+        like.setCreateDate(dto.getCreateDate());
+
+        if (dto.getUserId() != null) {
+            User user = new User();
+            user.setId(dto.getUserId());
+            like.setUser(user); // Thiết lập user cho Like
+        }
+
+        if (dto.getPlaylistId() != null) {
+            Playlist playlist = new Playlist();
+            playlist.setId(dto.getPlaylistId());
+            like.setPlaylist(playlist); // Thiết lập laylist cho Like
+        }
+
+        return like;
     }
 
 }

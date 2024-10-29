@@ -90,4 +90,11 @@ public interface UserService {
 
     @Transactional
     void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
+
+
+    public List<SearchDto> searchPlaylist(String keyword);
+    public List<SearchDto> searchAlbum(String keyword);
+    public List<SearchDto> searchTrack(String keyword);
+    public List<SearchDto> searchUser(String keyword);
+
 }
