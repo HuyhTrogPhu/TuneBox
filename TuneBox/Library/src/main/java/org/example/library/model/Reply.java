@@ -1,6 +1,5 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Entity
@@ -28,20 +28,19 @@ public class Reply {
     private LocalDateTime creationDate;
 
     @ManyToOne
-    @JsonManagedReference
+//    @JsonManagedReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = false)
-    private Comment parentComment;
+    private Comment parentComment; // Bình luận mà reply này thuộc về
 
     @ManyToOne
     @JoinColumn(name = "reply_id") // Khóa ngoại để chỉ định reply cha
     private Reply parentReply;
 
-    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentReply", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reply> replies = new ArrayList<>();
 }
-
 

@@ -13,21 +13,20 @@ import java.time.LocalDateTime;
 @Component
 public class ReplyMapper {
 
-    private final CommentRepository commentRepository; // Declaring repository
+    private final CommentRepository commentRepository;
 
-    // Initializing CommentRepository through constructor
     public ReplyMapper(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
 
-    // Convert from Reply Entity to ReplyDTO
+    // Chuyển từ Reply Entity sang ReplyDTO
     public ReplyDto toDto(Reply reply) {
         if (reply == null) return null;
 
         ReplyDto replyDTO = new ReplyDto();
         replyDTO.setId(reply.getId());
         replyDTO.setContent(reply.getContent());
-        replyDTO.setCreationDate(reply.getCreationDate());
+        replyDTO.setCreationDate(reply.getCreationDate()); // Trực tiếp sử dụng LocalDateTime
         replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
         replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
 
@@ -36,7 +35,7 @@ public class ReplyMapper {
             replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserInformation().getName()); // Gán nickname của người bình luận gốc
         }
 
-        // Set commentId từ parentComment nếu có
+        // Set commentId từ parentComment
         if (reply.getParentComment() != null) {
             replyDTO.setCommentId(reply.getParentComment().getId());
         }
@@ -49,8 +48,7 @@ public class ReplyMapper {
         return replyDTO;
     }
 
-
-    // Convert from ReplyDTO to Reply Entity
+    // Chuyển từ ReplyDTO sang Reply Entity
     public Reply toEntity(ReplyDto replyDTO, User user, Long parentCommentId) {
         Reply reply = new Reply();
         reply.setContent(replyDTO.getContent());

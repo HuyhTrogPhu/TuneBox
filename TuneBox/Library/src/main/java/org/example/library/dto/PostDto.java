@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,6 +19,5 @@ public class PostDto {
     private Set<PostImageDto> images;
     private LocalDateTime createdAt;
     private boolean hidden;
-
-
+    private String avatar;
 }

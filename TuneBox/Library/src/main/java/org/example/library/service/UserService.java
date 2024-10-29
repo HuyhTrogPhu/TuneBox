@@ -78,4 +78,16 @@ public interface UserService {
     void updateGender(Long userId, String newGender);
 
     void updateUserInformation(Long userId, String name, String location, String about);
+
+    // Update inspiredBy
+    void updateInspiredBy(Long userId, List<Long> inspiredByIds);
+
+    // Update talent
+    void updateTalent(Long userId, List<Long> talentIds);
+
+    // Update genre
+    void updateGenre(Long userId, List<Long> genreIds);
+
+    @Transactional
+    void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 }

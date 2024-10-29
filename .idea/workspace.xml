@@ -4,20 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="sau tham hoa">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/EmailUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInfoUpdateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="Sau khi sua cua chi Nhu (tat nhien roi)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CommentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CommentDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/UserInformation.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/UserInformation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserInformationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserInformationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/NotificationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/NotificationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/NotificationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/NotificationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/NotificationServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +33,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="GiaBao" />
+        <entry key="$PROJECT_DIR$" value="QuocTrung" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -48,9 +45,6 @@
     &quot;assignee&quot;: &quot;halayra&quot;
   }
 }</component>
-  <component name="GitRewordedCommitMessages">
-    <option name="onto" value="5164d59cdb53b14a49dac94f67f160379910d605" />
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
@@ -73,6 +67,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;JUnit.All in DuAnTotNghiep.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
@@ -87,17 +82,43 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.example.library.dto" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FPT_poly\DuAnTotNghiep\TuneBox\TuneBox\Customer\src\main\java\org\example\customer\config" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <myKeys>
+      <visibility group="Gradle Tasks" flag="true" />
+      <visibility group="Grunt" flag="true" />
+      <visibility group="Gulp" flag="true" />
+      <visibility group="HTTP Requests" flag="true" />
+      <visibility group="Maven Goals" flag="true" />
+      <visibility group="Node.js" flag="true" />
+      <visibility group="Recent projects" flag="true" />
+      <visibility group="Run configurations" flag="true" />
+      <visibility group="com.intellij.httpClient.http.request.run.HttpRequestRunAnythingProvider" flag="true" />
+      <visibility group="com.intellij.ide.actions.runAnything.RunAnythingRunConfigurationProvider" flag="true" />
+      <visibility group="com.intellij.ide.actions.runAnything.activity.RunAnythingRecentProjectProvider" flag="true" />
+      <visibility group="com.intellij.lang.javascript.buildTools.grunt.GruntRunAnythingProvider" flag="true" />
+      <visibility group="com.intellij.lang.javascript.buildTools.gulp.GulpRunAnythingProvider" flag="true" />
+      <visibility group="com.intellij.lang.javascript.buildTools.npm.NpmRunAnythingProvider.Npm" flag="true" />
+      <visibility group="com.intellij.lang.javascript.buildTools.npm.NpmRunAnythingProvider.Yarn" flag="true" />
+      <visibility group="com.jetbrains.nodejs.execution.NodeRunAnythingProvider" flag="true" />
+      <visibility group="npm" flag="true" />
+      <visibility group="org.jetbrains.idea.maven.execution.MavenRunAnythingProvider" flag="true" />
+      <visibility group="org.jetbrains.plugins.gradle.execution.GradleRunAnythingProvider" flag="true" />
+      <visibility group="yarn" flag="true" />
+    </myKeys>
   </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
@@ -110,6 +131,27 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.CustomerApplication">
+    <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
+      <module name="Customer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.customer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in DuAnTotNghiep" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DuAnTotNghiep" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
@@ -141,12 +183,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
+        <item itemvalue="Application.CustomerApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -163,11 +211,17 @@
       <workItem from="1728305162768" duration="14857000" />
       <workItem from="1728357263814" duration="164000" />
       <workItem from="1728359274760" duration="4462000" />
-      <workItem from="1729753314143" duration="1283000" />
-      <workItem from="1729821373967" duration="12866000" />
-      <workItem from="1729857619605" duration="8842000" />
-      <workItem from="1729912503810" duration="521000" />
-      <workItem from="1729913852880" duration="3602000" />
+      <workItem from="1728663834379" duration="13925000" />
+      <workItem from="1728687951455" duration="8353000" />
+      <workItem from="1730125328146" duration="1398000" />
+      <workItem from="1730126942178" duration="227000" />
+      <workItem from="1730127172672" duration="176000" />
+      <workItem from="1730127355877" duration="521000" />
+      <workItem from="1730127880740" duration="92000" />
+      <workItem from="1730128041404" duration="249000" />
+      <workItem from="1730128300250" duration="642000" />
+      <workItem from="1730128951090" duration="2787000" />
+      <workItem from="1730161214859" duration="7738000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -185,63 +239,39 @@
       <option name="project" value="LOCAL" />
       <updated>1728317883783</updated>
     </task>
-    <task id="LOCAL-00003" summary="cap nhat">
+    <task id="LOCAL-00003" summary="Done Like Track &lt;3">
       <option name="closed" value="true" />
-      <created>1729096702866</created>
+      <created>1728680249788</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1729096702866</updated>
+      <updated>1728680249789</updated>
     </task>
-    <task id="LOCAL-00004" summary="cap nhat sua sau tham hoa merge code">
+    <task id="LOCAL-00004" summary="Done Like Track &lt;3">
       <option name="closed" value="true" />
-      <created>1729136058291</created>
+      <created>1730103577975</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1729136058291</updated>
+      <updated>1730103577975</updated>
     </task>
-    <task id="LOCAL-00005" summary="sau tham hoa">
+    <task id="LOCAL-00005" summary="Done Like Track &lt;3">
       <option name="closed" value="true" />
-      <created>1729752548460</created>
+      <created>1730103582924</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1729752548460</updated>
+      <updated>1730103582924</updated>
     </task>
-    <task id="LOCAL-00006" summary="sau tham hoa">
+    <task id="LOCAL-00006" summary="Sau khi sua cua chi Nhu (tat nhien roi)">
       <option name="closed" value="true" />
-      <created>1729752552440</created>
+      <created>1730129270975</created>
       <option name="number" value="00006" />
       <option name="presentableId" value="LOCAL-00006" />
       <option name="project" value="LOCAL" />
-      <updated>1729752552440</updated>
+      <updated>1730129270975</updated>
     </task>
-    <task id="LOCAL-00007" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729753357611</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1729753357612</updated>
-    </task>
-    <task id="LOCAL-00008" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729753948645</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1729753948645</updated>
-    </task>
-    <task id="LOCAL-00009" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729754070094</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1729754070094</updated>
-    </task>
-    <option name="localTasksCounter" value="10" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,11 +291,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="commit" />
     <MESSAGE value="cap nhat comment" />
-    <MESSAGE value="cap nhat" />
-    <MESSAGE value="cap nhat sua sau tham hoa merge code" />
-    <MESSAGE value="cập nhật xem list bạn bè, theo dõi, được theo dõi" />
-    <MESSAGE value="sau tham hoa" />
-    <option name="LAST_COMMIT_MESSAGE" value="sau tham hoa" />
+    <MESSAGE value="Done Like Track &lt;3" />
+    <MESSAGE value="Sau khi sua cua chi Nhu (tat nhien roi)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sau khi sua cua chi Nhu (tat nhien roi)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
