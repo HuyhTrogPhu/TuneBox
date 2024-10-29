@@ -8,7 +8,7 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.*;
 
-import org.example.library.utils.JwtUtility;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -28,8 +28,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private JwtUtility jwtUtility;
 
     @Autowired
     private UserService userService;
@@ -112,7 +110,6 @@ public class UserController {
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
                 // Tạo JWT token cho user
-                String jwtToken = jwtUtility.generateToken(user.getUserName());
 
                 // Thiết lập cookie cho userId
                 Cookie cookie = new Cookie("userId", user.getId().toString());
@@ -122,31 +119,22 @@ public class UserController {
 
                 // Trả về phản hồi bao gồm token và userId
                 Map<String, Object> responseMap = new HashMap<>();
-                responseMap.put("token", jwtToken);
                 responseMap.put("userId", user.getId());
 
                 System.out.println("Login successful");
 
                 return ResponseEntity.ok(responseMap);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 
     // log-out
     @GetMapping("/log-out")
     public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
-        // Lấy JWT từ tiêu đề Authorization
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwt = authorizationHeader.substring(7);
-
-            // Thêm token vào blacklist hoặc lưu thông tin về việc đã log-out
-            // Ví dụ: jwtBlacklistService.addTokenToBlacklist(jwt);
-
             // Xóa cookie userId
             Cookie cookie = new Cookie("userId", null);
             cookie.setMaxAge(0);
@@ -154,9 +142,6 @@ public class UserController {
             response.addCookie(cookie);
 
             return ResponseEntity.ok("Logged out successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token không hợp lệ");
-        }
     }
 
 

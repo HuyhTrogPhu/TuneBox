@@ -2,9 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.CategoryDto;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.dto.InstrumentSalesDto;
 import org.example.library.dto.StatisticalInstrumentDto;
@@ -16,13 +14,11 @@ import org.example.library.repository.BrandRepository;
 import org.example.library.repository.CategoryInsRepository;
 import org.example.library.repository.InstrumentRepository;
 import org.example.library.service.InstrumentService;
-import org.example.library.utils.ImageUploadInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,7 +39,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final ImageUploadInstrument imageUploadInstrument;
 
     @Override
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image) {
