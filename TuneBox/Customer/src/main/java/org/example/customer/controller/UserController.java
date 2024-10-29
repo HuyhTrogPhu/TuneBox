@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,8 +49,6 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-
 
     // Register
     @PostMapping("/register")
@@ -169,7 +167,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Trả về null hoặc thông điệp lỗi cụ thể
         }
     }
 
@@ -213,4 +211,4 @@ public class UserController {
     }
 
 
-    }
+}
