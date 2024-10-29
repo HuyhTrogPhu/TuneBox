@@ -61,4 +61,11 @@ public interface UserService {
     void updateGender(Long userId, String newGender);
 
     void updateUserInformation(Long userId, String name, String location, String about);
+
+
+    public List<SearchDto> searchPlaylist(String keyword);
+    public List<SearchDto> searchAlbum(String keyword);
+    public List<SearchDto> searchTrack(String keyword);
+    public List<SearchDto> searchUser(String keyword);
+
 }

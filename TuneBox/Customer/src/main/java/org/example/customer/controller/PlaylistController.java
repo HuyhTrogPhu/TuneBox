@@ -97,7 +97,7 @@ public class PlaylistController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //get playlist theo id track
+    //get playlist theo ng dung
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PlaylistDto>> getPlaylistByUserId(@PathVariable Long userId) {
         List<PlaylistDto> playlist = playlistService.getplaylistByUserId(userId);

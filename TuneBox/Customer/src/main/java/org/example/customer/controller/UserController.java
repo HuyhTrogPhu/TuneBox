@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -213,4 +215,35 @@ public class UserController {
     }
 
 
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam String keyword) {
+        try {
+            // Gọi các phương thức tìm kiếm từ service
+            List<SearchDto> userResults = userService.searchUser("%" + keyword + "%");
+            List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
+            List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
+            List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
+
+            // In ra dữ liệu kết quả tìm kiếm
+            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
+            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
+            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
+            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
+
+            // Tạo response chứa tất cả kết quả
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", userResults);
+            response.put("tracks", trackResults);
+            response.put("albums", albumResults);
+            response.put("playlists", playlistResults);
+
+            // Trả về phản hồi thành công với kết quả tìm kiếm
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Xử lý lỗi và trả về phản hồi lỗi
+            return ResponseEntity.internalServerError().body("Error retrieving search results: " + e.getMessage());
+        }
     }
+
+
+}

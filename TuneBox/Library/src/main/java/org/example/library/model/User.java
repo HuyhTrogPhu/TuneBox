@@ -41,7 +41,6 @@ public class User {
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_inspired_by",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
