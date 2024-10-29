@@ -187,4 +187,5 @@ public class FriendServiceImpl implements FriendService {
         return (long) friendSet.size(); // Trả về số lượng bạn bè duy nhất
     }
 
+
 }

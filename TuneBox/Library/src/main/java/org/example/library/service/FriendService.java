@@ -2,7 +2,6 @@ package org.example.library.service;
 
 import org.example.library.dto.FriendAcceptDto;
 import org.example.library.dto.FriendRequestDTO;
-import org.example.library.model.User;
 
 import java.util.List;
 

@@ -23,8 +23,8 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
     Long countByFriendAndStatus(User friend, String status);
 
     // get friend list
-    @Query("select new org.example.library.dto.FriendAcceptDto(u.id, ui.avatar, ui.name, u.userName)" +
-            "from Friend f join f.user u join u.userInformation ui where u.id = :userId")
+    @Query("select new org.example.library.dto.FriendAcceptDto(u.id,f.id, ui.avatar, ui.name, u.userName)" +
+            "from Friend f join f.friend u join u.userInformation ui where f.user.id = :userId and f.accepted = true ")
     List<FriendAcceptDto> getFriendAccepts(@Param("userId") Long userId);
 }
 

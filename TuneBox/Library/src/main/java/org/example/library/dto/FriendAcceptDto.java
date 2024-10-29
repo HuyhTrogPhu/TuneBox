@@ -12,11 +12,13 @@ import lombok.Setter;
 public class FriendAcceptDto {
     private Long userId;
 
+    private Long friendId;
+
     private String avatar;
 
     private String name;
 
-    private String username;
+    private String userName;
 
 
 }
