@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FollowController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,6 +176,7 @@
         <item itemvalue="Application.CustomerApplication" />
         <item itemvalue="JUnit.All in DuAnTotNghiep" />
         <item itemvalue="Application.CustomerApplication" />
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
       </list>
     </recent_temporary>
   </component>
@@ -238,6 +241,7 @@
       <workItem from="1730120733397" duration="10792000" />
       <workItem from="1730145320645" duration="585000" />
       <workItem from="1730178792192" duration="5648000" />
+      <workItem from="1730208208516" duration="27000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />

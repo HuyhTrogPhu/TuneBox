@@ -214,6 +214,11 @@ public class UserController {
         }
     }
 
+    @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserProfile(userId, userUpdateRequest);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/search")
     public ResponseEntity<?> search(@RequestParam String keyword) {
