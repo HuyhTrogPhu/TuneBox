@@ -291,48 +291,97 @@ public class UserServiceImpl implements UserService {
         // Lưu lại thông tin đã cập nhật
         userRepository.save(user);
     }
+    //updateInspiredBy
+    public void updateInspiredBy(Long userId, List<Long> inspiredByIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    @Override
+        // Clear current inspiredBy and set new values
+        user.getInspiredBy().clear();
+        for (Long id : inspiredByIds) {
+            InspiredBy inspiredBy = inspiredByRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("InspiredBy not found for ID: " + id));
+            user.getInspiredBy().add(inspiredBy);
+        }
+
+        userRepository.save(user); // Save changes
+    }
+//updateTalent
+    public void updateTalent(Long userId, List<Long> talentIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Clear current talents and set new values
+        user.getTalent().clear();
+        for (Long id : talentIds) {
+            Talent talent = talentRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Talent not found for ID: " + id));
+            user.getTalent().add(talent);
+        }
+
+        userRepository.save(user); // Save changes
+    }
+//updateGenre
+    public void updateGenre(Long userId, List<Long> genreIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Clear current genres and set new values
+        user.getGenre().clear();
+        for (Long id : genreIds) {
+            Genre genre = genreRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Genre not found for ID: " + id));
+            user.getGenre().add(genre);
+        }
+
+        userRepository.save(user); // Save changes
+    }
     @Transactional
-    public void updateUserProfile(Long userId, UserUpdateInspiredBytalentgenre userUpdateInspiredBytalentgenre) {
-        // Tìm người dùng theo userId
+    @Override
+    public void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
 
-        // Cập nhật InspiredBy
-        if (userUpdateInspiredBytalentgenre.getInspiredBy() != null) {
-            Set<InspiredBy> inspiredBySet = new HashSet<>();
-            for (Long inspiredId : userUpdateInspiredBytalentgenre.getInspiredBy()) {
-                InspiredBy inspiredBy = inspiredByRepository.findById(inspiredId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inspired by not found"));
-                inspiredBySet.add(inspiredBy);
-            }
-            user.setInspiredBy(inspiredBySet);
+        // Cập nhật tên người dùng
+        if (userUpdateRequest.getUserName() != null && !userUpdateRequest.getUserName().isEmpty()) {
+            user.setUserName(userUpdateRequest.getUserName());
         }
 
-        // Cập nhật Talent
-        if (userUpdateInspiredBytalentgenre.getTalent() != null) {
-            Set<Talent> talentSet = new HashSet<>();
-            for (Long talentId : userUpdateInspiredBytalentgenre.getTalent()) {
-                Talent talent = talentRepository.findById(talentId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Talent not found"));
-                talentSet.add(talent);
+        // Cập nhật thông tin cá nhân từ UserInfoUpdateDto
+        UserInfoUpdateDto userInfoUpdate = userUpdateRequest.getUserInformation();
+        if (userInfoUpdate != null) {
+            UserInformation userInfo = user.getUserInformation();
+            if (userInfo != null) {
+                if (userInfoUpdate.getName() != null) {
+                    userInfo.setName(userInfoUpdate.getName());
+                }
+                if (userInfoUpdate.getLocation() != null) {
+                    userInfo.setLocation(userInfoUpdate.getLocation());
+                }
+                if (userInfoUpdate.getAbout() != null) {
+                    userInfo.setAbout(userInfoUpdate.getAbout());
+                }
             }
-            user.setTalent(talentSet);
         }
 
-        // Cập nhật Genre
-        if (userUpdateInspiredBytalentgenre.getGenre() != null) {
-            Set<Genre> genreSet = new HashSet<>();
-            for (Long genreId : userUpdateInspiredBytalentgenre.getGenre()) {
-                Genre genre = genreRepository.findById(genreId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Genre not found"));
-                genreSet.add(genre);
-            }
-            user.setGenre(genreSet);
+        // Cập nhật inspiredBy
+        if (userUpdateRequest.getInspiredBy() != null) {
+            updateInspiredBy(userId, userUpdateRequest.getInspiredBy());
+        }
+
+        // Cập nhật talent
+        if (userUpdateRequest.getTalent() != null) {
+            updateTalent(userId, userUpdateRequest.getTalent());
+        }
+
+        // Cập nhật genre
+        if (userUpdateRequest.getGenre() != null) {
+            updateGenre(userId, userUpdateRequest.getGenre());
         }
 
         // Lưu lại thông tin đã cập nhật
         userRepository.save(user);
     }
+
+
 }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.UserInformation;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,4 +15,7 @@ import org.example.library.model.UserInformation;
 public class UserUpdateRequest {
     private String userName;
     private UserInfoUpdateDto userInformation;
+    private List<Long> inspiredBy; // New field for inspiredBy IDs
+    private List<Long> talent; // New field for talent IDs
+    private List<Long> genre; // New field for genre IDs
 }

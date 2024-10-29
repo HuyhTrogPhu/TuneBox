@@ -212,66 +212,9 @@ public class UserController {
         }
     }
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateUserInfo(
-            @PathVariable Long userId,
-            @RequestBody UserUpdateRequest userUpdateRequest) {
-        System.out.println("Received request: " + userUpdateRequest);
-        try {
-            // Kiểm tra và cập nhật username nếu nó không null
-            if (userUpdateRequest.getUserName() != null) {
-                userService.updateUserName(userId, userUpdateRequest.getUserName());
-            }
-
-            // Cập nhật thông tin người dùng
-            if (userUpdateRequest.getUserInformation() != null) {
-                UserInfoUpdateDto userInfo = userUpdateRequest.getUserInformation();
-                // Chỉ cập nhật name nếu nó không null
-                if (userInfo.getName() != null) {
-                    userService.updateUserInformation(userId, userInfo.getName(),
-                            userInfo.getLocation() != null ? userInfo.getLocation() : null,
-                            userInfo.getAbout() != null ? userInfo.getAbout() : null);
-                }
-
-                // Cập nhật location nếu nó không null
-                if (userInfo.getLocation() != null) {
-                    userService.updateUserInformation(userId,
-                            userInfo.getName() != null ? userInfo.getName() : null,
-                            userInfo.getLocation(),
-                            userInfo.getAbout() != null ? userInfo.getAbout() : null);
-                }
-
-                // Cập nhật about nếu nó không null
-                if (userInfo.getAbout() != null) {
-                    userService.updateUserInformation(userId,
-                            userInfo.getName() != null ? userInfo.getName() : null,
-                            userInfo.getLocation() != null ? userInfo.getLocation() : null,
-                            userInfo.getAbout());
-                }
-            }
-
-            return ResponseEntity.ok("Cập nhật thông tin thành công!");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace(); // Để có thêm thông tin nếu có lỗi
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi cập nhật thông tin.");
-        }
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserProfile(userId, userUpdateRequest);
+        return ResponseEntity.ok().build();
     }
-
-    // Cập nhật thông tin profile người dùng (inspiredBy, talent, genre)
-    @PutMapping("/{userId}/update-inspiredBy_talent_genre")
-    public ResponseEntity<String> updateUserProfile(
-            @PathVariable Long userId,
-            @RequestBody UserUpdateInspiredBytalentgenre userProfileUpdateRequest) {
-        try {
-            userService.updateUserProfile(userId, userProfileUpdateRequest);
-            return ResponseEntity.ok("Cập nhật profile thành công!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Đã xảy ra lỗi khi cập nhật profile.");
-        }
-    }
-
 
     }

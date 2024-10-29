@@ -149,11 +149,11 @@ public class TrackController {
         return ResponseEntity.ok(result);
     }
 
-//    get all track
+    //    get all track
     @GetMapping("/allTrack")
     public ResponseEntity<List<TrackDto>> getAllTracks() {
-         List<TrackDto> tracks = trackService.getAllTracks();
-         return ResponseEntity.ok(tracks);
+        List<TrackDto> tracks = trackService.getAllTracks();
+        return ResponseEntity.ok(tracks);
     }
 
 }
