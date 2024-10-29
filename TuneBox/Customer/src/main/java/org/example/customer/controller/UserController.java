@@ -194,7 +194,7 @@ public class UserController {
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
+            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,4 +251,4 @@ public class UserController {
     }
 
 
-}
+    }
