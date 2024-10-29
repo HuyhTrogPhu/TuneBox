@@ -1,5 +1,6 @@
 package org.example.library.service;
 
+import org.example.library.dto.FriendAcceptDto;
 import org.example.library.dto.FriendRequestDTO;
 import org.example.library.model.User;
 
@@ -13,7 +14,7 @@ public interface FriendService {
 
     void cancelFriendRequest(Long userId, Long friendId);
 
-    List<User> getFriends(Long userId);
+    List<FriendAcceptDto> getFriends(Long userId);
 
     String checkFriendStatus(Long userId, Long friendId);
 
