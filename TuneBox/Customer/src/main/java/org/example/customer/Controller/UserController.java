@@ -4,10 +4,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.library.dto.GenreDto;
-import org.example.library.dto.UserProfileDto;
-import org.example.library.dto.UserDto;
-import org.example.library.dto.UserInformationDto;
+import org.example.library.dto.*;
 import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.GenreService;
@@ -90,14 +87,27 @@ public class UserController {
         return ResponseEntity.ok(talentList);
     }
 
-    @GetMapping("/list-genre")
-    public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
-        List<GenreDto> genreDtoList = genreList.stream()
-                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(genreDtoList);
+//    @GetMapping("/list-genre")
+//    public ResponseEntity<List<GenreDto>> listGenre() {
+//        List<Genre> genreList = genreService.findAllGenre();
+//        List<GenreDto> genreDtoList = genreList.stream()
+//                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(genreDtoList);
+//    }
+
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
+        try {
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
+
 
     // get list inspired by
     @GetMapping("/list-inspired-by")

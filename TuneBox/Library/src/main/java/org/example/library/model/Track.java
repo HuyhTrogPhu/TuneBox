@@ -55,9 +55,9 @@ public class Track {
     @JoinColumn(name = "user_id", nullable = false)
     private User creator;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "albums_id", nullable = true)
-    private Albums albums;
+
+    @ManyToMany(mappedBy = "tracks",fetch = FetchType.LAZY)
+    private Set<Albums> albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;

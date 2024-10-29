@@ -45,4 +45,3 @@ public class Reply {
     private List<Reply> replies = new ArrayList<>();
 }
 
-

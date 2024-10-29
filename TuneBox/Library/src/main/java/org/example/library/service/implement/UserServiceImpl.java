@@ -4,6 +4,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.UserMessageDTO;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -21,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -151,5 +153,23 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+
+    @Override
+    public List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId) {
+        List<User> users = userRepository.findAll();
+        // Lọc bỏ người gửi
+        users = users.stream()
+                .filter(user -> !user.getId().equals(senderId)) // loại bỏ người dùng đã đăng nhập
+                .collect(Collectors.toList());
+        // Chuyển đổi danh sách người dùng thành danh sách UserMessageDTO
+        List<UserMessageDTO> userMessageDTOs = users.stream()
+                .map(user -> new UserMessageDTO(user.getId(), user.getId(), senderId)) // Gán id và senderId
+                .collect(Collectors.toList());
+        return userMessageDTOs;
+    }
+
+
+
 
 }

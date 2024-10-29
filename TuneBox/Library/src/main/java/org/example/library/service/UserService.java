@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 
+import org.example.library.dto.UserMessageDTO;
 import org.example.library.dto.UserProfileDto;
 import org.example.library.dto.UserDto;
 import org.example.library.dto.UserInformationDto;
@@ -23,4 +24,5 @@ public interface UserService {
 
     List<UserDto> findAllUser();
 
+    List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
 }

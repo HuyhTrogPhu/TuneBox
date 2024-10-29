@@ -28,7 +28,7 @@ public class ReportController {
     @Autowired
     private PostService postService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     public ResponseEntity<ReportDto> createReport(
             @RequestBody ReportDto reportDto,
             @CookieValue(value = "userId", defaultValue = "0") Long currentUserId // Lấy giá trị currentUserId từ cookie
@@ -56,7 +56,6 @@ public class ReportController {
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {

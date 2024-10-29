@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping("/api/replies")
 public class ReplyController {
 
@@ -23,7 +24,6 @@ public class ReplyController {
                                              @PathVariable Long userId,
                                              @RequestBody ReplyDto replyDto,
                                              @RequestParam(required = false) Long parentReplyId) {
-        // Ensure you are using replyDto.getUserNickname() here
         System.out.println("Comment ID: " + commentId);
         System.out.println("User ID: " + userId);
         System.out.println("User Nickname: " + replyDto.getUserNickname());
@@ -32,7 +32,6 @@ public class ReplyController {
         ReplyDto createdReply = replyService.addReply(commentId, userId, replyDto, parentReplyId);
         return new ResponseEntity<>(createdReply, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/comment/{commentId}")
     public ResponseEntity<List<ReplyDto>> getRepliesByComment(@PathVariable Long commentId) {
@@ -68,8 +67,4 @@ public class ReplyController {
         ReplyDto updatedReply = replyService.updateReply(replyId, userId, replyDto);
         return ResponseEntity.ok(updatedReply);
     }
-
-
-
-
 }

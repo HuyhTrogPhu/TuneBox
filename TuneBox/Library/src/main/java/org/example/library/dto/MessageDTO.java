@@ -14,13 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MessageDTO {
-
     private Long id;
     private String content;
     private LocalDateTime creationDate;
     private Long senderId;
     private Long receiverId;
     private Long chatId;
+    private Long trackId;
+    private String trackName;
     private List<OtherAttachmentDto> attachments;
 
 }

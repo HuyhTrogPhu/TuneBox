@@ -8,15 +8,23 @@ import java.util.List;
 
 public interface TrackService {
 
-    public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+        public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-//        public TrackDto getAllTracks();
+        List<TrackDto> getAllTracks();
 
-    TrackDto getTrackById(Long trackId);
+        TrackDto getTrackById(Long trackId);
 
-    public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+        public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-    public void deleteTrack(Long trackId);
+        public void deleteTrack(Long trackId);
 
-    List<TrackDto> getTracksByUserId(Long userId);
+        List<TrackDto> getTracksByUserId(Long userId);
+
+    // get track theo genreId
+    List<TrackDto> getTracksByGenreId(Long genreId);
+
+    List<TrackDto> searchTracks (String keywords);
+
+        TrackDto getTracksById(Long trackId);
+
 }

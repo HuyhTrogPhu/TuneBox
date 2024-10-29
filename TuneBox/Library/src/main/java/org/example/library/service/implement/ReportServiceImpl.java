@@ -67,7 +67,6 @@ public class ReportServiceImpl implements ReportService {
 
 
 
-
     @Override
     public ReportDto getReportById(Long id) {
         Report report = reportRepository.findById(id).orElseThrow(() -> new RuntimeException("Report not found"));
