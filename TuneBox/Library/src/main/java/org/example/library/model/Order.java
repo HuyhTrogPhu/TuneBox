@@ -53,5 +53,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
+    private String paymentStatus;
+
 
 }

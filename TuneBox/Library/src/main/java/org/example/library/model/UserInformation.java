@@ -40,8 +40,8 @@ public class UserInformation {
 
     private String location;
 
-    @JsonBackReference
     @OneToOne(mappedBy = "userInformation")
+    @JsonBackReference
     private User user;
 
 }

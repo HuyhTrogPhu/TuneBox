@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Post;
 
 @Getter
 @Setter
@@ -13,5 +12,5 @@ import org.example.library.model.Post;
 @NoArgsConstructor
 public class PostImageDto {
     private Long id;
-    private byte[] postImage;
+    private String postImage;
 }

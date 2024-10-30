@@ -1,15 +1,20 @@
 package org.example.library.repository;
 
-import org.example.library.dto.ProfileSettingDto;
 import org.example.library.model.UserInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UserInformationRepository extends JpaRepository<UserInformation, Long> {
+import java.util.Date;
 
-    // get user information in profile page
-    @Query("select new org.example.library.dto.ProfileSettingDto(ui.avatar, ui.name, ui.location, ui.gender, ui.birthDay, ui.about) " +
-            "from UserInformation  ui join User u where u.id = :userId")
-    ProfileSettingDto findUserProfileByUserId(@Param("userId") Long userId);
+public interface UserInformationRepository extends JpaRepository<UserInformation, Long> {
+    @Modifying
+    @Query("UPDATE UserInformation u SET u.birthDay = :newBirthday WHERE u.id = :userId")
+    void updateBirthdayById(@Param("userId") Long userId, @Param("newBirthday") Date newBirthday);
+
+    @Modifying
+    @Query("UPDATE UserInformation u SET u.gender = :newGender WHERE u.id = :userId")
+    void updateGenderById(@Param("userId") Long userId, @Param("newGender") String newGender);
+
 }

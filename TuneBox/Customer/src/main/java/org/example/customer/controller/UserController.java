@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +51,8 @@ public class UserController {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+
 
     // Register
     @PostMapping("/register")
@@ -89,11 +93,23 @@ public class UserController {
     // get list genres
     @GetMapping("/list-genre")
     public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreList = genreService.findAll();
         List<GenreDto> genreDtoList = genreList.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(genreDtoList);
+    }
+
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
+        try {
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // get list inspired by
@@ -155,7 +171,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Trả về null hoặc thông điệp lỗi cụ thể
+            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -178,7 +194,7 @@ public class UserController {
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,6 +213,41 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
-
-
+    @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserProfile(userId, userUpdateRequest);
+        return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam String keyword) {
+        try {
+            // Gọi các phương thức tìm kiếm từ service
+            List<SearchDto> userResults = userService.searchUser("%" + keyword + "%");
+            List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
+            List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
+            List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
+
+            // In ra dữ liệu kết quả tìm kiếm
+            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
+            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
+            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
+            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
+
+            // Tạo response chứa tất cả kết quả
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", userResults);
+            response.put("tracks", trackResults);
+            response.put("albums", albumResults);
+            response.put("playlists", playlistResults);
+
+            // Trả về phản hồi thành công với kết quả tìm kiếm
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Xử lý lỗi và trả về phản hồi lỗi
+            return ResponseEntity.internalServerError().body("Error retrieving search results: " + e.getMessage());
+        }
+    }
+
+
+}
