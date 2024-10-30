@@ -31,7 +31,7 @@ public class StaticSocialAdmin {
     CommentService commentService;
 
     @Autowired
-    PlayListService playlistService;
+    PlaylistService playlistService;
 
     @Autowired
     ReplyService replyService;
@@ -58,7 +58,7 @@ public class StaticSocialAdmin {
         try {
             response.put("status", true);
             response.put("message", "UserData");
-            response.put("data", userService.GetAll());
+            response.put("data", userService.findAllUser());
         } catch (Exception e) {
             response.put("status", false);
             response.put("message", e.getMessage());
@@ -73,7 +73,7 @@ public class StaticSocialAdmin {
         try {
             response.put("status", true);
             response.put("message", "PostData");
-            response.put("data",postService.getAllPosts());
+            response.put("data",postService.findAllPosts());
         } catch (Exception e) {
             response.put("status", false);
             response.put("message", e.getMessage());

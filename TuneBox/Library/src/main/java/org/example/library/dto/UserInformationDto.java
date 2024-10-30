@@ -1,12 +1,9 @@
 package org.example.library.dto;
 
-
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Number;
 
 import java.util.Date;
 
@@ -16,15 +13,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserInformationDto {
 
-    private Long id;
+    private Long userInformationId;
 
-    private String firstName;
+    private String name;
 
     private String gender;
 
     private String phoneNumber;
 
-    private Date birthDate;
+    private Date birthDay;
 
     private String avatar;
 
@@ -32,6 +29,21 @@ public class UserInformationDto {
 
     private String about;
 
-    private Number number;
+    private Long userId;
 
+    public UserInformationDto(Long id, String name, String gender, String phoneNumber, Date birthDay, String avatar, String background, String about) {
+        this.userInformationId = id;
+        this.name = name;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.birthDay = birthDay;
+        this.avatar = avatar;
+        this.background = background;
+        this.about = about;
+        this.userId = null;
+    }
+
+    public UserInformationDto(String name) {
+        this.name = name;
+    }
 }

@@ -1,7 +1,7 @@
 
 package org.example.customer.config;
 
-import org.example.library.model.Role;
+
 import org.example.library.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,15 +11,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 public class CustomerDetail implements UserDetails {
 
-    private User user;
+    private final User user;
+
+    // Constructor nhận User
+    public CustomerDetail(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRole()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        if (user != null && user.getRole() != null && user.getRole().getName() != null) {
+            authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
         }
         return authorities;
     }

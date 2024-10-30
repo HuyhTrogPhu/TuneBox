@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -41,6 +42,8 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore

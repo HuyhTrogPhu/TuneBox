@@ -4,17 +4,345 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="Done Like Track &lt;3">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PlayListMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlayListService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PlayListServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="merging - 17pm08">
+      <change afterPath="$PROJECT_DIR$/TuneBox/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/MyCloudinaryConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/SecurityConfigg.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/VNPayConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AlbumsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CartController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ChatController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ChatWebSocketController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FollowController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FriendController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/MessageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/NotificationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PlaylistController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/VNPayController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/StatisticalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/PostNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/WebSocketConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AccountSettingDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CartItemDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/EmailUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/FollowCountsDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/FriendRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/MessageDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/MessageWebSocketDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/NotificationDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderDetailInfoDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderItemsDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderListDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PaymentRestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostReportDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ProfileSettingDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ReportDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ShoppingCartDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserFavoriteDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserFollowDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInfoUpdateDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserIsInvoice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserMessageDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserProfileDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserThisIdDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumsMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/BlockMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/ChatMessageMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/FollowMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/NotificationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PlaylistMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostReportMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/ReportMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserInformationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Friend.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/PostReport.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Report.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model_enum/ReportStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FriendRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/NotificationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ReportRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/SearchRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/AlbumStyleService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/AlbumsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/BlockService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CartService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ChatService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/FollowService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/FriendService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/MessageService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/OrderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlaylistService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReportService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ShoppingCartService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserInformationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumStyleServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/BlockServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ChatServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/FollowServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/FriendServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/MessageServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/NotificationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/OrderServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReportServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ShoppingCartServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserInformationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/utils/ImageUploadAlbums.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/utils/JwtTokenUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/config/CloudinaryConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/PostAdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/httpClient.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpClient.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/1787286.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/3ae67df286b9b8e568de17e4657fd21d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/4574841.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/4736755.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/4737096.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/792d2408f0a0c73578c19d928a136f15.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/ACTUAL DESIGN - This is what we publish!.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/ableton.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/aiaiai.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/akai.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/b13e7aa3d557780f8fd5ad2271014c82.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/bandlab.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/banner5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/batcat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/c2443e614d97389bc8c45e8a8fe85ae5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/casi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/cat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/charva.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/denondj.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/download.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/edwards.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/f3f2071b26d83eaa739b9632a6c375e6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/kala.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/logo copy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/masall.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageBrand/yamaha.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/4574841.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/4736755.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/4737096.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/792d2408f0a0c73578c19d928a136f15.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/ACTUAL DESIGN - This is what we publish!.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/Orange Black Modern Music Presentation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/Pink Music Trending Instagram Story.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/Red Black Modern Music Presentation.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/bandlab.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/blob" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/c2443e614d97389bc8c45e8a8fe85ae5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/casi.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/download.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/f3f2071b26d83eaa739b9632a6c375e6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/kala.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/logoMautrang.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/logo_backgroundWhite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/logo_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/nen1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/nen2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/nen3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/nen4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ImageInstrument/yamaha.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/ChangePassword.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/GenreController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/InspiredByController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/InstrumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/InstrumentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/LikeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/ReplyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReplyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/ShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/TalentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/UserInforController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/CustomerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/CustomerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerDetail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserInforController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserInforController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/BrandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/BrandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/CategoryInsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/CategoryInsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/EcomAdminAccount.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/InstrumentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/InstrumentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageBrand/karina.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageBrand/missfortune_16.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageBrand/wallhaven-0je77w.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageBrand/wallhaven-x6kloz.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageCategory/wallhaven-0je77w.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/blob" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/missfortune_16.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/nen.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/samurai-practice-moewalls-com.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-0je77w.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-6dr366.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-858k3j.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-85pkwo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-jxrrmp.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-kx9pg7.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-o5wlp9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-qz525r.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/ImageInstrument/wallhaven-x6kloz.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/AdminConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/CloudinaryConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/CloudinaryConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumStyleDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumStyleDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumsDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BlockDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BlockDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BrandsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BrandsDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ChangePasswordRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserCheckOut.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ChatDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CityDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CommentDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CommentDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CountryDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/GenreUserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/DistrictDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/EcomAdminDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SocialMediaAdminDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/EcommerceAdminDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/FollowDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/FollowDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/GenreDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/GenreDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/LikeDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/LikeDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/MessageDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/NumberDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ChatDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderDetailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderDetailDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/OrderDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PlaylistDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PlaylistDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostImageDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostImageDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ReplyDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ReplyDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/RequestSignUpModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SocialAdminDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/StreetDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/EcommerceUserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TalentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TalentDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInforDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserDetailEcommerce.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInformationDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInformationDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/CategoryInsMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/CommentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/EcomAdminMapping.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/GenreMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/GenreMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/InstrumentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/InstrumentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/LikeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/LikeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PlayListMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PlayListMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostImageMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostImageMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/ReplyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/ReplyMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/TrackMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserInforMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserInforMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Albums.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Albums.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Block.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Brand.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Brand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Chat.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Chat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/City.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Country.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/District.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/EcommerceAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/EcommerceAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Follow.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Follow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Instrument.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Instrument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Like.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Like.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Number.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/OrderDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/OrderDetail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Playlist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/PostImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/PostImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Reply.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Reply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/SocialAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/SocialAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Street.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Track.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Track.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/AlbumService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/AlbumService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/UserInformation.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/UserInformation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/AlbumsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/AlbumsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BlockRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BlockRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BrandRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BrandRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ChatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ChatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CityRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CountryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/DistrictRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/GenreRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/GenreRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InspiredByRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InspiredByRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/MessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/MessageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/NumberRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderDetailRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PlaylistRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PlaylistRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/StreetRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TalentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TalentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserInformationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserInformationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/BrandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/BrandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CategoryInsService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/EcomAdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/EcomAdminService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/GenreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/GenreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlayListService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlayListService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReplyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReplyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TalentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TalentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserInforService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserInforService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumServiceImplement.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumServiceImplement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/BrandServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/BrandServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CategoryInsServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CommentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CommentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/EcomAdminServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/EcomAdminServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/GenreServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/GenreServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InpiredByServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InpiredByServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PlayListServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PlayListServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReplyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReplyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TalentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TalentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserInforServiceImplement.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserInforServiceImplement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/utils/Mp3UploadTrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/utils/Mp3UploadTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/SocialAdminApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/SocialAdminApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/SocialAdminAccount.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/SocialAdminAccount.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StaticSocialAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StaticSocialAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,13 +360,13 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="QuocTrung" />
+        <entry key="$PROJECT_DIR$" value="GiaNhu" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectId" id="2majaHCdOnWZr93uoNP2yt7dSev" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -55,7 +383,8 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.intellij.openapi.externalSystem.service.settings.ExternalSystemGroupConfigurable" value="SELECTIVE" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -63,6 +392,13 @@
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="org.example.library.service.implement" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.library.service.implement" />
+      <recent name="org.example.customer.Controller" />
+      <recent name="org.example.library.mapper" />
+      <recent name="org.example.library.service" />
+      <recent name="org.example.library.utils" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -75,7 +411,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
+  <component name="RunManager" selected="Spring Boot.CustomerApplication">
     <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
       <module name="Customer" />
@@ -132,6 +468,8 @@
       <list>
         <item itemvalue="JUnit.All in DuAnTotNghiep" />
         <item itemvalue="Application.CustomerApplication" />
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
+        <item itemvalue="Application.CustomerApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -157,14 +495,45 @@
       <workItem from="1728357263814" duration="164000" />
       <workItem from="1728359274760" duration="4462000" />
       <workItem from="1728663834379" duration="13925000" />
-      <workItem from="1728687951455" duration="8353000" />
-      <workItem from="1729752305882" duration="1744000" />
-      <workItem from="1729867114599" duration="2797000" />
-      <workItem from="1729873805786" duration="367000" />
-      <workItem from="1729910988284" duration="5341000" />
-      <workItem from="1729921999287" duration="1856000" />
-      <workItem from="1730046052644" duration="1793000" />
-      <workItem from="1730084762661" duration="9148000" />
+      <workItem from="1728687951455" duration="8696000" />
+      <workItem from="1728750008674" duration="3318000" />
+      <workItem from="1728765705228" duration="879000" />
+      <workItem from="1728832896054" duration="6885000" />
+      <workItem from="1728876994422" duration="9457000" />
+      <workItem from="1728927156051" duration="1602000" />
+      <workItem from="1728962459220" duration="13961000" />
+      <workItem from="1729043290909" duration="17834000" />
+      <workItem from="1729095637997" duration="3715000" />
+      <workItem from="1729133563376" duration="5396000" />
+      <workItem from="1729144152971" duration="2541000" />
+      <workItem from="1729147141151" duration="1096000" />
+      <workItem from="1729189894792" duration="1677000" />
+      <workItem from="1729267703696" duration="11009000" />
+      <workItem from="1729286690472" duration="1751000" />
+      <workItem from="1729325858989" duration="2099000" />
+      <workItem from="1729331243433" duration="1222000" />
+      <workItem from="1729351037762" duration="7236000" />
+      <workItem from="1729509164669" duration="20777000" />
+      <workItem from="1729588235497" duration="1473000" />
+      <workItem from="1729827875285" duration="12571000" />
+      <workItem from="1729913713931" duration="6275000" />
+      <workItem from="1729923567665" duration="1201000" />
+      <workItem from="1729924934568" duration="1870000" />
+      <workItem from="1729936890073" duration="2753000" />
+      <workItem from="1729958646178" duration="10000" />
+      <workItem from="1729958666437" duration="2770000" />
+      <workItem from="1729964415901" duration="3846000" />
+      <workItem from="1729982244269" duration="1006000" />
+      <workItem from="1729983791436" duration="2408000" />
+      <workItem from="1730019661193" duration="2550000" />
+      <workItem from="1730022582184" duration="3990000" />
+      <workItem from="1730041966837" duration="11902000" />
+      <workItem from="1730061016811" duration="1309000" />
+      <workItem from="1730064466690" duration="8296000" />
+      <workItem from="1730084218466" duration="16761000" />
+      <workItem from="1730120733397" duration="6744000" />
+      <workItem from="1730192856114" duration="6756000" />
+      <workItem from="1730213332762" duration="411000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -190,7 +559,63 @@
       <option name="project" value="LOCAL" />
       <updated>1728680249789</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="comment Track">
+      <option name="closed" value="true" />
+      <created>1728724018915</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728724018915</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update reply">
+      <option name="closed" value="true" />
+      <created>1728890866636</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728890866636</updated>
+    </task>
+    <task id="LOCAL-00006" summary="comment">
+      <option name="closed" value="true" />
+      <created>1729051602978</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1729051602978</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Albums">
+      <option name="closed" value="true" />
+      <created>1729061705783</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1729061705783</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Albums 80%">
+      <option name="closed" value="true" />
+      <created>1729594166379</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1729594166379</updated>
+    </task>
+    <task id="LOCAL-00009" summary="merge">
+      <option name="closed" value="true" />
+      <created>1729923985928</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1729923985928</updated>
+    </task>
+    <task id="LOCAL-00010" summary="list post liked">
+      <option name="closed" value="true" />
+      <created>1730070727423</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1730070727423</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,7 +637,16 @@
     <MESSAGE value="commit" />
     <MESSAGE value="cap nhat comment" />
     <MESSAGE value="Done Like Track &lt;3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Done Like Track &lt;3" />
+    <MESSAGE value="comment Track" />
+    <MESSAGE value="update reply" />
+    <MESSAGE value="comment" />
+    <MESSAGE value="Albums" />
+    <MESSAGE value="create album" />
+    <MESSAGE value="Albums 80%" />
+    <MESSAGE value="merge" />
+    <MESSAGE value="list post liked" />
+    <MESSAGE value="merging - 17pm08" />
+    <option name="LAST_COMMIT_MESSAGE" value="merging - 17pm08" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

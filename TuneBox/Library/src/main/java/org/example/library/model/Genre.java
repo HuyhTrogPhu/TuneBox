@@ -20,6 +20,7 @@ public class Genre {
 
     private String name;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "genre")
     @JsonIgnore
     private Set<User> user;

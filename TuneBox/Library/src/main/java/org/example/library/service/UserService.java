@@ -1,37 +1,77 @@
 package org.example.library.service;
 
 
-
-import org.example.library.dto.RequestSignUpModel;
-import org.example.library.dto.UserDto;
+import jakarta.transaction.Transactional;
+import org.example.library.dto.*;
 import org.example.library.model.User;
-import org.springframework.stereotype.Service;
+import org.example.library.model.UserInformation;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-
+import java.util.Optional;
 
 public interface UserService {
-    void CheckLogin(RequestSignUpModel requestSignUpModel);
 
-    UserDto Register(RequestSignUpModel requestSignUpModel);
+    UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
 
-    Optional<User> findById(Long userId);
+    // get user checkout information
+    UserCheckOut getUserCheckoutInfo(Long userId);
 
-    void ForgotPassword(UserDto user);
+    // get user avatar by userId
+    String getUserAvatar(Long userId);
 
-    void resetPassword(String token, String newPassword);
+    // get profile user by userId
+    UserProfileDto getProfileUserById(Long userId);
 
-//   UserDto loginWithGoogle(String email , String name);
+    Optional<UserFollowDto> getUserFollowById(Long userId);
 
-    UserDto Login(UserDto user);
+    // get user in profile page
+    ProfileSettingDto getUserProfileSetting(Long userId);
 
-    void changePassword(String email, String oldPassword, String newPassword);
+    // Lấy số lượng followers của user
+    Long getFollowersCount(Long userId);
 
-     List<User> GetAll();
+    // Lấy số lượng following của user
+    Long getFollowingCount(Long userId);
+
+    // update userName by userId
+    void updateUserName(Long userId, String newUserName);
+
+    // update email in account page
+    void updateEmail(Long userId, String newEmail);
+
+    // set password in account page
+    void setPassword(Long userId, String newPassword);
+
+    AccountSettingDto getAccountSetting(Long userId);
+
+    // get all user in ecommerce customer page
+    List<EcommerceUserDto> getAllUsersEcommerce();
+
+    // get user details ecommerce customer page
+    UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
+
+    List<UserDto> findAllUser();
+
+    @Transactional
+    void updateBirthday(Long userId, Date newBirthday);
+
+    @Transactional
+    void updateGender(Long userId, String newGender);
+
+    void updateUserInformation(Long userId, String name, String location, String about);
 
 
-
+    public List<SearchDto> searchPlaylist(String keyword);
+    public List<SearchDto> searchAlbum(String keyword);
+    public List<SearchDto> searchTrack(String keyword);
+    public List<SearchDto> searchUser(String keyword);
 
     public long countUser();
+
+    Optional<User> findById(Long userId);
+    @Transactional
+    void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 }

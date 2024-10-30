@@ -1,7 +1,7 @@
 package org.example.library.model;
 
+import org.example.library.model.AlbumStyle;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
-
+import java.util.HashSet;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -43,7 +43,7 @@ public class Albums {
 
     private Date reportDate;
 
-    private String status;
+    private boolean status;
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
@@ -51,12 +51,15 @@ public class Albums {
 
     @ManyToOne
     @JoinColumn(name = "albumCreator_id", nullable = false)
-    @JsonIgnore
     private User creator;
 
-    @OneToMany(mappedBy = "albums", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Track> tracks;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "album_track",
+            joinColumns = @JoinColumn(name = "albums_id"),
+            inverseJoinColumns = @JoinColumn(name = "track_id")
+    )
+    private Set<Track> tracks = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "album_style_id")

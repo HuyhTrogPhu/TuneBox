@@ -11,7 +11,7 @@ public interface TrackService {
 
         public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-//        public TrackDto getAllTracks();
+        List<TrackDto> getAllTracks();
 
         TrackDto getTrackById(Long trackId);
 
@@ -19,8 +19,13 @@ public interface TrackService {
 
         public void deleteTrack(Long trackId);
 
-    List<TrackDto> getTracksByUserId(Long userId);
-    public TrackStatus getTrackCountCommentandLike(Long Id);
+        List<TrackDto> getTracksByUserId(Long userId);
 
+    // get track theo genreId
+    List<TrackDto> getTracksByGenreId(Long genreId);
+
+    List<TrackDto> searchTracks (String keywords);
+    public TrackStatus getTrackCountCommentandLike(Long Id);
     public List<TrackDto> getAll();
+
 }

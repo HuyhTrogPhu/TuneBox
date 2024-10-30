@@ -13,4 +13,6 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
     public List<Brand> findByKeyword(String keyword);
 
 
+
 }
+

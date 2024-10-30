@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.AlbumsDto;
 import org.example.library.dto.PlaylistDto;
 import org.example.library.mapper.AlbumMapper;
-import org.example.library.mapper.PlayListMapper;
+
 import org.example.library.model.Albums;
 import org.example.library.repository.AlbumsRepository;
 import org.example.library.service.AlbumService;
@@ -29,18 +29,18 @@ public class AlbumServiceImplement implements AlbumService {
             throw new EntityNotFoundException("No albums found for user ID: " + UserId);
         }
         Albums albums = albumsList.get(0);
-        return AlbumMapper.mapToDTO(albums);
+        return AlbumMapper.mapperAlbumsDto(albums);
     }
     @Override
     public List<AlbumsDto> getAll(){
         return albumsRepository.findAll()
         .stream()
-        .map(AlbumMapper::mapToDTO)
+        .map(AlbumMapper::mapperAlbumsDto)
         .collect(Collectors.toList());
     }
     @Override
     public AlbumsDto findByAlbumsByID(Long id) {
-        AlbumsDto albumsDto = AlbumMapper.mapToDTO(albumsRepository.findById(id).get());
+        AlbumsDto albumsDto = AlbumMapper.mapperAlbumsDto(albumsRepository.findById(id).get());
         return albumsDto;
     }
 }

@@ -2,12 +2,10 @@ package org.example.library.service.implement;
 
 
 
-import org.example.library.dto.UserInforDTO;
+import org.example.library.dto.UserInformationDto;
 import org.example.library.mapper.UserInforMapper;
-import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.example.library.repository.UserInformationRepository;
-import org.example.library.repository.UserRepository;
 import org.example.library.service.UserInforService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,19 +20,19 @@ public class UserInforServiceImplement implements UserInforService {
 
 
     @Override
-    public UserInforDTO updateUserInfor(Long userId, UserInforDTO UserInforDTO) {
+    public UserInformationDto updateUserInfor(Long userId, UserInformationDto UserInforDTO) {
         Optional<UserInformation> userOptional = Repo.findById(userId);
 
         if (!userOptional.isPresent()) {
             throw new RuntimeException("User not found with id: " + userId);
         }
         UserInformation userToUpdate = userOptional.get();
-        UserInformation updatedUser = UserInforMapper.maptoEntity(UserInforDTO);
+        UserInformation updatedUser = UserInforMapper.mapToUserInformation(UserInforDTO);
 
 
         updatedUser.setId(userToUpdate.getId()); //ko doi ID
         UserInformation savedUser = Repo.save(updatedUser);
-        return UserInforMapper.maptoDto(savedUser);
+        return UserInforMapper.mapToUserInformationDto(savedUser);
     }
 
     @Override

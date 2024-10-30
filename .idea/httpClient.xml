@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="HttpClientEndpointsTabState">
-    <option name="requestToText" value="&lt;CachedHttpClientTabRequests&gt;&#10;  &lt;entry key=&quot;cf0a20b11c41acd239d428abaf43d73a23f249db&quot; value=&quot;###&amp;#10;POST http://localhost:8080/api/tracks&amp;#10;Content-Type: application/json&amp;#10;&amp;#10;{&amp;#10;  &amp;quot;id&amp;quot;: 0,&amp;#10;  &amp;quot;name&amp;quot;: &amp;quot;Track 1&amp;quot;,&amp;#10;  &amp;quot;trackImage&amp;quot;: &amp;quot;base64EncodedImageString&amp;quot;,&amp;#10;  &amp;quot;description&amp;quot;: &amp;quot;This is the first track&amp;quot;,&amp;#10;  &amp;quot;status&amp;quot;: true,&amp;#10;  &amp;quot;createDate&amp;quot;: &amp;quot;2024-10-06&amp;quot;,&amp;#10;  &amp;quot;report&amp;quot;: false,&amp;#10;  &amp;quot;reportDate&amp;quot;: &amp;quot;&amp;quot;,&amp;#10;  &amp;quot;genreId&amp;quot;: 0,&amp;#10;  &amp;quot;creator&amp;quot;: 102,&amp;#10;  &amp;quot;albumsId&amp;quot;: 0&amp;#10;}&quot; /&gt;&#10;&lt;/CachedHttpClientTabRequests&gt;" />
   </component>
 </project>
