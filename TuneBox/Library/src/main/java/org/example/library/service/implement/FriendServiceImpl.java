@@ -1,20 +1,18 @@
 package org.example.library.service.implement;
 
 import org.example.library.dto.FriendAcceptDto;
-import org.example.library.dto.FriendRequestDTO;
+import org.example.library.dto.FriendRequestDto;
 import org.example.library.model.Friend;
 import org.example.library.model.User;
+import org.example.library.model_enum.FriendStatus;
 import org.example.library.repository.FriendRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendServiceImpl implements FriendService {
@@ -28,19 +26,22 @@ public class FriendServiceImpl implements FriendService {
     public Long sendFriendRequest(Long userId, Long friendId) {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
-
         // Kiểm tra xem đã gửi lời mời hay chưa
-        checkExistingRequest(user, friend);
-
+        checkExistingRequest(user, friend); // Nếu đã gửi yêu cầu thì ném ra ngoại lệ
         // Tạo yêu cầu kết bạn mới
         Friend friendRequest = new Friend();
         friendRequest.setUser(user);
         friendRequest.setFriend(friend);
         friendRequest.setAccepted(false);
-        friendRequest.setStatus("pending");
-
-        // Lưu yêu cầu kết bạn và trả về ID
-        friendRequest = friendRepository.save(friendRequest);
+        friendRequest.setStatus(FriendStatus.PENDING_SENT);
+        friendRepository.save(friendRequest);
+        // Tạo yêu cầu kết bạn đối ứng với trạng thái "PENDING_RECEIVED"
+        Friend reciprocalRequest = new Friend();
+        reciprocalRequest.setUser(friend);
+        reciprocalRequest.setFriend(user);
+        reciprocalRequest.setAccepted(false);
+        reciprocalRequest.setStatus(FriendStatus.PENDING_RECEIVED);
+        friendRepository.save(reciprocalRequest);
         return friendRequest.getId();
     }
 
@@ -48,22 +49,31 @@ public class FriendServiceImpl implements FriendService {
     public void acceptFriendRequest(Long requestId) {
         Friend friendRequest = friendRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Friend request not found with ID: " + requestId));
+
         friendRequest.setAccepted(true);
-        friendRequest.setStatus("accepted");
+        friendRequest.setStatus(FriendStatus.ACCEPTED);
         friendRepository.save(friendRequest);
 
-        // Tạo quan hệ bạn bè đối ứng
-        User user = friendRequest.getUser();
-        User friend = friendRequest.getFriend();
-        if (!friendRepository.existsByUserAndFriend(friend, user)) {
-            Friend reciprocalFriendRequest = new Friend();
-            reciprocalFriendRequest.setUser(friend);
-            reciprocalFriendRequest.setFriend(user);
-            reciprocalFriendRequest.setAccepted(true);
-            reciprocalFriendRequest.setStatus("accepted");
-            friendRepository.save(reciprocalFriendRequest);
-        }
+        // Cập nhật trạng thái của yêu cầu đối ứng
+        Friend reciprocalRequest = friendRepository.findByUserAndFriend(friendRequest.getFriend(), friendRequest.getUser())
+                .orElseThrow(() -> new RuntimeException("Reciprocal friend request not found"));
+
+        reciprocalRequest.setAccepted(true);
+        reciprocalRequest.setStatus(FriendStatus.ACCEPTED);
+        friendRepository.save(reciprocalRequest);
     }
+    @Override
+    public void declineFriendRequest(Long requestId) {
+        Friend friendRequest = friendRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Friend request not found"));
+
+        friendRepository.delete(friendRequest);
+
+        // Xóa yêu cầu đối ứng nếu có
+        friendRepository.findByUserAndFriend(friendRequest.getFriend(), friendRequest.getUser())
+                .ifPresent(friendRepository::delete);
+    }
+
 
     @Override
     public List<FriendAcceptDto> getFriends(Long userId) {
@@ -72,36 +82,67 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public String checkFriendStatus(Long userId, Long friendId) {
+    public Map<String, Object> checkFriendStatus(Long userId, Long friendId) {
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
+        Optional<Friend> requestSent = friendRepository.findByUserAndFriend(user, friend);
+        Optional<Friend> requestReceived = friendRepository.findByFriendAndUser(friend, user);
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (requestSent.isPresent() && requestSent.get().getStatus() == FriendStatus.PENDING_SENT) {
+            response.put("status", FriendStatus.PENDING_SENT.name());
+            response.put("requestId", requestSent.get().getId());
+        } else if (requestReceived.isPresent() && requestReceived.get().getStatus() == FriendStatus.PENDING_RECEIVED) {
+            response.put("status", FriendStatus.PENDING_RECEIVED.name());
+            response.put("requestId", requestReceived.get().getId());
+        } else if ((requestSent.isPresent() || requestReceived.isPresent()) && (requestSent.get().isAccepted() || requestReceived.get().isAccepted())) {
+            response.put("status", FriendStatus.ACCEPTED.name());
+            response.put("requestId", requestSent.isPresent() ? requestSent.get().getId() : requestReceived.get().getId());
+        } else {
+            response.put("status", "Add Friend");
+            response.put("requestId", null);
+        }
+
+        System.out.println("Returning " + response + " for userId: " + userId + " and friendId: " + friendId);
+        return response;
+    }
+
+
+
+    public boolean isBlocked(Long userId, Long friendId) {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
 
-        // Kiểm tra xem người dùng có gửi yêu cầu kết bạn không
-        Optional<Friend> requestSent = friendRepository.findByUserAndFriend(user, friend);
-        if (requestSent.isPresent()) {
-            return requestSent.get().isAccepted() ? "accepted" : "pending"; // Gửi yêu cầu mà chưa chấp nhận
+        // Kiểm tra xem có một bản ghi nào thể hiện rằng user đã chặn friend không
+        Optional<Friend> blockRecord = friendRepository.findByUserAndFriend(user, friend);
+        if (blockRecord.isPresent()) {
+            return blockRecord.get().getStatus() == FriendStatus.BLOCKED; // Trả về true nếu bị chặn
         }
 
-        // Kiểm tra xem người dùng có nhận yêu cầu kết bạn không
-        Optional<Friend> requestReceived = friendRepository.findByFriendAndUser(user, friend);
-        if (requestReceived.isPresent()) {
-            return requestReceived.get().isAccepted() ? "accepted" : "pending"; // Nhận yêu cầu mà chưa chấp nhận
-        }
-
-        // Kiểm tra xem họ có phải là bạn bè không
-        boolean isFriend = friendRepository.existsByUserAndFriend(user, friend) ||
-                friendRepository.existsByUserAndFriend(friend, user);
-
-        return isFriend ? "accepted" : "not_friends"; // Không có yêu cầu nào
+        return false; // Không bị chặn
     }
 
     @Override
-    public void declineFriendRequest(Long requestId) {
-        Friend friendRequest = friendRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("Friend request not found"));
+    public List<FriendRequestDto> getFriendRequests(Long userId) {
+        List<Friend> friendRequests = friendRepository.findByFriendId(userId);
 
-        // Xóa yêu cầu kết bạn
-        friendRepository.delete(friendRequest);
+        return friendRequests.stream().map(friend -> {
+            boolean isSender = friend.getUser().getId().equals(userId);
+            String senderAvatar = friend.getUser().getUserInformation().getAvatar();
+            String senderName = friend.getUser().getUserInformation().getName();
+
+            // Trả về DTO mới
+            return new FriendRequestDto(
+                    friend.getId(), // requestId
+                    isSender ? friend.getUser().getId() : friend.getFriend().getId(), // senderId
+                    isSender ? friend.getFriend().getId() : friend.getUser().getId(), // receiverId
+                    isSender, // true nếu là người gửi, false nếu là người nhận
+                    friend.getStatus().name(), // status
+                    senderAvatar, // senderAvatar
+                    senderName // senderName
+            );
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -118,13 +159,19 @@ public class FriendServiceImpl implements FriendService {
     public void cancelFriendRequest(Long userId, Long friendId) {
         User user = getUserById(userId);
         User friend = getUserById(friendId);
-        Friend friendRequest = friendRepository.findByUserAndFriend(user, friend)
-                .orElseThrow(() -> new RuntimeException("No pending friend request found."));
 
-        if (!friendRequest.isAccepted() && "pending".equals(friendRequest.getStatus())) {
-            friendRepository.delete(friendRequest);
+        // Kiểm tra và xoá yêu cầu kết bạn từ cả hai phía
+        Optional<Friend> pendingRequestSent = friendRepository.findByUserAndFriendAndStatus(user, friend, FriendStatus.PENDING_SENT);
+        Optional<Friend> pendingRequestReceived = friendRepository.findByUserAndFriendAndStatus(friend, user, FriendStatus.PENDING_RECEIVED);
+
+        if (pendingRequestSent.isEmpty() && pendingRequestReceived.isEmpty()) {
+            throw new RuntimeException("No pending friend request found.");
         }
+
+        pendingRequestSent.ifPresent(friendRepository::delete);
+        pendingRequestReceived.ifPresent(friendRepository::delete);
     }
+
 
     private User getUserById(Long userId) {
         return userRepository.findById(userId)
@@ -141,28 +188,6 @@ public class FriendServiceImpl implements FriendService {
     private void deleteFriendRecord(User user, User friend) {
         friendRepository.findByUserAndFriend(user, friend)
                 .ifPresent(friendRepository::delete);
-    }
-
-    @Override
-    public List<FriendRequestDTO> getPendingFriendRequests(Long userId) {
-        User user = getUserById(userId);
-
-        // Lấy danh sách lời mời kết bạn đang chờ
-        List<Friend> pendingRequests = friendRepository.findByFriendAndStatus(user, "pending");
-
-        // Chuyển đổi sang DTO
-        List<FriendRequestDTO> requestDTOs = new ArrayList<>();
-        for (Friend request : pendingRequests) {
-            FriendRequestDTO dto = new FriendRequestDTO();
-            dto.setId(request.getId());
-            dto.setRequesterId(request.getUser().getId());
-            dto.setRequesterName(request.getUser().getUserName());
-            dto.setRequesterUserNickName(request.getUser().getUserInformation().getName());
-            dto.setRequesterAvatar(request.getUser().getUserInformation().getAvatar());
-            requestDTOs.add(dto);
-        }
-
-        return requestDTOs; // Trả về danh sách DTO
     }
 
     @Override
@@ -186,6 +211,4 @@ public class FriendServiceImpl implements FriendService {
 
         return (long) friendSet.size(); // Trả về số lượng bạn bè duy nhất
     }
-
-
 }
