@@ -124,11 +124,6 @@ public class UserController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.findAllUser();
-        return ResponseEntity.ok(users);
-    }
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
