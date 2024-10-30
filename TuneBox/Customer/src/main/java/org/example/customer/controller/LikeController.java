@@ -28,7 +28,7 @@ public class LikeController {
     public ResponseEntity<LikeDto> addLike(@RequestBody LikeDto likeDto) {
         try {
             // Kiểm tra nếu likeDto không hợp lệ
-            if (likeDto.getUserId() == null || (likeDto.getPostId() == null && likeDto.getTrackId() == null)) {
+            if (likeDto.getUserId() == null || likeDto.getPostId() == null) {
                 return ResponseEntity.badRequest().body(null);
             }
 
@@ -36,10 +36,12 @@ public class LikeController {
             LikeDto createdLikeDto = likeService.addLike(likeDto.getUserId(), likeDto.getPostId(), likeDto.getTrackId());
             return ResponseEntity.status(HttpStatus.CREATED).body(createdLikeDto);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+
 
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
@@ -88,36 +90,7 @@ public class LikeController {
         return ResponseEntity.ok(hasLiked);
     }
 
-    @GetMapping("/all/{userId}")
-    public ResponseEntity<List<LikeDto>> getAllLikedByUser(@PathVariable Long userId) {
-        List<LikeDto> liked = likeService.getAllByUserId(userId);
-        return ResponseEntity.ok(liked);
-    }
-
-//    album
-    @GetMapping("/allAlbums/{userId}")
-    public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
-        List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
-
-        // Lọc ra các LikeDto có albumId khác null
-        List<LikeDto> filteredLikes = liked.stream()
-                .filter(likeDto -> likeDto.getAlbumId() != null)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(filteredLikes);
-    }
-
-    @GetMapping("/allPlaylist/{userId}")
-    public ResponseEntity<List<LikeDto>> getAllPlayListByUserId(@PathVariable Long userId) {
-        List<LikeDto> liked = likeService.getAllPlayListByUserId(userId);
-
-        // Lọc ra các LikeDto có albumId khác null
-        List<LikeDto> filteredLikes = liked.stream()
-                .filter(likeDto -> likeDto.getPlaylistId() != null)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(filteredLikes);
-    }
-
-
 }
+
+
+
