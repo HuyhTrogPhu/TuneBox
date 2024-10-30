@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -106,5 +107,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
-    long countByIdNotNull();
+
 }

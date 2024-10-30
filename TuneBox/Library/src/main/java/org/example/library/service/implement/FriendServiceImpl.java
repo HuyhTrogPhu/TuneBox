@@ -1,5 +1,6 @@
 package org.example.library.service.implement;
 
+import org.example.library.dto.FriendAcceptDto;
 import org.example.library.dto.FriendRequestDTO;
 import org.example.library.model.Friend;
 import org.example.library.model.User;
@@ -65,23 +66,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<User> getFriends(Long userId) {
-        User user = getUserById(userId);
-        Set<User> friendSet = new HashSet<>();
-
-        // Lấy danh sách bạn bè đã được chấp nhận từ user
-        List<Friend> friends = friendRepository.findByUserAndStatus(user, "accepted");
-        for (Friend friend : friends) {
-            friendSet.add(friend.getFriend());
-        }
-
-        // Lấy danh sách bạn bè đã được chấp nhận từ những người khác
-        List<Friend> reciprocalFriends = friendRepository.findByFriendAndStatus(user, "accepted");
-        for (Friend friend : reciprocalFriends) {
-            friendSet.add(friend.getUser());
-        }
-
-        return new ArrayList<>(friendSet); // Trả về danh sách bạn bè duy nhất
+    public List<FriendAcceptDto> getFriends(Long userId) {
+        List<FriendAcceptDto> friends = friendRepository.getFriendAccepts(userId);
+        return friends;
     }
 
     @Override
@@ -199,5 +186,6 @@ public class FriendServiceImpl implements FriendService {
 
         return (long) friendSet.size(); // Trả về số lượng bạn bè duy nhất
     }
+
 
 }
