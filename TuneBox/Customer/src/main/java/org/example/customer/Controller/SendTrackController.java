@@ -3,6 +3,7 @@
     import org.example.library.dto.TrackDto;
     //import org.example.library.dto.UserDTO;
     import org.example.library.dto.UserMessageDTO;
+    import org.example.library.service.SendTrackService;
     import org.example.library.service.TrackService;
     import org.example.library.service.UserService;
     import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@
         @Autowired
         private TrackService trackService;
 
+        @Autowired
+        private SendTrackService sendTrackService;
+
         @GetMapping("/users/receivers")
         public ResponseEntity<List<UserMessageDTO>> getAllReceiversExcludingSender(@RequestParam Long senderId) {
             List<UserMessageDTO> receivers = userService.findAllReceiversExcludingSender(senderId);
@@ -32,5 +36,11 @@
         public ResponseEntity<TrackDto> getTrackForSharing(@PathVariable Long trackId) {
             TrackDto track = trackService.getTrackById(trackId);
             return ResponseEntity.ok(track);
+        }
+
+        @PostMapping("/track")
+        public ResponseEntity<Void> sendTrack(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long trackId) {
+            sendTrackService.sendTrackMessage(senderId, receiverId, trackId);
+            return ResponseEntity.ok().build();
         }
     }

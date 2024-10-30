@@ -25,4 +25,5 @@ public interface UserService {
     List<UserDto> findAllUser();
 
     List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
+
 }
