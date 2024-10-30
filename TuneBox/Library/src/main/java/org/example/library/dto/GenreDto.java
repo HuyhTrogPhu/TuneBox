@@ -12,7 +12,6 @@ import org.example.library.model.User;
 
 import java.util.Set;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,6 +27,4 @@ public class GenreDto {
         this.id = id;
         this.name = name;
     }
-
-
 }

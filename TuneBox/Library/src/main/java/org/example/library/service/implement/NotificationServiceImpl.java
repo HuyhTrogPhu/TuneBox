@@ -5,9 +5,11 @@ import org.example.library.model.Follow;
 import org.example.library.model.Notification;
 import org.example.library.mapper.NotificationMapper;
 import org.example.library.model.Post;
+import org.example.library.model.User;
 import org.example.library.repository.FollowRepository;
 import org.example.library.repository.NotificationRepository;
 import org.example.library.repository.PostRepository;
+import org.example.library.repository.UserRepository;
 import org.example.library.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -35,6 +37,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public void sendNotificationToFollowers(NotificationDTO notificationDTO, Long targetUserId) {
@@ -91,9 +96,6 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
-
-
-
     @Override
     public List<NotificationDTO> getUserNotifications(Long userId) {
         // Lấy danh sách thông báo theo userId
@@ -113,39 +115,49 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
-    @Override
-    public void sendWarningToUser(Long userId, String title, String message) {
-        // Tạo đối tượng NotificationDTO cho cảnh báo
-        NotificationDTO warningNotification = new NotificationDTO();
-        warningNotification.setUserId(userId);
-        warningNotification.setMessage(message); // Nội dung cảnh báo
-        warningNotification.setCreatedAt(LocalDateTime.now());
 
-        // Lưu cảnh báo vào cơ sở dữ liệu
-        Notification notification = notificationMapper.toEntity(warningNotification);
-        notificationRepository.save(notification);
-
-        // Gửi cảnh báo qua WebSocket đến người dùng
-        messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/notifications", warningNotification);
-
-    }
-
-
-
-    @Override
-    public void notifyReporter(Long userId, String title, String message) {
-        // Tạo đối tượng NotificationDTO cho người báo cáo
-        NotificationDTO reportNotification = new NotificationDTO();
-        reportNotification.setUserId(userId);
-        reportNotification.setMessage(message); // Nội dung thông báo
-        reportNotification.setCreatedAt(LocalDateTime.now());
-
+    public void sendLikeNotification(User liker, Post post) {
+        Long postOwnerId = post.getUser().getId();
+        String postOwnerName = post.getUser().getUserInformation().getName();
+        String avatarUrl = liker.getUserInformation().getAvatar();
+        // Tạo nội dung thông báo
+        NotificationDTO notification = new NotificationDTO();
+        notification.setPostId(post.getId());
+        notification.setMessage(liker.getUserInformation().getName() + " đã thích bài viết của bạn.");
+        notification.setUserId(postOwnerId);
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setAvatarUrl(avatarUrl);
         // Lưu thông báo vào cơ sở dữ liệu
-        Notification notification = notificationMapper.toEntity(reportNotification);
-        notificationRepository.save(notification);
+        Notification notificationEntity = notificationMapper.toEntity(notification);
+        notificationRepository.save(notificationEntity);
+        // Gửi thông báo qua WebSocket
+        messagingTemplate.convertAndSendToUser(postOwnerId.toString(), "/queue/notifications", notification);
+    }
+    public void sendNotificationcomment(Long userId, String message, Long postId) {
+        Optional<User> user = userRepository.findById(userId);
 
-        // Gửi thông báo qua WebSocket cho người báo cáo
-        messagingTemplate.convertAndSendToUser(userId.toString(), "/queue/notifications", reportNotification);
+        if (user.isPresent()) {
+            // Tạo thông báo mới
+            Notification notification = new Notification();
+            notification.setMessage(message);
+            notification.setUserId(userId);
+            notification.setCreatedAt(LocalDateTime.now());
+            notification.setPostId(postId);
+            notification.setRead(false); // Mặc định chưa đọc
+            // Lưu thông báo vào cơ sở dữ liệu
+            notificationRepository.save(notification);
+        } else {
+            throw new IllegalArgumentException("User not found");
+        }
     }
 
+    @Override
+    public void deleteNotification(Long notificationId) {
+        Optional<Notification> notificationOpt = notificationRepository.findById(notificationId);
+        if (notificationOpt.isPresent()) {
+            notificationRepository.delete(notificationOpt.get()); // Xóa thông báo
+        } else {
+            throw new IllegalArgumentException("Notification not found");
+        }
+    }
 }

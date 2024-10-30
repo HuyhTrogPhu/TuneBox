@@ -2,8 +2,8 @@ package org.example.customer.controller;
 
 
 import org.example.library.dto.OrderDto;
+import org.example.library.dto.UserCheckOut;
 import org.example.library.model.Order;
-import org.example.library.model.User;
 import org.example.library.service.implement.OrderServiceImpl;
 import org.example.library.service.implement.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,15 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    UserServiceImpl userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private OrderServiceImpl orderService;
 
     // Get user information from cookie
     @GetMapping("/getUserById/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        return null;
+    public UserCheckOut getUserById(@PathVariable Long userId) {
+        return userService.getUserCheckoutInfo(userId);
     }
 
     @PostMapping("/create")

@@ -36,9 +36,11 @@ public class CommentController {
             commentDTO.setCreationDate(LocalDateTime.parse(createdAt));
         }
 
+        // Gán icon từ commentDTO vào commentService
         CommentDTO createdComment = commentService.addComment(postId, userId, commentDTO);
         return ResponseEntity.ok(createdComment);
     }
+
 
 
     // Xóa comment

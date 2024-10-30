@@ -38,6 +38,8 @@ public class UserInformation {
 
     private String about;
 
+    private String location;
+
     @OneToOne(mappedBy = "userInformation")
     @JsonIgnore
     private User user;

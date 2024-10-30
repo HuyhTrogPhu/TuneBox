@@ -24,6 +24,7 @@ public class ReplyController {
                                              @PathVariable Long userId,
                                              @RequestBody ReplyDto replyDto,
                                              @RequestParam(required = false) Long parentReplyId) {
+        // Ensure you are using replyDto.getUserNickname() here
         System.out.println("Comment ID: " + commentId);
         System.out.println("User ID: " + userId);
         System.out.println("User Nickname: " + replyDto.getUserNickname());
@@ -32,6 +33,7 @@ public class ReplyController {
         ReplyDto createdReply = replyService.addReply(commentId, userId, replyDto, parentReplyId);
         return new ResponseEntity<>(createdReply, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/comment/{commentId}")
     public ResponseEntity<List<ReplyDto>> getRepliesByComment(@PathVariable Long commentId) {
@@ -68,3 +70,6 @@ public class ReplyController {
         return ResponseEntity.ok(updatedReply);
     }
 }
+
+
+

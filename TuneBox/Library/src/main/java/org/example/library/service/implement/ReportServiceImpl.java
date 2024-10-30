@@ -13,6 +13,7 @@ import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
+import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,7 +35,7 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository;  // Khai báo UserRepository để thao tác với User trong hệ thống
 
     @Autowired
     private ReportMapper reportMapper;

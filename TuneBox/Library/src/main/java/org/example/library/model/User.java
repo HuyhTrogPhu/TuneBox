@@ -29,7 +29,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
-
     private Long id;
 
     private String email;
@@ -44,6 +43,7 @@ public class User {
 
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 

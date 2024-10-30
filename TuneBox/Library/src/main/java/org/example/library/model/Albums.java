@@ -1,3 +1,4 @@
+
 package org.example.library.model;
 
 
@@ -37,7 +38,7 @@ public class Albums {
     private Date releaseDate;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate = LocalDate.now();
+    private LocalDate createDate;
 
     private boolean report;
 

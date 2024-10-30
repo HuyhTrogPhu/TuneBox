@@ -52,6 +52,7 @@ public class PostAdminController {
         }
     }
 
+    //report
     @GetMapping("/report")
     public List<ReportDto> getPendingReports() {
         return postService.getReportedPosts();
