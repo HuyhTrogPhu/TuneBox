@@ -115,6 +115,16 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
+    public void sendWarningToUser(Long userId, String title, String message) {
+
+    }
+
+    @Override
+    public void notifyReporter(Long userId, String title, String message) {
+
+    }
+
 
     public void sendLikeNotification(User liker, Post post) {
         Long postOwnerId = post.getUser().getId();
