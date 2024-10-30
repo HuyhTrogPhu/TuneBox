@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class TrackDto {
 
     private boolean status;
 
-    private LocalDate createDate;
+    private LocalDateTime createDate;
 
     private boolean report;
 
@@ -38,6 +39,10 @@ public class TrackDto {
     private String genreName;
 
     private Long userId;
+
+    private String avatar;
+
+    private String userNickname;
 
     private String userName;
 
@@ -50,6 +55,24 @@ public class TrackDto {
     private Set<Long> likes;
 
 
-    public TrackDto(Long id, String name, String trackImage, byte[] bytes, String description, boolean status, LocalDate createDate, boolean report, Date reportDate, Long aLong, String s, Long aLong1, String s1, Long aLong2, Set<Long> playlist, Set<Long> comments, Set<Long> likes) {
-    }
+    public TrackDto(Long id,
+                    String name,
+                    String imageTrack,
+                    byte[] trackFile,
+                    String description,
+                    boolean status,
+                    LocalDate createDate,
+                    boolean report,
+                    Date reportDate,
+                    Long genreId,
+                    String genreName,
+                    Long userId,
+                    String avatar,
+                    String userNickname,
+                    String userName,
+                    Long albumIds,
+                    Set<Long> playlistIds,
+                    Set<Long> comments,
+                    Set<Long> likes)
+    {}
 }
