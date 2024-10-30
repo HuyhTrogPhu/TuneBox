@@ -117,6 +117,11 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.countByTrackId(trackId);
     }
 
+    @Override
+    public long countLikesByPlaylistId(Long playlistId) {
+        return likeRepository.countByplaylistId(playlistId);
+    }
+
 
     @Override
     public List<LikeDto> getLikesByPostId(Long postId) {

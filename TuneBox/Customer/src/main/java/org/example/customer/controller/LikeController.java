@@ -64,6 +64,12 @@ public class LikeController {
         return ResponseEntity.ok(count);
     }
 
+    @GetMapping("/playlist/{playlistId}/count")
+    public ResponseEntity<Long> getLikesCountByPlaylistId(@PathVariable Long playlistId) {
+        long count = likeService.countLikesByTrackId(playlistId);
+        return ResponseEntity.ok(count);
+    }
+
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<LikeDto>> getLikesByPostId(@PathVariable Long postId) {
         List<LikeDto> likes = likeService.getLikesByPostId(postId);

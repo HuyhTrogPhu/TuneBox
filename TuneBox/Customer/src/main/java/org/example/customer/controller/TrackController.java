@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class TrackController {
             trackDto.setDescription(description);
             trackDto.setStatus(status);
             trackDto.setReport(report);
-            trackDto.setCreateDate(LocalDate.now());
+            trackDto.setCreateDate(LocalDateTime.now());
             trackDto.setReportDate(null); // Assume report date is null for now
 
             TrackDto createdTrack = trackService.createTrack(trackDto, trackImage, trackFile, user.getId(), genre.getId());
