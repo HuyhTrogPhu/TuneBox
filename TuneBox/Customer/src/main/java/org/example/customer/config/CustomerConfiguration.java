@@ -1,10 +1,12 @@
 package org.example.customer.config;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,13 +16,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "org.example.*")
 public class CustomerConfiguration {
-
+    @Autowired
+    @Lazy
+    private JwtFilter jwtFilter;
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomerServiceConfig();
@@ -45,8 +50,10 @@ public class CustomerConfiguration {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
                                 "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
-                                "/customer/category/**", "/customer/instrument/**").permitAll()
-                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
+                                "/customer/category/**", "/customer/instrument/**", "/user/**").permitAll()
+                        .requestMatchers("/customer/cart/**").hasRole("Customer")
+                        .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
+                        .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .requestMatchers("/oauth2/**").authenticated()
                         .anyRequest().permitAll()
                 )
@@ -65,9 +72,10 @@ public class CustomerConfiguration {
                 )
 
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sử dụng JWT nên không cần Session
                 )
                 .authenticationManager(authenticationManager);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

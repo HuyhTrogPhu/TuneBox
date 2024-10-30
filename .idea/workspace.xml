@@ -4,14 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cao nhạt admin e com">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/StatisticalCategoryDto.java" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cao nhạt">
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/EcommerceAdminConfiguration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserIsInvoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserIsInvoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +68,7 @@
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;XuanTruong&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/backkk/TuneBox-XuanTruong&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/TuneBox-XuanTruong&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -75,6 +78,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.customer.config" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -177,7 +185,12 @@
       <workItem from="1729857065861" duration="5609000" />
       <workItem from="1730091228309" duration="1913000" />
       <workItem from="1730103012793" duration="3234000" />
-      <workItem from="1730135685964" duration="34000" />
+      <workItem from="1730135685964" duration="64000" />
+      <workItem from="1730176508663" duration="3288000" />
+      <workItem from="1730271951321" duration="18000" />
+      <workItem from="1730279603051" duration="343000" />
+      <workItem from="1730279999354" duration="661000" />
+      <workItem from="1730292403906" duration="2465000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -307,7 +320,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729841570041</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="cao nhạt">
+      <option name="closed" value="true" />
+      <created>1730135731455</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1730135731455</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -338,7 +359,8 @@
     <MESSAGE value="hoan thanh order cod" />
     <MESSAGE value="update" />
     <MESSAGE value="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java" />
+    <MESSAGE value="cao nhạt" />
+    <option name="LAST_COMMIT_MESSAGE" value="cao nhạt" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

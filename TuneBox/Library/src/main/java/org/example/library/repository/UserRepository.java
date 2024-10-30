@@ -16,8 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     // get user by username or email
-    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password) " +
-            "FROM User u WHERE u.userName = :userName OR u.email = :email")
+    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
+            "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
     Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
 
     // get user check out info
@@ -159,7 +159,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserNotSell();
 
 
-
-
-
+    User findByUserName(String username);
 }
