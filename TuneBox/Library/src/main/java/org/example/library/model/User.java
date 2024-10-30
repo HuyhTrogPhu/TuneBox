@@ -38,6 +38,7 @@ public class User {
     private LocalDate createDate;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 

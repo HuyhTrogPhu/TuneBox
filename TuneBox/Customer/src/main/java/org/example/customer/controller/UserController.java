@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -93,7 +93,7 @@ public class UserController {
     // get list genres
     @GetMapping("/list-genre")
     public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreList = genreService.findAll();
         List<GenreDto> genreDtoList = genreList.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());
@@ -194,7 +194,7 @@ public class UserController {
     @GetMapping("/{userId}/settingProfile")
     public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
         try {
-            ProfileSettingDto userInfo = userInformationService.getUserInformation(userId);
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
             return ResponseEntity.ok(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
@@ -213,7 +213,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
-
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserProfile(userId, userUpdateRequest);
@@ -251,4 +250,4 @@ public class UserController {
     }
 
 
-    }
+}
