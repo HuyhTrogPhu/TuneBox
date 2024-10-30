@@ -115,21 +115,13 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    // Phương thức gửi thông báo khi có người thích bài viết
     @Override
-    public void sendWarningToUser(Long userId, String title, String message) {
-
-    }
-
-    @Override
-    public void notifyReporter(Long userId, String title, String message) {
-
-    }
-
-
     public void sendLikeNotification(User liker, Post post) {
         Long postOwnerId = post.getUser().getId();
         String postOwnerName = post.getUser().getUserInformation().getName();
         String avatarUrl = liker.getUserInformation().getAvatar();
+
         // Tạo nội dung thông báo
         NotificationDTO notification = new NotificationDTO();
         notification.setPostId(post.getId());
@@ -137,12 +129,15 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setUserId(postOwnerId);
         notification.setCreatedAt(LocalDateTime.now());
         notification.setAvatarUrl(avatarUrl);
+
         // Lưu thông báo vào cơ sở dữ liệu
         Notification notificationEntity = notificationMapper.toEntity(notification);
         notificationRepository.save(notificationEntity);
+
         // Gửi thông báo qua WebSocket
         messagingTemplate.convertAndSendToUser(postOwnerId.toString(), "/queue/notifications", notification);
     }
+    @Override
     public void sendNotificationcomment(Long userId, String message, Long postId) {
         Optional<User> user = userRepository.findById(userId);
 
@@ -154,13 +149,13 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setCreatedAt(LocalDateTime.now());
             notification.setPostId(postId);
             notification.setRead(false); // Mặc định chưa đọc
+
             // Lưu thông báo vào cơ sở dữ liệu
             notificationRepository.save(notification);
         } else {
             throw new IllegalArgumentException("User not found");
         }
     }
-
     @Override
     public void deleteNotification(Long notificationId) {
         Optional<Notification> notificationOpt = notificationRepository.findById(notificationId);
@@ -170,4 +165,10 @@ public class NotificationServiceImpl implements NotificationService {
             throw new IllegalArgumentException("Notification not found");
         }
     }
+    @Override
+    public void deleteAllReadNotifications(Long userId) {
+        List<Notification> readNotifications = notificationRepository.findByUserIdAndRead(userId, true);
+        notificationRepository.deleteAll(readNotifications);
+    }
+
 }

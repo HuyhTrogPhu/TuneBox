@@ -23,5 +23,7 @@ public interface NotificationService {
     void sendNotificationcomment(Long userId, String message, Long postId);
 
     void deleteNotification(Long notificationId);
+
+    void deleteAllReadNotifications(Long userId);
 }
 

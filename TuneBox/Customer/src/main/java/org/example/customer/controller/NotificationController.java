@@ -38,4 +38,9 @@ public class NotificationController {
         notificationService.deleteNotification(id);
         return ResponseEntity.ok().build();
     }
+    @DeleteMapping("/delete-read")
+    public ResponseEntity<?> deleteAllReadNotifications(@RequestParam Long userId) {
+        notificationService.deleteAllReadNotifications(userId);
+        return ResponseEntity.ok("Đã xóa tất cả thông báo đã đọc.");
+    }
 }

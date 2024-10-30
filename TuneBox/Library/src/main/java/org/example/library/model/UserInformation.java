@@ -42,6 +42,7 @@ public class UserInformation {
 
     @OneToOne(mappedBy = "userInformation")
     @JsonIgnore
+    @JsonBackReference
     private User user;
 
 }
