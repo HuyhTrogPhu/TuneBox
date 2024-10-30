@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -89,6 +90,22 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT SUM(o.total_price) FROM orders o " +
             "WHERE YEAR(o.order_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
     Double getRevenueOfBeforeYear();
+
+    // get revenue according to day
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate = :date")
+    Double getRevenueByDay(@Param("date") Date date);
+
+    // get revenue according to week
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE WEEK(o.orderDate) = WEEK(:date) AND YEAR(o.orderDate) = YEAR(:date)")
+    Double getRevenueByWeek(@Param("date") Date date);
+
+    // get revenue according to month
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE MONTH(o.orderDate) = MONTH(:date) AND YEAR(o.orderDate) = YEAR(:date)")
+    Double getRevenueByMonth(@Param("date") Date date);
+
+    // get revenue according to year
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEAR(o.orderDate) = :date")
+    Double getRevenueByYear(@Param("date") Date date);
 
 
 

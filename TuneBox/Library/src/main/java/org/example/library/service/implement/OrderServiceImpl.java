@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,6 +170,25 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getRevenueOfBeforeYear();
     }
 
+    @Override
+    public Double revenueByDay(Date date) {
+        return orderRepository.getRevenueByDay(date);
+    }
+
+    @Override
+    public Double revenueByWeek(Date date) {
+        return orderRepository.getRevenueByWeek(date);
+    }
+
+    @Override
+    public Double revenueByMonth(Date date) {
+        return orderRepository.getRevenueByMonth(date);
+    }
+
+    @Override
+    public Double revenueByYear(Date date) {
+        return orderRepository.getRevenueByYear(date);
+    }
 
 
     @Override

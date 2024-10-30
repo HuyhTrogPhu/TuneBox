@@ -5,6 +5,7 @@ import org.example.library.dto.*;
 import org.example.library.model.Order;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface OrderService {
@@ -37,5 +38,14 @@ public interface OrderService {
     Double revenueBeforeOfMonth();
 
     Double revenueBeforeOfYear();
+
+    Double revenueByDay(Date date);
+
+    Double revenueByWeek(Date date);
+
+    Double revenueByMonth(Date date);
+
+    Double revenueByYear(Date date);
+
 
 }

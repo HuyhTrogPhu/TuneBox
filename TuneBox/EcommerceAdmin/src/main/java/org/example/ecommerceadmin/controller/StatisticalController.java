@@ -1,9 +1,6 @@
 package org.example.ecommerceadmin.controller;
 
-import org.example.library.dto.InstrumentSalesDto;
-import org.example.library.dto.StatisticalInstrumentDto;
-import org.example.library.dto.UserRevenueInfo;
-import org.example.library.dto.UserSell;
+import org.example.library.dto.*;
 import org.example.library.service.InstrumentService;
 import org.example.library.service.OrderService;
 import org.example.library.service.UserService;
@@ -14,10 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/e-statistical")
@@ -200,6 +194,86 @@ public class StatisticalController {
             revenue.put("revenueOfYear", revenueOfYear!= null? revenueOfYear : 0.0);
 
             return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // revenue according to day
+    @GetMapping("/revenue-according/{date}")
+    public ResponseEntity<?> getRevenueDay(@PathVariable Date date) {
+        try {
+            Double revenueByDay = orderService.revenueByDay(date);
+            List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByDay(date);
+            List<UserSell> userSells = userService.getUserBuyTheLeastCurrentMonth(date);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("revenueByDay", revenueByDay!= null? revenueByDay : 0.0);
+            response.put("listInstrumentByDay", list);
+            response.put("userSells", userSells);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // revenue according to week
+    @GetMapping("/revenue-according-week/{date}")
+    public ResponseEntity<?> getRevenueWeek(@PathVariable Date date) {
+        try {
+            Double revenueByWeek = orderService.revenueByWeek(date);
+            List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByWeek(date);
+            List<UserSell> userSells = userService.getUserBuyTheLeastCurrentWeek(date);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("revenueByWeek", revenueByWeek!= null? revenueByWeek : 0.0);
+            response.put("listInstrumentByWeek", list);
+            response.put("userSells", userSells);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // revenue according to month
+    @GetMapping("/revenue-according-month/{date}")
+    public ResponseEntity<?> getRevenueMonth(@PathVariable Date date) {
+        try {
+            Double revenueByMonth = orderService.revenueByMonth(date);
+            List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByMonth(date);
+            List<UserSell> userSells = userService.getUserBuyTheLeastCurrentMonth(date);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("revenueByMonth", revenueByMonth!= null? revenueByMonth : 0.0);
+            response.put("listInstrumentByMonth", list);
+            response.put("userSells", userSells);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // revenue according to year
+    @GetMapping("/revenue-according-year/{date}")
+    public ResponseEntity<?> getRevenueYear(@PathVariable Date date) {
+        try {
+            Double revenueByYear = orderService.revenueByYear(date);
+            List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByYear(date);
+            List<UserSell> userSells = userService.getUserBuyTheLeastCurrentYear(date);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("revenueByYear", revenueByYear!= null? revenueByYear : 0.0);
+            response.put("listInstrumentByYear", list);
+            response.put("userSells", userSells);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

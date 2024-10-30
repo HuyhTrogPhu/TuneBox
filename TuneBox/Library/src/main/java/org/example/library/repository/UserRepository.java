@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -135,7 +136,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Double getTotalRevenueThisYearByTopUser(Long userId);
 
 
-
     // get list user buy the least
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
@@ -159,10 +159,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserNotSell();
 
 
-
-
-    boolean existsByUserName(String userName);
-
     // search
     @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name) " +
             "from UserInformation ui join ui.user us where ui.name like :keyword")
@@ -179,6 +175,39 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new org.example.library.dto.SearchDto(p.id, p.title, p.imagePlaylist, p.creator.userName) " +
             "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
+
+
+    // get list user sell the most according to current day
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where o.orderDate = :date " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellTheMostOfDay(@Param("date") Date date);
+
+    // get list user sell the most according to current week
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where year(o.orderDate) = year(:date) and week(o.orderDate) = week(:date) " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellTheMostOfWeek(@Param("date") Date date);
+
+    // get list user sell the most according to current month
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where year(o.orderDate) = year(:date) and month(o.orderDate) = month(:date) " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellTheMostOfMonth(@Param("date") Date date);
+
+    // get list user sell the most according to current year
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where year(o.orderDate) = year(:date) " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellTheMostOfYear(@Param("date") Date date);
 
 
 }

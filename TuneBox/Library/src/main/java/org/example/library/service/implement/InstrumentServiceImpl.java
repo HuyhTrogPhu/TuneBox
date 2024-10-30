@@ -3,6 +3,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.InstrumentAccordingTo;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.dto.InstrumentSalesDto;
 import org.example.library.dto.StatisticalInstrumentDto;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -287,6 +289,26 @@ public class InstrumentServiceImpl implements InstrumentService {
             return 0.0;
         }
 
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByDay(Date date) {
+        return instrumentRepository.getInstrumentAccordingToDay(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByWeek(Date date) {
+        return instrumentRepository.getInstrumentAccordingToWeek(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByMonth(Date date) {
+        return instrumentRepository.getInstrumentAccordingToMonth(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByYear(Date date) {
+        return instrumentRepository.getInstrumentAccordingToYear(date);
     }
 
 

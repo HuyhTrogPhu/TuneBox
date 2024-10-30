@@ -1,10 +1,12 @@
 package org.example.library.service;
 
+import org.example.library.dto.InstrumentAccordingTo;
 import org.example.library.dto.InstrumentDto;
 import org.example.library.dto.InstrumentSalesDto;
 import org.example.library.dto.StatisticalInstrumentDto;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 public interface InstrumentService {
@@ -59,6 +61,19 @@ public interface InstrumentService {
 
     // get revenue instrument of year by instrumentId
     Double getRevenueInstrumentOfYear(Long instrumentId);
+
+    // list revenue instrument by day
+    List<InstrumentAccordingTo> getListInstrumentByDay(Date date);
+
+    // list revenue instrument by week
+    List<InstrumentAccordingTo> getListInstrumentByWeek(Date date);
+
+    // list revenue instrument by month
+    List<InstrumentAccordingTo> getListInstrumentByMonth(Date date);
+
+    // list revenue instrument by year
+    List<InstrumentAccordingTo> getListInstrumentByYear(Date date);
+
 
 }
 

@@ -97,4 +97,17 @@ public interface UserService {
     public List<SearchDto> searchTrack(String keyword);
     public List<SearchDto> searchUser(String keyword);
 
+    // list user sell the most according current day
+    List<UserSell> getUserSellTheMostCurrent(Date date);
+
+    // list user buy the least according current week
+    List<UserSell> getUserBuyTheLeastCurrentWeek(Date date);
+
+    // list user buy the least according current month
+    List<UserSell> getUserBuyTheLeastCurrentMonth(Date date);
+
+    // list user buy the least according current year
+    List<UserSell> getUserBuyTheLeastCurrentYear(Date date);
+
+
 }

@@ -424,6 +424,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserSell> getUserSellTheMostCurrent(Date date) {
+        return userRepository.getUserSellTheMostOfDay(date);
+    }
+
+    @Override
+    public List<UserSell> getUserBuyTheLeastCurrentWeek(Date date) {
+        return userRepository.getUserSellTheMostOfWeek(date);
+    }
+
+    @Override
+    public List<UserSell> getUserBuyTheLeastCurrentMonth(Date date) {
+        return userRepository.getUserSellTheMostOfMonth(date);
+    }
+
+    @Override
+    public List<UserSell> getUserBuyTheLeastCurrentYear(Date date) {
+        return userRepository.getUserSellTheMostOfYear(date);
+    }
+
+    @Override
     public List<SearchDto> searchTrack(String keyword) {
         return userRepository.searchTrack(keyword);
     }

@@ -1,5 +1,6 @@
 package org.example.library.repository;
 
+import org.example.library.dto.InstrumentAccordingTo;
 import org.example.library.dto.InstrumentSalesDto;
 import org.example.library.dto.StatisticalInstrumentDto;
 import org.example.library.model.Instrument;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
@@ -119,6 +121,42 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
             "WHERE i.id = :instrumentId AND FUNCTION('YEAR', o.orderDate) = FUNCTION('YEAR', CURRENT_DATE)")
     Double getTotalRevenueInstrumentOfYear(@Param("instrumentId") Long instrumentId);
 
+
+    // get list instrument sell the most by day
+    @Query("select new org.example.library.dto.InstrumentAccordingTo(i.id, i.name, i.costPrice, i.image, sum(od.quantity)) " +
+            "from Instrument i left join OrderDetail od on i.id = od.instrument.id " +
+            "left join od.order o " +
+            "where o.orderDate = :date " +
+            "group by i.id, i.name, i.costPrice, i.image " +
+            "order by sum(od.quantity) desc")
+    List<InstrumentAccordingTo> getInstrumentAccordingToDay(@Param("date") Date date);
+
+    // get list instrument sell the most by week
+    @Query("select new org.example.library.dto.InstrumentAccordingTo(i.id, i.name, i.costPrice, i.image, sum(od.quantity)) " +
+            "from Instrument i left join OrderDetail od on i.id = od.instrument.id " +
+            "left join od.order o " +
+            "where year(o.orderDate) = year(:date) and week(o.orderDate) = week(:date) " +
+            "group by i.id, i.name, i.costPrice, i.image " +
+            "order by sum(od.quantity) desc")
+    List<InstrumentAccordingTo> getInstrumentAccordingToWeek(@Param("date") Date date);
+
+    // get list instrument sell the most by month
+    @Query("select new org.example.library.dto.InstrumentAccordingTo(i.id, i.name, i.costPrice, i.image, sum(od.quantity)) " +
+            "from Instrument i left join OrderDetail od on i.id = od.instrument.id " +
+            "left join od.order o " +
+            "where year(o.orderDate) = year(:date) and month(o.orderDate) = month(:date) " +
+            "group by i.id, i.name, i.costPrice, i.image " +
+            "order by sum(od.quantity) desc")
+    List<InstrumentAccordingTo> getInstrumentAccordingToMonth(@Param("date") Date date);
+
+    // get list instrument sell the most by year
+    @Query("select new org.example.library.dto.InstrumentAccordingTo(i.id, i.name, i.costPrice, i.image, sum(od.quantity)) " +
+            "from Instrument i left join OrderDetail od on i.id = od.instrument.id " +
+            "left join od.order o " +
+            "where year(o.orderDate) = year(:date) " +
+            "group by i.id, i.name, i.costPrice, i.image " +
+            "order by sum(od.quantity) desc")
+    List<InstrumentAccordingTo> getInstrumentAccordingToYear(@Param("date") Date date);
 
 
 }
