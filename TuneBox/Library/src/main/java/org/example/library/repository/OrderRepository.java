@@ -95,17 +95,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate = :date")
     Double getRevenueByDay(@Param("date") Date date);
 
-    // get revenue according to week
-    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE WEEK(o.orderDate) = WEEK(:date) AND YEAR(o.orderDate) = YEAR(:date)")
-    Double getRevenueByWeek(@Param("date") Date date);
-
-    // get revenue according to month
-    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE MONTH(o.orderDate) = MONTH(:date) AND YEAR(o.orderDate) = YEAR(:date)")
-    Double getRevenueByMonth(@Param("date") Date date);
-
-    // get revenue according to year
-    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEAR(o.orderDate) = :date")
-    Double getRevenueByYear(@Param("date") Date date);
+    // get revenue between date
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
+    Double getRevenueBetweenDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 
 

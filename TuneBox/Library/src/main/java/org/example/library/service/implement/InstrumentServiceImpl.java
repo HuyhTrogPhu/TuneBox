@@ -297,18 +297,8 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public List<InstrumentAccordingTo> getListInstrumentByWeek(Date date) {
-        return instrumentRepository.getInstrumentAccordingToWeek(date);
-    }
-
-    @Override
-    public List<InstrumentAccordingTo> getListInstrumentByMonth(Date date) {
-        return instrumentRepository.getInstrumentAccordingToMonth(date);
-    }
-
-    @Override
-    public List<InstrumentAccordingTo> getListInstrumentByYear(Date date) {
-        return instrumentRepository.getInstrumentAccordingToYear(date);
+    public List<InstrumentAccordingTo> getListInstrumentBetween(Date startDate, Date endDate) {
+        return instrumentRepository.getInstrumentBetween(startDate, endDate);
     }
 
 

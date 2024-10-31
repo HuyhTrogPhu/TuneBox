@@ -54,8 +54,7 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserInformationService userInformationService;
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -127,22 +126,14 @@ public class UserController {
 
     // Login
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto) {
         Optional<UserLoginDto> optionalUser = userRepository.findByUserNameOrEmail(userLoginDto.getUserName(), userLoginDto.getEmail());
 
         if (optionalUser.isPresent()) {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-                Long userId = user.getId();
 
-                // Thiết lập cookie cho userId
-                Cookie cookie = new Cookie("userId", userId.toString());
-                cookie.setMaxAge(24 * 60 * 60);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-
-                return ResponseEntity.ok().body(null);
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 

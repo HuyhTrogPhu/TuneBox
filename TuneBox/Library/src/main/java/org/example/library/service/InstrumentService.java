@@ -65,14 +65,8 @@ public interface InstrumentService {
     // list revenue instrument by day
     List<InstrumentAccordingTo> getListInstrumentByDay(Date date);
 
-    // list revenue instrument by week
-    List<InstrumentAccordingTo> getListInstrumentByWeek(Date date);
-
-    // list revenue instrument by month
-    List<InstrumentAccordingTo> getListInstrumentByMonth(Date date);
-
-    // list revenue instrument by year
-    List<InstrumentAccordingTo> getListInstrumentByYear(Date date);
+    // list revenue instrument between date
+    List<InstrumentAccordingTo> getListInstrumentBetween(Date startDate, Date endDate);
 
 
 }

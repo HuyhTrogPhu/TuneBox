@@ -176,19 +176,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Double revenueByWeek(Date date) {
-        return orderRepository.getRevenueByWeek(date);
+    public Double revenueBetweenDate(Date startDate, Date endDate) {
+        return orderRepository.getRevenueBetweenDate(startDate, endDate);
     }
 
-    @Override
-    public Double revenueByMonth(Date date) {
-        return orderRepository.getRevenueByMonth(date);
-    }
 
-    @Override
-    public Double revenueByYear(Date date) {
-        return orderRepository.getRevenueByYear(date);
-    }
 
 
     @Override
