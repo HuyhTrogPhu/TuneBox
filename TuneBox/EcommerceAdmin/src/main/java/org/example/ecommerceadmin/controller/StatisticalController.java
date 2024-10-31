@@ -201,7 +201,7 @@ public class StatisticalController {
     }
 
     // revenue according to day
-    @GetMapping("/revenue-according/{date}")
+    @GetMapping("/revenue-according-day/{date}")
     public ResponseEntity<?> getRevenueDay(@PathVariable Date date) {
         try {
             Double revenueByDay = orderService.revenueByDay(date);
