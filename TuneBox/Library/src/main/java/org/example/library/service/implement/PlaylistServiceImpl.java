@@ -221,6 +221,34 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
 
+    @Override
+    public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId) {
+        try {
+            // Tìm playlist theo playlistId
+            Playlist playlist = playlistRepository.findById(playlistId).orElseThrow(
+                    () -> new RuntimeException("Playlist not found")
+            );
+
+            // Tìm track theo trackId
+            Track track = trackRepository.findById(trackId).orElseThrow(
+                    () -> new RuntimeException("Track not found with ID: " + trackId)
+            );
+
+            // Xóa track khỏi playlist
+            if (playlist.getTracks().contains(track)) {
+                playlist.getTracks().remove(track);
+                track.getPlaylists().remove(playlist); // Xóa playlist khỏi tập hợp playlists của track
+                playlistRepository.save(playlist); // Lưu cập nhật vào cơ sở dữ liệu
+            } else {
+                throw new RuntimeException("Track not found in the playlist");
+            }
+
+            return PlaylistMapper.mapperPlaylistDto(playlist);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }

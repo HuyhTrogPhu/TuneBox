@@ -5,10 +5,7 @@ import org.example.library.dto.NotificationDTO;
 import org.example.library.mapper.LikeMapper;
 import org.example.library.mapper.TrackMapper;
 import org.example.library.model.*;
-import org.example.library.repository.LikeRepository;
-import org.example.library.repository.PostRepository;
-import org.example.library.repository.TrackRepository;
-import org.example.library.repository.UserRepository;
+import org.example.library.repository.*;
 import org.example.library.service.LikeService;
 import org.example.library.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,8 @@ public class LikeServiceImpl implements LikeService {
     private final UserRepository userRepository;
     private final TrackRepository trackRepository;
     private LikeServiceImpl likeService;
+    @Autowired
+    private PlaylistRepository playlistRepository;
 
     @Autowired
     public LikeServiceImpl(LikeRepository likeRepository, PostRepository postRepository, UserRepository userRepository, TrackRepository trackRepository) {
@@ -80,6 +79,36 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    public LikeDto addLikePlaylist(Long userId, Long playlistId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        Like like = new Like();
+        like.setUser(user);
+
+        // Nếu có postId -> tìm bài viết
+        if (playlistId != null) {
+            Playlist list = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+
+            // Kiểm tra xem người dùng đã thích bài viết này chưa
+            if (likeRepository.existsByUserAndPlaylist(user, list)) {
+                throw new RuntimeException("User already liked this playlist");
+            }
+            System.out.println("list: " + list);
+            like.setPlaylist(list);
+            // Thêm logic gửi thông báo khi có người thích bài viết
+//            notificationService.sendLikeNotification(user, list);
+
+        } else {
+            throw new RuntimeException("Not found Playlist and user");
+        }
+
+        like.setCreateDate(LocalDate.now());
+        likeRepository.save(like);
+
+        return LikeMapper.toDto(like);
+    }
+
+    @Override
     public void removeLike(Long userId, Long postId, Long trackId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -108,6 +137,30 @@ public class LikeServiceImpl implements LikeService {
         // Xóa like
         likeRepository.delete(like);
     }
+
+    @Override
+    public void removeLikePlaylist(Long userId, Long playlistId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Like like;
+
+        if (playlistId != null) {
+            // Nếu postId có giá trị, kiểm tra like cho post
+            Playlist list = playlistRepository.findById(playlistId)
+                    .orElseThrow(() -> new RuntimeException("playlist not found"));
+
+            like = likeRepository.findByUserAndPlaylist(user, list)
+                    .orElseThrow(() -> new RuntimeException("Like not found"));
+        }  else {
+            // Nếu cả postId và trackId đều không có
+            throw new RuntimeException("not found PostId and TrackID");
+        }
+
+        // Xóa like
+        likeRepository.delete(like);
+    }
+
     public long countLikesByPostId(Long postId) {
         return likeRepository.countByPostId(postId); // Giả sử bạn có phương thức này trong repository
     }
@@ -154,6 +207,13 @@ public class LikeServiceImpl implements LikeService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Track track = trackRepository.findById(trackId).orElseThrow(() -> new RuntimeException("Track not found"));
         return likeRepository.existsByUserAndTrack(user,track);
+    }
+
+    @Override
+    public boolean checkUserLikePlaylist(Long playlistId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Playlist playlist = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+        return likeRepository.existsByUserAndPlaylist(user, playlist);
     }
 
     @Override

@@ -135,4 +135,16 @@ public class PlaylistController {
         List<PlaylistDto> list = playlistService.getAllPlaylist();
         return ResponseEntity.ok(list);
     }
+
+    @DeleteMapping("/{playlistId}/tracks/{trackId}")
+    public ResponseEntity<String> removeTrackFromPlaylist(
+            @PathVariable Long playlistId,
+            @PathVariable Long trackId) {
+        try {
+            playlistService.removeTrackFromPlaylist(playlistId, trackId);
+            return ResponseEntity.ok("Track được xóa khỏi playlist thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Không thể xóa track khỏi playlist: " + e.getMessage());
+        }
+    }
 }
