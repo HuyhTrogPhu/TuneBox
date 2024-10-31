@@ -1,10 +1,8 @@
-
 package org.example.library.service;
 
 import org.example.library.dto.PostDto;
 import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
@@ -21,7 +19,6 @@ public interface PostService {
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
-    @Transactional
     void deletePost(Long id);
 
     void updateReportPost(Post post);
@@ -34,7 +31,12 @@ public interface PostService {
     List<Post> getFilteredPosts(Long currentUserId);
 
     //ADMIN
+    PostDto findPostByIdadmin(Long id);
+
     PostDto findPostById(Long id);
+
+    PostDto getPostByPostId(Long postId);
+
 
     List<PostDto> findAllPosts();
 
@@ -43,7 +45,5 @@ public interface PostService {
     long countTotalPosts();
 
     List<ReportDto> getReportedPosts(); // Lấy danh sách các bài viết bị báo cáo
-
-    PostDto getPostByPostId(Long postId);
 
 }

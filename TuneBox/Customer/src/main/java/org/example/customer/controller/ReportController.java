@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.ReportDto3;
 import org.example.library.model.Post;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.service.PostService;
@@ -29,17 +30,23 @@ public class ReportController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<ReportDto> createReport(
-            @RequestBody ReportDto reportDto,
-            @CookieValue(value = "userId", defaultValue = "0") Long currentUserId // Lấy giá trị currentUserId từ cookie
+    public ResponseEntity<ReportDto3> createReport(
+            @RequestBody ReportDto3 reportDto,
+            @CookieValue(value = "userId", defaultValue = "0") Long currentUserId
     ) {
         // Kiểm tra nếu userId từ cookie không hợp lệ
         if (currentUserId == 0) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu không có userId hợp lệ
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        System.out.println("cookies: " + currentUserId);
+
         // Kiểm tra xem bài viết có tồn tại hay không
-        Post post = postService.findThisPostById(reportDto.getPostId().getId());
+        if (reportDto.getPost() == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        Post post = postService.findThisPostById(reportDto.getPost().getReportedId());
         if (post == null) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -53,7 +60,7 @@ public class ReportController {
         reportDto.setUserId(currentUserId);
 
         // Tiến hành tạo báo cáo
-        ReportDto createdReport = reportService.createReport(reportDto);
+        ReportDto3 createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
 

@@ -121,22 +121,36 @@ public class UserController {
 
     // Login
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletResponse response) {
         Optional<UserLoginDto> optionalUser = userRepository.findByUserNameOrEmail(userLoginDto.getUserName(), userLoginDto.getEmail());
 
         if (optionalUser.isPresent()) {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-                // Trả về userId thay vì toàn bộ thông tin user
                 Long userId = user.getId();
-                System.out.println("userId: " + userId);
-                return ResponseEntity.ok(userId);
+
+
+                // Thiết lập cookie cho userId
+                Cookie cookie = new Cookie("userId", userId.toString());
+                cookie.setMaxAge(24 * 60 * 60);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                System.out.println("+++++++++++++++++++++");
+                System.out.println("+++++++++++++++++++++");
+                System.out.println("+++++++++++++++++++++");
+                System.out.println(userId);
+                System.out.println("+++++++++++++++++++++");
+                System.out.println("+++++++++++++++++++++");
+                System.out.println("+++++++++++++++++++++");
+
+
+                return ResponseEntity.ok().body(null);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 
@@ -249,5 +263,10 @@ public class UserController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userService.findAllUser();
+        return ResponseEntity.ok(users);
+    }
 
 }

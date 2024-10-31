@@ -1,6 +1,9 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,7 +45,6 @@ public class UserInformation {
 
     @OneToOne(mappedBy = "userInformation")
     @JsonIgnore
-    @JsonBackReference
     private User user;
 
 }

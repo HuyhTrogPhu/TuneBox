@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class ChatWebSocketController {
 
-
-
     @Autowired
     private MessageService messageService;
 

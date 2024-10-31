@@ -1,9 +1,6 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +20,7 @@ import java.util.Set;
 @Table(name = "users")
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-
-public class User {
+    public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,7 +39,6 @@ public class User {
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 
@@ -91,7 +86,7 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")

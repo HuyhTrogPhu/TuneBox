@@ -37,7 +37,7 @@ public class PostMapper {
         entity.setContent(postDto.getContent());
         entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
         entity.setCreatedAt(postDto.getCreatedAt());
-        entity.setDescription(postDto.getDescription());
+//        entity.setDescription(postDto.getDescription());
         return entity;
     }
 }

@@ -16,6 +16,8 @@ public interface UserService {
 
     UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
 
+    UserCheckOut getUserCheckoutInfo(Long userId);
+
     // get user avatar by userId
     String getUserAvatar(Long userId);
 

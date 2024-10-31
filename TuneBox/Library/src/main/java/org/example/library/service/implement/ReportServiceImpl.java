@@ -4,6 +4,7 @@ import org.example.library.Exception.ResourceNotFoundException;
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
 
+import org.example.library.dto.ReportDto3;
 import org.example.library.mapper.ReportMapper;
 
 import org.example.library.model.Post;
@@ -43,27 +44,29 @@ public class ReportServiceImpl implements ReportService {
     private PostService postService;
 
     @Override
-    public ReportDto createReport(ReportDto reportDto) {
+    public ReportDto3 createReport(ReportDto3 reportDto) {
         // Chuyển đổi từ DTO sang Entity
         Report report = reportMapper.toEntity(reportDto);
 
+        // Thiết lập ngày tạo và trạng thái mặc định
         report.setCreateDate(LocalDate.now());
         report.setStatus(ReportStatus.PENDING);
 
         // Lấy userId của người dùng hiện tại
-        Long currentUserId = reportDto.getUserId(); // Giả sử bạn gửi userId từ front-end hoặc lấy từ token
+        Long currentUserId = reportDto.getUserId();
 
         // Kiểm tra xem userId đã tồn tại hay chưa
-        User user = userRepository.findById(currentUserId).orElseThrow(() -> new RuntimeException("User không tồn tại"));
+        User user = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
 
-        // Set user vào report
+        // Gán user vào report
         report.setUser(user);
 
         // Lưu báo cáo
         Report savedReport = reportRepository.save(report);
 
         // Chuyển đổi từ Entity sang DTO
-        return reportMapper.toDto(savedReport);
+        return reportMapper.toReportDto3(savedReport);
     }
 
 

@@ -27,11 +27,10 @@ public class Role {
     @JsonManagedReference
     private Set<User> users;
 
-    @JsonBackReference
+
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<SocialAdmin> socialAdmins;
 
-    @JsonBackReference
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<EcommerceAdmin> ecommerceAdmins;
 

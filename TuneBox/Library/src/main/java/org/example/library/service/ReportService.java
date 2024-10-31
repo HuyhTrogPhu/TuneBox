@@ -2,6 +2,7 @@ package org.example.library.service;
 
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.ReportDto3;
 import org.example.library.model.Post;
 import org.example.library.model_enum.ReportStatus;
 import org.springframework.data.domain.Page;
@@ -9,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ReportService {
-    ReportDto createReport(ReportDto reportDto);
+    ReportDto3 createReport(ReportDto3 reportDto);
     ReportDto getReportById(Long id);
     List<ReportDto> getAllReports();
     List<Report2Dto> getPendingReports(); // Thêm phương thức không phân trang

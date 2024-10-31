@@ -14,10 +14,10 @@ public interface NotificationService {
     List<NotificationDTO> getUserNotifications(Long userId);
 
     void markNotificationAsRead(Long notificationId);
-
-    void sendWarningToUser(Long userId, String title, String message);
-    void notifyReporter(Long userId, String title, String message);
-    // Phương thức gửi thông báo khi có người thích bài viết
+//
+//    void sendWarningToUser(Long userId, String title, String message);
+//    void notifyReporter(Long userId, String title, String message);
+//    // Phương thức gửi thông báo khi có người thích bài viết
     void sendLikeNotification(User liker, Post post);
 
     void sendNotificationcomment(Long userId, String message, Long postId);
