@@ -12,6 +12,7 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +49,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInformationRepository userInformationRepository;
-
 
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
-       return userRepository.findAccountSettingProfile(userId);
+        return userRepository.findAccountSettingProfile(userId);
     }
 
     @Override
@@ -237,6 +237,40 @@ public class UserServiceImpl implements UserService {
                     return new UserDto(user.getId(), user.getUserName());
                 })
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserSell> getUserSellTheMost() {
+        return userRepository.getUserSellTheMost();
+    }
+
+    @Override
+    public UserSell getTop1UserRevenueInfo() {
+        List<UserSell> topUser = userRepository.getUserSellTheMost();
+        if (!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<UserSell> getUserBuyTheLeast() {
+        return userRepository.getUserBuyTheLeast();
+    }
+
+    @Override
+    public UserSell getTop1UserBuyTheLeast() {
+        List<UserSell> topUser = userRepository.getUserBuyTheLeast();
+        if(!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserSell> getUserNotSell() {
+        return userRepository.getUserNotSell();
     }
 
 

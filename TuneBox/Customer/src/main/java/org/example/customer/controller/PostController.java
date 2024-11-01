@@ -75,6 +75,7 @@ public class PostController {
         }
     }
 
+
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/current-user")
     public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
@@ -134,6 +135,7 @@ public class PostController {
         postDto.setId(id);
         postDto.setContent(content);
 
+
         try {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
@@ -156,6 +158,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
+
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")

@@ -38,10 +38,18 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public boolean checkReportExists(Long userId, Long postId, Long trackId, Long albumId, String type) {
-        return reportRepository.existsByUserIdAndType(userId, postId, trackId, albumId, type);
+        // Logic để kiểm tra báo cáo tồn tại
+        if (type.equals("post")) {
+            return reportRepository.existsByUserIdAndPostId(userId, postId);
+        } else if (type.equals("track")) {
+            return reportRepository.existsByUserIdAndTrackId(userId, trackId);
+        } else if (type.equals("album")) {
+            return reportRepository.existsByUserIdAndAlbumId(userId, albumId);
+        }
+        return false;
     }
 
-    @Override
+        @Override
     public ReportDto createReport(ReportDto reportDto) {
         boolean reportExists = reportRepository.existsByUserIdAndType(
                 reportDto.getUserId(),

@@ -14,8 +14,8 @@ import java.util.Optional;
 public interface FriendRepository extends JpaRepository<Friend, Long> {
     Optional<Friend> findByUserAndFriend(User user, User friend);
     Optional<Friend> findByFriendAndUser(User friend, User user);
-    List<Friend> findByFriendAndStatus(User friend, String status);
-    List<Friend> findByUserAndStatus(User user, String status);
+    List<Friend> findByUserAndStatus(User user, FriendStatus status);
+    List<Friend> findByFriendAndStatus(User friend, FriendStatus status);
     // get friend list
     @Query("select new org.example.library.dto.FriendAcceptDto(u.id,f.id, ui.avatar, ui.name, u.userName)" +
             "from Friend f join f.friend u join u.userInformation ui where f.user.id = :userId and f.accepted = true ")

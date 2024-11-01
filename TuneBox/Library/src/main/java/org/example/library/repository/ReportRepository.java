@@ -18,4 +18,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             @Param("albumId") Long albumId,
             @Param("type") String type
     );
+        boolean existsByUserIdAndPostId(Long userId, Long postId);
+        boolean existsByUserIdAndTrackId(Long userId, Long trackId);
+        boolean existsByUserIdAndAlbumId(Long userId, Long albumId);
 }

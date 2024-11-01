@@ -5,20 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
-    private Long id;
+public class UserRevenueInfo {
+    private UserSell user;
 
-    private String email;
+    private Double todayRevenue;
 
-    private String userName;
+    private Double weekRevenue;
 
-    private String password;
+    private Double monthRevenue;
 
-    private RoleDto role;
+    private Double yearRevenue;
 }

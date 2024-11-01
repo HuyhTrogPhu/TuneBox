@@ -195,8 +195,8 @@ public class FriendServiceImpl implements FriendService {
         User user = getUserById(userId);
 
         // Lấy danh sách bạn bè đã được chấp nhận
-        List<Friend> friends = friendRepository.findByUserAndStatus(user, "accepted");
-        List<Friend> reciprocalFriends = friendRepository.findByFriendAndStatus(user, "accepted");
+        List<Friend> friends = friendRepository.findByUserAndStatus(user, FriendStatus.ACCEPTED);
+        List<Friend> reciprocalFriends = friendRepository.findByFriendAndStatus(user, FriendStatus.ACCEPTED);
 
         // Tạo Set để đảm bảo không có bản sao
         Set<User> friendSet = new HashSet<>();
@@ -211,4 +211,5 @@ public class FriendServiceImpl implements FriendService {
 
         return (long) friendSet.size(); // Trả về số lượng bạn bè duy nhất
     }
+
 }

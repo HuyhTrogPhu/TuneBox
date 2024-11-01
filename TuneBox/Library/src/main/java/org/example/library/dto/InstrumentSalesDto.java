@@ -5,20 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
-    private Long id;
+public class InstrumentSalesDto {
+    
+    private Long instrumentId;
 
-    private String email;
+    private String instrumentName;
 
-    private String userName;
-
-    private String password;
-
-    private RoleDto role;
+    // để chứa tổng số lượng instrument đã bán
+    private Long totalSold;
 }

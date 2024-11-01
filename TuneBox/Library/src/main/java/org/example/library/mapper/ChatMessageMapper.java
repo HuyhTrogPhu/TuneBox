@@ -1,15 +1,11 @@
 package org.example.library.mapper;
 
-import org.example.library.dto.MessageDTO;
 import org.example.library.dto.MessageWebSocketDTO;
-import org.example.library.dto.UserDto;
 import org.example.library.dto.UserMessageDTO;
 import org.example.library.model.Message;
 import org.example.library.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ChatMessageMapper {

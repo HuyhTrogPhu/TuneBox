@@ -3,20 +3,24 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
+import org.example.library.model.Genre;
 import org.example.library.model.InspiredBy;
 import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
-import org.example.library.utils.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,9 +52,9 @@ public class UserController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtUtility jwtUtility;
-
-
+    private UserInformationService userInformationService;
+    @Autowired
+    private JwtUtil jwtUtil;
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -118,30 +122,22 @@ public class UserController {
 
     // Login
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto) {
         Optional<UserLoginDto> optionalUser = userRepository.findByUserNameOrEmail(userLoginDto.getUserName(), userLoginDto.getEmail());
 
         if (optionalUser.isPresent()) {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-                // Tạo JWT token cho user
-                String jwtToken = jwtUtility.generateToken(user.getUserName());
+                // Lấy tên vai trò từ đối tượng RoleDto
+                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
-                // Thiết lập cookie cho userId
-                Cookie cookie = new Cookie("userId", user.getId().toString());
-                cookie.setMaxAge(24 * 60 * 60);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-
-                // Trả về phản hồi bao gồm token và userId
-                Map<String, Object> responseMap = new HashMap<>();
-                responseMap.put("token", jwtToken);
-                responseMap.put("userId", user.getId());
-
-                System.out.println("Login successful");
-
-                return ResponseEntity.ok(responseMap);
+                // Tạo JWT token với username và role
+                String jwtToken = jwtUtil.generateToken(user.getUserName(), role);
+                Map<String, Object> response = new HashMap<>();
+                response.put("userId", user.getId());
+                response.put("token", jwtToken);
+                return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
@@ -150,6 +146,29 @@ public class UserController {
         }
     }
 
+
+    // Phương thức để lấy userId từ cookie
+    private String getUserIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ID not found in cookie");
+    }
+
+    // Get user avatar by userId
+    @GetMapping("/{userId}/avatar")
+    public ResponseEntity<String> getUserAvatar(@PathVariable Long userId) {
+        try {
+            String avatar = userService.getUserAvatar(userId);
+            return ResponseEntity.ok(avatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting user avatar");
+        }
+    }
 
     // get user profile by userId
     @GetMapping("/{userId}/profile")
@@ -165,17 +184,12 @@ public class UserController {
 
     // log-out
     @GetMapping("/log-out")
-    public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Cookie cookie = new Cookie("userId", null);
-            cookie.setMaxAge(0); // Thiết lập tuổi thọ cookie về 0 để xóa
-            cookie.setPath("/");  // Đảm bảo xóa cookie cho toàn bộ domain
-            response.addCookie(cookie);
-            return ResponseEntity.ok("Logged out successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
-        }
+    public ResponseEntity<String> logOut(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     // get user information in profile page
@@ -189,15 +203,17 @@ public class UserController {
             return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    // Get user avatar by userId
-    @GetMapping("/{userId}/avatar")
-    public ResponseEntity<String> getUserAvatar(@PathVariable Long userId) {
+
+
+    // get user in account page
+    @GetMapping("/{userId}/accountSetting")
+    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
         try {
-            String avatar = userService.getUserAvatar(userId);
-            return ResponseEntity.ok(avatar);
+            AccountSettingDto userAccount = userService.getAccountSetting(userId);
+            return ResponseEntity.ok(userAccount);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting user avatar");
+            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

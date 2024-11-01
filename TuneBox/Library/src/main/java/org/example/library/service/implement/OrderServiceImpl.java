@@ -1,7 +1,5 @@
 package org.example.library.service.implement;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.*;
 import org.example.library.model.Instrument;
 import org.example.library.model.Order;
@@ -15,11 +13,9 @@ import org.example.library.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,6 +88,15 @@ public class OrderServiceImpl implements OrderService {
                         .orElseThrow(() -> new RuntimeException("Instrument not found with ID: " + detailDto.getInstrumentId()));
                 orderDetail.setInstrument(instrument);
                 orderDetail.setOrder(order);
+
+                // Cập nhật số lượng của nhạc cụ
+                int newQuantity = instrument.getQuantity() - detailDto.getQuantity();
+                if (newQuantity < 0) {
+                    throw new RuntimeException("Not enough quantity for instrument ID: " + detailDto.getInstrumentId());
+                }
+                instrument.setQuantity(newQuantity);
+                instrumentRepository.save(instrument); // Lưu nhạc cụ với số lượng mới vào cơ sở dữ liệu
+
                 return orderDetail;
             }).collect(Collectors.toList());
 
@@ -109,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+
     @Override
     public OrderDetailInfoDto getOrderDetailByOrderId(Long orderId) {
         // Lấy thông tin chi tiết của đơn hàng (không bao gồm sản phẩm)
@@ -121,6 +127,58 @@ public class OrderServiceImpl implements OrderService {
         orderDetailInfoDto.setOrderItems(orderItems);
 
         return orderDetailInfoDto;
+    }
+
+    @Override
+    public Double revenueOfDay() {
+        return orderRepository.getRevenueOfDay();
+    }
+
+    @Override
+    public Double revenueOfWeek() {
+        return orderRepository.getRevenueOfWeek();
+    }
+
+    @Override
+    public Double revenueOfMonth() {
+        return orderRepository.getRevenueOfMonth();
+    }
+
+    @Override
+    public Double revenueOfYear() {
+        return orderRepository.getRevenueOfYear();
+    }
+
+    @Override
+    public Double revenueBeforeOfDay() {
+        return orderRepository.getRevenueOfBeforeDay();
+    }
+
+    @Override
+    public Double revenueBeforeOfWeek() {
+        return orderRepository.getRevenueOfBeforeWeek();
+    }
+
+    @Override
+    public Double revenueBeforeOfMonth() {
+        return orderRepository.getRevenueOfBeforeMonth();
+    }
+
+    @Override
+    public Double revenueBeforeOfYear() {
+        return orderRepository.getRevenueOfBeforeYear();
+    }
+
+
+
+    @Override
+    public void updateOrderStatus(Long orderId, String status, LocalDate deliveryDate, String paymentStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(status);
+        order.setDeliveryDate(deliveryDate);
+        order.setPaymentStatus(paymentStatus);// Cập nhật deliveryDate
+        orderRepository.save(order);
     }
 
 
@@ -139,6 +197,7 @@ public class OrderServiceImpl implements OrderService {
         orderDto.setAddress(order.getAddress());
         orderDto.setShippingMethod(order.getShippingMethod());
         orderDto.setUserId(order.getUser().getId());
+        orderDto.setPaymentStatus(order.getPaymentStatus());
 
         orderDto.setUsername(order.getUser().getUserName());
         orderDto.setEmail(order.getUser().getEmail());
@@ -157,7 +216,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderDto;
     }
-    public boolean updatePaymentStatus(Long orderId, String paymentStatus) {
+    public boolean updatePaymentStatus(Long orderId, String paymentStatus ) {
         // Logic cập nhật trạng thái thanh toán vào CSDL
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId)); // Sử dụng orElseThrow để lấy giá trị
