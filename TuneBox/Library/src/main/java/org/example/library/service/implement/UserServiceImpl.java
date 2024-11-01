@@ -424,13 +424,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserSell> getUserSellTheMostDay(Date date) {
+    public List<UserSell> getUserSellTheMostDay(LocalDate date) {
         return userRepository.getUserSellTheMostOfDay(date);
     }
 
     @Override
-    public List<UserSell> getUserSellBetweenDate(Date startDate, Date endDate) {
+    public List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate) {
         return userRepository.getUserSellBetweenDate(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByWeek(LocalDate startDate) {
+        return userRepository.getUserSellByWeek(startDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellFromWeekToWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByMonth(int year, int month) {
+        return userRepository.getUserSellsByMonth(year, month);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth) {
+        return userRepository.getUserSellsBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByYear(int year) {
+        return userRepository.getUserSellByYear(year);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenYear(int startYear, int endYear) {
+        return userRepository.getUserSellBetweenYears(startYear, endYear);
     }
 
 

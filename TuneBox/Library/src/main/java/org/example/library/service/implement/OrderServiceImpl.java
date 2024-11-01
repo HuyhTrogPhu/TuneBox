@@ -171,16 +171,54 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Double revenueByDay(Date date) {
+    public Double revenueByDay(LocalDate date) {
         return orderRepository.getRevenueByDay(date);
     }
 
     @Override
-    public Double revenueBetweenDate(Date startDate, Date endDate) {
+    public Double revenueBetweenDate(LocalDate startDate, LocalDate endDate) {
         return orderRepository.getRevenueBetweenDate(startDate, endDate);
     }
 
+    @Override
+    public Double revenueByWeek(LocalDate date) {
+        try {
+            return orderRepository.getRevenueByWeek(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
 
+    @Override
+    public Double revenueBetweenWeeks(LocalDate startDate, LocalDate endDate) {
+        try {
+            return orderRepository.getRevenueBetweenWeek(startDate, endDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double revenueByMonth(int year, int month) {
+        return orderRepository.getRevenueByMonth(year, month);
+    }
+
+    @Override
+    public Double revenueBetweenMonths(int year, int startMonth, int endMonth) {
+        return orderRepository.getRevenueBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public Double revenueByYear(int year) {
+        return orderRepository.getRevenueByYear(year);
+    }
+
+    @Override
+    public Double revenueBetweenYears(int startYear, int endYear) {
+        return orderRepository.getRevenueBetweenYears(startYear, endYear);
+    }
 
 
     @Override

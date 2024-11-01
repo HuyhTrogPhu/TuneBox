@@ -40,11 +40,29 @@ public interface OrderService {
     Double revenueBeforeOfYear();
 
     // revenue by day
-    Double revenueByDay(Date date);
+    Double revenueByDay(LocalDate date);
 
+    // revenue between days
+    Double revenueBetweenDate(LocalDate startDate, LocalDate endDate);
 
-    // revenue from date to date
-    Double revenueBetweenDate(Date startDate, Date endDate);
+    // revenue by week
+    Double revenueByWeek(LocalDate date);
+
+    // revenue between weeks
+    Double revenueBetweenWeeks(LocalDate startDate, LocalDate endDate);
+
+    // revenue by month
+    Double revenueByMonth(int year, int month);
+
+    // revenue between months
+    Double revenueBetweenMonths(int year, int startMonth, int endMonth);
+
+    // revenue by year
+    Double revenueByYear(int year);
+
+    // revenue between years
+    Double revenueBetweenYears(int startYear, int endYear);
+
 
 
 }

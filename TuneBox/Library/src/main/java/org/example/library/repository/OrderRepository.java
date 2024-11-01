@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -91,14 +92,43 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE YEAR(o.order_date) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 YEAR))", nativeQuery = true)
     Double getRevenueOfBeforeYear();
 
-    // get revenue according to day
+    // get revenue by day
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate = :date")
-    Double getRevenueByDay(@Param("date") Date date);
+    Double getRevenueByDay(@Param("date") LocalDate date);
 
     // get revenue between date
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
-    Double getRevenueBetweenDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    Double getRevenueBetweenDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    // get revenue by week
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEARWEEK(o.orderDate, 1) = YEARWEEK(:date, 1)")
+    Double getRevenueByWeek(@Param("date") LocalDate date);
+
+
+    // get revenue between week
+    @Query("SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE (YEAR(o.orderDate) = YEAR(:startDate) and WEEK(o.orderDate) >= WEEK(:startDate)) " +
+            "   or (YEAR(o.orderDate) = YEAR(:endDate) and WEEK(o.orderDate) <= WEEK(:endDate))")
+    Double getRevenueBetweenWeek(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    // get revenue by month
+    @Query("SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE YEAR(o.orderDate) = :year AND MONTH(o.orderDate) = :month")
+    Double getRevenueByMonth(@Param("year") int year, @Param("month") int month);
+
+
+    // get revenue between month
+    @Query("SELECT SUM(o.totalPrice) FROM Order o " +
+            "WHERE YEAR(o.orderDate) = :year AND MONTH(o.orderDate) BETWEEN :startMonth AND :endMonth")
+    Double getRevenueBetweenMonths(@Param("year") int year, @Param("startMonth") int startMonth, @Param("endMonth") int endMonth);
+
+    // get revenue by year
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEAR(o.orderDate) = :year")
+    Double getRevenueByYear(@Param("year") int year);
+
+    // get revenue between year
+    @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEAR(o.orderDate) BETWEEN :startYear AND :endYear")
+    Double getRevenueBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
 
 
 }

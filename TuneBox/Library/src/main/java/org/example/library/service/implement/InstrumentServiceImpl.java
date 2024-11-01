@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -292,13 +293,43 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
-    public List<InstrumentAccordingTo> getListInstrumentByDay(Date date) {
+    public List<InstrumentAccordingTo> getListInstrumentByDay(LocalDate date) {
         return instrumentRepository.getInstrumentAccordingToDay(date);
     }
 
     @Override
-    public List<InstrumentAccordingTo> getListInstrumentBetween(Date startDate, Date endDate) {
+    public List<InstrumentAccordingTo> getListInstrumentBetween(LocalDate startDate, LocalDate endDate) {
         return instrumentRepository.getInstrumentBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByWeek(LocalDate date) {
+        return instrumentRepository.getInstrumentByWeek(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return instrumentRepository.getInstrumentBetweenWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByMonth(int year, int month) {
+        return instrumentRepository.getInstrumentsByMonth(year, month);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenMonth(int year, int monthStart, int monthEnd) {
+        return instrumentRepository.getInstrumentsBetweenMonths(year, monthStart, monthEnd);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByYear(int year) {
+        return instrumentRepository.getInstrumentByYear(year);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenYear(int yearStart, int yearEnd) {
+        return instrumentRepository.getInstrumentBetweenYears(yearStart, yearEnd);
     }
 
 

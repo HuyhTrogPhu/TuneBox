@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -179,13 +180,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
 
-    // get list user sell according to current day
+    // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
             "where o.orderDate = :date " +
             "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
             "order by sum(o.totalPrice) desc")
-    List<UserSell> getUserSellTheMostOfDay(@Param("date") Date date);
+    List<UserSell> getUserSellTheMostOfDay(@Param("date") LocalDate date);
 
     // get list user sell from date to date
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
@@ -193,7 +194,60 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where o.orderDate BETWEEN :startDate AND :endDate " +
             "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
             "order by sum(o.totalPrice) desc")
-    List<UserSell> getUserSellBetweenDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    List<UserSell> getUserSellBetweenDate(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    // get list user sell by week
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where YEARWEEK(o.orderDate, 1) = YEARWEEK(:date, 1) " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellByWeek(@Param("date") LocalDate date);
+
+
+    // get list user sell between weeks
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where (YEAR(o.orderDate) = YEAR(:startDate) and WEEK(o.orderDate) >= WEEK(:startDate)) " +
+            "   or (YEAR(o.orderDate) = YEAR(:endDate) and WEEK(o.orderDate) <= WEEK(:endDate)) " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellFromWeekToWeek(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+
+    // get list user sell by month
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where YEAR(o.orderDate) = :year AND MONTH(o.orderDate) = :month " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellsByMonth(@Param("year") int year, @Param("month") int month);
+
+
+    // get list user sell between month
+    @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
+            "from UserInformation ui join ui.user u join u.orderList o " +
+            "where YEAR(o.orderDate) = :year AND MONTH(o.orderDate) BETWEEN :startMonth AND :endMonth " +
+            "group by u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "order by sum(o.totalPrice) desc")
+    List<UserSell> getUserSellsBetweenMonths(@Param("year") int year, @Param("startMonth") int startMonth, @Param("endMonth") int endMonth);
+
+    // get list user sell by year
+    @Query("SELECT new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, COUNT(o.id), SUM(o.totalPrice)) " +
+            "FROM UserInformation ui JOIN ui.user u JOIN u.orderList o " +
+            "WHERE YEAR(o.orderDate) = :year " +
+            "GROUP BY u.id, ui.name, ui.phoneNumber, u.userName, ui.location, ui.email " +
+            "ORDER BY SUM(o.totalPrice) DESC")
+    List<UserSell> getUserSellByYear(@Param("year") int year);
+
+
+    // get list user sell between year
+    @Query("SELECT new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, COUNT(o.id), SUM(o.totalPrice)) " +
+            "FROM UserInformation ui JOIN ui.user u JOIN u.orderList o " +
+            "WHERE YEAR(o.orderDate) BETWEEN :startYear AND :endYear " +
+            "GROUP BY u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
+            "ORDER BY SUM(o.totalPrice) DESC")
+    List<UserSell> getUserSellBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
 
 
 }
