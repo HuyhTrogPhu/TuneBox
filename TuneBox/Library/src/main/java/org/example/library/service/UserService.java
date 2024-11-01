@@ -80,4 +80,6 @@ public interface UserService {
     public List<SearchDto> searchTrack(String keyword);
     public List<SearchDto> searchUser(String keyword);
 
+    void updateAvatar(Long userId, MultipartFile image);
+
 }

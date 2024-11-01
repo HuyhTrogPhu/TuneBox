@@ -390,6 +390,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateAvatar(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
+        }
+    }
+
+        @Override
     public List<SearchDto> searchTrack(String keyword) {
         return userRepository.searchTrack(keyword);
     }
@@ -403,5 +418,6 @@ public class UserServiceImpl implements UserService {
     public List<SearchDto> searchPlaylist(String keyword) {
         return userRepository.searchPlaylist(keyword);
     }
+
 
 }

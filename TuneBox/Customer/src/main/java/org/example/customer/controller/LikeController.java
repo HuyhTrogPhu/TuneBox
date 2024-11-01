@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import org.example.library.dto.LikeDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.Like;
+import org.example.library.model.Post;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -118,6 +119,5 @@ public class LikeController {
 
         return ResponseEntity.ok(filteredLikes);
     }
-
 
 }

@@ -48,6 +48,7 @@ public class CustomerConfiguration {
                                 "/customer/category/**", "/customer/instrument/**").permitAll()
                         .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
                         .requestMatchers("/oauth2/**").authenticated()
+                        .requestMatchers("/api/reports/**").hasRole("CUSTOMER") // yêu cầu xác thực cho các báo cáo
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -68,6 +69,7 @@ public class CustomerConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 )
                 .authenticationManager(authenticationManager);
+
 
         return http.build();
     }
