@@ -204,6 +204,15 @@ public class StatisticalController {
     }
 
 
+    // map cho các trường hợp thống kê theo thời gian
+    private Map<String, Object> createResponse(Double revenue, List<InstrumentAccordingTo> instruments, List<UserSell> users, String revenueKey) {
+        Map<String, Object> response = new HashMap<>();
+        response.put(revenueKey, revenue != null ? revenue : 0.0);
+        response.put("listInstrument", instruments);
+        response.put("userSells", users);
+        return response;
+    }
+
     // revenue by day
     @GetMapping("/revenue-according-date/{date}")
     public ResponseEntity<?> getRevenueDay(@PathVariable String date) {
@@ -214,12 +223,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByDay(parsedDate);
             List<UserSell> userSells = userService.getUserSellTheMostDay(parsedDate);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByDay", revenueByDay != null ? revenueByDay : 0.0);
-            response.put("listInstrumentByDay", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByDay, list, userSells, "revenueByDay"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -228,9 +232,7 @@ public class StatisticalController {
 
     // revenue between days
     @GetMapping("/revenue-between-date/{startDate}/{endDate}")
-    public ResponseEntity<?> getRevenueBetweenDate(
-            @PathVariable String startDate,
-            @PathVariable String endDate) {
+    public ResponseEntity<?> getRevenueBetweenDate(@PathVariable String startDate, @PathVariable String endDate) {
         try {
             LocalDate parsedStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             LocalDate parsedEndDate = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -239,12 +241,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentBetween(parsedStartDate, parsedEndDate);
             List<UserSell> userSells = userService.getUserSellBetweenDate(parsedStartDate, parsedEndDate);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByDate", revenueByDate != null ? revenueByDate : 0.0);
-            response.put("listInstrumentByDate", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByDate, list, userSells, "revenueByDay"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -252,37 +249,21 @@ public class StatisticalController {
     }
 
     // revenue by week
-    @GetMapping("/revenue-by-week/{date}")
-    public ResponseEntity<?> getRevenueByWeek(@PathVariable String date) {
+    @GetMapping("/revenue-by-week/{selectWeek}")
+    public ResponseEntity<?> getRevenueByWeek(@PathVariable String selectWeek) {
         try {
-            // Log nhận date từ request
-            System.out.println("Received date: " + date);
+            LocalDate parsedDate = LocalDate.parse(selectWeek, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            // Thử phân tích cú pháp ngày
-            LocalDate parsedDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            System.out.println("Parsed date: " + parsedDate);
-
-            // Truy xuất doanh thu theo tuần
             Double revenueByWeek = orderService.revenueByWeek(parsedDate);
-            System.out.println("Revenue by week: " + revenueByWeek);
-
-            // Truy xuất danh sách instrument và user bán trong tuần
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByWeek(parsedDate);
             List<UserSell> userSells = userService.getUserSellByWeek(parsedDate);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByWeek", revenueByWeek != null ? revenueByWeek : 0.0);
-            response.put("listInstrumentByWeek", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByWeek, list, userSells, "revenueByWeek"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid date format or internal error.");
         }
     }
-
-
 
     // revenue between weeks
     @GetMapping("/revenue-between-weeks/{startDate}/{endDate}")
@@ -295,18 +276,12 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentBetweenWeek(parsedStartDate, parsedEndDate);
             List<UserSell> userSells = userService.getUserSellBetweenWeek(parsedStartDate, parsedEndDate);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByWeek", revenueByWeek!= null? revenueByWeek : 0.0);
-            response.put("listInstrumentByWeek", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByWeek, list, userSells, "revenueByWeek"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
-
 
     // revenue by month
     @GetMapping("/revenue-by-month/{year}/{month}")
@@ -317,12 +292,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByMonth(year, month);
             List<UserSell> userSells = userService.getUserSellByMonth(year, month);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByMonth", revenueByMonth!= null? revenueByMonth : 0.0);
-            response.put("listInstrumentByMonth", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+           return ResponseEntity.ok(createResponse(revenueByMonth, list, userSells, "revenueByMonth"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -339,12 +309,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentBetweenMonth(year, startMonth, endMonth);
             List<UserSell> userSells = userService.getUserSellBetweenMonth(year, startMonth, endMonth);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByMonth", revenueByMonth!= null? revenueByMonth : 0.0);
-            response.put("listInstrumentByMonth", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByMonth, list, userSells, "revenueByMonth"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -361,12 +326,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByYear(year);
             List<UserSell> userSells = userService.getUserSellByYear(year);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByYear", revenueByYear!= null? revenueByYear : 0.0);
-            response.put("listInstrumentByYear", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByYear, list, userSells, "revenueByYear"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -383,12 +343,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentBetweenYear(startYear, endYear);
             List<UserSell> userSells = userService.getUserSellBetweenYear(startYear, endYear);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("revenueByYear", revenueByYear != null ? revenueByYear : 0.0);
-            response.put("listInstrumentByYear", list);
-            response.put("userSells", userSells);
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(createResponse(revenueByYear, list, userSells, "revenueByYear"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

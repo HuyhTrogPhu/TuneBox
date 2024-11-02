@@ -236,7 +236,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, COUNT(o.id), SUM(o.totalPrice)) " +
             "FROM UserInformation ui JOIN ui.user u JOIN u.orderList o " +
             "WHERE YEAR(o.orderDate) = :year " +
-            "GROUP BY u.id, ui.name, ui.phoneNumber, u.userName, ui.location, ui.email " +
+            "GROUP BY u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
             "ORDER BY SUM(o.totalPrice) DESC")
     List<UserSell> getUserSellByYear(@Param("year") int year);
 
