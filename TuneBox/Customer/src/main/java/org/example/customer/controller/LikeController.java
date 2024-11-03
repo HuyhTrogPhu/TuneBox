@@ -1,8 +1,6 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.LikeDto;
-import org.example.library.dto.TrackDto;
-import org.example.library.model.Like;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins ="http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -60,12 +57,6 @@ public class LikeController {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/track/{trackId}/count")
-    public ResponseEntity<Long> getLikesCountByTrackId(@PathVariable Long trackId) {
-        long count = likeService.countLikesByTrackId(trackId);
-        return ResponseEntity.ok(count);
-    }
-
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<LikeDto>> getLikesByPostId(@PathVariable Long postId) {
         List<LikeDto> likes = likeService.getLikesByPostId(postId);
@@ -91,6 +82,4 @@ public class LikeController {
     }
 
 }
-
-
 

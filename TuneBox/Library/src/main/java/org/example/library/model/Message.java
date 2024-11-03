@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.library.model_enum.MessageStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,5 +40,8 @@ public class Message {
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OtherAttachment> attachments;
+
+    @Enumerated(EnumType.STRING)
+    private MessageStatus status = MessageStatus.SENT;
 
 }

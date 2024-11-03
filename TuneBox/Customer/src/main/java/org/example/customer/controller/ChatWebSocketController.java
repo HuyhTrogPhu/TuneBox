@@ -57,6 +57,7 @@ public class ChatWebSocketController {
                             attachment.setFileName(attachmentDto.getFileName());
                             attachment.setFileUrl(attachmentDto.getFileUrl());
                             attachment.setMimeType(attachmentDto.getMimeType());
+                            attachment.setContentType(attachmentDto.getMimeType());
                             attachment.setSize(attachmentDto.getSize());
                             attachment.setMessage(message);
                             return attachment;

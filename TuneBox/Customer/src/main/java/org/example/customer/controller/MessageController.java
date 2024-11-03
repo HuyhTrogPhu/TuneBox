@@ -1,20 +1,21 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.MessageDTO;
+import org.example.library.dto.MessageWebSocketDTO;
 import org.example.library.dto.OtherAttachmentDto;
+import org.example.library.dto.UserMessageDTO;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
-import org.example.library.service.FileStorageService;
 import org.example.library.service.MessageService;
+import org.example.library.service.implement.CloudinaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,16 +30,17 @@ public class MessageController {
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
-    private FileStorageService fileStorageService;
-
-    @Autowired
     private MessageService messageService;
 
     @Autowired
     private ChatMessageMapper messageMapper;
 
-    @Value("${file.upload-dir}") // Định nghĩa trong application.properties
-    private String uploadDir;
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    @Autowired
+    private SimpMessagingTemplate template;
+
 
     @GetMapping("/between")
     public ResponseEntity<List<MessageDTO>> getMessagesBetween(@RequestParam Long userId1, @RequestParam Long userId2) {
@@ -84,19 +86,18 @@ public class MessageController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            // Lưu file và lấy tên file đã được tạo unique
-            String fileName = fileStorageService.storeFile(file);
+            // Upload to Cloudinary
+            Map uploadResult = cloudinaryService.uploadFile(file);
 
-            // Tạo URL để truy cập file
-            String fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/files/")
-                    .path(fileName)
-                    .toUriString();
+            // Get the secure URL from Cloudinary
+            String fileUrl = (String) uploadResult.get("secure_url");
+            String publicId = (String) uploadResult.get("public_id");
 
-            // Tạo response
+            // Create response
             Map<String, String> response = new HashMap<>();
-            response.put("fileName", fileName);
+            response.put("fileName", file.getOriginalFilename());
             response.put("fileUrl", fileUrl);
+            response.put("publicId", publicId);
             response.put("size", String.valueOf(file.getSize()));
             response.put("type", file.getContentType());
 
@@ -104,7 +105,38 @@ public class MessageController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi upload file: " + e.getMessage());
+                    .body("Upload error: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> revokeMessage(@PathVariable Long id, @RequestParam Long userId) {
+        try {
+            Message revokedMessage = messageService.revokeMessage(id, userId);
+
+            // Tạo DTO để trả về
+            MessageWebSocketDTO revokedMessageDTO = new MessageWebSocketDTO();
+            revokedMessageDTO.setId(revokedMessage.getId());
+            revokedMessageDTO.setSenderId(new UserMessageDTO(revokedMessage.getSender().getId()));
+            revokedMessageDTO.setReceiverId(new UserMessageDTO(revokedMessage.getReceiver().getId()));
+            revokedMessageDTO.setContent(revokedMessage.getContent());
+            revokedMessageDTO.setCreationDate(revokedMessage.getDateTime());
+            revokedMessageDTO.setStatus(revokedMessage.getStatus().name());
+
+            // Gửi thông báo qua WebSocket để cập nhật realtime
+            template.convertAndSendToUser(
+                    revokedMessage.getReceiver().getId().toString(),
+                    "/queue/messages",
+                    revokedMessageDTO
+            );
+
+            return ResponseEntity.ok(revokedMessageDTO);
+        } catch (RuntimeException e) {
+            logger.error("Error revoking message with id {}: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error revoking message: " + e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error revoking message with id {}: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error revoking message: " + e.getMessage());
         }
     }
 }

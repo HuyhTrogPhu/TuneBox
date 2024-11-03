@@ -16,5 +16,6 @@ public class MessageWebSocketDTO {
     private UserMessageDTO receiverId;
     private String content;
     private LocalDateTime creationDate;
+    private String status;
     private List<OtherAttachmentDto> attachments;
 }

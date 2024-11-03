@@ -15,6 +15,7 @@ public class OtherAttachment {
     private String fileName;
     private String fileUrl;
     private String mimeType;
+    private String contentType;
     private long size;
 
     @ManyToOne(fetch = FetchType.LAZY)

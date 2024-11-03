@@ -17,6 +17,7 @@ public class OtherAttachmentMapper {
                 otherAttachment.getFileName(),
                 otherAttachment.getFileUrl(),
                 otherAttachment.getMimeType(),
+                otherAttachment.getContentType(),
                 otherAttachment.getSize()
         );
     }
