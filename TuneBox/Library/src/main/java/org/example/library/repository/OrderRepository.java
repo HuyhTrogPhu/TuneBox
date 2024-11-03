@@ -1,9 +1,6 @@
 package org.example.library.repository;
 
-import org.example.library.dto.OrderDetailInfoDto;
-import org.example.library.dto.OrderItemsDto;
-import org.example.library.dto.OrderListDto;
-import org.example.library.dto.UserIsInvoice;
+import org.example.library.dto.*;
 import org.example.library.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -129,6 +126,78 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     // get revenue between year
     @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE YEAR(o.orderDate) BETWEEN :startYear AND :endYear")
     Double getRevenueBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
+
+    // get list order by payment status = unpaid
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.paymentStatus) = 'not paid' ")
+    List<StatisticalOrder> getListOrderByPaymentStatusUnpaid();
+
+    // get list order by payment status = paid
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.paymentStatus) = 'paid'")
+    List<StatisticalOrder> getListOrderByPaymentStatusPaid();
+
+    // get list order by status = confirmed
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.status) = 'confirmed'")
+    List<StatisticalOrder> getListOrderByStatusConfirmed();
+
+    // get list order by status = delivering
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.status) = 'delivering'")
+    List<StatisticalOrder> getListOrderByStatusDelivering();
+
+    // get list order by status = delivered
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.status) = 'delivered'")
+    List<StatisticalOrder> getListOrderByStatusDelivered();
+
+    // get list order by status = canceled
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.status) = 'canceled'")
+    List<StatisticalOrder> getListOrderByStatusCanceled();
+
+    // get list order by payment method = cod
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.paymentMethod) = 'cod'")
+    List<StatisticalOrder> getListOrderByPaymentMethodCOD();
+
+
+    // get list order by payment method = vnpay
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.paymentMethod) = 'vnpay'")
+    List<StatisticalOrder> getListOrderByPaymentMethodVNPAY();
+
+    // get list order by shipping method = normal
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.shippingMethod) = 'normal'")
+    List<StatisticalOrder> getListOrderByShippingMethodNormal();
+
+    // get list order by shipping method = fast
+    @Query("select new org.example.library.dto.StatisticalOrder(u.id, ui.name, u.email, od.id, od.orderDate, od.deliveryDate, od.phoneNumber," +
+            " od.totalPrice, od.totalItems, od.paymentMethod, od.status, od.shippingMethod, od.paymentStatus) " +
+            "from UserInformation ui join ui.user u join u.orderList od " +
+            "where LOWER(od.shippingMethod) = 'fast'")
+    List<StatisticalOrder> getListOrderByShippingMethodFast();
+
 
 
 }

@@ -63,6 +63,36 @@ public interface OrderService {
     // revenue between years
     Double revenueBetweenYears(int startYear, int endYear);
 
+    // get list order by status = unpaid
+    List<StatisticalOrder> getOrdersByStatusUnpaid();
+
+    // get list order by status = paid
+    List<StatisticalOrder> getOrdersByStatusPaid();
+
+    // get list order by status = confirmed
+    List<StatisticalOrder> getOrdersByStatusConfirmed();
+
+    // get list order by status = delivered
+    List<StatisticalOrder> getOrdersByStatusDelivered();
+
+    // get list order by status = delivering
+    List<StatisticalOrder> getOrdersByStatusDelivering();
+
+    // get list order by status = canceled
+    List<StatisticalOrder> getOrdersByStatusCanceled();
+
+    // get list order by payment method = cod
+    List<StatisticalOrder> getOrdersByPaymentMethodCOD();
+
+    // get list order by payment method = vnpay
+    List<StatisticalOrder> getOrdersByPaymentMethodVNPAY();
+
+    // get list order by shipping method = normal
+    List<StatisticalOrder> getOrdersByShippingMethodNormal();
+
+    // get list order by shipping method = fast
+    List<StatisticalOrder> getOrdersByShippingMethodFast();
+
 
 
 }

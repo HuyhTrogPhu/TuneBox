@@ -220,6 +220,56 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getRevenueBetweenYears(startYear, endYear);
     }
 
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusUnpaid() {
+        return orderRepository.getListOrderByPaymentStatusUnpaid();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusPaid() {
+        return orderRepository.getListOrderByPaymentStatusPaid();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusConfirmed() {
+        return orderRepository.getListOrderByStatusConfirmed();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusDelivered() {
+        return orderRepository.getListOrderByStatusDelivered();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusDelivering() {
+        return orderRepository.getListOrderByStatusDelivering();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusCanceled() {
+        return orderRepository.getListOrderByStatusCanceled();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByPaymentMethodCOD() {
+        return orderRepository.getListOrderByPaymentMethodCOD();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByPaymentMethodVNPAY() {
+        return orderRepository.getListOrderByPaymentMethodVNPAY();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByShippingMethodNormal() {
+        return orderRepository.getListOrderByShippingMethodNormal();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByShippingMethodFast() {
+        return orderRepository.getListOrderByShippingMethodFast();
+    }
+
 
     @Override
     public void updateOrderStatus(Long orderId, String status, LocalDate deliveryDate, String paymentStatus) {

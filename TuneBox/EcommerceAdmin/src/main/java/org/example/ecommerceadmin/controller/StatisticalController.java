@@ -191,10 +191,10 @@ public class StatisticalController {
             Double revenueOfYear = instrumentService.getRevenueInstrumentOfYear(instrumentId);
 
             Map<String, Double> revenue = new HashMap<>();
-            revenue.put("revenueOfDay", revenueOfDay!= null? revenueOfDay : 0.0);
-            revenue.put("revenueOfWeek", revenueOfWeek!= null? revenueOfWeek : 0.0);
-            revenue.put("revenueOfMonth", revenueOfMonth!= null? revenueOfMonth : 0.0);
-            revenue.put("revenueOfYear", revenueOfYear!= null? revenueOfYear : 0.0);
+            revenue.put("revenueOfDay", revenueOfDay != null ? revenueOfDay : 0.0);
+            revenue.put("revenueOfWeek", revenueOfWeek != null ? revenueOfWeek : 0.0);
+            revenue.put("revenueOfMonth", revenueOfMonth != null ? revenueOfMonth : 0.0);
+            revenue.put("revenueOfYear", revenueOfYear != null ? revenueOfYear : 0.0);
 
             return ResponseEntity.ok(revenue);
         } catch (Exception e) {
@@ -292,7 +292,7 @@ public class StatisticalController {
             List<InstrumentAccordingTo> list = instrumentService.getListInstrumentByMonth(year, month);
             List<UserSell> userSells = userService.getUserSellByMonth(year, month);
 
-           return ResponseEntity.ok(createResponse(revenueByMonth, list, userSells, "revenueByMonth"));
+            return ResponseEntity.ok(createResponse(revenueByMonth, list, userSells, "revenueByMonth"));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -350,6 +350,146 @@ public class StatisticalController {
         }
     }
 
+    // get list order by status unpaid
+    @GetMapping("/order-unpaid")
+    public ResponseEntity<?> getOrderUnpaid() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusUnpaid();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    // get list order by status paid
+    @GetMapping("/order-paid")
+    public ResponseEntity<?> getOrderPaid() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusPaid();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by status confirmed
+    @GetMapping("/order-confirmed")
+    public ResponseEntity<?> getOrderConfirmed() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusConfirmed();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by status delivered
+    @GetMapping("/order-delivered")
+    public ResponseEntity<?> getOrderDelivered() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusDelivered();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by status delivering
+    @GetMapping("/order-delivering")
+    public ResponseEntity<?> getOrderDelivering() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusDelivering();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by status canceled
+    @GetMapping("/order-canceled")
+    public ResponseEntity<?> getOrderCancelled() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByStatusCanceled();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by payment method cod
+    @GetMapping("/order-cod")
+    public ResponseEntity<?> getOrderCOD() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByPaymentMethodCOD();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by payment method vnpay
+    @GetMapping("/order-vnpay")
+    public ResponseEntity<?> getOrderVNPAY() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByPaymentMethodVNPAY();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by shipping method normal
+    @GetMapping("/order-normal")
+    public ResponseEntity<?> getOrderNormal() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByShippingMethodNormal();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get list order by shipping method fast
+    @GetMapping("/order-fast")
+    public ResponseEntity<?> getOrderFast() {
+        try {
+            List<StatisticalOrder> orders = orderService.getOrdersByShippingMethodFast();
+            Map<String, Object> response = new HashMap<>();
+            response.put("orders", orders);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
 }
