@@ -12,7 +12,6 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -451,6 +450,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<SearchDto> searchPlaylist(String keyword) {
         return userRepository.searchPlaylist(keyword);
+    }
+
+    @Override
+    public void updateBackground(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+
+            // Tải lên hình ảnh lên Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Cập nhật URL hình nền
+            userInformation.setBackground(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading background image to Cloudinary", e);
+        }
     }
 
 

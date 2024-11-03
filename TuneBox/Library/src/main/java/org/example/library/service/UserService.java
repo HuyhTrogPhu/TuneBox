@@ -102,4 +102,5 @@ public interface UserService {
 
     void updateAvatar(Long userId, MultipartFile image);
 
+    void updateBackground(Long userId, MultipartFile image);
 }

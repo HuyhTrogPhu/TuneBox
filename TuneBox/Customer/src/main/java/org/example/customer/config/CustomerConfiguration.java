@@ -1,5 +1,6 @@
 package org.example.customer.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -53,10 +54,9 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login", "/register", "/user/**", "/api/**",
-                                "/customer/**").permitAll()
-                        .requestMatchers("/customer/cart/**").hasRole("Customer")
-                        .requestMatchers("/api/reports/**").authenticated()
+                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**").permitAll()
+                        .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .anyRequest().authenticated()
@@ -78,7 +78,13 @@ public class CustomerConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sử dụng JWT nên không cần Session
                 )
-                .authenticationManager(authenticationManager);
+                .authenticationManager(authenticationManager)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint((request, response, authException) -> {
+                                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+                                })
+                );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

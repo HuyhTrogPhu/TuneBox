@@ -264,5 +264,14 @@ public class UserController {
         }
     }
 
-
+    @PostMapping("/users/{userId}/background")
+    public ResponseEntity<?> updateBackground(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateBackground(userId, image);
+        return ResponseEntity.ok("Background updated successfully.");
+    }
+    @PutMapping("/{userId}/avatar")
+    public ResponseEntity<Void> updateAvatar(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateAvatar(userId, image);
+        return ResponseEntity.ok().build();
+    }
 }

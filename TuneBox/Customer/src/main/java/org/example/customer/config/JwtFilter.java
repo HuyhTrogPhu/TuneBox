@@ -29,8 +29,8 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        // Chỉ thực hiện kiểm tra JWT cho các endpoint yêu cầu xác thực bằng JWT
-        if (path.startsWith("/api/reports")) {
+        // Bỏ qua các endpoint không cần xác thực JWT
+        if (!path.equals("/login") && path.startsWith("/api")) {
             String authorizationHeader = request.getHeader("Authorization");
             String username = null;
             String jwt = null;
@@ -55,4 +55,5 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
+
 }
