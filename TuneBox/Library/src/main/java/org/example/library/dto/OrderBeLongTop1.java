@@ -11,21 +11,23 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserIsInvoice {
-    private Long id;
+public class OrderBeLongTop1 {
+
+    private Long userId;
+
+    private Long orderId;
+
     private LocalDate orderDate;
 
     private LocalDate deliveryDate;
 
-    private double tax;
+    private int totalItems;
 
     private double totalPrice;
-
-    private double totalItem;
 
     private String paymentMethod;
 
     private String status;
 
-    private String shippingMethod;
+
 }

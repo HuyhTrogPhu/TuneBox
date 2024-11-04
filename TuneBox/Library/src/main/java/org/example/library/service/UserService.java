@@ -1,21 +1,23 @@
-
 package org.example.library.service;
-
 
 
 import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.UserInformation;
+import org.springframework.data.domain.Pageable;
 import org.example.library.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
     UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image);
 
+    // get user checkout information
     UserCheckOut getUserCheckoutInfo(Long userId);
 
     // get user avatar by userId
@@ -57,7 +59,23 @@ public interface UserService {
     // get user details ecommerce customer page
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
 
-//    List<UserDto> findAllUser();
+    // get user sell the most
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    UserSell getTop1UserRevenueInfo();
+
+
+    // get user buy the least
+    List<UserSell> getUserBuyTheLeast();
+
+    // get top 1 user buy the least
+    UserSell getTop1UserBuyTheLeast();
+
+    // get user not sell
+    List<UserSell> getUserNotSell();
+
+    List<UserDto> findAllUser();
 
     @Transactional
     void updateBirthday(Long userId, Date newBirthday);
@@ -85,4 +103,27 @@ public interface UserService {
     public List<SearchDto> searchTrack(String keyword);
     public List<SearchDto> searchUser(String keyword);
 
+    // list user sell by day
+    List<UserSell> getUserSellTheMostDay(LocalDate date);
+
+    // list user between days
+    List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by week
+    List<UserSell> getUserSellByWeek(LocalDate startDate);
+
+    // list user between weeks
+    List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by month
+    List<UserSell> getUserSellByMonth(int year, int month);
+
+    // list user sell between months
+    List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth);
+
+    // list user sell by year
+    List<UserSell> getUserSellByYear(int year);
+
+    // list user sell between years
+    List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
 }

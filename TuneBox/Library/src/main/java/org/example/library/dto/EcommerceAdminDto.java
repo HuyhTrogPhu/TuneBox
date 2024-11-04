@@ -4,21 +4,31 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.library.model.Role;
 
-import java.util.List;
+import java.util.Collection;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
+public class EcommerceAdminDto {
+
     private Long id;
 
     private String email;
 
-    private String userName;
-
     private String password;
 
-    private RoleDto role;
+    private String name;
+
+    private String gender;
+
+    private String phoneNumber;
+
+    private String address;
+
+    private String avatar;
+
+    private Collection<Role> role;
 }

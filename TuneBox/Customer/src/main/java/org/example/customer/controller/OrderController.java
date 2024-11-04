@@ -4,15 +4,18 @@ package org.example.customer.controller;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.UserCheckOut;
 import org.example.library.model.Order;
-import org.example.library.service.UserService;
+import org.example.library.service.EmailService;
 import org.example.library.service.implement.OrderServiceImpl;
-
+import org.example.library.service.implement.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -20,16 +23,19 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private OrderServiceImpl orderService;
+    @Autowired
+    private EmailService emailService;
 
     // Get user information from cookie
     @GetMapping("/getUserById/{userId}")
     public UserCheckOut getUserById(@PathVariable Long userId) {
-        return null;
+        return userService.getUserCheckoutInfo(userId);
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto,
@@ -40,8 +46,39 @@ public class OrderController {
 
         Long userId = Long.valueOf(userIdCookie);
         OrderDto createdOrder = orderService.createOrder(orderDto, userId);
+
+        // Định dạng totalPrice
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String formattedTotalPrice = currencyFormat.format(createdOrder.getTotalPrice());
+
+        // Định dạng orderDate
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedOrderDate = createdOrder.getOrderDate().format(dateFormatter);
+
+        // Lấy thông tin người dùng (email) để gửi thông báo
+        UserCheckOut userCheckOut = userService.getUserCheckoutInfo(userId);
+
+        // Tạo đường dẫn đến chi tiết hóa đơn
+        String orderDetailUrl = "http://localhost:3000/orderDetail/" + createdOrder.getOrderId(); // Cập nhật đường dẫn tùy theo cấu trúc ứng dụng của bạn
+
+        // Tạo nội dung email
+        String subject = "Xác nhận đơn hàng #" + createdOrder.getOrderId();
+        String body = "Xin chào " + userCheckOut.getUserName() + ",\n\n"
+                + "Cảm ơn bạn đã đặt hàng tại TuneBox. Đây là thông tin đơn hàng của bạn:\n"
+                + "Mã đơn hàng: " + createdOrder.getOrderId() + "\n"
+                + "Tổng tiền: " + formattedTotalPrice + "\n" // Sử dụng giá trị đã định dạng
+                + "Ngày đặt: " + formattedOrderDate + "\n" // Sử dụng giá trị đã định dạng
+                + "Chi tiết hóa đơn: " + orderDetailUrl + "\n" // Đường dẫn đến chi tiết hóa đơn
+                + "\nChúng tôi sẽ sớm xác nhận và giao hàng cho bạn.\n"
+                + "Xin cảm ơn!";
+
+        // Gửi email
+        emailService.sendOrderConfirmationEmail(userCheckOut.getEmail(), subject, body);
+
         return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
+
+
 
 
 

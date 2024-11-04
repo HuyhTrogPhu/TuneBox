@@ -11,21 +11,32 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserIsInvoice {
-    private Long id;
+public class StatisticalOrder {
+
+    private Long userId;
+
+    private String name;
+
+    private String email;
+
+    private Long oderId;
+
     private LocalDate orderDate;
 
     private LocalDate deliveryDate;
 
-    private double tax;
+    private String phone;
 
     private double totalPrice;
 
-    private double totalItem;
+    private int totalItems;
 
     private String paymentMethod;
 
     private String status;
 
     private String shippingMethod;
+
+    private String paymentStatus;
+
 }
