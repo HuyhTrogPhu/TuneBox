@@ -27,9 +27,6 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
-//    void changePassword(String email, String oldPassword, String newPassword);
-
-    UserDto getUserById(Long userId);
     // get user in profile page
     ProfileSettingDto getUserProfileSetting(Long userId);
 
@@ -81,4 +78,46 @@ public interface UserService {
     void updateGender(Long userId, String newGender);
 
     void updateUserInformation(Long userId, String name, String location, String about);
+
+    // Update inspiredBy
+    void updateInspiredBy(Long userId, List<Long> inspiredByIds);
+
+    // Update talent
+    void updateTalent(Long userId, List<Long> talentIds);
+
+    // Update genre
+    void updateGenre(Long userId, List<Long> genreIds);
+
+    @Transactional
+    void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
+
+
+    public List<SearchDto> searchPlaylist(String keyword);
+    public List<SearchDto> searchAlbum(String keyword);
+    public List<SearchDto> searchTrack(String keyword);
+    public List<SearchDto> searchUser(String keyword);
+
+    // list user sell by day
+    List<UserSell> getUserSellTheMostDay(LocalDate date);
+
+    // list user between days
+    List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by week
+    List<UserSell> getUserSellByWeek(LocalDate startDate);
+
+    // list user between weeks
+    List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by month
+    List<UserSell> getUserSellByMonth(int year, int month);
+
+    // list user sell between months
+    List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth);
+
+    // list user sell by year
+    List<UserSell> getUserSellByYear(int year);
+
+    // list user sell between years
+    List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
 }

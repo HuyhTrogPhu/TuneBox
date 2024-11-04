@@ -1,10 +1,12 @@
 package org.example.customer.controller;
 
+import org.example.library.dto.FriendAcceptDto;
 import org.example.library.dto.FriendRequestDTO;
 import org.example.library.model.Friend;
 import org.example.library.model.User;
 import org.example.library.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,11 +58,18 @@ public class FriendController {
     public List<FriendRequestDTO> getFriendRequests(@PathVariable Long userId) {
         return friendService.getPendingFriendRequests(userId);
     }
+    // get friends of user other
     @GetMapping("/list/{userId}")
-    public ResponseEntity<List<User>> getFriends(@PathVariable Long userId) {
-        List<User> friends = friendService.getFriends(userId);
-        return ResponseEntity.ok(friends);
+    public ResponseEntity<?> getFriends(@PathVariable Long userId) {
+        try {
+            List<FriendAcceptDto> friends = friendService.getFriends(userId);
+            return ResponseEntity.ok(friends);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
     @GetMapping("/count/{userId}")
     public ResponseEntity<Long> getFriendCount(@PathVariable Long userId) {
         Long friendCount = friendService.countFriends(userId);

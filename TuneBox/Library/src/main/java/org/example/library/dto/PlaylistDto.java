@@ -33,9 +33,16 @@ public class PlaylistDto {
 
     private LocalDate createDate;
 
-    private boolean report;
-
     private LocalDate reportDate;
 
-    private Set<Track> tracks;
+    private boolean report;
+
+    private boolean status;
+
+
+
+    private Long creatorId;
+
+    private Set<Long> tracks;
+
 }

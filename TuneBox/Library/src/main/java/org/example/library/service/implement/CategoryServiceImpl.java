@@ -8,7 +8,6 @@ import org.example.library.mapper.CategoryMapper;
 import org.example.library.model.CategoryIns;
 import org.example.library.repository.CategoryInsRepository;
 import org.example.library.service.CategoryService;
-import org.example.library.utils.ImageUploadCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +25,6 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryInsRepository categoryInsRepository;
     @Autowired
     private Cloudinary cloudinary;
-    private final ImageUploadCategory imageUploadCategory;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile image) {

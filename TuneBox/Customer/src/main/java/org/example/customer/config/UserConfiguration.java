@@ -18,17 +18,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "org.example.*")
-public class CustomerConfiguration {
+public class UserConfiguration {
+
     @Autowired
     @Lazy
     private JwtFilter jwtFilter;
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerServiceConfig();
+        return new UserServiceConfig();
     }
 
     @Bean
@@ -44,15 +49,23 @@ public class CustomerConfiguration {
 
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
-        http
+        http     .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowCredentials(true);
+                    config.addAllowedHeader("*");
+                    return config;
+                }))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
                                 "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
-                                "/customer/category/**", "/customer/instrument/**", "/user/**").permitAll()
-                        .requestMatchers("/customer/cart/**").hasRole("Customer")
-                        .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
+                                "/customer/category/**", "/customer/instrument/**", "/user/**","/api/**",
+                                "/customer/tracks/**", "/customer/albums/", "/customer/playlist/**").permitAll()
+                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
+                        .requestMatchers("/e-comAdmin/**").hasRole("ECOMADMIN") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .requestMatchers("/oauth2/**").authenticated()
                         .anyRequest().permitAll()
@@ -80,5 +93,6 @@ public class CustomerConfiguration {
         return http.build();
     }
 
-
 }
+
+

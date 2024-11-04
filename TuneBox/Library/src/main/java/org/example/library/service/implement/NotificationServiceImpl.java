@@ -165,5 +165,10 @@ public class NotificationServiceImpl implements NotificationService {
             throw new IllegalArgumentException("Notification not found");
         }
     }
+    @Override
+    public void deleteAllReadNotifications(Long userId) {
+        List<Notification> readNotifications = notificationRepository.findByUserIdAndRead(userId, true);
+        notificationRepository.deleteAll(readNotifications);
+    }
 
 }

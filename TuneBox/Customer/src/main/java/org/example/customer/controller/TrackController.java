@@ -2,7 +2,6 @@ package org.example.customer.controller;
 
 import org.example.library.dto.GenreDto;
 import org.example.library.dto.TrackDto;
-import org.example.library.mapper.GenreMapper;
 import org.example.library.model.Genre;
 import org.example.library.model.Track;
 import org.example.library.model.User;
@@ -21,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/customer/tracks")
 public class TrackController {
@@ -115,16 +115,9 @@ public class TrackController {
     //get tat ca cac theloai
     @GetMapping("/getAllGenre")
     public ResponseEntity<List<GenreDto>> getAllGenres() {
-        List<Genre> genres = genreService.findAll();
-
-        // Sử dụng mapper để chuyển đổi danh sách Genre thành GenreDto
-        List<GenreDto> genreDtos = genres.stream()
-                .map(GenreMapper::mapToGenreDto)
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(genreDtos);
+        List<GenreDto> genres = genreService.findAll();
+        return ResponseEntity.ok(genres);
     }
-
 
     //get track theo id track
     @GetMapping("/{trackId}")
@@ -133,6 +126,34 @@ public class TrackController {
         return new ResponseEntity<>(trackDto, HttpStatus.OK);
     }
 
+    //get track theo id gênre
+    @GetMapping("/genre/{genreId}")
+    public ResponseEntity<List<TrackDto>> getTracksByGenreId(@PathVariable Long genreId) {
+        List<TrackDto> tracks = trackService.getTracksByGenreId(genreId);
+        if (tracks.isEmpty()) {
+            System.out.println("No tracks found for genreId: " + genreId);
+        } else {
+            System.out.println("Found " + tracks.size() + " tracks for genreId: " + genreId);
+        }
 
+        return new ResponseEntity<>(tracks, HttpStatus.OK);
+    }
+
+    // API tìm kiếm track
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<TrackDto>> searchTracks(@PathVariable String keyword) {
+        // Gọi service để tìm kiếm track theo từ khóa
+        List<TrackDto> result = trackService.searchTracks(keyword);
+
+        // Trả về danh sách track
+        return ResponseEntity.ok(result);
+    }
+
+    //    get all track
+    @GetMapping("/allTrack")
+    public ResponseEntity<List<TrackDto>> getAllTracks() {
+        List<TrackDto> tracks = trackService.getAllTracks();
+        return ResponseEntity.ok(tracks);
+    }
 
 }

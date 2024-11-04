@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -74,7 +75,6 @@ public class PostController {
         }
     }
 
-
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/current-user")
     public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
@@ -101,10 +101,20 @@ public class PostController {
     }
 
     // Phương thức lấy tất cả các bài viết
-    @GetMapping("/all")
+//    @GetMapping("/all")
+//    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
+//        List<PostDto> posts = postService.getAllPosts(currentUserId);
+//        return new ResponseEntity<>(posts, HttpStatus.OK);
+//    }
+      @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-        List<PostDto> posts = postService.getAllPosts(currentUserId);
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+        try {
+            List<PostDto> posts = postService.getAllPosts(currentUserId);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println("Error fetching posts: " + e.getMessage());
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // Phương thức cập nhật bài viết
@@ -146,7 +156,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
-
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")

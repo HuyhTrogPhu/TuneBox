@@ -4,14 +4,12 @@ package org.example.library.mapper;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.*;
 
-import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TrackMapper {
 
     public static TrackDto mapperTrackDto(Track track) {
-
         Set<Long> playlist = track.getPlaylists() != null ? track.getPlaylists().stream()
                 .map(Playlist::getId).collect(Collectors.toSet()) : null;
 
@@ -21,11 +19,15 @@ public class TrackMapper {
         Set<Long> likes = track.getLikes() != null ? track.getLikes().stream()
                 .map(Like::getId).collect(Collectors.toSet()) : null;
 
+        // Lấy ID của album
+        Set<Long> albumIds = track.getAlbums() != null ?
+                track.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) : null;
+
         return new TrackDto(
                 track.getId(),
                 track.getName(),
                 track.getTrackImage(),
-                track.getTrackFile().getBytes(),
+                track.getTrackFile(),
                 track.getDescription(),
                 track.isStatus(),
                 track.getCreateDate(),
@@ -35,19 +37,20 @@ public class TrackMapper {
                 track.getGenre() != null ? track.getGenre().getName() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
                 track.getCreator() != null ? track.getCreator().getUserName() : null,
-                track.getAlbums()!= null? track.getAlbums().getId() : null,
+                albumIds,  // Chuyển albumIds vào đây
                 playlist,
                 comments,
                 likes
         );
     }
 
+
     public static Track mapperTrack(TrackDto trackDto) {
         Track track = new Track();
         track.setId(trackDto.getId());
         track.setName(trackDto.getName());
         track.setTrackImage(trackDto.getImageTrack());
-        track.setTrackFile(Arrays.toString(trackDto.getTrackFile().getBytes()));
+        track.setTrackFile(trackDto.getTrackFile());
         track.setDescription(trackDto.getDescription());
         track.setStatus(trackDto.isStatus()); // Convert Long to boolean
         track.setCreateDate(trackDto.getCreateDate());
@@ -65,9 +68,13 @@ public class TrackMapper {
         creator.setUserName(trackDto.getUserName());
         track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
-        Albums albums = new Albums();
-        albums.setId(trackDto.getAlbumId());
-        track.setAlbums(albums);  // Assume albums is already fetched or managed elsewhere
+        Set<Albums> albums = trackDto.getAlbumIds() != null ?
+                trackDto.getAlbumIds().stream().map(id -> {
+                    Albums album = new Albums();
+                    album.setId(id);
+                    return album;
+                }).collect(Collectors.toSet()) : null;
+        track.setAlbums(albums);
 
         // Set playlists (if necessary)
         Set<Playlist> playlists = trackDto.getPlaylistIds() != null ?

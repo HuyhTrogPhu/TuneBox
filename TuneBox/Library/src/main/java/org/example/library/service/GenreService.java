@@ -10,7 +10,7 @@ import org.example.library.model.Talent;
 import java.util.List;
 
 public interface GenreService {
-    List<Genre> findAll();
+    List<GenreDto> findAll();
 
     List<GenreUserDto> findNameGenre();
 

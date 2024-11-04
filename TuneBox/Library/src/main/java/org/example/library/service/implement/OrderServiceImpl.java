@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,6 +170,105 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getRevenueOfBeforeYear();
     }
 
+    @Override
+    public Double revenueByDay(LocalDate date) {
+        return orderRepository.getRevenueByDay(date);
+    }
+
+    @Override
+    public Double revenueBetweenDate(LocalDate startDate, LocalDate endDate) {
+        return orderRepository.getRevenueBetweenDate(startDate, endDate);
+    }
+
+    @Override
+    public Double revenueByWeek(LocalDate date) {
+        try {
+            return orderRepository.getRevenueByWeek(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double revenueBetweenWeeks(LocalDate startDate, LocalDate endDate) {
+        try {
+            return orderRepository.getRevenueBetweenWeek(startDate, endDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double revenueByMonth(int year, int month) {
+        return orderRepository.getRevenueByMonth(year, month);
+    }
+
+    @Override
+    public Double revenueBetweenMonths(int year, int startMonth, int endMonth) {
+        return orderRepository.getRevenueBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public Double revenueByYear(int year) {
+        return orderRepository.getRevenueByYear(year);
+    }
+
+    @Override
+    public Double revenueBetweenYears(int startYear, int endYear) {
+        return orderRepository.getRevenueBetweenYears(startYear, endYear);
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusUnpaid() {
+        return orderRepository.getListOrderByPaymentStatusUnpaid();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusPaid() {
+        return orderRepository.getListOrderByPaymentStatusPaid();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusConfirmed() {
+        return orderRepository.getListOrderByStatusConfirmed();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusDelivered() {
+        return orderRepository.getListOrderByStatusDelivered();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusDelivering() {
+        return orderRepository.getListOrderByStatusDelivering();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByStatusCanceled() {
+        return orderRepository.getListOrderByStatusCanceled();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByPaymentMethodCOD() {
+        return orderRepository.getListOrderByPaymentMethodCOD();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByPaymentMethodVNPAY() {
+        return orderRepository.getListOrderByPaymentMethodVNPAY();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByShippingMethodNormal() {
+        return orderRepository.getListOrderByShippingMethodNormal();
+    }
+
+    @Override
+    public List<StatisticalOrder> getOrdersByShippingMethodFast() {
+        return orderRepository.getListOrderByShippingMethodFast();
+    }
 
 
     @Override

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -25,8 +26,11 @@ public class GenreServiceImpl implements GenreService {
 
 
     @Override
-    public List<Genre> findAll() {
-        return genreRepository.findAll();
+    public List<GenreDto> findAll() {
+        List<Genre> genres = genreRepository.findAll();
+        return genres.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName())) // Giả sử GenreDto có id và name
+                .collect(Collectors.toList());
     }
 
     @Override

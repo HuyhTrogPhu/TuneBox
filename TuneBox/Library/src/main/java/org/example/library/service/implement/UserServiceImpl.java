@@ -325,5 +325,158 @@ public class UserServiceImpl implements UserService {
         // Lưu lại thông tin đã cập nhật
         userRepository.save(user);
     }
+    //updateInspiredBy
+    public void updateInspiredBy(Long userId, List<Long> inspiredByIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Clear current inspiredBy and set new values
+        user.getInspiredBy().clear();
+        for (Long id : inspiredByIds) {
+            InspiredBy inspiredBy = inspiredByRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("InspiredBy not found for ID: " + id));
+            user.getInspiredBy().add(inspiredBy);
+        }
+
+        userRepository.save(user); // Save changes
+    }
+//updateTalent
+    public void updateTalent(Long userId, List<Long> talentIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Clear current talents and set new values
+        user.getTalent().clear();
+        for (Long id : talentIds) {
+            Talent talent = talentRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Talent not found for ID: " + id));
+            user.getTalent().add(talent);
+        }
+
+        userRepository.save(user); // Save changes
+    }
+//updateGenre
+    public void updateGenre(Long userId, List<Long> genreIds) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Clear current genres and set new values
+        user.getGenre().clear();
+        for (Long id : genreIds) {
+            Genre genre = genreRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Genre not found for ID: " + id));
+            user.getGenre().add(genre);
+        }
+
+        userRepository.save(user); // Save changes
+    }
+    @Transactional
+    @Override
+    public void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+
+        // Cập nhật tên người dùng
+        if (userUpdateRequest.getUserName() != null && !userUpdateRequest.getUserName().isEmpty()) {
+            user.setUserName(userUpdateRequest.getUserName());
+        }
+
+        // Cập nhật thông tin cá nhân từ UserInfoUpdateDto
+        UserInfoUpdateDto userInfoUpdate = userUpdateRequest.getUserInformation();
+        if (userInfoUpdate != null) {
+            UserInformation userInfo = user.getUserInformation();
+            if (userInfo != null) {
+                if (userInfoUpdate.getName() != null) {
+                    userInfo.setName(userInfoUpdate.getName());
+                }
+                if (userInfoUpdate.getLocation() != null) {
+                    userInfo.setLocation(userInfoUpdate.getLocation());
+                }
+                if (userInfoUpdate.getAbout() != null) {
+                    userInfo.setAbout(userInfoUpdate.getAbout());
+                }
+            }
+        }
+
+        // Cập nhật inspiredBy
+        if (userUpdateRequest.getInspiredBy() != null) {
+            updateInspiredBy(userId, userUpdateRequest.getInspiredBy());
+        }
+
+        // Cập nhật talent
+        if (userUpdateRequest.getTalent() != null) {
+            updateTalent(userId, userUpdateRequest.getTalent());
+        }
+
+        // Cập nhật genre
+        if (userUpdateRequest.getGenre() != null) {
+            updateGenre(userId, userUpdateRequest.getGenre());
+        }
+
+        // Lưu lại thông tin đã cập nhật
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public List<SearchDto> searchUser(String keyword) {
+        return userRepository.searchUser(keyword);
+    }
+
+    @Override
+    public List<UserSell> getUserSellTheMostDay(LocalDate date) {
+        return userRepository.getUserSellTheMostOfDay(date);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellBetweenDate(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByWeek(LocalDate startDate) {
+        return userRepository.getUserSellByWeek(startDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellFromWeekToWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByMonth(int year, int month) {
+        return userRepository.getUserSellsByMonth(year, month);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth) {
+        return userRepository.getUserSellsBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByYear(int year) {
+        return userRepository.getUserSellByYear(year);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenYear(int startYear, int endYear) {
+        return userRepository.getUserSellBetweenYears(startYear, endYear);
+    }
+
+
+    @Override
+    public List<SearchDto> searchTrack(String keyword) {
+        return userRepository.searchTrack(keyword);
+    }
+
+    @Override
+    public List<SearchDto> searchAlbum(String keyword) {
+        return userRepository.searchAlbum(keyword);
+    }
+
+    @Override
+    public List<SearchDto> searchPlaylist(String keyword) {
+        return userRepository.searchPlaylist(keyword);
+    }
 
 }

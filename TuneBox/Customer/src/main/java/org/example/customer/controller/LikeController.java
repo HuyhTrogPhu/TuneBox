@@ -1,6 +1,8 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.LikeDto;
+import org.example.library.dto.TrackDto;
+import org.example.library.model.Like;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins ="http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -25,7 +28,7 @@ public class LikeController {
     public ResponseEntity<LikeDto> addLike(@RequestBody LikeDto likeDto) {
         try {
             // Kiểm tra nếu likeDto không hợp lệ
-            if (likeDto.getUserId() == null || likeDto.getPostId() == null) {
+            if (likeDto.getUserId() == null || (likeDto.getPostId() == null && likeDto.getTrackId() == null)) {
                 return ResponseEntity.badRequest().body(null);
             }
 
@@ -33,6 +36,7 @@ public class LikeController {
             LikeDto createdLikeDto = likeService.addLike(likeDto.getUserId(), likeDto.getPostId(), likeDto.getTrackId());
             return ResponseEntity.status(HttpStatus.CREATED).body(createdLikeDto);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
@@ -54,6 +58,12 @@ public class LikeController {
     @GetMapping("/post/{postId}/count")
     public ResponseEntity<Long> getLikesCountByPostId(@PathVariable Long postId) {
         long count = likeService.countLikesByPostId(postId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/track/{trackId}/count")
+    public ResponseEntity<Long> getLikesCountByTrackId(@PathVariable Long trackId) {
+        long count = likeService.countLikesByTrackId(trackId);
         return ResponseEntity.ok(count);
     }
 
@@ -80,6 +90,38 @@ public class LikeController {
         boolean hasLiked = likeService.checkUserLikeTrack(trackId, userId);
         return ResponseEntity.ok(hasLiked);
     }
+
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<LikeDto>> getAllLikedByUser(@PathVariable Long userId) {
+        List<LikeDto> liked = likeService.getAllByUserId(userId);
+        return ResponseEntity.ok(liked);
+    }
+
+//    album
+    @GetMapping("/allAlbums/{userId}")
+    public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
+        List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
+
+        // Lọc ra các LikeDto có albumId khác null
+        List<LikeDto> filteredLikes = liked.stream()
+                .filter(likeDto -> likeDto.getAlbumId() != null)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredLikes);
+    }
+
+    @GetMapping("/allPlaylist/{userId}")
+    public ResponseEntity<List<LikeDto>> getAllPlayListByUserId(@PathVariable Long userId) {
+        List<LikeDto> liked = likeService.getAllPlayListByUserId(userId);
+
+        // Lọc ra các LikeDto có albumId khác null
+        List<LikeDto> filteredLikes = liked.stream()
+                .filter(likeDto -> likeDto.getPlaylistId() != null)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(filteredLikes);
+    }
+
 
 }
 

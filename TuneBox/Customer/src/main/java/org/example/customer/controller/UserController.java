@@ -13,20 +13,16 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
@@ -44,6 +40,9 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
+    private UserInformationService userInformationService;
+
+    @Autowired
     private TalentService talentService;
 
     @Autowired
@@ -55,10 +54,11 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserInformationService userInformationService;
+
     @Autowired
     private JwtUtil jwtUtil;
+
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -98,11 +98,23 @@ public class UserController {
     // get list genres
     @GetMapping("/list-genre")
     public ResponseEntity<List<GenreDto>> listGenre() {
-        List<Genre> genreList = genreService.findAll();
+        List<GenreDto> genreList = genreService.findAll();
         List<GenreDto> genreDtoList = genreList.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName()))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(genreDtoList);
+    }
+
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
+        try {
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     // get list inspired by
@@ -121,6 +133,7 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
@@ -131,12 +144,13 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
+
 
 
     // Phương thức để lấy userId từ cookie
@@ -170,7 +184,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -205,6 +219,41 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
+        }
+    }
+    @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserProfile(userId, userUpdateRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam String keyword) {
+        try {
+            // Gọi các phương thức tìm kiếm từ service
+            List<SearchDto> userResults = userService.searchUser("%" + keyword + "%");
+            List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
+            List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
+            List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
+
+            // In ra dữ liệu kết quả tìm kiếm
+            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
+            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
+            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
+            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
+
+            // Tạo response chứa tất cả kết quả
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", userResults);
+            response.put("tracks", trackResults);
+            response.put("albums", albumResults);
+            response.put("playlists", playlistResults);
+
+            // Trả về phản hồi thành công với kết quả tìm kiếm
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Xử lý lỗi và trả về phản hồi lỗi
+            return ResponseEntity.internalServerError().body("Error retrieving search results: " + e.getMessage());
         }
     }
 

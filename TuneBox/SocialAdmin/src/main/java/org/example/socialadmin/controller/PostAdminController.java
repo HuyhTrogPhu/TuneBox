@@ -1,9 +1,7 @@
 package org.example.socialadmin.controller;
 
-import org.example.library.Exception.PostNotFoundException;
 import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReportDto;
-import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
+import org.example.library.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +33,7 @@ public class PostAdminController {
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
         try {
-            List<PostDto> newPosts = postService.findNewPosts(); // Giả định có phương thức lấy bài mới
+            List<PostDto> newPosts = postService.findNewPosts();
             return ResponseEntity.ok(newPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -45,7 +43,7 @@ public class PostAdminController {
     @GetMapping("/trending")
     public ResponseEntity<List<PostDto>> getTrendingPosts() {
         try {
-            List<PostDto> trendingPosts = postService.findTrendingPosts(); // Giả định có phương thức lấy bài xu hướng
+            List<PostDto> trendingPosts = postService.findTrendingPosts();
             return ResponseEntity.ok(trendingPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -79,7 +77,7 @@ public class PostAdminController {
     @GetMapping("/total")
     public ResponseEntity<Long> getTotalPosts() {
         try {
-            long totalPosts = postService.countTotalPosts(); // Gọi phương thức để lấy tổng số bài viết
+            long totalPosts = postService.countTotalPosts();
             return ResponseEntity.ok(totalPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -121,10 +119,8 @@ public class PostAdminController {
         try {
             postService.deletePost(id);
             return ResponseEntity.noContent().build();
-        } catch (PostNotFoundException e) {  // Ngoại lệ cụ thể khi không tìm thấy bài viết
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found with id: " + id);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting post");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found with id: " + id);
         }
     }
 

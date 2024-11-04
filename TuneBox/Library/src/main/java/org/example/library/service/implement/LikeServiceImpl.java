@@ -3,6 +3,7 @@ package org.example.library.service.implement;
 import org.example.library.dto.LikeDto;
 import org.example.library.dto.NotificationDTO;
 import org.example.library.mapper.LikeMapper;
+import org.example.library.mapper.TrackMapper;
 import org.example.library.model.*;
 import org.example.library.repository.LikeRepository;
 import org.example.library.repository.PostRepository;
@@ -112,11 +113,17 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    public long countLikesByTrackId(Long trackId) {
+        return likeRepository.countByTrackId(trackId);
+    }
+
+
+    @Override
     public List<LikeDto> getLikesByPostId(Long postId) {
 
         List<Like> likes = likeRepository.findByPostId(postId);
         return likes.stream()
-                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId()))
+                .map(like -> new LikeDto(like.getId(), like.getCreateDate(), like.getUser().getId(), like.getPost().getId(), like.getTrack().getId(), like.getAlbums().getId(),like.getPlaylist().getId()))
                 .collect(Collectors.toList());
     }
 
@@ -142,6 +149,24 @@ public class LikeServiceImpl implements LikeService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Track track = trackRepository.findById(trackId).orElseThrow(() -> new RuntimeException("Track not found"));
         return likeRepository.existsByUserAndTrack(user,track);
+    }
+
+    @Override
+    public List<LikeDto> getAllByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::PostAndTrack).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllAlbumByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toAlbumDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LikeDto> getAllPlayListByUserId(Long userId) {
+        List<Like> liked = likeRepository.findByUserId(userId);
+        return liked.stream().map(LikeMapper::toPlayListDto).collect(Collectors.toList());
     }
 
 }

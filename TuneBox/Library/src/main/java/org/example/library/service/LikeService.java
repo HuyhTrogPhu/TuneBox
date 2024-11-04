@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 import org.example.library.dto.LikeDto;
+import org.example.library.model.Like;
 
 import java.util.List;
 
@@ -13,4 +14,11 @@ public interface LikeService {
     boolean checkUserLikeTrack(Long trackId, Long userId);
 
     long countLikesByPostId(Long postId);
+
+    long countLikesByTrackId(Long trackId);
+    List<LikeDto> getAllByUserId(Long userId);
+
+
+    List<LikeDto> getAllAlbumByUserId(Long userId);
+    List<LikeDto> getAllPlayListByUserId(Long userId);
 }
