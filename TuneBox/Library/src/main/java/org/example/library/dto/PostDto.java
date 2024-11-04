@@ -14,10 +14,12 @@ import java.util.Set;
 public class PostDto {
     private Long id;
     private String content;
-    private Long userId; // Trường userId
+    private Long userId;
     private String userNickname;
     private Set<PostImageDto> images;
     private LocalDateTime createdAt;
     private boolean hidden;
     private String avatar;
+    private long likeCount;
+    private long commentCount;
 }

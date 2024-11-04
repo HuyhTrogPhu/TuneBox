@@ -24,6 +24,8 @@ public class PostMapper {
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
         dto.setCreatedAt(post.getCreatedAt());
 //        dto,setDescription(post.getDescription());
+        dto.setLikeCount(post.getLikes().size());
+        dto.setCommentCount(post.getComments().size());
         return dto;
     }
 
