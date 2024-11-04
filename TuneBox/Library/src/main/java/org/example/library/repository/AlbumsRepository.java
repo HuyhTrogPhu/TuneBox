@@ -13,5 +13,5 @@ public interface AlbumsRepository extends JpaRepository<Albums, Long> {
     @Query("SELECT a FROM Albums a WHERE lower(a.title) LIKE lower(concat('%', :keywords, '%')) " +
             "OR lower(a.description) LIKE lower(concat('%', :keywords, '%'))")
     List<Albums> searchByKeywords(@Param("keywords") String keywords);
-
+    List<Albums> findAllByReportTrue();
 }

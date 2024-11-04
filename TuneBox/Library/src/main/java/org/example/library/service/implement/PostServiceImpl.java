@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -281,5 +282,23 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+    public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDateTime, Long> postCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+
+        // Vòng lặp để đi qua từng ngày
+        while (!currentDate.isAfter(endDate)) {
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(23, 59, 59, 999999999); // Thay đổi tại đây
+            Long count = postRepository.countByCreatedAtBetween(startOfDay, endOfDay);
+            postCountMap.put(startOfDay, count);
+            currentDate = currentDate.plusDays(1);
+        }
+
+        System.out.println("Post Count Map: " + postCountMap);
+        return postCountMap;
+    }
+
+
 
 }

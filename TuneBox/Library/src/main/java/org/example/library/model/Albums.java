@@ -1,5 +1,7 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.example.library.model.AlbumStyle;
 
 import jakarta.persistence.*;
@@ -43,7 +45,7 @@ public class Albums {
 
     private Date reportDate;
 
-    private boolean status;
+    private Boolean status ;
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
@@ -51,6 +53,7 @@ public class Albums {
 
     @ManyToOne
     @JoinColumn(name = "albumCreator_id", nullable = false)
+    @JsonIgnore
     private User creator;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -59,6 +62,7 @@ public class Albums {
             joinColumns = @JoinColumn(name = "albums_id"),
             inverseJoinColumns = @JoinColumn(name = "track_id")
     )
+    @JsonManagedReference
     private Set<Track> tracks = new HashSet<>();
 
     @ManyToOne

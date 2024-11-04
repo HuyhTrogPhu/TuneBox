@@ -3,10 +3,12 @@ package org.example.library.repository;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.Brand;
 import org.example.library.model.Track;
+import org.example.library.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
@@ -18,4 +20,16 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
             "OR lower(t.description) LIKE lower(concat('%', :keywords, '%'))")
     List<Track> searchByKeywords(@Param("keywords") String keywords);
 
+    // Lay Track theo ID cua Album
+    @Query("SELECT a.tracks FROM Albums a WHERE a.id = :albumId")
+    List<Track> findTracksByAlbumId(@Param("albumId") Long albumId);
+    List<Track> findByReportTrue();
+    Long countByCreateDate(LocalDate createDate);
+    @Query("SELECT t.genre.name AS genre, COUNT(t) AS trackCount " +
+            "FROM Track t " +
+            "WHERE t.createDate BETWEEN :startDate AND :endDate " +
+            "GROUP BY t.genre.name")
+    List<Object[]> countTracksByGenreAndDateRange(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 }

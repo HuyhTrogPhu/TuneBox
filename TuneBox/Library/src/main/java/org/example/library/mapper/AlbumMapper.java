@@ -17,7 +17,7 @@ public class AlbumMapper {
                 album.getDescription(),
                 album.getCreateDate(),
                 album.isReport(),
-                album.isStatus(),
+                album.getStatus(),
                 album.getGenre() != null ? album.getGenre().getId() : null,  // Genre ID
                 album.getCreator() != null ? album.getCreator().getId() : null,  // Creator ID
                 album.getAlbumStyle() != null ? album.getAlbumStyle().getId() : null,  // Album Style ID
@@ -34,7 +34,7 @@ public class AlbumMapper {
         album.setDescription(albumsDto.getDescription());
         album.setCreateDate(albumsDto.getCreateDate());
         album.setReport(albumsDto.isReport());
-        album.setStatus(albumsDto.isStatus());
+        album.setStatus(albumsDto.getStatus());
 
         // Thiết lập Genre từ albumsDto
         if (albumsDto.getGenreId() != null) {

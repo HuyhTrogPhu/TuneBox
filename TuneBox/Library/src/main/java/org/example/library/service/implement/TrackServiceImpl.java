@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -341,5 +342,43 @@ public class TrackServiceImpl implements TrackService {
                 .collect(Collectors.toList());
 }
 
+@Override
+    public List<TrackDto> findByTracksByAlbumId(Long id) {
+       return trackRepository.findTracksByAlbumId(id)
+               .stream()
+               .map(TrackMapper::mapperTrackDto)
+               .collect(Collectors.toList());
+    }
 
+    @Override
+    public List<TrackDto> findReportedTrack() {
+        return trackRepository.findByReportTrue()
+                .stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
+    }
+public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate){
+        Map<LocalDate, Long> trackCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            Long count = trackRepository.countByCreateDate(currentDate);
+            trackCountMap.put(currentDate, count);
+            currentDate = currentDate.plusDays(1);
+        }
+        return trackCountMap;
+
+}
+
+    public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate) {
+        List<Object[]> results = trackRepository.countTracksByGenreAndDateRange(startDate, endDate);
+
+        Map<String, Long> trackCountMap = new HashMap<>();
+        for (Object[] result : results) {
+            String genre = (String) result[0];
+            Long count = (Long) result[1];
+            trackCountMap.put(genre, count);
+        }
+
+        return trackCountMap;
+    }
 }

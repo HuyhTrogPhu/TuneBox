@@ -24,7 +24,7 @@ public class AlbumsDto {
     private String description;
     private LocalDate createDate;
     private boolean report; //false
-    private boolean status;
+    private Boolean status;
     private Long genreId;
     private Long creatorId;
     private Long albumStyleId;

@@ -5,19 +5,21 @@ import org.example.library.dto.TrackStatus;
 import org.example.library.model.Track;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface TrackService {
 
-        public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+         TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
         List<TrackDto> getAllTracks();
 
         TrackDto getTrackById(Long trackId);
 
-        public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+         TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-        public void deleteTrack(Long trackId);
+         void deleteTrack(Long trackId);
 
         List<TrackDto> getTracksByUserId(Long userId);
 
@@ -25,7 +27,11 @@ public interface TrackService {
     List<TrackDto> getTracksByGenreId(Long genreId);
 
     List<TrackDto> searchTracks (String keywords);
-    public TrackStatus getTrackCountCommentandLike(Long Id);
-    public List<TrackDto> getAll();
+     TrackStatus getTrackCountCommentandLike(Long Id);
+     List<TrackDto> getAll();
+     List<TrackDto> findByTracksByAlbumId(Long id);
+    public List<TrackDto> findReportedTrack();
+    public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate);
+    public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate);
 
 }

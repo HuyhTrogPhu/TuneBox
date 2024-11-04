@@ -43,4 +43,12 @@ public class AlbumServiceImplement implements AlbumService {
         AlbumsDto albumsDto = AlbumMapper.mapperAlbumsDto(albumsRepository.findById(id).get());
         return albumsDto;
     }
+
+    @Override
+    public List<AlbumsDto> getAllReported(){
+        return albumsRepository.findAllByReportTrue()
+                .stream()
+                .map(AlbumMapper::mapperAlbumsDto)
+                .collect(Collectors.toList());
+    }
 }

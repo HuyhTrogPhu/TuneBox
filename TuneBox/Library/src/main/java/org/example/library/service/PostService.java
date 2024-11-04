@@ -6,7 +6,10 @@ import org.example.library.model.Post;
 import org.example.library.dto.PostReportDto;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface PostService {
@@ -53,6 +56,6 @@ public interface PostService {
     PostDto getPostByPostId(Long postId);
 
 //    PostDto createPost(PostDto postDto);
-
+ Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate);
 
 }

@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +41,9 @@ public class StaticSocialAdmin {
     @Autowired
     ReplyService replyService;
 
+    @Autowired
+    UserInforService userInforService;
+
 
     @GetMapping("/countUser")
     public ResponseEntity<?> getCountUser() {
@@ -59,6 +67,7 @@ public class StaticSocialAdmin {
             response.put("status", true);
             response.put("message", "UserData");
             response.put("data", userService.findAllUser());
+
         } catch (Exception e) {
             response.put("status", false);
             response.put("message", e.getMessage());
@@ -119,6 +128,7 @@ public class StaticSocialAdmin {
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data", userService.findById(UserId));
+            response.put("dataInformation", userService.findById(UserId));
 
         } catch (Exception ex) {
             response.put("status", false);
@@ -151,7 +161,8 @@ public class StaticSocialAdmin {
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", albumService.findByAlbumsByID(Id));
+            response.put("dataAlbums", albumService.findByAlbumsByID(Id));
+            response.put("dataTracks",trackService.findByTracksByAlbumId(Id));
 
         } catch (Exception ex) {
             response.put("status", false);
@@ -258,7 +269,138 @@ public class StaticSocialAdmin {
 
         return ResponseEntity.ok(response);
     }
+    //get user reported
+    @GetMapping("/getUserReported")
+    public ResponseEntity<?> GetUserReported(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",userService.findByReportTrue());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
 
+    //get album reported
+    @GetMapping("/getAlbumReported")
+    public ResponseEntity<?> GetAlbumReported(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",albumService.getAllReported());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    //get Track reported
+    @GetMapping("/getTrackReported")
+    public ResponseEntity<?> GetTracksReported(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",trackService.findReportedTrack());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+//thong ke user tạo theo ngày
+@GetMapping("/getUserBeetWeen/{startDate}/{endDate}")
+public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String startDateStr,
+                                         @PathVariable("endDate") String endDateStr) {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+        Map<LocalDate, Long> userCountMap = userService.countUsersByDateRange(startDate, endDate);
+        response.put("status", true);
+        response.put("message", "Succesfull");
+        response.put("data", userCountMap);
+    } catch (Exception ex) {
+        response.put("status", false);
+        response.put("message", ex);
+        response.put("data", null);
+    }
+
+    return ResponseEntity.ok(response);
+}
+// thong ke post tạo theo ngày
+    @GetMapping("/getPostBeetWeen/{startDate}/{endDate}")
+    public ResponseEntity<?> GetPostBeetWeen(@PathVariable("startDate") String startDateStr,
+                                             @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Cập nhật định dạng nếu cần
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            Map<LocalDateTime, Long> userCountMap = postService.countPostByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    // thong ke track tạo theo ngày
+    @GetMapping("/getTrackBeetWeen/{startDate}/{endDate}")
+    public ResponseEntity<?> GetTrackBeetWeen(@PathVariable("startDate") String startDateStr,
+                                             @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            Map<LocalDate, Long> userCountMap = trackService.countTrackByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    // thong ke track tạo theo ngày/genre
+    @GetMapping("/getTrackGenreBeetWeen/{startDate}/{endDate}")
+    public ResponseEntity<?> GetTrackGenreBeetWeen(@PathVariable("startDate") String startDateStr,
+                                              @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            Map<String, Long> userCountMap = trackService.getTrackCountsByGenreAndDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    //trộm của như
     @GetMapping("/getTrackCommentbyId/{trackId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByTrack(@PathVariable Long trackId) {
         List<CommentDTO> comments = commentService.getCommentsByTrack(trackId);
@@ -269,4 +411,5 @@ public class StaticSocialAdmin {
         List<ReplyDto> replies = replyService.getRepliesByComment(commentId);
         return new ResponseEntity<>(replies, HttpStatus.OK);
     }
+
 }

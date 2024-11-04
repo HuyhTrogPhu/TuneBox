@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -76,14 +77,16 @@ public interface UserService {
     void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 
 
-    public List<SearchDto> searchPlaylist(String keyword);
-    public List<SearchDto> searchAlbum(String keyword);
-    public List<SearchDto> searchTrack(String keyword);
-    public List<SearchDto> searchUser(String keyword);
+     List<SearchDto> searchPlaylist(String keyword);
+     List<SearchDto> searchAlbum(String keyword);
+     List<SearchDto> searchTrack(String keyword);
+     List<SearchDto> searchUser(String keyword);
 
-    public long countUser();
+     long countUser();
 
     Optional<User> findById(Long userId);
-    @Transactional
-    void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
+    List<User> findByReportTrue();
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
+
 }
