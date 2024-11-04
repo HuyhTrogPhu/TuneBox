@@ -1,3 +1,4 @@
+
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
@@ -9,7 +10,6 @@ import java.util.stream.Collectors;
 public class TrackMapper {
 
     public static TrackDto mapperTrackDto(Track track) {
-
         Set<Long> playlist = track.getPlaylists() != null ? track.getPlaylists().stream()
                 .map(Playlist::getId).collect(Collectors.toSet()) : null;
 
@@ -18,6 +18,10 @@ public class TrackMapper {
 
         Set<Long> likes = track.getLikes() != null ? track.getLikes().stream()
                 .map(Like::getId).collect(Collectors.toSet()) : null;
+
+        // Lấy ID của album
+        Set<Long> albumIds = track.getAlbums() != null ?
+                track.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) : null;
 
         return new TrackDto(
                 track.getId(),
@@ -30,13 +34,16 @@ public class TrackMapper {
                 track.isReport(),
                 track.getReportDate(),
                 track.getGenre() != null ? track.getGenre().getId() : null,
+                track.getGenre() != null ? track.getGenre().getName() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
-                track.getAlbums() != null ? track.getAlbums().getId() : null,
+                track.getCreator() != null ? track.getCreator().getUserName() : null,
+                albumIds,  // Chuyển albumIds vào đây
                 playlist,
                 comments,
                 likes
         );
     }
+
 
     public static Track mapperTrack(TrackDto trackDto) {
         Track track = new Track();
@@ -53,15 +60,21 @@ public class TrackMapper {
         // Set the genre, user (creator), and albums using IDs from trackDto
         Genre genre = new Genre();
         genre.setId(trackDto.getGenreId());
+        genre.setName(trackDto.getGenreName());
         track.setGenre(genre);  // Assume genre is already fetched or managed elsewhere
 
         User creator = new User();
         creator.setId(trackDto.getUserId());
+        creator.setUserName(trackDto.getUserName());
         track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
-        Albums albums = new Albums();
-        albums.setId(trackDto.getAlbumId());
-        track.setAlbums(albums);  // Assume albums is already fetched or managed elsewhere
+        Set<Albums> albums = trackDto.getAlbumIds() != null ?
+                trackDto.getAlbumIds().stream().map(id -> {
+                    Albums album = new Albums();
+                    album.setId(id);
+                    return album;
+                }).collect(Collectors.toSet()) : null;
+        track.setAlbums(albums);
 
         // Set playlists (if necessary)
         Set<Playlist> playlists = trackDto.getPlaylistIds() != null ?

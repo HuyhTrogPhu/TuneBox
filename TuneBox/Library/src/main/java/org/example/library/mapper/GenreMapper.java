@@ -1,3 +1,4 @@
+
 package org.example.library.mapper;
 
 
@@ -11,9 +12,17 @@ public class GenreMapper {
 
 
     public static Genre maptoGenre(GenreDto genredto) {
+
         return new Genre(
                 genredto.getId(),
                 genredto.getName()
+        );
+    }
+
+    public static GenreDto toDTO(Genre genre) {
+        return new GenreDto(
+                genre.getId(),
+                genre.getName()
         );
     }
 

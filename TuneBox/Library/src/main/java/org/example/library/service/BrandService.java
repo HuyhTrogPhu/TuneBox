@@ -21,4 +21,6 @@ public interface    BrandService {
 
     Brand getManagedBrand(Long id);
 
+
+
 }

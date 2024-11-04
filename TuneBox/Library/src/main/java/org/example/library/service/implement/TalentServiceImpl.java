@@ -17,11 +17,11 @@ public class TalentServiceImpl implements TalentService {
 
 
     @Autowired
-    private TalentRepository TalentRepo;
+    private TalentRepository talentRepository;
 
 
     @Override
     public List<Talent> findAll() {
-        return TalentRepo.findAll();
+        return talentRepository.findAll();
     }
 }

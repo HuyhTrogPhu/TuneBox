@@ -1,5 +1,6 @@
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,30 +20,28 @@ public class UserInformation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String firstName;
+    private String name;
 
     private String gender;
 
     private String phoneNumber;
 
-    private Date birthDate;
+    private Date birthDay;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String background;
 
     private String about;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "address", referencedColumnName = "number_id")
-    private Number number;
+    private String location;
 
     @OneToOne(mappedBy = "userInformation")
+    @JsonBackReference
     private User user;
-
 
 }

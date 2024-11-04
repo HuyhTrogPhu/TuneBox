@@ -30,7 +30,7 @@ public class Track {
     private String trackImage;
 
     @Column(columnDefinition = "LONGBLOB")
-    private byte[] trackFile;
+    private String trackFile;
 
     private String description;
 
@@ -49,13 +49,12 @@ public class Track {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "trackCreator_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User creator;
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "albums_id", nullable = true)
-    private Albums albums;
+    @ManyToMany(mappedBy = "tracks")
+    private Set<Albums> albums;
 
     @ManyToMany(mappedBy = "tracks")
     private Set<Playlist> playlists;

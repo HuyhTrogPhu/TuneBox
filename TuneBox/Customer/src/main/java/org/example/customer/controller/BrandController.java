@@ -4,14 +4,11 @@ import lombok.AllArgsConstructor;
 import org.example.library.dto.BrandsDto;
 import org.example.library.service.implement.BrandServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/customer/brand")

@@ -2,13 +2,14 @@ package org.example.library.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -24,9 +25,9 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    private Date orderDate;
+    private LocalDate orderDate;
 
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
 
     private double tax;
 
@@ -38,6 +39,13 @@ public class Order {
 
     private String status;
 
+    private String address;
+
+    private String phoneNumber;
+
+    private String shippingMethod;
+
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
@@ -45,7 +53,7 @@ public class Order {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderDetail> orderDetails;
 
-
+    private String paymentStatus;
 
 
 }

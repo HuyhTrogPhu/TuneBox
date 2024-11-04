@@ -21,7 +21,7 @@ public class TrackDto {
 
     private String imageTrack;
 
-    private byte[] trackFile;
+    private String trackFile;
 
     private String description;
 
@@ -35,9 +35,13 @@ public class TrackDto {
 
     private Long genreId;
 
+    private String genreName;
+
     private Long userId;
 
-    private Long albumId;
+    private String userName;
+
+    private Set<Long> albumIds;
 
     private Set<Long> playlistIds;
 
@@ -46,5 +50,6 @@ public class TrackDto {
     private Set<Long> likes;
 
 
-
+    public TrackDto(Long id, String name, String trackImage, byte[] bytes, String description, boolean status, LocalDate createDate, boolean report, Date reportDate, Long aLong, String s, Long aLong1, String s1, Long aLong2, Set<Long> playlist, Set<Long> comments, Set<Long> likes) {
+    }
 }

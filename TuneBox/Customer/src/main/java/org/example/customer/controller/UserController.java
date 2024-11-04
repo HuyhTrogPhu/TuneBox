@@ -1,238 +1,261 @@
 package org.example.customer.controller;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
-import org.example.library.dto.ChangePasswordRequestDto;
-import org.example.library.dto.RequestSignUpModel;
-import org.example.library.dto.UserDto;
-import org.example.library.model.RespondModel;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.customer.config.JwtUtil;
+import org.example.library.dto.*;
+import org.example.library.model.Genre;
+import org.example.library.model.InspiredBy;
+import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
-import org.example.library.service.UserService;
+import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService UserService;
 
     @Autowired
-    private UserRepository Repo;
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserInformationService userInformationService;
+
+    @Autowired
+    private TalentService talentService;
+
+    @Autowired
+    private GenreService genreService;
+
+    @Autowired
+    private InspiredByService inspiredByService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
 
-    //LOGIN
-    @PostMapping("/log-in")
-    public ResponseEntity<?> login(@RequestBody UserDto user) {
-        Map<String, Object> response = new HashMap<>();
+    @Autowired
+    private JwtUtil jwtUtil;
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+    // Register
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("name") String name,
+            @RequestParam("talent") List<Long> talents,
+            @RequestParam("genre") List<Long> genres,
+            @RequestParam("inspiredBy") List<Long> inspiredBys,
+            @RequestParam("image") MultipartFile image) {
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+
+        // Mã hóa mật khẩu
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // Gọi service để thực hiện đăng ký
+        UserDto userDto = new UserDto(userName, email, encodedPassword, talents, genres, inspiredBys);
+        UserInformationDto userInformationDto = new UserInformationDto(name);
+
+        UserDto registeredUser = userService.register(userDto, userInformationDto, image);
+        return ResponseEntity.ok(registeredUser);
+    }
+
+
+    // get list talents
+    @GetMapping("/list-talent")
+    public ResponseEntity<List<Talent>> listTalent() {
+        List<Talent> talentList = talentService.findAll();
+        return ResponseEntity.ok(talentList);
+    }
+
+    // get list genres
+    @GetMapping("/list-genre")
+    public ResponseEntity<List<GenreDto>> listGenre() {
+        List<GenreDto> genreList = genreService.findAll();
+        List<GenreDto> genreDtoList = genreList.stream()
+                .map(genre -> new GenreDto(genre.getId(), genre.getName()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(genreDtoList);
+    }
+
+    // get list name genre
+    @GetMapping("/listNameGenre")
+    public ResponseEntity<List<GenreUserDto>> listNameGenre() {
         try {
-            UserDto loggedInUser = UserService.Login(user);
-
-            response.put("status", true);
-            response.put("message", "Đăng nhập thành công");
-            response.put("data", loggedInUser);
+            List<GenreUserDto> listNameGenres = genreService.findNameGenre();
+            return ResponseEntity.ok(listNameGenres);
         } catch (Exception e) {
-            response.put("status", false);
-            response.put("message", e.getMessage());
-            response.put("data", null);
-        }
-        return ResponseEntity.ok(response);
-    }
-
-
-    //FORGOT PASSWORD
-    @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody  UserDto user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        try {
-            UserService.ForgotPassword(user);
-
-            return ResponseEntity.ok("Email reset password đã được gửi đến địa chỉ của bạn");
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    // RESET PASSWORD
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody UserDto user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        try {
-            UserService.resetPassword(user.getToken(), user.getNewPassword());
-
-            return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công");
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+    // get list inspired by
+    @GetMapping("/list-inspired-by")
+    public ResponseEntity<List<InspiredBy>> listInspiredBy() {
+        List<InspiredBy> inspiredByList = inspiredByService.findAll();
+        return ResponseEntity.ok(inspiredByList);
     }
 
-//Change Password
-    @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestdto) {
+    // Login
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> login(@RequestBody UserLoginDto userLoginDto) {
+        Optional<UserLoginDto> optionalUser = userRepository.findByUserNameOrEmail(userLoginDto.getUserName(), userLoginDto.getEmail());
 
-        //encode
-        changePasswordRequestdto.setOldPassword(passwordEncoder.encode(changePasswordRequestdto.getOldPassword()));
-        changePasswordRequestdto.setNewPassword(passwordEncoder.encode(changePasswordRequestdto.getNewPassword()));
-        try {
-            UserService.changePassword(changePasswordRequestdto.getEmail(),
-                    changePasswordRequestdto.getOldPassword(),
-                    changePasswordRequestdto.getNewPassword());
-            return ResponseEntity.ok("Mật khẩu đã được thay đổi thành công");
-        } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-    }
+        if (optionalUser.isPresent()) {
+            UserLoginDto user = optionalUser.get();
 
+            if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        try {
+                // Lấy tên vai trò từ đối tượng RoleDto
+                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
-            if (!Repo.existsById(id)) {
-                return ResponseEntity.badRequest().body("Không tìm thấy người dùng với ID này.");
-            }
-            Repo.deleteById(id);
-
-            return ResponseEntity.ok("Người dùng đã được xóa thành công.");
-        } catch (Exception ex) {
-            return ResponseEntity.status(500).body("Lỗi khi xóa người dùng: " + ex.getMessage());
-        }
-    }
-
-
-
-//    @GetMapping("/login/oauth2/success")
-//    public ResponseEntity<?> loginWithGoogle(Authentication authentication) {
-//        Map<String, Object> response = new HashMap<>();
-//
-//        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication is required");
-//        }
-//
-//        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-//
-//        // Kiểm tra oauth2User có phải null hay không
-//        if (oauth2User == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OAuth2 User is not found");
-//        }
-//
-//        String email = oauth2User.getAttribute("email");
-//        String name = oauth2User.getAttribute("name");
-//
-//        if (email == null || name == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email or name not found");
-//        }
-//
-//        UserDto userDto = UserService.loginWithGoogle(email, name);
-//
-//        response.put("status", true);
-//        response.put("message", "Đăng nhập thành công");
-//        response.put("data", userDto);
-//
-//        return ResponseEntity.ok(response);
-//    }
-
-
-    @PostMapping("/sign-up")
-    public ResponseEntity<?> Register(@RequestBody RequestSignUpModel requestSignUpModel,
-                                      HttpServletRequest request
-    ) {
-
-        String psEncode =passwordEncoder.encode(requestSignUpModel.getUserDto().getPassword());
-        requestSignUpModel.getUserDto().setPassword(psEncode);
-        RespondModel response = new RespondModel();
-        try {
-            response.setMessage("Đăng ký thành công");
-            response.setData(UserService.Register(requestSignUpModel));
-
-            response.setStatus(true);
-            HttpSession session = request.getSession(true);
-            session.setAttribute("userId", requestSignUpModel.getUserDto().getId());
-        } catch (Exception ex) {
-            response.setMessage(ex.getMessage());
-            response.setData(null);
-            response.setStatus(false);
-        }
-        return ResponseEntity.ok(response);
-    }
-    @GetMapping("/get/{id}")
-    public ResponseEntity<?> GetUser(@PathVariable("id") Long UserId){
-        Map<String, Object> response = new HashMap<>();
-
-        try {
-            response.put("status", true);
-            response.put("message", "Succesfull");
-
-            response.put("data", UserService.findById(UserId));
-
-        } catch (Exception ex) {
-            response.put("status", false);
-            response.put("message", "Fail");
-            response.put("data", null);
-        }
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/session")
-    public ResponseEntity<?> getSessionData(HttpServletRequest request) {
-        Map<String, Object> response = new HashMap<>();
-
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Object userId = session.getAttribute("userId");
-            if (userId != null) {
-                response.put("status", true);
-                response.put("message", "Dữ liệu session được tìm thấy");
-                response.put("data", userId);
+                // Tạo JWT token với username và role
+                String jwtToken = jwtUtil.generateToken(user.getUserName(), role);
+                Map<String, Object> response = new HashMap<>();
+                response.put("userId", user.getId());
+                response.put("token", jwtToken);
+                return ResponseEntity.ok(response);
             } else {
-                response.put("status", false);
-                response.put("message", "Không tìm thấy user ID trong session");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            response.put("status", false);
-            response.put("message", "Session không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
-        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/check")
-    public ResponseEntity<String> check(@RequestBody RequestSignUpModel requestSignUpModel) {
+
+
+    // Phương thức để lấy userId từ cookie
+    private String getUserIdFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if ("userId".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User ID not found in cookie");
+    }
+
+    // Get user avatar by userId
+    @GetMapping("/{userId}/avatar")
+    public ResponseEntity<String> getUserAvatar(@PathVariable Long userId) {
         try {
-
-            UserService.CheckLogin(requestSignUpModel);
-
-            return ResponseEntity.ok("Check completed successfully");
-        } catch (ResponseStatusException ex) {
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason()); // Use getStatusCode()
+            String avatar = userService.getUserAvatar(userId);
+            return ResponseEntity.ok(avatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error getting user avatar");
         }
     }
 
+    // get user profile by userId
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserProfileDto> getProfileUser(@PathVariable Long userId) {
+        try {
+            UserProfileDto profileUser = userService.getProfileUserById(userId);
+            return ResponseEntity.ok(profileUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // log-out
+    @GetMapping("/log-out")
+    public ResponseEntity<String> logOut(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    // get user information in profile page
+    @GetMapping("/{userId}/settingProfile")
+    public ResponseEntity<ProfileSettingDto> getUserInformation(@PathVariable Long userId) {
+        try {
+            ProfileSettingDto userInfo = userService.getUserProfileSetting(userId);
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // get follower and following user by user id
+    @GetMapping("/{userId}/followCount")
+    public ResponseEntity<Optional<UserFollowDto>> getFollowCount(@PathVariable Long userId) {
+        try {
+            Optional<UserFollowDto> followCount = userService.getUserFollowById(userId);
+            return ResponseEntity.ok(followCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
+        }
+    }
+    @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+        userService.updateUserProfile(userId, userUpdateRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam String keyword) {
+        try {
+            // Gọi các phương thức tìm kiếm từ service
+            List<SearchDto> userResults = userService.searchUser("%" + keyword + "%");
+            List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
+            List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
+            List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
+
+            // In ra dữ liệu kết quả tìm kiếm
+            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
+            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
+            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
+            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
+
+            // Tạo response chứa tất cả kết quả
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", userResults);
+            response.put("tracks", trackResults);
+            response.put("albums", albumResults);
+            response.put("playlists", playlistResults);
+
+            // Trả về phản hồi thành công với kết quả tìm kiếm
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Xử lý lỗi và trả về phản hồi lỗi
+            return ResponseEntity.internalServerError().body("Error retrieving search results: " + e.getMessage());
+        }
+    }
 
 
 }
