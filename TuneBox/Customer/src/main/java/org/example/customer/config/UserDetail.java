@@ -12,12 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class CustomerDetail implements UserDetails {
+public class UserDetail implements UserDetails {
 
     private final User user;
 
     // Constructor nhận User
-    public CustomerDetail(User user) {
+    public UserDetail(User user) {
         this.user = user;
     }
 

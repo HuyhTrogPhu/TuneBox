@@ -2,10 +2,11 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.example.library.dto.CategoryDto;
+import org.example.library.dto.InstrumentAccordingTo;
 import org.example.library.dto.InstrumentDto;
+import org.example.library.dto.InstrumentSalesDto;
+import org.example.library.dto.StatisticalInstrumentDto;
 import org.example.library.mapper.InstrumentMapper;
 import org.example.library.model.Brand;
 import org.example.library.model.CategoryIns;
@@ -14,13 +15,13 @@ import org.example.library.repository.BrandRepository;
 import org.example.library.repository.CategoryInsRepository;
 import org.example.library.repository.InstrumentRepository;
 import org.example.library.service.InstrumentService;
-import org.example.library.utils.ImageUploadInstrument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +42,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final ImageUploadInstrument imageUploadInstrument;
 
     @Override
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image) {
@@ -54,7 +54,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 //                instrument.setImage(Base64.getEncoder().encodeToString(image.getBytes()));
 //            }
             Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
-            String imageUrl  = (String) uploadResult.get("url");
+            String imageUrl = (String) uploadResult.get("url");
             instrumentDto.setImage(imageUrl);
 
             Instrument instrument = new Instrument();
@@ -118,7 +118,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 //                } else {
 //                    throw new RuntimeException("Failed to upload the image");
 //                }
-                if (instrument.getImage() != null){
+                if (instrument.getImage() != null) {
                     String publicId = extractPublicIdFromUrl(instrument.getImage());
                     cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
                 }
@@ -151,7 +151,7 @@ public class InstrumentServiceImpl implements InstrumentService {
         instrumentRepository.save(instrument);
     }
 
-    public CategoryIns getManagedCategory(Long id){
+    public CategoryIns getManagedCategory(Long id) {
         return categoryInsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
     }
@@ -174,9 +174,162 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<StatisticalInstrumentDto> getIdAndNameInstrument() {
+        return instrumentRepository.getStatisticalInstruments();
+    }
+
+    @Override
     public List<InstrumentDto> getInstrumentByCategoryIdAndBrandId(Long categoryId, Long brandId) {
         List<Instrument> instruments = instrumentRepository.getInstrumentByCategoryIdAndBrandId(categoryId, brandId);
         return instruments.stream().map(InstrumentMapper::mapperInstrumentDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheMostOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheMostOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfDay() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfDay();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfWeek() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfWeek();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentSalesDto> instrumentSalesTheLeastOfMonth() {
+        try {
+            return instrumentRepository.getInstrumentSalesTheLeastOfMonth();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfDay(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfDay(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfWeek(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfWeek(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfMonth(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfMonth(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+
+    }
+
+    @Override
+    public Double getRevenueInstrumentOfYear(Long instrumentId) {
+        try {
+            return instrumentRepository.getTotalRevenueInstrumentOfYear(instrumentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByDay(LocalDate date) {
+        return instrumentRepository.getInstrumentAccordingToDay(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetween(LocalDate startDate, LocalDate endDate) {
+        return instrumentRepository.getInstrumentBetween(startDate, endDate);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByWeek(LocalDate date) {
+        return instrumentRepository.getInstrumentByWeek(date);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return instrumentRepository.getInstrumentBetweenWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByMonth(int year, int month) {
+        return instrumentRepository.getInstrumentsByMonth(year, month);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenMonth(int year, int monthStart, int monthEnd) {
+        return instrumentRepository.getInstrumentsBetweenMonths(year, monthStart, monthEnd);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentByYear(int year) {
+        return instrumentRepository.getInstrumentByYear(year);
+    }
+
+    @Override
+    public List<InstrumentAccordingTo> getListInstrumentBetweenYear(int yearStart, int yearEnd) {
+        return instrumentRepository.getInstrumentBetweenYears(yearStart, yearEnd);
     }
 
 

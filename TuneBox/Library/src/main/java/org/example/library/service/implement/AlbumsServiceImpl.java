@@ -3,16 +3,10 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.AlbumsDto;
-import org.example.library.dto.TrackDto;
 import org.example.library.mapper.AlbumsMapper;
-import org.example.library.mapper.TrackMapper;
 import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.AlbumsService;
-import org.example.library.service.TrackService;
-import org.example.library.utils.ImageUploadAlbums;
-import org.example.library.utils.ImageUploadTrack;
-import org.example.library.utils.Mp3UploadTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +39,6 @@ public class AlbumsServiceImpl implements AlbumsService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ImageUploadAlbums imageUploadAlbums;
 
     @Autowired
     private Cloudinary cloudinary;
