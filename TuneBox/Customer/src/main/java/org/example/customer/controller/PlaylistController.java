@@ -36,7 +36,6 @@ public class PlaylistController {
     public ResponseEntity<PlaylistDto> createPlaylist(@RequestParam("title") String title, @RequestParam("imagePlaylist") MultipartFile imagePlaylist,
                                                     @RequestParam("description") String description,
                                                     @RequestParam("status") boolean status,
-
                                                     @RequestParam("report") boolean report, @RequestParam("user") Long userId, @RequestParam("type") String type,
                                                     @RequestParam(value = "trackIds", required = false) List<Long> trackIds) {
         Set<Long> trackIdSet = new HashSet<>(trackIds);

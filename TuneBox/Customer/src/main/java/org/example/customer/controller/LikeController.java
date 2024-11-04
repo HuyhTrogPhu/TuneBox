@@ -59,6 +59,23 @@ public class LikeController {
         }
     }
 
+    @PostMapping("/addAlbums")
+    public ResponseEntity<LikeDto> addLikeAlbum(@RequestBody LikeDto likeDto) {
+        try {
+            // Kiểm tra nếu likeDto không hợp lệ
+            if (likeDto.getUserId() == null || (likeDto.getAlbumId() == null)) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            // Thêm like
+            LikeDto createdLikeDto = likeService.addLikeAlbum(likeDto.getUserId(), likeDto.getAlbumId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdLikeDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
                                            @RequestParam(required = false) Long postId,
@@ -84,6 +101,19 @@ public class LikeController {
         }
     }
 
+    //    delete like album
+    @DeleteMapping("/removeAlbum")
+    public ResponseEntity<Void> removeLikeAlbum(@RequestParam Long userId,
+                                           @RequestParam Long albumId
+    ) {
+        try {
+            likeService.removeLikeAlbum(userId, albumId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Hoặc mã lỗi khác tùy vào trường hợp
+        }
+    }
+
     @GetMapping("/post/{postId}/count")
     public ResponseEntity<Long> getLikesCountByPostId(@PathVariable Long postId) {
         long count = likeService.countLikesByPostId(postId);
@@ -99,6 +129,12 @@ public class LikeController {
     @GetMapping("/playlist/{playlistId}/count")
     public ResponseEntity<Long> getLikesCountByPlaylistId(@PathVariable Long playlistId) {
         long count = likeService.countLikesByPlaylistId(playlistId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/album/{albumId}/count")
+    public ResponseEntity<Long> getLikesCountByAlbums(@PathVariable Long albumId) {
+        long count = likeService.countLikesByAlbumId(albumId);
         return ResponseEntity.ok(count);
     }
 
@@ -129,6 +165,12 @@ public class LikeController {
     @GetMapping("/playlist/{playlistId}/user/{userId}")
     public ResponseEntity<Boolean> checkUserLikePlaylist(@PathVariable Long playlistId, @PathVariable Long userId) {
         boolean hasLiked = likeService.checkUserLikePlaylist(playlistId, userId);
+        return ResponseEntity.ok(hasLiked);
+    }
+
+    @GetMapping("/album/{albumId}/user/{userId}")
+    public ResponseEntity<Boolean> checkUserLikeAlbums(@PathVariable Long albumId, @PathVariable Long userId) {
+        boolean hasLiked = likeService.checkUserLikeAlbum(albumId, userId);
         return ResponseEntity.ok(hasLiked);
     }
 

@@ -123,7 +123,10 @@ public class AlbumsServiceImpl implements AlbumsService {
             if (savedAlbum != null) {
                 System.out.println("Album saved successfully with ID: " + savedAlbum.getId());
             }
-
+            System.out.println("User ID: " + userId);
+            System.out.println("Genre ID: " + genreId);
+            System.out.println("Album Style ID: " + albumstyleId);
+            System.out.println("Album before save: " + albums);
             return AlbumsMapper.mapperAlbumsDto(albums);
 
         }catch (Exception e) {
@@ -230,7 +233,7 @@ public class AlbumsServiceImpl implements AlbumsService {
         }
     }
 
-//    trích xuất Public ID từ URL của hình ảnh đã được tải lên Cloudinary
+    //    trích xuất Public ID từ URL của hình ảnh đã được tải lên Cloudinary
     private String extractPublicIdFromUrl(String imageUrl) {
         // Tách publicId từ URL hình ảnh
         String[] parts = imageUrl.split("/"); //sẽ chia URL thành một mảng các phần, mỗi phần được phân tách bởi dấu /.

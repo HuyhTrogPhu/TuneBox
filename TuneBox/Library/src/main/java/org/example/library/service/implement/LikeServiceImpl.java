@@ -29,6 +29,8 @@ public class LikeServiceImpl implements LikeService {
     private LikeServiceImpl likeService;
     @Autowired
     private PlaylistRepository playlistRepository;
+    @Autowired
+    private AlbumsRepository albumsRepository;
 
     @Autowired
     public LikeServiceImpl(LikeRepository likeRepository, PostRepository postRepository, UserRepository userRepository, TrackRepository trackRepository) {
@@ -89,17 +91,44 @@ public class LikeServiceImpl implements LikeService {
         if (playlistId != null) {
             Playlist list = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
 
-            // Kiểm tra xem người dùng đã thích bài viết này chưa
+            // Kiểm tra xem người dùng đã thích
             if (likeRepository.existsByUserAndPlaylist(user, list)) {
                 throw new RuntimeException("User already liked this playlist");
             }
             System.out.println("list: " + list);
             like.setPlaylist(list);
-            // Thêm logic gửi thông báo khi có người thích bài viết
-//            notificationService.sendLikeNotification(user, list);
+
 
         } else {
             throw new RuntimeException("Not found Playlist and user");
+        }
+
+        like.setCreateDate(LocalDate.now());
+        likeRepository.save(like);
+
+        return LikeMapper.toDto(like);
+    }
+
+    @Override
+    public LikeDto addLikeAlbum(Long userId, Long albumId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        Like like = new Like();
+        like.setUser(user);
+
+        // Nếu có postId -> tìm bài viết
+        if (albumId != null) {
+            Albums album = albumsRepository.findById(albumId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+
+            // Kiểm tra xem người dùng đã thích hay chuưa
+            if (likeRepository.existsByUserAndAlbums(user, album)) {
+                throw new RuntimeException("User already liked this album");
+            }
+            System.out.println("album: " + album);
+            like.setAlbums(album);
+
+        } else {
+            throw new RuntimeException("Not found album and user");
         }
 
         like.setCreateDate(LocalDate.now());
@@ -154,7 +183,30 @@ public class LikeServiceImpl implements LikeService {
                     .orElseThrow(() -> new RuntimeException("Like not found"));
         }  else {
             // Nếu cả postId và trackId đều không có
-            throw new RuntimeException("not found PostId and TrackID");
+            throw new RuntimeException("not found playlist");
+        }
+
+        // Xóa like
+        likeRepository.delete(like);
+    }
+
+    @Override
+    public void removeLikeAlbum(Long userId, Long albumID) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Like like;
+
+        if (albumID != null) {
+            // Nếu postId có giá trị, kiểm tra like cho post
+            Albums album = albumsRepository.findById(albumID)
+                    .orElseThrow(() -> new RuntimeException("playlist not found"));
+
+            like = likeRepository.findByUserAndAlbums(user, album)
+                    .orElseThrow(() -> new RuntimeException("Like not found"));
+        }  else {
+            // Nếu cả postId và trackId đều không có
+            throw new RuntimeException("not found album");
         }
 
         // Xóa like
@@ -175,6 +227,10 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.countByplaylistId(playlistId);
     }
 
+    @Override
+    public long countLikesByAlbumId(Long albumId) {
+        return likeRepository.countByAlbumsId(albumId);
+    }
 
     @Override
     public List<LikeDto> getLikesByPostId(Long postId) {
@@ -214,6 +270,13 @@ public class LikeServiceImpl implements LikeService {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Playlist playlist = playlistRepository.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
         return likeRepository.existsByUserAndPlaylist(user, playlist);
+    }
+
+    @Override
+    public boolean checkUserLikeAlbum(Long albumId, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Albums album = albumsRepository.findById(albumId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+        return likeRepository.existsByUserAndAlbums(user, album);
     }
 
     @Override
