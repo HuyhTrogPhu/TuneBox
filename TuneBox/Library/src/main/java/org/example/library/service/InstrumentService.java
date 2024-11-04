@@ -60,5 +60,6 @@ public interface InstrumentService {
     // get revenue instrument of year by instrumentId
     Double getRevenueInstrumentOfYear(Long instrumentId);
 
+    Integer getInstrumentQuantityById(Long id);
 }
 

@@ -207,6 +207,12 @@ public class InstrumentServiceImpl implements InstrumentService {
         }
 
     }
+    @Override
+    public Integer getInstrumentQuantityById(Long id) {
+        Instrument instrument = instrumentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Instrument not found"));
+        return instrument.getQuantity(); // Trả về số lượng nhạc cụ
+    }
 
     @Override
     public List<InstrumentSalesDto> instrumentSalesTheMostOfMonth() {
