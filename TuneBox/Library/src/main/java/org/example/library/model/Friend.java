@@ -1,22 +1,25 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.library.model_enum.FriendStatus;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "friends")
+@Table(name = "friends", indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_friend_id", columnList = "friend_id")
+})
 public class Friend {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -29,6 +32,6 @@ public class Friend {
 
     private boolean accepted; // Trạng thái chấp nhận
 
-    private String status; // Trạng thái lời mời (ví dụ: "pending", "declined")
-
+    @Enumerated(EnumType.STRING)
+    private FriendStatus status;
 }

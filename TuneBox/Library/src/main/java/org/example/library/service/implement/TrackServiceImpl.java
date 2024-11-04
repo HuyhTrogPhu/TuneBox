@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -120,7 +121,7 @@ public class TrackServiceImpl implements TrackService {
             // Thiết lập thông tin còn lại cho track
             track.setCreator(user);
             track.setGenre(genre);
-            track.setCreateDate(LocalDate.now());
+            track.setCreateDate(LocalDateTime.now());
             track.setStatus(false); // Trạng thái mặc định
             track.setReport(false); // Báo cáo mặc định
             track.setAlbums(null); // Album mặc định

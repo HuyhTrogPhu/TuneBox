@@ -1,9 +1,7 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.FriendAcceptDto;
-import org.example.library.dto.FriendRequestDTO;
-import org.example.library.model.Friend;
-import org.example.library.model.User;
+import org.example.library.dto.FriendRequestDto;
 import org.example.library.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/friends")
@@ -49,15 +48,16 @@ public class FriendController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<String> checkFriendStatus(@RequestParam Long userId, @RequestParam Long friendId) {
-        String status = friendService.checkFriendStatus(userId, friendId);
+    public ResponseEntity<Map<String, Object>> checkFriendStatus(@RequestParam Long userId, @RequestParam Long friendId) {
+        Map<String, Object> status = friendService.checkFriendStatus(userId, friendId);
         return ResponseEntity.ok(status);
     }
 
     @GetMapping("/requests/{userId}")
-    public List<FriendRequestDTO> getFriendRequests(@PathVariable Long userId) {
-        return friendService.getPendingFriendRequests(userId);
+    public List<FriendRequestDto> getFriendRequests(@PathVariable Long userId) {
+        return friendService.getFriendRequests(userId);
     }
+
     // get friends of user other
     @GetMapping("/list/{userId}")
     public ResponseEntity<?> getFriends(@PathVariable Long userId) {

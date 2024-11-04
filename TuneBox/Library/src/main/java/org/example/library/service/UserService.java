@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
 import org.example.library.model.User;
 import org.example.library.model.UserInformation;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -28,6 +29,9 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
+//    void changePassword(String email, String oldPassword, String newPassword);
+
+    UserDto getUserById(Long userId);
     // get user in profile page
     ProfileSettingDto getUserProfileSetting(Long userId);
 
@@ -53,6 +57,22 @@ public interface UserService {
 
     // get user details ecommerce customer page
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
+
+    // get user sell the most
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    UserSell getTop1UserRevenueInfo();
+
+
+    // get user buy the least
+    List<UserSell> getUserBuyTheLeast();
+
+    // get top 1 user buy the least
+    UserSell getTop1UserBuyTheLeast();
+
+    // get user not sell
+    List<UserSell> getUserNotSell();
 
     List<UserDto> findAllUser();
 
@@ -89,4 +109,7 @@ public interface UserService {
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 
 
+    void updateAvatar(Long userId, MultipartFile image);
+
+    void updateBackground(Long userId, MultipartFile image);
 }

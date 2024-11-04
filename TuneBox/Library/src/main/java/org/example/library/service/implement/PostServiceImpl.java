@@ -15,8 +15,10 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -111,11 +113,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostsByUserId(Long userId) {
-        List<Post> posts = postRepository.findByUserId(userId);  // Lấy tất cả các bài đăng của userId
-        return posts.stream()
-                .map(PostMapper::toDto)  // Chuyển đổi từ Post entity sang PostDto
-                .collect(Collectors.toList());
+    public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
+        List<Post> posts;
+
+        // Lấy thông tin người dùng từ userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        // Kiểm tra xem người dùng hiện tại có phải là chủ sở hữu của trang cá nhân không
+        if (user.getUserName().equals(currentUsername)) {
+            // Nếu là chủ sở hữu, lấy tất cả bài viết
+            posts = postRepository.findByUserId(userId);
+        } else {
+            // Nếu không phải, chỉ lấy các bài viết không bị ẩn
+            posts = postRepository.findByUserIdAndHidden(userId, false);
+        }
+
+        return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -163,6 +177,7 @@ public class PostServiceImpl implements PostService {
             }
             post.setImages(postImages); // Gán tập hình ảnh mới vào bài viết
         }
+        post.setEdited(true); // Đánh dấu bài viết đã được thay đổi
 
         // Lưu bài viết đã cập nhật vào database
         Post updatedPost = postRepository.save(post);
@@ -274,8 +289,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post findPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bài viết không tồn tại"));
     }
+    @Override
+    public void save(Post post) {
+        postRepository.save(post);
+    }
+
     @Override
     public PostDto findPostByIdadmin(Long id) {
         Post post = postRepository.findById(id)
@@ -299,6 +320,17 @@ public class PostServiceImpl implements PostService {
         return postCountMap;
     }
 
+
+
+    @Override
+    public boolean userCanToggleHidden(Long postId, String username) {
+        // Tìm bài viết bằng ID
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Bài viết không tồn tại"));
+
+        // Kiểm tra xem người dùng có phải là tác giả của bài viết hay không
+        return post.getUser().getUserName().equals(username);
+    }
 
 
 }

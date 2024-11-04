@@ -20,9 +20,8 @@ public interface PostService {
 
     List<PostDto> getAllPosts(Long currentUserId);
 
-    public List<PostDto> get5Posts();
-
-    List<PostDto> getPostsByUserId(Long userId);
+     List<PostDto> get5Posts();
+    List<PostDto> getPostsByUserId(Long userId, String currentUsername);
 
     public PostDto getPostById(Long PostId);
 
@@ -37,6 +36,9 @@ public interface PostService {
 
     List<Post> getFilteredPosts(Long currentUserId);
 
+    PostDto getPostByPostId(Long postId);
+
+    void save(Post post);
 
     //ADMIN
     PostDto findPostByIdadmin(Long id);
@@ -53,7 +55,7 @@ public interface PostService {
 
     List<PostDto> searchPostsByKeyword(String keyword);
 
-    PostDto getPostByPostId(Long postId);
+    boolean userCanToggleHidden(Long postId, String username);
 
 //    PostDto createPost(PostDto postDto);
  Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate);

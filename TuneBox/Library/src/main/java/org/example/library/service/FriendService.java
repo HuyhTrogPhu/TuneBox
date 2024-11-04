@@ -1,9 +1,10 @@
 package org.example.library.service;
 
 import org.example.library.dto.FriendAcceptDto;
-import org.example.library.dto.FriendRequestDTO;
+import org.example.library.dto.FriendRequestDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FriendService {
     Long sendFriendRequest(Long userId, Long friendId);
@@ -15,9 +16,9 @@ public interface FriendService {
 
     List<FriendAcceptDto> getFriends(Long userId);
 
-    String checkFriendStatus(Long userId, Long friendId);
+    Map<String, Object> checkFriendStatus(Long userId, Long friendId);
 
-    List<FriendRequestDTO> getPendingFriendRequests(Long userId);
+    List<FriendRequestDto> getFriendRequests(Long userId);
 
     Long countFriends(Long userId);
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,4 +19,6 @@ public class UserLoginDto {
     private String userName;
 
     private String password;
+
+    private RoleDto role;
 }

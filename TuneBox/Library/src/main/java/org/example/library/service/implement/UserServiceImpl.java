@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
-       return userRepository.findAccountSettingProfile(userId);
+        return userRepository.findAccountSettingProfile(userId);
     }
 
     @Override
@@ -237,6 +237,40 @@ public class UserServiceImpl implements UserService {
                     return new UserDto(user.getId(), user.getUserName());
                 })
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserSell> getUserSellTheMost() {
+        return userRepository.getUserSellTheMost();
+    }
+
+    @Override
+    public UserSell getTop1UserRevenueInfo() {
+        List<UserSell> topUser = userRepository.getUserSellTheMost();
+        if (!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<UserSell> getUserBuyTheLeast() {
+        return userRepository.getUserBuyTheLeast();
+    }
+
+    @Override
+    public UserSell getTop1UserBuyTheLeast() {
+        List<UserSell> topUser = userRepository.getUserBuyTheLeast();
+        if(!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserSell> getUserNotSell() {
+        return userRepository.getUserNotSell();
     }
 
 
@@ -390,6 +424,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateAvatar(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
+        }
+    }
+
+        @Override
     public List<SearchDto> searchTrack(String keyword) {
         return userRepository.searchTrack(keyword);
     }
@@ -429,4 +478,24 @@ public class UserServiceImpl implements UserService {
 
         return userCountMap;
     }
+    @Override
+    public void updateBackground(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+
+            // Tải lên hình ảnh lên Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Cập nhật URL hình nền
+            userInformation.setBackground(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading background image to Cloudinary", e);
+        }
+    }
+
+
 }
