@@ -13,6 +13,7 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserInformationService userInformationService;
+    private OrderService orderService;
 
     @Autowired
     private TalentService talentService;
@@ -236,12 +237,6 @@ public class UserController {
             List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
             List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
 
-            // In ra dữ liệu kết quả tìm kiếm
-            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
-            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
-            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
-            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
-
             // Tạo response chứa tất cả kết quả
             Map<String, Object> response = new HashMap<>();
             response.put("users", userResults);
@@ -257,5 +252,16 @@ public class UserController {
         }
     }
 
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 }
