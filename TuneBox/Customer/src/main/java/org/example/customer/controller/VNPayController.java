@@ -6,8 +6,11 @@ import jakarta.servlet.http.HttpSession;
 import org.example.customer.config.VNPayConfig;
 import org.example.library.dto.OrderDto;
 import org.example.library.dto.PaymentRestDTO;
+import org.example.library.dto.UserCheckOut;
+import org.example.library.service.EmailService;
 import org.example.library.service.OrderService;
 import org.example.library.service.implement.OrderServiceImpl;
+import org.example.library.service.implement.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +21,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -28,6 +33,10 @@ public class VNPayController {
     private OrderService orderService;
     @Autowired
     private OrderServiceImpl orderServiceImpl;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private UserServiceImpl userService;
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment(@RequestBody  OrderDto orderDto, @CookieValue(value = "userId", required = false) String userIdCookie
             , HttpServletRequest request) throws UnsupportedEncodingException {
@@ -88,6 +97,23 @@ public class VNPayController {
         query.append("&vnp_SecureHash=").append(URLEncoder.encode(vnp_SecureHash, StandardCharsets.US_ASCII.toString()));
         String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + query.toString();
 
+        //gửi mail xác nhan
+        UserCheckOut userCheckOut = userService.getUserCheckoutInfo(userId);
+        String orderDetailUrl = "http://localhost:3000/orderDetail/" + createdOrder.getOrderId();
+        String subject = "Xác nhận đơn hàng #" + createdOrder.getOrderId();
+        String body = "Xin chào " + userCheckOut.getUserName() + ",\n\n"
+                + "Cảm ơn bạn đã đặt hàng tại TuneBox. Đây là thông tin đơn hàng của bạn:\n"
+                + "Mã đơn hàng: " + createdOrder.getOrderId() + "\n"
+                + "Tổng tiền: " + NumberFormat.getCurrencyInstance(new Locale("vi", "VN")).format(createdOrder.getTotalPrice()) + "\n"
+                + "Ngày đặt: " + createdOrder.getOrderDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "\n"
+                +  "Chi tiết hóa đơn: " + orderDetailUrl + "\n"
+                + "Vui lòng truy cập vào VNPay để hoàn tất thanh toán tại link sau: " + paymentUrl + "\n"
+                + "\nXin cảm ơn!";
+
+        emailService.sendOrderConfirmationEmail(userCheckOut.getEmail(), subject, body);
+
+
+        // trả về url thanh toán cho fe
         PaymentRestDTO paymentRestDTO = new PaymentRestDTO();
         paymentRestDTO.setStatus("OK");
         paymentRestDTO.setMessage("Successfully");

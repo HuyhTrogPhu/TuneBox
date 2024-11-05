@@ -3,10 +3,9 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.Genre;
-import org.example.library.model.InspiredBy;
-import org.example.library.model.Talent;
+import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -36,9 +34,6 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserInformationService userInformationService;
 
     @Autowired
     private TalentService talentService;
@@ -52,8 +47,10 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
-
+    @Autowired
+    private UserInformationService userInformationService;
+    @Autowired
+    private JwtUtil jwtUtil;
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -128,10 +125,15 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-                // Trả về userId thay vì toàn bộ thông tin user
-                Long userId = user.getId();
-                System.out.println("userId: " + userId);
-                return ResponseEntity.ok(userId);
+                // Lấy tên vai trò từ đối tượng RoleDto
+                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
+
+                // Tạo JWT token với username và role
+                String jwtToken = jwtUtil.generateToken(user.getUserName(), role);
+                Map<String, Object> response = new HashMap<>();
+                response.put("userId", user.getId());
+                response.put("token", jwtToken);
+                return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
@@ -139,6 +141,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
+
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
@@ -177,17 +180,12 @@ public class UserController {
 
     // log-out
     @GetMapping("/log-out")
-    public ResponseEntity<String> logOut(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            Cookie cookie = new Cookie("userId", null);
-            cookie.setMaxAge(0); // Thiết lập tuổi thọ cookie về 0 để xóa
-            cookie.setPath("/");  // Đảm bảo xóa cookie cho toàn bộ domain
-            response.addCookie(cookie);
-            return ResponseEntity.ok("Logged out successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error logging out");
-        }
+    public ResponseEntity<String> logOut(HttpServletResponse response) {
+        Cookie cookie = new Cookie("Authorization", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     // get user information in profile page
@@ -199,6 +197,19 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // get user in account page
+    @GetMapping("/{userId}/accountSetting")
+    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
+        try {
+            AccountSettingDto userAccount = userService.getAccountSetting(userId);
+            return ResponseEntity.ok(userAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -249,5 +260,63 @@ public class UserController {
         }
     }
 
+    @PostMapping("/users/{userId}/background")
+    public ResponseEntity<?> updateBackground(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateBackground(userId, image);
+        return ResponseEntity.ok("Background updated successfully.");
+    }
+    @PutMapping("/{userId}/avatar")
+    public ResponseEntity<Void> updateAvatar(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateAvatar(userId, image);
+        return ResponseEntity.ok().build();
+    }
+    // Cập nhật giới tính
+    @PutMapping("/{userId}/gender")
+    public ResponseEntity<String> setGender(@PathVariable Long userId, @RequestBody String newGender) {
+        try {
+            String sanitizedGender = newGender.replace("\"", ""); // Xóa dấu ngoặc kép
+            userService.updateGender(userId, sanitizedGender);
+            return ResponseEntity.ok("Giới tính đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating gender");
+        }
+    }
+    // Cập nhật ngày sinh
+    @PutMapping("/{userId}/birthday")
+    public ResponseEntity<String> setBirthday(@PathVariable Long userId, @RequestBody String newBirthday) {
+        try {
+            // Làm sạch chuỗi ngày sinh bằng cách loại bỏ dấu nháy đôi
+            newBirthday = newBirthday.replace("\"", "").trim();
 
+            // Chuyển đổi chuỗi thành Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date birthday = dateFormat.parse(newBirthday);
+
+            userService.updateBirthday(userId, birthday); // Cập nhật ngày sinh
+            return ResponseEntity.ok("Ngày sinh đã thay đổi thành công");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Ngày sinh không hợp lệ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating birthday");
+        }
+    }
+    @PutMapping("/{userId}/email")
+    public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestBody EmailUpdateRequest emailUpdateRequest) {
+        try {
+            userService.updateEmail(userId, emailUpdateRequest.getNewEmail()); // Sử dụng getNewEmail từ DTO
+            return ResponseEntity.ok("Email đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
+        }
+    }
+
+    @GetMapping("/not-followed/{userId}")
+    public ResponseEntity<List<UserNameAvatarUsernameDto>> getUsersNotFollowed(@PathVariable Long userId) {
+        List<UserNameAvatarUsernameDto> users = userService.getUsersNotFollowed(userId);
+        return ResponseEntity.ok(users);
+    }
 }

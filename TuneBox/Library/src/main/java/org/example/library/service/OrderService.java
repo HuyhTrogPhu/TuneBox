@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.library.dto.*;
 import org.example.library.model.Order;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -17,4 +18,24 @@ public interface OrderService {
     OrderDto createOrder(OrderDto orderDto, Long userId);
 
     OrderDetailInfoDto getOrderDetailByOrderId(Long orderId);
+
+    void updateOrderStatus(Long orderId, String status, LocalDate deliveryDate, String paymentStatus );
+
+
+    Double revenueOfDay();
+
+    Double revenueOfWeek();
+
+    Double revenueOfMonth();
+
+    Double revenueOfYear();
+
+    Double revenueBeforeOfDay();
+
+    Double revenueBeforeOfWeek();
+
+    Double revenueBeforeOfMonth();
+
+    Double revenueBeforeOfYear();
+
 }

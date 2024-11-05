@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class Track {
     private boolean status;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDate createDate = LocalDate.now();
+    private LocalDateTime createDate;
 
     private boolean report;
 

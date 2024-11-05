@@ -13,16 +13,13 @@ public class PostMapper {
         dto.setId(post.getId());
         dto.setHidden(post.isHidden());
         dto.setContent(post.getContent());
-        dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
+        dto.setUserId(post.getUser() != null ? post.getUser().getId() : null);
         dto.setAvatar(post.getUser().getUserInformation().getAvatar());
-        // Kiểm tra post.getUser() không null trước khi lấy userName
         dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
-
-        dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
+        dto.setImages(PostImageMapper.toDtoSet(post.getImages()));
         dto.setCreatedAt(post.getCreatedAt());
         return dto;
     }
-
 
     public static Post toEntity(PostDto postDto) {
         if (postDto == null) return null;
@@ -31,8 +28,9 @@ public class PostMapper {
         entity.setId(postDto.getId());
         entity.setHidden(postDto.isHidden());
         entity.setContent(postDto.getContent());
-        entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
+        entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));
         entity.setCreatedAt(postDto.getCreatedAt());
         return entity;
     }
 }
+

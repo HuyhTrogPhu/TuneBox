@@ -17,7 +17,7 @@ public interface PostService {
 
     List<PostDto> getAllPosts(Long currentUserId);
 
-    List<PostDto> getPostsByUserId(Long userId);
+    List<PostDto> getPostsByUserId(Long userId, String currentUsername);
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
@@ -30,6 +30,9 @@ public interface PostService {
 
     List<Post> getFilteredPosts(Long currentUserId);
 
+    PostDto getPostByPostId(Long postId);
+
+    void save(Post post);
 
     //ADMIN
     PostDto findPostByIdadmin(Long id);
@@ -46,7 +49,7 @@ public interface PostService {
 
     List<PostDto> searchPostsByKeyword(String keyword);
 
-    PostDto getPostByPostId(Long postId);
+    boolean userCanToggleHidden(Long postId, String username);
 
 //    PostDto createPost(PostDto postDto);
 

@@ -13,29 +13,31 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Report {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private LocalDate createDate = LocalDate.now();
 
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "track_id", nullable = true)
+    private Track track;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id", nullable = true)
+    private Albums album;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
     private String reason;
+    private LocalDate createDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ReportStatus status;
 
-    @Column(columnDefinition = "TEXT")
-    private String notes;
+    private String type;
 }

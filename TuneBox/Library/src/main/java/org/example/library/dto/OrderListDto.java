@@ -32,4 +32,6 @@ public class OrderListDto {
     private String shippingMethod;
 
 
+    private String paymentStatus;
+
 }
