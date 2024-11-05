@@ -1,7 +1,5 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.example.library.model_enum.ReportStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -29,15 +26,22 @@ public class Report {
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "track_id", nullable = true)
+    private Track track;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id", nullable = true)
+    private Albums album;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
-    @Column(nullable = false)
     private String reason;
+//    private LocalDate createDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ReportStatus status;
 
     @Column(columnDefinition = "TEXT")
@@ -47,4 +51,5 @@ public class Report {
 
     private String description;
 
+    private String type;
 }

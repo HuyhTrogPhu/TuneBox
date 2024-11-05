@@ -3,6 +3,7 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.springframework.data.domain.Pageable;
 import org.example.library.model.User;
@@ -126,4 +127,9 @@ public interface UserService {
 
     // list user sell between years
     List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
+    void updateAvatar(Long userId, MultipartFile image);
+
+    void updateBackground(Long userId, MultipartFile image);
+
+    List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
 }

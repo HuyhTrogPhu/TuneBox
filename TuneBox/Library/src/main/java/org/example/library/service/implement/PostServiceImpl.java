@@ -3,20 +3,24 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
-import org.example.library.dto.ReportDto;
+import org.example.library.dto.PostReportDto;
 import org.example.library.mapper.PostMapper;
+import org.example.library.mapper.PostReportMapper;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
-import org.example.library.model.Report;
+import org.example.library.model.PostReport;
 import org.example.library.model.User;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.PostRepository;
 import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,7 +44,8 @@ public class PostServiceImpl implements PostService {
         this.reportRepository = reportRepository;
         this.cloudinary = cloudinary;
     }
-
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
@@ -95,6 +100,7 @@ public class PostServiceImpl implements PostService {
         return PostMapper.toDto(savedPost);
     }
 
+
     @Override
     public List<PostDto> getAllPosts(Long currentUserId) {
         // Retrieve all posts excluding those from blocked users or users who have blocked the current user
@@ -105,11 +111,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostsByUserId(Long userId) {
-        List<Post> posts = postRepository.findByUserId(userId);  // Lấy tất cả các bài đăng của userId
-        return posts.stream()
-                .map(PostMapper::toDto)  // Chuyển đổi từ Post entity sang PostDto
-                .collect(Collectors.toList());
+    public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
+        List<Post> posts;
+
+        // Lấy thông tin người dùng từ userId
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+
+        // Kiểm tra xem người dùng hiện tại có phải là chủ sở hữu của trang cá nhân không
+        if (user.getUserName().equals(currentUsername)) {
+            // Nếu là chủ sở hữu, lấy tất cả bài viết
+            posts = postRepository.findByUserId(userId);
+        } else {
+            // Nếu không phải, chỉ lấy các bài viết không bị ẩn
+            posts = postRepository.findByUserIdAndHidden(userId, false);
+        }
+
+        return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
@@ -161,6 +179,7 @@ public class PostServiceImpl implements PostService {
         return PostMapper.toDto(updatedPost);
     }
 
+
     @Override
     public void deletePost(Long id) {
         // Kiểm tra xem bài viết có tồn tại không
@@ -193,33 +212,13 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
-
-    @Override
-    public long countTotalPosts() {
-        return postRepository.count(); // Sử dụng phương thức count() của PostRepository
-    }
-
-    @Override
-    public Post findThisPostById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-    }
-
-
-    @Override
-    public PostDto findPostById(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-        return PostMapper.toDto(post);
-    }
-
-
     @Override
     public List<PostDto> findAllPosts() {
         List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
         return posts.stream()
                 .map(post -> {
                     PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                    postDto.setUserNickname(post.getUser().getUserName()); // Lấy tên người dùng
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
                     return postDto; // Trả về PostDto đã được thiết lập userName
                 })
                 .collect(Collectors.toList());
@@ -231,7 +230,7 @@ public class PostServiceImpl implements PostService {
         return newPosts.stream()
                 .map(post -> {
                     PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                    postDto.setUserNickname(post.getUser().getUserName()); // Lấy tên người dùng
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
                     return postDto; // Trả về PostDto đã được thiết lập userName
                 })
                 .collect(Collectors.toList());
@@ -239,10 +238,20 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<Post> getFilteredPosts(Long currentUserId) {
-        return postRepository.findPostsExcludingBlockedUsers(currentUserId);
+    public long countTotalPosts() {
+        return postRepository.count(); // Sử dụng phương thức count() của PostRepository
     }
-//        List<Post> reportedPosts = postRepository.findReportedPosts(); // Lấy các bài viết bị báo cáo
+
+    @Override
+    public List<PostDto> searchPostsByKeyword(String keyword) {
+        // Tìm bài viết theo từ khóa
+        List<Post> posts = postRepository.findByKeyword(keyword);
+
+        // Chuyển đổi danh sách Post thành PostDto
+        return posts.stream()
+                .map(PostMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<ReportDto> getReportedPosts() {
@@ -265,15 +274,6 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
-
-    @Override
-    public PostDto findPostByIdadmin(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
-        return PostMapper.toDto(post);
-    }
-
-
     @Override
     public PostDto getPostByPostId(Long postId) {
         // Tìm bài viết bằng postId
@@ -283,5 +283,39 @@ public class PostServiceImpl implements PostService {
         // Chuyển đổi bài viết sang DTO
         return PostMapper.toDto(post);
     }
+
+
+    @Override
+    public List<Post> getFilteredPosts(Long currentUserId) {
+        return postRepository.findPostsExcludingBlockedUsers(currentUserId);
+    }
+
+    @Override
+    public Post findPostById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Bài viết không tồn tại"));
+    }
+    @Override
+    public void save(Post post) {
+        postRepository.save(post);
+    }
+
+    @Override
+    public PostDto findPostByIdadmin(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        return PostMapper.toDto(post);
+    }
+
+    @Override
+    public boolean userCanToggleHidden(Long postId, String username) {
+        // Tìm bài viết bằng ID
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Bài viết không tồn tại"));
+
+        // Kiểm tra xem người dùng có phải là tác giả của bài viết hay không
+        return post.getUser().getUserName().equals(username);
+    }
+
 
 }

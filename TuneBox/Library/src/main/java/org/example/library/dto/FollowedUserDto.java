@@ -9,12 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FriendRequestDTO {
+public class FollowedUserDto {
     private Long id;
-    private Long requesterId;
-    private String requesterName;
-    private String requesterUserNickName;
-    private String requesterAvatar;
-
-
+    private String userName;
+    private String email;
+    private String avatar;
+    private boolean isFollowing;
 }

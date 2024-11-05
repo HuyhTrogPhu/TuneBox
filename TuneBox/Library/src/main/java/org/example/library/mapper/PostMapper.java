@@ -3,6 +3,7 @@ package org.example.library.mapper;
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
 
+
 public class PostMapper {
 
     public static PostDto toDto(Post post) {
@@ -12,16 +13,10 @@ public class PostMapper {
         dto.setId(post.getId());
         dto.setHidden(post.isHidden());
         dto.setContent(post.getContent());
-        dto.setUserId(post.getUser() != null ? post.getUser().getId() : null); // Lấy ID người dùng
-
-        // Thêm kiểm tra null cho UserInformation
-        dto.setUserNickname(post.getUser() != null && post.getUser().getUserInformation() != null ?
-                post.getUser().getUserInformation().getName() : null);
+        dto.setUserId(post.getUser() != null ? post.getUser().getId() : null);
         dto.setAvatar(post.getUser().getUserInformation().getAvatar());
-        // Kiểm tra post.getUser() không null trước khi lấy userName
-//        dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
-
-        dto.setImages(PostImageMapper.toDtoSet(post.getImages()));  // Ánh xạ thủ công cho Set PostImage
+        dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
+        dto.setImages(PostImageMapper.toDtoSet(post.getImages()));
         dto.setCreatedAt(post.getCreatedAt());
 //        dto,setDescription(post.getDescription());
         dto.setLikeCount(post.getLikes().size());
@@ -37,9 +32,8 @@ public class PostMapper {
         entity.setId(postDto.getId());
         entity.setHidden(postDto.isHidden());
         entity.setContent(postDto.getContent());
-        entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));  // Ánh xạ thủ công cho Set PostImageDto
+        entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));
         entity.setCreatedAt(postDto.getCreatedAt());
-//        entity.setDescription(postDto.getDescription());
         return entity;
     }
 }

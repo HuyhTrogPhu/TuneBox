@@ -1,72 +1,74 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
-import org.example.library.dto.ReportDto3;
 import org.example.library.model.Post;
-import org.example.library.model_enum.ReportStatus;
+import org.example.library.model.User;
+import org.example.library.repository.ReportRepository;
+import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+
+
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000",
-        allowCredentials = "true",
-        allowedHeaders = {"Content-Type", "Accept"},
-        methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE}
-)@RequestMapping("/api/reports")
+@RequestMapping("/api/reports")
 public class ReportController {
 
     @Autowired
     private ReportService reportService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<ReportDto3> createReport(
-            @RequestBody ReportDto3 reportDto,
-            @CookieValue(value = "userId", defaultValue = "0") Long currentUserId
+    public ResponseEntity<ReportDto> createReport(
+            @RequestBody ReportDto reportDto,
+            @RequestHeader(value = "Authorization", required = false) String token // Lấy JWT token từ header
     ) {
-        // Kiểm tra nếu userId từ cookie không hợp lệ
-        if (currentUserId == 0) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu không có token hoặc token không hợp lệ
         }
 
-        System.out.println("Payload received: " + reportDto);
+        String jwt = token.substring(7); // Loại bỏ phần "Bearer "
+        String username = jwtUtil.extractUsername(jwt);
 
-        System.out.println("cookies: " + currentUserId);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        // Kiểm tra xem bài viết có tồn tại hay không
-        if (reportDto.getPost() == null) {
-            return ResponseEntity.badRequest().body(null);
+        if (!jwtUtil.validateToken(jwt, userDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu JWT không hợp lệ
         }
 
-        Post post = postService.findThisPostById(reportDto.getPost().getReportedId());
-        if (post == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Kiểm tra lý do báo cáo
+        // Kiểm tra các điều kiện khác và tạo báo cáo
         if (reportDto.getReason() == null || reportDto.getReason().isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        // Set userId hiện tại cho reportDto
-        reportDto.setUserId(currentUserId);
-
-        // Tiến hành tạo báo cáo
-        ReportDto3 createdReport = reportService.createReport(reportDto);
+        reportDto.setUserId(user.getId());
+        ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
 
-    @GetMapping("/{id}")
+        @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);
         return ResponseEntity.ok(reportDto);
@@ -76,6 +78,23 @@ public class ReportController {
     public ResponseEntity<List<ReportDto>> getAllReports() {
         List<ReportDto> reportDtos = reportService.getAllReports();
         return ResponseEntity.ok(reportDtos);
+    }
+
+    @GetMapping("/check")
+
+    public ResponseEntity<Map<String, Boolean>> checkReportExists(
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long postId,
+            @RequestParam(required = false) Long trackId,
+            @RequestParam(required = false) Long albumId,
+            @RequestParam String type) {
+        boolean exists = reportService.checkReportExists(userId, postId, trackId, albumId, type);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
+    }
+
+
     }
 
     @GetMapping("/pending")
@@ -120,31 +139,3 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
-
-    @PutMapping("/{reportId}/dismiss")
-    public ResponseEntity<Report2Dto> dismissReport(
-            @PathVariable Long reportId,
-            @RequestParam(required = false) String reason
-    ) {
-        try {
-            Report2Dto dismissedReport = reportService.dismissReport(reportId, reason);
-            return ResponseEntity.ok(dismissedReport);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    // Xử lý báo cáo
-//    @PutMapping("/{reportId}/process")
-//    public ResponseEntity<ReportDto> processReport(
-//            @PathVariable Long reportId,
-//            @RequestBody ReportProcessRequest request
-//    ) {
-//        try {
-//            ReportDto processedReport = reportService.processReport(reportId, request);
-//            return ResponseEntity.ok(processedReport);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
-}

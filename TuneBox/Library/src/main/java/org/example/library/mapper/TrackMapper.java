@@ -22,6 +22,7 @@ public class TrackMapper {
         Set<Long> albumIds = track.getAlbums() != null ?
                 track.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) : null;
 
+
         return new TrackDto(
                 track.getId(),
                 track.getName(),
@@ -35,6 +36,8 @@ public class TrackMapper {
                 track.getGenre() != null ? track.getGenre().getId() : null,
                 track.getGenre() != null ? track.getGenre().getName() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
+                track.getCreator() != null ? track.getCreator().getUserInformation().getAvatar() : null,
+                track.getCreator() != null ? track.getCreator().getUserInformation().getName() : null,
                 track.getCreator() != null ? track.getCreator().getUserName() : null,
                 albumIds,  // Chuyển albumIds vào đây
                 playlist,
