@@ -14,18 +14,20 @@ import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
+
+import static org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames.CLIENT_ID;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -86,6 +88,7 @@ public class UserController {
         UserDto registeredUser = userService.register(userDto, userInformationDto, image);
         return ResponseEntity.ok(registeredUser);
     }
+
 
 
     // get list talents

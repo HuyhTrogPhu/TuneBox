@@ -4,11 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cập nhật jwt, phân quyen">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat backend phan qantity">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserIsInvoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserIsInvoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/OrderRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +80,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -187,6 +202,8 @@
       <workItem from="1730292403906" duration="3141000" />
       <workItem from="1730344770684" duration="1693000" />
       <workItem from="1730528897629" duration="5259000" />
+      <workItem from="1730720304797" duration="9698000" />
+      <workItem from="1730773591374" duration="3261000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
