@@ -16,4 +16,18 @@ public class EmailService {
         message.setText(body);
         mailSender.send(message);
     }
+
+    public void sendVerificationCode(String email, String verificationCode) {
+        String subject = "Mã xác nhận đổi mật khẩu";
+        String body = "Mã xác nhận của bạn là: " + verificationCode;
+        sendOrderConfirmationEmail(email, subject, body); // Gọi lại phương thức đã có để gửi email
+    }
+
+    public void sendPasswordResetLink(String email, String resetPasswordLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Đặt lại mật khẩu của bạn");
+        message.setText("Nhấp vào liên kết sau để đổi mật khẩu của bạn: " + resetPasswordLink);
+        mailSender.send(message);
+    }
 }
