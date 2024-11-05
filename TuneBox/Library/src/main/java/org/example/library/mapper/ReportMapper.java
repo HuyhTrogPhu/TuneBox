@@ -1,6 +1,6 @@
 package org.example.library.mapper;
 
-import org.example.library.dto.ReportDto;
+import org.example.library.dto.*;
 import org.example.library.model.*;
 import org.springframework.stereotype.Component;
 

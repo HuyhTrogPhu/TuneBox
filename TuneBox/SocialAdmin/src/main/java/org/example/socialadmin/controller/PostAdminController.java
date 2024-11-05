@@ -63,7 +63,7 @@ public class PostAdminController {
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
         try {
-            PostDto post = postService.findPostById(id);
+            PostDto post = postService.findPostByIdadmin(id);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

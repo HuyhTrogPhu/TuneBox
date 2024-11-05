@@ -1,14 +1,18 @@
 package org.example.library.service.implement;
 
+import org.example.library.Exception.ResourceNotFoundException;
+import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
 import org.example.library.mapper.ReportMapper;
 import org.example.library.model.*;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.*;
+import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -36,6 +40,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private PostService postService;
 
     @Override
     public boolean checkReportExists(Long userId, Long postId, Long trackId, Long albumId, String type) {

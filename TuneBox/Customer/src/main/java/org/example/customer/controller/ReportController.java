@@ -1,5 +1,7 @@
 package org.example.customer.controller;
 
+import org.example.customer.config.JwtUtil;
+import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
 import org.example.library.model.User;
@@ -30,6 +32,7 @@ public class ReportController {
     private ReportService reportService;
     @Autowired
     private PostService postService;
+
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -51,7 +54,7 @@ public class ReportController {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (!jwtUtil.validateToken(jwt, userDetails)) {
+        if (!jwtUtil.validateToken(jwt,userDetails)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu JWT không hợp lệ
         }
 
@@ -92,9 +95,6 @@ public class ReportController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", exists);
         return ResponseEntity.ok(response);
-    }
-
-
     }
 
     @GetMapping("/pending")
@@ -139,3 +139,6 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+}
+
+
