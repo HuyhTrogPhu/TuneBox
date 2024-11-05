@@ -25,35 +25,38 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
 
-        String username = null;
-        String jwt = null;
+        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api")) {
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
-        }
+            String authorizationHeader = request.getHeader("Authorization");
+            String username = null;
+            String jwt = null;
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                jwt = authorizationHeader.substring(7);
+                if (jwt != null && !jwt.trim().isEmpty()) {
+                    username = jwtUtil.extractUsername(jwt);
+                }
+            }
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
-                String role = jwtUtil.extractRole(jwt);
-                System.out.println("Role from JWT: " + role); // In ra vai trò từ token
+                if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
+                    String role = jwtUtil.extractRole(jwt);
+                    System.out.println("Role from JWT: " + role); // In ra vai trò từ token
 
-                // Kiểm tra quyền từ UserDetails
-                System.out.println("User authorities: " + userDetails.getAuthorities());
+                    // Kiểm tra quyền từ UserDetails
+                    System.out.println("User authorities: " + userDetails.getAuthorities());
 
-                // Chỉ sử dụng một lần để lưu vào SecurityContext
-                var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                System.out.println("Invalid JWT token");
+                    // Chỉ sử dụng một lần để lưu vào SecurityContext
+                    var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    System.out.println("Invalid JWT token");
+                }
             }
         }
-
 
         chain.doFilter(request, response);
     }

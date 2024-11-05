@@ -38,8 +38,14 @@ public class JwtUtil {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        try {
+            return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            System.out.println("Invalid JWT token: " + e.getMessage());
+            return null;
+        }
     }
+
     public String extractRole(String token) {
         return extractAllClaims(token).get("role", String.class);  // Lấy thông tin vai trò
     }

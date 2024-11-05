@@ -39,6 +39,8 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        System.out.println("Payload received: " + reportDto);
+
         System.out.println("cookies: " + currentUserId);
 
         // Kiểm tra xem bài viết có tồn tại hay không

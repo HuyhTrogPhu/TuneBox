@@ -288,6 +288,20 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
     @Override
     @Transactional
     public void updateBirthday(Long userId, Date birthday) {

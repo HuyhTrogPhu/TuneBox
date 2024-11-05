@@ -30,7 +30,7 @@ public interface UserService {
 
 //    void changePassword(String email, String oldPassword, String newPassword);
 
-    List<UserDto> findAllUser();
+    List<UserDto> findAllUsers();
 
     List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
 
