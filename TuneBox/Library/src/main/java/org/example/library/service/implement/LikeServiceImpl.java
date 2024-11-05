@@ -162,4 +162,11 @@ public class LikeServiceImpl implements LikeService {
         return liked.stream().map(LikeMapper::toPlayListDto).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Post> getLikedPostsByUser(Long userId) {
+        List<Like> likes = likeRepository.findByUserId(userId);
+        return likes.stream()
+                .map(Like::getPost)
+                .collect(Collectors.toList());
+    }
 }

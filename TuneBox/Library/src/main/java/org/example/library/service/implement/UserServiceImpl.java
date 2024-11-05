@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -470,6 +471,19 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Error uploading background image to Cloudinary", e);
         }
     }
+    @Override
+    public List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId) {
+        List<User> usersNotFollowed = userRepository.findUsersNotFollowedBy(userId);
 
+        return usersNotFollowed.stream().map(user -> {
+            String avatar = user.getUserInformation() != null ? user.getUserInformation().getAvatar() : null;
+            return new UserNameAvatarUsernameDto(
+                    user.getId(),
+                    user.getUserName(),
+                    avatar,
+                    user.getUserInformation() != null ? user.getUserInformation().getName() : null
+            );
+        }).collect(Collectors.toList());
+    }
 
 }

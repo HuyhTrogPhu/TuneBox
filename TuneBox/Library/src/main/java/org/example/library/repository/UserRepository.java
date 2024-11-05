@@ -176,4 +176,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
 
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
+
+
 }

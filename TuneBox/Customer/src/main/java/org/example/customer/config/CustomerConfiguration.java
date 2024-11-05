@@ -56,7 +56,7 @@ public class CustomerConfiguration {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
-                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/api/**","/user/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .anyRequest().authenticated()

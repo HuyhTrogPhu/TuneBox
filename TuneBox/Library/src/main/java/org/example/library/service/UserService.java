@@ -3,6 +3,7 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,4 +104,6 @@ public interface UserService {
     void updateAvatar(Long userId, MultipartFile image);
 
     void updateBackground(Long userId, MultipartFile image);
+
+    List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
 }

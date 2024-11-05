@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.Genre;
-import org.example.library.model.InspiredBy;
-import org.example.library.model.Talent;
-import org.example.library.model.UserInformation;
+import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -273,5 +269,54 @@ public class UserController {
     public ResponseEntity<Void> updateAvatar(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
         userService.updateAvatar(userId, image);
         return ResponseEntity.ok().build();
+    }
+    // Cập nhật giới tính
+    @PutMapping("/{userId}/gender")
+    public ResponseEntity<String> setGender(@PathVariable Long userId, @RequestBody String newGender) {
+        try {
+            String sanitizedGender = newGender.replace("\"", ""); // Xóa dấu ngoặc kép
+            userService.updateGender(userId, sanitizedGender);
+            return ResponseEntity.ok("Giới tính đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating gender");
+        }
+    }
+    // Cập nhật ngày sinh
+    @PutMapping("/{userId}/birthday")
+    public ResponseEntity<String> setBirthday(@PathVariable Long userId, @RequestBody String newBirthday) {
+        try {
+            // Làm sạch chuỗi ngày sinh bằng cách loại bỏ dấu nháy đôi
+            newBirthday = newBirthday.replace("\"", "").trim();
+
+            // Chuyển đổi chuỗi thành Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date birthday = dateFormat.parse(newBirthday);
+
+            userService.updateBirthday(userId, birthday); // Cập nhật ngày sinh
+            return ResponseEntity.ok("Ngày sinh đã thay đổi thành công");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Ngày sinh không hợp lệ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating birthday");
+        }
+    }
+    @PutMapping("/{userId}/email")
+    public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestBody EmailUpdateRequest emailUpdateRequest) {
+        try {
+            userService.updateEmail(userId, emailUpdateRequest.getNewEmail()); // Sử dụng getNewEmail từ DTO
+            return ResponseEntity.ok("Email đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
+        }
+    }
+
+    @GetMapping("/not-followed/{userId}")
+    public ResponseEntity<List<UserNameAvatarUsernameDto>> getUsersNotFollowed(@PathVariable Long userId) {
+        List<UserNameAvatarUsernameDto> users = userService.getUsersNotFollowed(userId);
+        return ResponseEntity.ok(users);
     }
 }
