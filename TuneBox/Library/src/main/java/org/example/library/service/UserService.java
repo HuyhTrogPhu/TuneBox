@@ -52,6 +52,22 @@ public interface UserService {
     // get user details ecommerce customer page
     UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId);
 
+    // get user sell the most
+    List<UserSell> getUserSellTheMost();
+
+    // get top 1 user sell the most
+    UserSell getTop1UserRevenueInfo();
+
+
+    // get user buy the least
+    List<UserSell> getUserBuyTheLeast();
+
+    // get top 1 user buy the least
+    UserSell getTop1UserBuyTheLeast();
+
+    // get user not sell
+    List<UserSell> getUserNotSell();
+
     List<UserDto> findAllUser();
 
     @Transactional
@@ -80,4 +96,27 @@ public interface UserService {
     public List<SearchDto> searchTrack(String keyword);
     public List<SearchDto> searchUser(String keyword);
 
+    // list user sell by day
+    List<UserSell> getUserSellTheMostDay(LocalDate date);
+
+    // list user between days
+    List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by week
+    List<UserSell> getUserSellByWeek(LocalDate startDate);
+
+    // list user between weeks
+    List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by month
+    List<UserSell> getUserSellByMonth(int year, int month);
+
+    // list user sell between months
+    List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth);
+
+    // list user sell by year
+    List<UserSell> getUserSellByYear(int year);
+
+    // list user sell between years
+    List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
 }

@@ -26,7 +26,8 @@ public class Notification {
 
     private LocalDateTime createdAt;
 
-    private boolean isRead = false;
+    @Column(name = "is_read")
+    private boolean read = false;
 
     private Long postId;
 }

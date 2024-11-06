@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="search, list like Feed">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AlbumsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AlbumsController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PlaylistController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PlaylistController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,6 +181,7 @@
         <item itemvalue="Application.CustomerApplication" />
         <item itemvalue="JUnit.All in DuAnTotNghiep" />
         <item itemvalue="Application.CustomerApplication" />
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
       </list>
     </recent_temporary>
   </component>
@@ -241,7 +245,19 @@
       <workItem from="1730084218466" duration="16761000" />
       <workItem from="1730120733397" duration="10792000" />
       <workItem from="1730145320645" duration="585000" />
-      <workItem from="1730178792192" duration="3023000" />
+      <workItem from="1730178792192" duration="5648000" />
+      <workItem from="1730208208516" duration="27000" />
+      <workItem from="1730259940810" duration="9406000" />
+      <workItem from="1730309010977" duration="6352000" />
+      <workItem from="1730321658245" duration="9503000" />
+      <workItem from="1730346240746" duration="682000" />
+      <workItem from="1730348112995" duration="2052000" />
+      <workItem from="1730350527778" duration="5012000" />
+      <workItem from="1730389635579" duration="654000" />
+      <workItem from="1730427959887" duration="6697000" />
+      <workItem from="1730518684825" duration="6835000" />
+      <workItem from="1730570426684" duration="3041000" />
+      <workItem from="1730689967221" duration="1776000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -331,7 +347,39 @@
       <option name="project" value="LOCAL" />
       <updated>1730137559936</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="update">
+      <option name="closed" value="true" />
+      <created>1730193183788</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1730193183788</updated>
+    </task>
+    <task id="LOCAL-00013" summary="update tiep">
+      <option name="closed" value="true" />
+      <created>1730247755628</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1730247755628</updated>
+    </task>
+    <task id="LOCAL-00014" summary="update tiep">
+      <option name="closed" value="true" />
+      <created>1730272058677</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1730272058677</updated>
+    </task>
+    <task id="LOCAL-00015" summary="update">
+      <option name="closed" value="true" />
+      <created>1730348253713</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1730348253713</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +409,9 @@
     <MESSAGE value="merge" />
     <MESSAGE value="list post liked" />
     <MESSAGE value="search, list like Feed" />
-    <option name="LAST_COMMIT_MESSAGE" value="search, list like Feed" />
+    <MESSAGE value="update tiep" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

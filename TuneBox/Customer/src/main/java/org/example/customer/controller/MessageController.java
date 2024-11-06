@@ -1,7 +1,6 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.MessageDTO;
-import org.example.library.dto.UserDto;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
 import org.example.library.service.MessageService;

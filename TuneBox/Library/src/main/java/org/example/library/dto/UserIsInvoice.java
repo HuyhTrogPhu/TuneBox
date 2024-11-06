@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserIsInvoice {
-
+    private Long id;
     private LocalDate orderDate;
 
     private LocalDate deliveryDate;

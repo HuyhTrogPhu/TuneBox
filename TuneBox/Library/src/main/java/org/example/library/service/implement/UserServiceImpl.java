@@ -12,6 +12,7 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("CUSTOMER"));
+            user.setRole(roleRepository.findByName("ECOMADMIN"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -218,7 +219,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
-        return userRepository.findAccountSettingProfile(userId);
+       return userRepository.findAccountSettingProfile(userId);
     }
 
     @Override
@@ -237,6 +238,40 @@ public class UserServiceImpl implements UserService {
                     return new UserDto(user.getId(), user.getUserName());
                 })
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<UserSell> getUserSellTheMost() {
+        return userRepository.getUserSellTheMost();
+    }
+
+    @Override
+    public UserSell getTop1UserRevenueInfo() {
+        List<UserSell> topUser = userRepository.getUserSellTheMost();
+        if (!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+
+    @Override
+    public List<UserSell> getUserBuyTheLeast() {
+        return userRepository.getUserBuyTheLeast();
+    }
+
+    @Override
+    public UserSell getTop1UserBuyTheLeast() {
+        List<UserSell> topUser = userRepository.getUserBuyTheLeast();
+        if(!topUser.isEmpty()) {
+            return topUser.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserSell> getUserNotSell() {
+        return userRepository.getUserNotSell();
     }
 
 
@@ -306,7 +341,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user); // Save changes
     }
-    //updateTalent
+//updateTalent
     public void updateTalent(Long userId, List<Long> talentIds) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -321,7 +356,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user); // Save changes
     }
-    //updateGenre
+//updateGenre
     public void updateGenre(Long userId, List<Long> genreIds) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -388,6 +423,47 @@ public class UserServiceImpl implements UserService {
     public List<SearchDto> searchUser(String keyword) {
         return userRepository.searchUser(keyword);
     }
+
+    @Override
+    public List<UserSell> getUserSellTheMostDay(LocalDate date) {
+        return userRepository.getUserSellTheMostOfDay(date);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellBetweenDate(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByWeek(LocalDate startDate) {
+        return userRepository.getUserSellByWeek(startDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellFromWeekToWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByMonth(int year, int month) {
+        return userRepository.getUserSellsByMonth(year, month);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth) {
+        return userRepository.getUserSellsBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByYear(int year) {
+        return userRepository.getUserSellByYear(year);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenYear(int startYear, int endYear) {
+        return userRepository.getUserSellBetweenYears(startYear, endYear);
+    }
+
 
     @Override
     public List<SearchDto> searchTrack(String keyword) {
