@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface ReportRepository extends JpaRepository<Report, Long> {
 
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Report r WHERE r.user.id = :userId AND "
@@ -21,4 +24,15 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
         boolean existsByUserIdAndPostId(Long userId, Long postId);
         boolean existsByUserIdAndTrackId(Long userId, Long trackId);
         boolean existsByUserIdAndAlbumId(Long userId, Long albumId);
+
+    @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithTracks();
+
+    @Query("SELECT r FROM Report r JOIN r.album t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithAlbum();
+
+
+    @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithPost();
+
 }

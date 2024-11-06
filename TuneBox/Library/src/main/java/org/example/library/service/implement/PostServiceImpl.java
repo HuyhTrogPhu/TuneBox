@@ -306,8 +306,7 @@ public class PostServiceImpl implements PostService {
     public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDateTime, Long> postCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
-
-        // Vòng lặp để đi qua từng ngày
+        //for de lay data
         while (!currentDate.isAfter(endDate)) {
             LocalDateTime startOfDay = currentDate.atStartOfDay();
             LocalDateTime endOfDay = currentDate.atTime(23, 59, 59, 999999999); // Thay đổi tại đây

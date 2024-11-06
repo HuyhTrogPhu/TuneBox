@@ -10,4 +10,6 @@ public interface ReportService {
     ReportDto createReport(ReportDto reportDto);
     ReportDto getReportById(Long id);
     List<ReportDto> getAllReports();
+    ReportDto updateApprove(Long id);
+    ReportDto updateDenied(Long id);
 }

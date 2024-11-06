@@ -247,7 +247,7 @@ public class TrackServiceImpl implements TrackService {
             combinedFuture.join(); // Chờ cho tất cả các tác vụ hoàn thành
 
             // Cập nhật ngày tạo và trạng thái
-            editTrack.setCreateDate(LocalDate.now());
+            editTrack.setCreateDate(LocalDateTime.now());
             editTrack.setStatus(false); // Trạng thái mặc định
             editTrack.setReport(false); // Báo cáo mặc định
             editTrack.setAlbums(null); // Album mặc định

@@ -2,6 +2,7 @@ package org.example.socialadmin.controller;
 
 import org.example.library.dto.CommentDTO;
 import org.example.library.dto.ReplyDto;
+import org.example.library.repository.ReportRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,11 @@ public class StaticSocialAdmin {
     @Autowired
     UserInforService userInforService;
 
+    @Autowired
+    ReportRepository reportRepository;
+
+    @Autowired
+    ReportService reportService;
 
     @GetMapping("/countUser")
     public ResponseEntity<?> getCountUser() {
@@ -390,6 +396,99 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    // thong ke reports
+    @GetMapping("/getTrackReport")
+    public ResponseEntity<?> getTrackReport() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportRepository.findAllReportsWithTracks());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/getAlbumReport")
+    public ResponseEntity<?> getAlbumReport() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportRepository.findAllReportsWithAlbum());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getPostReport")
+    public ResponseEntity<?> getPostReport() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportRepository.findAllReportsWithPost());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    //detail rp for track
+    @GetMapping("/getReport/{id}")
+    public ResponseEntity<?> GetTrackReportById(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportRepository.findById(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    //ban theo rp ID
+    @GetMapping("/ApproveRPTrack/{id}")
+    public ResponseEntity<?> ApproveRPTrack(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateApprove(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    //ban theo rp ID
+    @GetMapping("/DeniedRPTrack/{id}")
+    public ResponseEntity<?> DeniedRPTrack(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateDenied(Id));
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
