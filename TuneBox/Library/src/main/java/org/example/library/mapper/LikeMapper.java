@@ -136,4 +136,18 @@ public class LikeMapper {
         return like;
     }
 
+
+    public static LikeDto toDtoPlaylist(Like like) {
+        LikeDto dto = new LikeDto();
+        dto.setId(like.getId());
+        dto.setCreateDate(like.getCreateDate());
+        dto.setUserId(like.getUser().getId());
+
+        if (like.getPlaylist() != null) {
+            dto.setPlaylistId(like.getPlaylist().getId());
+        }
+
+        return dto;
+    }
+
 }

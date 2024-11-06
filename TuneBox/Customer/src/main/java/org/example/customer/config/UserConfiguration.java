@@ -1,6 +1,6 @@
 package org.example.customer.config;
 
-
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -19,21 +19,23 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "org.example.*")
-public class UserConfiguration {
+public class CustomerConfiguration {
 
     @Autowired
     @Lazy
     private JwtFilter jwtFilter;
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserServiceConfig();
+        return new CustomerServiceConfig();
     }
 
     @Bean
@@ -44,31 +46,27 @@ public class UserConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-
         authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
-        http     .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                    config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowCredentials(true);
-                    config.addAllowedHeader("*");
-                    return config;
-                }))
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Cấu hình CORS
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
-                                "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
-                                "/customer/category/**", "/customer/instrument/**", "/user/**","/api/**",
-                                "/customer/tracks/**", "/customer/albums/", "/customer/playlist/**", "/oauth2/success").permitAll()
-                        .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
-                        .requestMatchers("/e-comAdmin/**").hasRole("ECOMADMIN") // Chỉ cho phép ecomadmin
+                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**").permitAll()
+                        .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
+                        .requestMatchers("/api/**","/user/**").authenticated()
+                        .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
-                        .requestMatchers("/oauth2/**").authenticated()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("http://localhost:3000/", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll()
                 )
 
                 .logout(logout -> logout
@@ -85,12 +83,28 @@ public class UserConfiguration {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sử dụng JWT nên không cần Session
                 )
-                .authenticationManager(authenticationManager);
+                .authenticationManager(authenticationManager)
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint((request, response, authException) -> {
+                                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+                                })
+                );
+
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Cho phép origin của frontend
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Cho phép các method HTTP
+        configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả các header
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
-
-

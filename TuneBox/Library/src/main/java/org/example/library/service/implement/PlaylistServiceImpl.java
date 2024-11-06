@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.AlbumsDto;
 import org.example.library.dto.PlaylistDto;
 import org.example.library.mapper.AlbumsMapper;
@@ -102,7 +103,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public PlaylistDto updatePlaylist(Long PlaylistID, PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId) {
+    public PlaylistDto updatePlaylist(Long PlaylistID, PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId, List<Long> trackIds) {
         try {
 
             Playlist editPlaylist = playlistRepository.findById(PlaylistID).orElseThrow(
@@ -143,18 +144,22 @@ public class PlaylistServiceImpl implements PlaylistService {
             editPlaylist.setStatus(false); // Trạng thái mặc định
             editPlaylist.setReport(false); // Báo cáo mặc định
 
-            // Xử lý danh sách track
-            if (playlistDto.getTracks() != null) {
-                Set<Track> tracks = playlistDto.getTracks().stream()
-                        .map(trackId -> {
-                            // Tìm kiếm track từ cơ sở dữ liệu
-                            Track track = trackRepository.findById(trackId).orElseThrow(
-                                    () -> new RuntimeException("Track not found with ID: " + trackId)
-                            );
-                            return track; // Trả về track đã được quản lý
-                        }).collect(Collectors.toSet());
-                editPlaylist.setTracks(tracks); // Cập nhật danh sách track cho album
+            // Giữ lại track hiện có
+            Set<Track> currentTracks = editPlaylist.getTracks();
+
+            // Thêm track mới vào danh sách
+            if (trackIds != null) {
+                for (Long trackId : trackIds) {
+                    Track track = trackRepository.findById(trackId).orElseThrow(
+                            () -> new RuntimeException("Track not found with ID: " + trackId)
+                    );
+                    currentTracks.add(track);
+                }
             }
+
+            // Cập nhật playlist với các thông tin mới
+            editPlaylist.setTracks(currentTracks);
+
 
             playlistRepository.save(editPlaylist);
 
@@ -213,6 +218,36 @@ public class PlaylistServiceImpl implements PlaylistService {
     public List<PlaylistDto> getAllPlaylist() {
         List<Playlist> playlists = playlistRepository.findAll();
         return playlists.stream().map(PlaylistMapper::mapperPlaylistDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId) {
+        try {
+            // Tìm playlist theo playlistId
+            Playlist playlist = playlistRepository.findById(playlistId).orElseThrow(
+                    () -> new RuntimeException("Playlist not found")
+            );
+
+            // Tìm track theo trackId
+            Track track = trackRepository.findById(trackId).orElseThrow(
+                    () -> new RuntimeException("Track not found with ID: " + trackId)
+            );
+
+            // Xóa track khỏi playlist
+            if (playlist.getTracks().contains(track)) {
+                playlist.getTracks().remove(track);
+                track.getPlaylists().remove(playlist); // Xóa playlist khỏi tập hợp playlists của track
+                playlistRepository.save(playlist); // Lưu cập nhật vào cơ sở dữ liệu
+            } else {
+                throw new RuntimeException("Track not found in the playlist");
+            }
+
+            return PlaylistMapper.mapperPlaylistDto(playlist);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

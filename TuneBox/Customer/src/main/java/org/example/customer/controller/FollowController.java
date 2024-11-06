@@ -1,7 +1,5 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.FollowCountsDto;
-import org.example.library.dto.UserDto;
 import org.example.library.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,9 +58,9 @@ public class FollowController {
         }
     }
     @GetMapping("/{userId}/followers")
-    public ResponseEntity<List<UserDto>> getFollowers(@PathVariable Long userId) {
+    public ResponseEntity<List<FollowedUserDto>> getFollowers(@PathVariable Long userId) {
         try {
-            List<UserDto> followers = followService.getFollowers(userId); // Đảm bảo gọi đúng phương thức
+            List<FollowedUserDto> followers = followService.getFollowers(userId); // Đảm bảo gọi đúng phương thức
             return ResponseEntity.ok(followers);
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,9 +68,9 @@ public class FollowController {
         }
     }
     @GetMapping("/{userId}/following")
-    public ResponseEntity<List<UserDto>> getFollowing(@PathVariable Long userId) {
+    public ResponseEntity<List<FollowedUserDto>> getFollowing(@PathVariable Long userId) {
         try {
-            List<UserDto> following = followService.getFollowing(userId); // Đảm bảo gọi đúng phương thức
+            List<FollowedUserDto> following = followService.getFollowing(userId); // Đảm bảo gọi đúng phương thức
             return ResponseEntity.ok(following);
         } catch (Exception e) {
             e.printStackTrace();

@@ -12,18 +12,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class UserServiceConfig implements UserDetailsService {
+public class CustomerServiceConfig implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        User user = userRepository.findByEmail(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return new UserDetail(user);
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+        System.out.println("User found: " + user.getUserName());  // Log thông tin người dùng
+        return new CustomerDetail(user);
     }
 }
