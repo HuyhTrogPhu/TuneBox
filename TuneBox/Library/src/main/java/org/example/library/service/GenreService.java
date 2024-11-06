@@ -12,6 +12,7 @@ import java.util.List;
 public interface GenreService {
     List<GenreDto> findAll();
 
-    List<GenreUserDto> findNameGenre();
+    List<Genre> findAllGenre();
 
+    List<GenreUserDto> findNameGenre();
 }

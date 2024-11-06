@@ -1,7 +1,17 @@
 package org.example.library.model_enum;
 
 public enum ReportStatus {
-    PENDING,   // Trạng thái báo cáo đang chờ xử lý
-    RESOLVED,  // Trạng thái báo cáo đã được giải quyết
-    DISMISSED  // Trạng thái báo cáo đã bị bác bỏ
+    PENDING("Đang chờ xử lý"),    // Báo cáo mới, chưa được xem xét
+    RESOLVED("Đã xử lý"),         // Đã xử lý và có hành động thích hợp
+    DISMISSED("Đã bác bỏ");     // Báo cáo không hợp lệ
+    private final String description;
+
+
+    ReportStatus(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

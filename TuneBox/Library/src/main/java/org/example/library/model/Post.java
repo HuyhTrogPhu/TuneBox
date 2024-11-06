@@ -42,4 +42,7 @@ public class Post {
     @Column(name = "is_hidden", nullable = false, columnDefinition = "boolean default false")
     private boolean hidden = false;
 
+    private String description;
+
+
 }

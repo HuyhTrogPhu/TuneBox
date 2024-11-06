@@ -5,7 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.*;
+import org.example.library.model.Genre;
+import org.example.library.model.InspiredBy;
+import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -135,10 +143,10 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 
@@ -174,7 +182,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -319,4 +327,11 @@ public class UserController {
         List<UserNameAvatarUsernameDto> users = userService.getUsersNotFollowed(userId);
         return ResponseEntity.ok(users);
     }
+
+    @GetMapping
+    public ResponseEntity<List<ListUserForMessageDto>> getAllUsers() {
+        List<ListUserForMessageDto> users = userService.findAllUserForMessage();
+        return ResponseEntity.ok(users);
+    }
+
 }

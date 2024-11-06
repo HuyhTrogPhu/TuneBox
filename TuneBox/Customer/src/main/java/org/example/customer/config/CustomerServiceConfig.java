@@ -5,14 +5,10 @@ import jakarta.transaction.Transactional;
 import org.example.library.model.User;
 import org.example.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,5 +24,4 @@ public class CustomerServiceConfig implements UserDetailsService {
         System.out.println("User found: " + user.getUserName());  // Log thông tin người dùng
         return new CustomerDetail(user);
     }
-
 }

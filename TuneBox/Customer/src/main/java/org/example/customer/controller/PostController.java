@@ -77,13 +77,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Phương thức lấy tất cả các bài viết
-//    @GetMapping("/all")
-//    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-//        List<PostDto> posts = postService.getAllPosts(currentUserId);
-//        return new ResponseEntity<>(posts, HttpStatus.OK);
-//    }
       @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
         try {

@@ -1,4 +1,3 @@
-
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
@@ -72,8 +71,7 @@ public class TrackMapper {
         track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
         Set<Albums> albums = trackDto.getAlbumIds() != null ?
-                trackDto.getAlbumIds().stream().map(id -> {
-                    Albums album = new Albums();
+                trackDto.getAlbumIds().stream().map(id -> {Albums album = new Albums();
                     album.setId(id);
                     return album;
                 }).collect(Collectors.toSet()) : null;

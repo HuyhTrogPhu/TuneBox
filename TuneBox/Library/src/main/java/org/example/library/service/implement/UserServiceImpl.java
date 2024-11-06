@@ -287,6 +287,36 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+    @Override
+    public List<ListUserForMessageDto> findAllUserForMessage() {
+        // Lấy danh sách tất cả User từ repository
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> {
+                    ListUserForMessageDto dto = new ListUserForMessageDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUserName());
+                    dto.setNickName(user.getUserInformation().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
     @Override
     @Transactional
     public void updateBirthday(Long userId, Date birthday) {
@@ -424,6 +454,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserSell> getUserSellTheMostDay(LocalDate date) {
+        return userRepository.getUserSellTheMostOfDay(date);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellBetweenDate(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByWeek(LocalDate startDate) {
+        return userRepository.getUserSellByWeek(startDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return userRepository.getUserSellFromWeekToWeek(startDate, endDate);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByMonth(int year, int month) {
+        return userRepository.getUserSellsByMonth(year, month);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth) {
+        return userRepository.getUserSellsBetweenMonths(year, startMonth, endMonth);
+    }
+
+    @Override
+    public List<UserSell> getUserSellByYear(int year) {
+        return userRepository.getUserSellByYear(year);
+    }
+
+    @Override
+    public List<UserSell> getUserSellBetweenYear(int startYear, int endYear) {
+        return userRepository.getUserSellBetweenYears(startYear, endYear);
+    }
+
+
+    @Override
     public void updateAvatar(Long userId, MultipartFile image) {
         try {
             User user = userRepository.findById(userId)
@@ -452,6 +523,21 @@ public class UserServiceImpl implements UserService {
     public List<SearchDto> searchPlaylist(String keyword) {
         return userRepository.searchPlaylist(keyword);
     }
+
+    @Override
+    public List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId) {
+        List<User> users = userRepository.findAll();
+        // Lọc bỏ người gửi
+        users = users.stream()
+                .filter(user -> !user.getId().equals(senderId)) // loại bỏ người dùng đã đăng nhập
+                .collect(Collectors.toList());
+        // Chuyển đổi danh sách người dùng thành danh sách UserMessageDTO
+        List<UserMessageDTO> userMessageDTOs = users.stream()
+                .map(user -> new UserMessageDTO(user.getId(), user.getId(), senderId)) // Gán id và senderId
+                .collect(Collectors.toList());
+        return userMessageDTOs;
+    }
+
 
     @Override
     public void updateBackground(Long userId, MultipartFile image) {

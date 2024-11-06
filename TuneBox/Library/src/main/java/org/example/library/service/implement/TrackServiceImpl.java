@@ -2,9 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.TrackDto;
-import org.example.library.dto.UserDto;
 import org.example.library.mapper.TrackMapper;
 import org.example.library.model.Genre;
 import org.example.library.model.Track;
@@ -13,8 +11,6 @@ import org.example.library.repository.GenreRepository;
 import org.example.library.repository.TrackRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.TrackService;
-import org.example.library.utils.ImageUploadTrack;
-import org.example.library.utils.Mp3UploadTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,11 +36,6 @@ public class TrackServiceImpl implements TrackService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ImageUploadTrack imageUploadTrack;
-
-    @Autowired
-    private Mp3UploadTrack mp3UploadTrack;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -290,6 +281,14 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public TrackDto getTrackById(Long trackId) {
+        Track track = trackRepository.findById(trackId).orElseThrow(
+                () -> new RuntimeException("Track not found")
+        );
+        return TrackMapper.mapperTrackDto(track);
+    }
+
+    @Override
+    public TrackDto getTracksById(Long trackId) {
         Track track = trackRepository.findById(trackId).orElseThrow(
                 () -> new RuntimeException("Track not found")
         );

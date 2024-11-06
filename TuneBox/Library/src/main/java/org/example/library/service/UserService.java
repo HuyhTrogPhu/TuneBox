@@ -6,6 +6,7 @@ import org.example.library.dto.*;
 import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.springframework.data.domain.Pageable;
+import org.example.library.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -30,8 +31,10 @@ public interface UserService {
 
 //    void changePassword(String email, String oldPassword, String newPassword);
 
-    UserDto getUserById(Long userId);
-    // get user in profile page
+    List<UserDto> findAllUsers();
+
+    List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
+
     ProfileSettingDto getUserProfileSetting(Long userId);
 
     // Lấy số lượng followers của user
@@ -75,6 +78,8 @@ public interface UserService {
 
     List<UserDto> findAllUser();
 
+    List<ListUserForMessageDto> findAllUserForMessage();
+
     @Transactional
     void updateBirthday(Long userId, Date newBirthday);
 
@@ -101,6 +106,29 @@ public interface UserService {
     public List<SearchDto> searchTrack(String keyword);
     public List<SearchDto> searchUser(String keyword);
 
+    // list user sell by day
+    List<UserSell> getUserSellTheMostDay(LocalDate date);
+
+    // list user between days
+    List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by week
+    List<UserSell> getUserSellByWeek(LocalDate startDate);
+
+    // list user between weeks
+    List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by month
+    List<UserSell> getUserSellByMonth(int year, int month);
+
+    // list user sell between months
+    List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth);
+
+    // list user sell by year
+    List<UserSell> getUserSellByYear(int year);
+
+    // list user sell between years
+    List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
     void updateAvatar(Long userId, MultipartFile image);
 
     void updateBackground(Long userId, MultipartFile image);
