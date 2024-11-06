@@ -3,19 +3,17 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReportDto;
 import org.example.library.mapper.PostMapper;
-import org.example.library.mapper.PostReportMapper;
+import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
-import org.example.library.model.PostReport;
+import org.example.library.model.Report;
 import org.example.library.model.User;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.PostRepository;
 import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -248,22 +246,6 @@ public class PostServiceImpl implements PostService {
         List<Post> trendingPosts = postRepository.findTopTrendingPosts(); // Giả sử bạn đã có phương thức này trong repository
         return trendingPosts.stream()
                 .map(PostMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PostReportDto> findAllReports() {
-        List<PostReport> reports = postRepository.findAllReports(); // Giả sử bạn đã có phương thức này trong repository
-        return reports.stream()
-                .map(report -> new PostReportDto(
-                        report.getId(),
-                        report.getContent(),
-                        report.getReporter(),
-                        report.getReportedPostId(),
-                        report.getReason(),
-                        report.getDateReported(),
-                        PostReportMapper.checkSensitiveContent(report.getContent())
-                ))
                 .collect(Collectors.toList());
     }
 

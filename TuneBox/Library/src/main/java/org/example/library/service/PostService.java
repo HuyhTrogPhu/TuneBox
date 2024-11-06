@@ -50,6 +50,8 @@ public interface PostService {
 
     List<PostDto> findNewPosts(); // Phương thức lấy bài mới
 
+    List<PostDto> findTrendingPosts();
+
     long countTotalPosts();
 
     List<PostDto> searchPostsByKeyword(String keyword);

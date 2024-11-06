@@ -42,7 +42,7 @@ public class LikeController {
         }
     }
 
-//add like cho playlist
+    //add like cho playlist
     @PostMapping("/addPlaylist")
     public ResponseEntity<LikeDto> addLikePlaylist(@RequestBody LikeDto likeDto) {
         try {
@@ -89,11 +89,11 @@ public class LikeController {
         }
     }
 
-//    delete like Playlist
+    //    delete like Playlist
     @DeleteMapping("/removePlaylist")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
                                            @RequestParam Long playlistId
-                                           ) {
+    ) {
         try {
             likeService.removeLikePlaylist(userId, playlistId);
             return ResponseEntity.ok().build();
@@ -105,7 +105,7 @@ public class LikeController {
     //    delete like album
     @DeleteMapping("/removeAlbum")
     public ResponseEntity<Void> removeLikeAlbum(@RequestParam Long userId,
-                                           @RequestParam Long albumId
+                                                @RequestParam Long albumId
     ) {
         try {
             likeService.removeLikeAlbum(userId, albumId);
@@ -181,7 +181,7 @@ public class LikeController {
         return ResponseEntity.ok(liked);
     }
 
-//    album
+    //    album
     @GetMapping("/allAlbums/{userId}")
     public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
         List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
@@ -207,4 +207,3 @@ public class LikeController {
     }
 
 }
-
