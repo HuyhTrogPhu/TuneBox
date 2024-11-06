@@ -11,8 +11,6 @@ import org.example.library.model.Track;
 import org.example.library.model.User;
 import org.example.library.repository.*;
 import org.example.library.service.TrackService;
-import org.example.library.utils.ImageUploadTrack;
-import org.example.library.utils.Mp3UploadTrack;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,11 +43,6 @@ public class TrackServiceImpl implements TrackService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ImageUploadTrack imageUploadTrack;
-
-    @Autowired
-    private Mp3UploadTrack mp3UploadTrack;
 
     @Autowired
     private Cloudinary cloudinary;

@@ -21,7 +21,7 @@ public interface PostService {
     List<PostDto> getAllPosts(Long currentUserId);
 
      List<PostDto> get5Posts();
-    List<PostDto> getPostsByUserId(Long userId, String currentUsername);
+    List<PostDto> getPostsByUserId(Long userId);
 
     public PostDto getPostById(Long PostId);
 

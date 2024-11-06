@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,26 +93,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserName(String userName);
 
-<<<<<<<<< Temporary merge branch 1
-    // search
-    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name) " +
-            "from UserInformation ui join ui.user us where ui.name like :keyword")
-    List<SearchDto> searchUser(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
-            "from Track t where t.name like :keyword or t.description like :keyword or t.genre.name like :keyword or t.creator.userName like :keyword")
-    List<SearchDto> searchTrack(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(a.id, a.title, a.description, a.albumImage, a.creator.userName) " +
-            "from Albums a where a.title like :keyword or a.description like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
-    List<SearchDto> searchAlbum(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(p.id, p.title, p.imagePlaylist, p.creator.userName) " +
-            "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
-    List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
 
-=========
     // get list user sell the most
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
@@ -199,24 +182,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countByIdNotNull();
     List<User> findByReportTrue();
     Long countByCreateDate(LocalDate createDate);
-
-    // search
-    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name) " +
-            "from UserInformation ui join ui.user us where ui.name like :keyword")
-    List<SearchDto> searchUser(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
-            "from Track t where t.name like :keyword or t.description like :keyword or t.genre.name like :keyword or t.creator.userName like :keyword")
-    List<SearchDto> searchTrack(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(a.id, a.title, a.description, a.albumImage, a.creator.userName) " +
-            "from Albums a where a.title like :keyword or a.description like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
-    List<SearchDto> searchAlbum(@Param("keyword") String keyword);
-
-    @Query("SELECT new org.example.library.dto.SearchDto(p.id, p.title, p.imagePlaylist, p.creator.userName) " +
-            "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
-    List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
-
 
     // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +

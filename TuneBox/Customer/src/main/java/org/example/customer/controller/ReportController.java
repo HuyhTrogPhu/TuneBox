@@ -1,6 +1,6 @@
 package org.example.customer.controller;
 
-import org.example.customer.config.CustomerDetail;
+
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
@@ -42,34 +42,31 @@ public class ReportController {
     @PostMapping
     public ResponseEntity<ReportDto> createReport(
             @RequestBody ReportDto reportDto,
-            @RequestHeader(value = "Authorization", required = false) String token // Lấy JWT token từ header
+            @CookieValue(value = "userId", defaultValue = "0") Long currentUserId // Lấy giá trị currentUserId từ cookie
     ) {
-        if (token == null || !token.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu không có token hoặc token không hợp lệ
+        // Kiểm tra nếu userId từ cookie không hợp lệ
+        if (currentUserId == 0) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu không có userId hợp lệ
         }
 
-        String jwt = token.substring(7); // Loại bỏ phần "Bearer "
-        String username = jwtUtil.extractUsername(jwt);
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        if (!jwtUtil.validateToken(jwt, userDetails)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu JWT không hợp lệ
+        // Kiểm tra xem bài viết có tồn tại hay không
+        Post post = postService.findPostById(reportDto.getPostId());
+        if (post == null) {
+            return ResponseEntity.badRequest().body(null);
         }
 
-        User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Kiểm tra các điều kiện khác và tạo báo cáo
+        // Kiểm tra lý do báo cáo
         if (reportDto.getReason() == null || reportDto.getReason().isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        reportDto.setUserId(user.getId());
+        // Set userId hiện tại cho reportDto
+        reportDto.setUserId(currentUserId);
+
+        // Tiến hành tạo báo cáo
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-
         @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);

@@ -1,7 +1,9 @@
 package org.example.library.service.implement;
 
 import org.example.library.dto.FollowedUserDto;
+import org.example.library.dto.UserDto;
 import org.example.library.mapper.FollowMapper;
+import org.example.library.mapper.UserMapper;
 import org.example.library.model.Follow;
 import org.example.library.model.User;
 import org.example.library.repository.FollowRepository;
@@ -73,33 +75,22 @@ public class FollowServiceImpl implements FollowService {
         return followingCount;
     }
     @Override
-    public List<FollowedUserDto> getFollowers(Long userId) {
+    public List<UserDto> getFollowers(Long userId) {
         List<Follow> followers = followRepository.findByFollowedId(userId);
-
-        // Lấy danh sách các user đang theo dõi userId
         return followers.stream()
                 .map(follow -> follow.getFollower()) // Lấy User từ Follow
-                .map(user -> {
-                    // Kiểm tra xem người dùng đang theo dõi hay không
-                    boolean isFollowing = followRepository.existsByFollowerIdAndFollowedId(user.getId(), userId);
-                    return new FollowedUserDto(user.getId(), user.getUserName(), user.getEmail(), user.getUserInformation().getAvatar(), isFollowing);
-                })
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
 
 
-    @Override
-    public List<FollowedUserDto> getFollowing(Long userId) {
-        List<Follow> followings = followRepository.findByFollowerId(userId);
 
-        // Lấy danh sách các user mà follower đang theo dõi
+    @Override
+    public List<UserDto> getFollowing(Long userId) {
+        List<Follow> followings = followRepository.findByFollowerId(userId);
         return followings.stream()
                 .map(follow -> follow.getFollowed()) // Lấy User từ Follow
-                .map(user -> {
-                    // Kiểm tra xem người dùng đang theo dõi hay không
-                    boolean isFollowing = followRepository.existsByFollowerIdAndFollowedId(userId, user.getId());
-                    return new FollowedUserDto(user.getId(), user.getUserName(), user.getEmail(), user.getUserInformation().getAvatar(), isFollowing);
-                })
+                .map(UserMapper::mapToUserDto) // Chuyển đổi sang UserDto
                 .collect(Collectors.toList());
     }
 

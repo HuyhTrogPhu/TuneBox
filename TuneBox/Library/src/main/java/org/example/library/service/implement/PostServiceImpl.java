@@ -113,25 +113,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
-        List<Post> posts;
-
-        // Lấy thông tin người dùng từ userId
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
-
-        // Kiểm tra xem người dùng hiện tại có phải là chủ sở hữu của trang cá nhân không
-        if (user.getUserName().equals(currentUsername)) {
-            // Nếu là chủ sở hữu, lấy tất cả bài viết
-            posts = postRepository.findByUserId(userId);
-        } else {
-            // Nếu không phải, chỉ lấy các bài viết không bị ẩn
-            posts = postRepository.findByUserIdAndHidden(userId, false);
-        }
-
-        return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
+    public List<PostDto> getPostsByUserId(Long userId) {
+        List<Post> posts = postRepository.findByUserId(userId);  // Lấy tất cả các bài đăng của userId
+        return posts.stream()
+                .map(PostMapper::toDto)  // Chuyển đổi từ Post entity sang PostDto
+                .collect(Collectors.toList());
     }
-
     @Override
     public PostDto getPostById(Long PostId) {
         Optional<Post> post = postRepository.findById(PostId);
