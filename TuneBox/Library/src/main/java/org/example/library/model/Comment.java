@@ -50,4 +50,3 @@ public class Comment {
 
     private boolean edited;
 }
-
