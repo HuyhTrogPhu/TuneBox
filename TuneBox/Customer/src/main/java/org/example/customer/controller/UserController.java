@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
 import org.example.library.model.*;
@@ -54,7 +55,8 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
-
+    @Autowired
+    private OrderService orderService;
         @Autowired
         private  EmailService emailService;
 

@@ -1,6 +1,6 @@
 package org.example.customer.controller;
 
-import org.example.customer.config.CustomerDetail;
+import org.example.customer.config.UserDetail;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
@@ -57,8 +57,8 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Trả về 401 nếu JWT không hợp lệ
         }
 
-        User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserName(username);
+
 
         // Kiểm tra các điều kiện khác và tạo báo cáo
         if (reportDto.getReason() == null || reportDto.getReason().isEmpty()) {

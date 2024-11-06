@@ -27,7 +27,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "org.example.*")
-public class CustomerConfiguration {
+public class UserConfiguration {
 
     @Autowired
     @Lazy
@@ -35,7 +35,7 @@ public class CustomerConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomerServiceConfig();
+        return new UserServiceConfig();
     }
 
     @Bean
