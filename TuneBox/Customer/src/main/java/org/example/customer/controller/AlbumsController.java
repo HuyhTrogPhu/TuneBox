@@ -52,8 +52,9 @@ public class AlbumsController {
             albumsDto.setReport(report);
             albumsDto.setCreateDate(LocalDate.now());
             albumsDto.setTracks(trackIdSet);
+            albumsDto.setCreatorId(userId);
 
-            AlbumsDto createAlbums = albumsService.createAlbums(albumsDto,albumImage,userId, genreId, albumStyleId);
+            AlbumsDto createAlbums = albumsService.createAlbums(albumsDto, albumImage, userId,  genreId, albumStyleId);
             return new ResponseEntity<>(createAlbums, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
