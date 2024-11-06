@@ -9,12 +9,18 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InstrumentSalesDto {
+public class InstrumentAccordingTo {
 
     private Long instrumentId;
+
     private String instrumentName;
-    private String image;
+
     private double costPrice;
-    private int quantity;
-    private Long totalSold; // chứa số lượng sản phẩm đã bán
+
+    private String image;
+
+    // để chứa tổng số lượng instrument đã bán
+    private Long totalSold;
+
+
 }

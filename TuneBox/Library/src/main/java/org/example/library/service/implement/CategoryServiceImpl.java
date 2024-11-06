@@ -4,11 +4,12 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
 import org.example.library.dto.CategoryDto;
+import org.example.library.dto.CategorySalesDto;
+import org.example.library.dto.StatisticalCategoryDto;
 import org.example.library.mapper.CategoryMapper;
 import org.example.library.model.CategoryIns;
 import org.example.library.repository.CategoryInsRepository;
 import org.example.library.service.CategoryService;
-import org.example.library.utils.ImageUploadCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryInsRepository categoryInsRepository;
     @Autowired
     private Cloudinary cloudinary;
-    private final ImageUploadCategory imageUploadCategory;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto, MultipartFile image) {
@@ -131,6 +131,61 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryIns getManagedCategory(Long id) {
         return categoryInsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesMostOfDay() {
+        return categoryInsRepository.getCategorySalesTheMostDay();
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesMostOfWeek() {
+        return categoryInsRepository.getCategorySalesTheMostWeek();
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesMostOfMonth() {
+        return categoryInsRepository.getCategorySalesTheMostMonth();
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesLeastOfDay() {
+        return categoryInsRepository.getCategorySalesTheLeastDay();
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesLeastOfWeek() {
+        return categoryInsRepository.getCategorySalesTheLeastWeek();
+    }
+
+    @Override
+    public List<CategorySalesDto> getCategorySalesLeastOfMonth() {
+        return categoryInsRepository.getCategorySalesTheLeastMonth();
+    }
+
+    @Override
+    public List<StatisticalCategoryDto> getIdsAndNamesCategory() {
+        return categoryInsRepository.getCategoryIdsAndNames();
+    }
+
+    @Override
+    public Double getRevenueCategoryByDay(Long id) {
+        return categoryInsRepository.getRevenueByCategoryIdOfDay(id);
+    }
+
+    @Override
+    public Double getRevenueCategoryByWeek(Long id) {
+        return categoryInsRepository.getRevenueByCategoryIdOfWeek(id);
+    }
+
+    @Override
+    public Double getRevenueCategoryByMonth(Long id) {
+        return categoryInsRepository.getRevenueByCategoryIdOfMonth(id);
+    }
+
+    @Override
+    public Double getRevenueCategoryByYear(Long id) {
+        return categoryInsRepository.getRevenueByCategoryIdOfYear(id);
     }
 
 

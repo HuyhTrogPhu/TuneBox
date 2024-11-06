@@ -2,7 +2,6 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.TrackDto;
 import org.example.library.dto.TrackStatus;
 import org.example.library.dto.UserDto;

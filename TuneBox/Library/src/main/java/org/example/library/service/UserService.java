@@ -109,6 +109,29 @@ public interface UserService {
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 
 
+    // list user sell by day
+    List<UserSell> getUserSellTheMostDay(LocalDate date);
+
+    // list user between days
+    List<UserSell> getUserSellBetweenDate(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by week
+    List<UserSell> getUserSellByWeek(LocalDate startDate);
+
+    // list user between weeks
+    List<UserSell> getUserSellBetweenWeek(LocalDate startDate, LocalDate endDate);
+
+    // list user sell by month
+    List<UserSell> getUserSellByMonth(int year, int month);
+
+    // list user sell between months
+    List<UserSell> getUserSellBetweenMonth(int year, int startMonth, int endMonth);
+
+    // list user sell by year
+    List<UserSell> getUserSellByYear(int year);
+
+    // list user sell between years
+    List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
     void updateAvatar(Long userId, MultipartFile image);
 
     void updateBackground(Long userId, MultipartFile image);

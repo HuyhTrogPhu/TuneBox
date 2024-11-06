@@ -13,11 +13,9 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -27,8 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -38,6 +39,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private TalentService talentService;
@@ -51,10 +55,11 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserInformationService userInformationService;
+
     @Autowired
     private JwtUtil jwtUtil;
+
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -129,6 +134,7 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
@@ -139,12 +145,13 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
+
 
 
     // Phương thức để lấy userId từ cookie
@@ -204,19 +211,6 @@ public class UserController {
         }
     }
 
-
-    // get user in account page
-    @GetMapping("/{userId}/accountSetting")
-    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
-        try {
-            AccountSettingDto userAccount = userService.getAccountSetting(userId);
-            return ResponseEntity.ok(userAccount);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     // get follower and following user by user id
     @GetMapping("/{userId}/followCount")
     public ResponseEntity<Optional<UserFollowDto>> getFollowCount(@PathVariable Long userId) {
@@ -243,12 +237,6 @@ public class UserController {
             List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
             List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
 
-            // In ra dữ liệu kết quả tìm kiếm
-            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
-            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
-            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
-            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
-
             // Tạo response chứa tất cả kết quả
             Map<String, Object> response = new HashMap<>();
             response.put("users", userResults);
@@ -264,14 +252,16 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users/{userId}/background")
-    public ResponseEntity<?> updateBackground(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
-        userService.updateBackground(userId, image);
-        return ResponseEntity.ok("Background updated successfully.");
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
     }
-    @PutMapping("/{userId}/avatar")
-    public ResponseEntity<Void> updateAvatar(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
-        userService.updateAvatar(userId, image);
-        return ResponseEntity.ok().build();
-    }
+
 }
