@@ -86,5 +86,7 @@ public interface InstrumentService {
 
     // list revenue instrument between years
     List<InstrumentAccordingTo> getListInstrumentBetweenYear(int yearStart, int yearEnd);
+
+    Integer getInstrumentQuantityById(Long id);
 }
 

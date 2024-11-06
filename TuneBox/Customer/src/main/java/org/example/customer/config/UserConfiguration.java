@@ -63,19 +63,14 @@ public class UserConfiguration {
                         .requestMatchers("/user/register", "/user/list-genre", "/user/list-inspired-by",
                                 "/user/list-talent", "/customer/shop/**", "/customer/brand/**",
                                 "/customer/category/**", "/customer/instrument/**", "/user/**","/api/**",
-                                "/customer/tracks/**", "/customer/albums/", "/customer/playlist/**").permitAll()
+                                "/customer/tracks/**", "/customer/albums/", "/customer/playlist/**", "/oauth2/success").permitAll()
                         .requestMatchers("/customer/cart/**").hasRole("CUSTOMER")
                         .requestMatchers("/e-comAdmin/**").hasRole("ECOMADMIN") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .requestMatchers("/oauth2/**").authenticated()
                         .anyRequest().permitAll()
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("http://localhost:3000/", true)
-                        .permitAll()
-                )
+
                 .logout(logout -> logout
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
@@ -83,7 +78,10 @@ public class UserConfiguration {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 )
-
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/user/login")
+                        .defaultSuccessUrl("/user/oauth2/success", true) // Điều hướng sau khi đăng nhập thành công
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sử dụng JWT nên không cần Session
                 )
