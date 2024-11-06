@@ -6,13 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AlbumsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AlbumsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PlaylistController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PlaylistController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/LikeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/LikeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/LikeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +29,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="QuocTrung" />
+        <entry key="$PROJECT_DIR$" value="TrongPhu" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -258,6 +257,8 @@
       <workItem from="1730518684825" duration="6835000" />
       <workItem from="1730570426684" duration="3041000" />
       <workItem from="1730689967221" duration="1776000" />
+      <workItem from="1730859898419" duration="8074000" />
+      <workItem from="1730884154953" duration="729000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
