@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserInformationRepository userInformationRepository;
 
+
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
         try {
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("CUSTOMER"));
+            user.setRole(roleRepository.findByName("ECOMADMIN"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -220,7 +221,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AccountSettingDto getAccountSetting(Long userId) {
-        return userRepository.findAccountSettingProfile(userId);
+       return userRepository.findAccountSettingProfile(userId);
     }
 
     @Override

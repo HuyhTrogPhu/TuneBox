@@ -167,8 +167,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     // search
-    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name) " +
-            "from UserInformation ui join ui.user us where ui.name like :keyword")
+    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.name, ui.avatar,  us.userName) " +
+            "from UserInformation ui join ui.user us where ui.name like :keyword or us.userName like :keyword")
     List<SearchDto> searchUser(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
@@ -179,8 +179,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from Albums a where a.title like :keyword or a.description like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
     List<SearchDto> searchAlbum(@Param("keyword") String keyword);
 
-    @Query("SELECT new org.example.library.dto.SearchDto(p.id, p.title, p.imagePlaylist, p.creator.userName) " +
-            "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
+    @Query("SELECT new org.example.library.dto.SearchDto(p.creator.userInformation.name, p.id, p.title, p.imagePlaylist, p.creator.userName) " +
+            "from Playlist p where p.title like :keyword or p.type like :keyword or p.creator.userName like :keyword  or p.creator.userInformation.name like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
 
