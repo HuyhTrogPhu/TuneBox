@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -360,6 +361,7 @@ public class TrackServiceImpl implements TrackService {
     }
 public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate){
         Map<LocalDate, Long> trackCountMap = new HashMap<>();
+
         LocalDate currentDate = startDate;
         while (!currentDate.isAfter(endDate)) {
             Long count = trackRepository.countByCreateDate(currentDate);
@@ -371,7 +373,10 @@ public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate
 }
 
     public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate) {
-        List<Object[]> results = trackRepository.countTracksByGenreAndDateRange(startDate, endDate);
+        // Convert LocalDate to LocalDateTime
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Object[]> results = trackRepository.countTracksByGenreAndDateRange(startDateTime, endDateTime);
 
         Map<String, Long> trackCountMap = new HashMap<>();
         for (Object[] result : results) {
@@ -379,7 +384,7 @@ public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate
             Long count = (Long) result[1];
             trackCountMap.put(genre, count);
         }
-
         return trackCountMap;
     }
+
 }

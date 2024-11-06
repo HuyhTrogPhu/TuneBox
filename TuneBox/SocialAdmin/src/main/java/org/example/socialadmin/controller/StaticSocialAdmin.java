@@ -386,7 +386,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     // thong ke track tạo theo ngày/genre
     @GetMapping("/getTrackGenreBeetWeen/{startDate}/{endDate}")
     public ResponseEntity<?> GetTrackGenreBeetWeen(@PathVariable("startDate") String startDateStr,
-                                              @PathVariable("endDate") String endDateStr) {
+                                                   @PathVariable("endDate") String endDateStr) {
         Map<String, Object> response = new HashMap<>();
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

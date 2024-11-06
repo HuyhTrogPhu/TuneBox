@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TrackRepository extends JpaRepository<Track, Long> {
@@ -32,8 +33,9 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
             "WHERE t.createDate BETWEEN :startDate AND :endDate " +
             "GROUP BY t.genre.name")
     List<Object[]> countTracksByGenreAndDateRange(
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
+
 
 
 }
