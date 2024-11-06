@@ -1,6 +1,6 @@
 package org.example.library.service;
 
-import org.example.library.dto.PostAdminDto;
+import org.example.library.dto.*;
 
 import java.util.List;
 
@@ -13,4 +13,9 @@ public interface PostServiceAdmin {
 
     List<PostAdminDto> findAllByOrderByCreatedAtDesc();
 
+    PostStatisticsDto getPostStatistics();
+
+    List<PostEngagementDto> getPostEngagementStats();
+
+    List<DailyPostStatsDto> getDailyPostStats();
 }

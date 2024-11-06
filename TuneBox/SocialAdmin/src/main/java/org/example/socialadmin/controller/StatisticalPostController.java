@@ -1,6 +1,6 @@
 package org.example.socialadmin.controller;
 
-import org.example.library.dto.PostAdminDto;
+import org.example.library.dto.*;
 import org.example.library.service.PostServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,5 +35,20 @@ public class StatisticalPostController {
     @GetMapping("/latest")
     public List<PostAdminDto> getLatestPosts() {
         return postServiceAdmin.findAllByOrderByCreatedAtDesc();
+    }
+
+    @GetMapping("/statistics")
+    public PostStatisticsDto getPostStatistics() {
+        return postServiceAdmin.getPostStatistics();
+    }
+
+    @GetMapping("/engagement")
+    public List<PostEngagementDto> getPostEngagementStats() {
+        return postServiceAdmin.getPostEngagementStats();
+    }
+
+    @GetMapping("/daily")
+    public List<DailyPostStatsDto> getDailyPostStats() {
+        return postServiceAdmin.getDailyPostStats();
     }
 }

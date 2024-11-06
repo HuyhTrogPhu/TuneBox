@@ -107,6 +107,10 @@ import java.util.Set;
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Post> posts; // Thuộc tính này sẽ đại diện cho các bài viết của người dùng
+
     public User(Long blockerId) {
         this.id = blockerId;
     }

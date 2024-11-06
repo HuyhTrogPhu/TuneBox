@@ -289,6 +289,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<ListUserForMessageDto> findAllUserForMessage() {
+        // Lấy danh sách tất cả User từ repository
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> {
+                    ListUserForMessageDto dto = new ListUserForMessageDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUserName());
+                    dto.setNickName(user.getUserInformation().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> userDtos = new ArrayList<>();

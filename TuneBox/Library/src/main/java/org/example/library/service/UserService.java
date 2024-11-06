@@ -78,6 +78,12 @@ public interface UserService {
 
     List<UserDto> findAllUser();
 
+
+
+    List<ListUserForMessageDto> findAllUserForMessage();
+
+
+
     @Transactional
     void updateBirthday(Long userId, Date newBirthday);
 
