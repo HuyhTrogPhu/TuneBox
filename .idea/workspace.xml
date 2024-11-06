@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="update jwt, mang  xa hoi">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserServiceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FollowController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FollowController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,6 +189,8 @@
       <workItem from="1730528897629" duration="5259000" />
       <workItem from="1730720304797" duration="9698000" />
       <workItem from="1730773591374" duration="3261000" />
+      <workItem from="1730879607959" duration="270000" />
+      <workItem from="1730894244951" duration="1983000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -349,7 +344,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730808816182</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="update jwt, mang  xa hoi">
+      <option name="closed" value="true" />
+      <created>1730879656557</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1730879656557</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -383,7 +386,8 @@
     <MESSAGE value="cao nhạt" />
     <MESSAGE value="cập nhật jwt, phân quyen" />
     <MESSAGE value="update customerorder, Google (chưa làm được), Quên Pass" />
-    <option name="LAST_COMMIT_MESSAGE" value="update customerorder, Google (chưa làm được), Quên Pass" />
+    <MESSAGE value="update jwt, mang  xa hoi" />
+    <option name="LAST_COMMIT_MESSAGE" value="update jwt, mang  xa hoi" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
