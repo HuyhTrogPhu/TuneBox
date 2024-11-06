@@ -5,11 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.*;
+import org.example.library.model.Genre;
+import org.example.library.model.InspiredBy;
+import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
@@ -40,7 +47,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
-    private UserInformationService userInformationService;
+    private OrderService orderService;
 
     @Autowired
     private TalentService talentService;
@@ -262,6 +269,17 @@ public class UserController {
         }
     }
 
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         User user = userRepository.findByEmail(email);
