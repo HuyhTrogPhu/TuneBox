@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReportServiceImpl implements ReportService {
+public class    ReportServiceImpl implements ReportService {
 
     @Autowired
     private ReportRepository reportRepository;

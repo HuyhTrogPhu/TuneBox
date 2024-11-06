@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
         this.userRepository = userRepository;
     }
     @Autowired
-    private Cloudinary cloudinary;
+            private Cloudinary cloudinary;
 
     @Override
     public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
