@@ -17,12 +17,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    User findByUserName(String username);
     // get user by username or email
-    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
+    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, r.id, r.name) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
     Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
-
     // get user check out info
     @Query("select new org.example.library.dto.UserCheckOut(u.id, u.email, u.userName) " +
             "from User u WHERE u.id = :userId")
@@ -180,6 +178,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
     Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
+//    Optional<User> findBysUserName(String username);
+
 
 //    User findByUserName(String username);
 
