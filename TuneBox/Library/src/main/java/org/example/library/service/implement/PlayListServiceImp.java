@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -227,6 +229,45 @@ public class PlayListServiceImp implements PlaylistService {
     public PlaylistDto findByPlaylistId(Long playlistId) {
         PlaylistDto playlistDTO =PlaylistMapper.mapperPlaylistDto(playlistRepository.findById(playlistId).get());
     return playlistDTO;
+    }
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            Long count = playlistRepository.countByCreateDate(currentDate);
+            userCountMap.put(currentDate, count);
+            currentDate = currentDate.plusDays(1);
+        }
+        return userCountMap;
+    }
+
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+            LocalDate currentWeekEnd = currentWeekStart.with(DayOfWeek.SUNDAY);
+            Long count = playlistRepository.countByCreateDateBetween(currentWeekStart, currentWeekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+            Long count = playlistRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        return userCountMap;
+    }
+    public List<Playlist> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate) {
+        return playlistRepository.findAllByCreateDateBetween(startDate, endDate);
     }
 
 }

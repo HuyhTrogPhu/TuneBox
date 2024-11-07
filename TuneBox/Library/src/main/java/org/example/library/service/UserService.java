@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -107,8 +108,11 @@ public interface UserService {
     Optional<User> findById(Long userId);
     List<User> findByReportTrue();
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
-
-
+    Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+    Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+    List<Object[]> getTop10MostFollowedUsers();
+    List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate);
+    List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
     // list user sell by day
     List<UserSell> getUserSellTheMostDay(LocalDate date);
 

@@ -26,8 +26,8 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findByReportTrue();
 
 
-    Long countByCreateDate(LocalDate createDate);
-
+    Long countByCreateDate(LocalDateTime createDate);
+    Long countByCreateDateBetween(LocalDateTime startDate, LocalDateTime endDate);
     @Query("SELECT t.genre.name AS genre, COUNT(t) AS trackCount " +
             "FROM Track t " +
             "WHERE t.createDate BETWEEN :startDate AND :endDate " +
@@ -35,7 +35,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Object[]> countTracksByGenreAndDateRange(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
-
+ List<Track> findAllByCreateDateBetween(LocalDateTime startDate,LocalDateTime endDate);
 
 
 }

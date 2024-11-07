@@ -35,4 +35,5 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
     List<Report> findAllReportsWithPost();
 
+
 }

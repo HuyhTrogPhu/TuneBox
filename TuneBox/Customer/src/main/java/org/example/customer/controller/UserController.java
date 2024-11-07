@@ -136,7 +136,7 @@ public class UserController {
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
 
                 // Lấy tên vai trò từ đối tượng RoleDto
-                String role = user.getRole() != null ? user.getRole().getName() : "CUSTOMER"; // Hoặc một vai trò mặc định khác
+                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
                 // Tạo JWT token với username và role
                 String jwtToken = jwtUtil.generateToken(user.getUserName(), role);

@@ -2,9 +2,16 @@ package org.example.socialadmin.controller;
 
 import org.example.library.dto.CommentDTO;
 import org.example.library.dto.ReplyDto;
+import org.example.library.model.Albums;
+import org.example.library.model.Playlist;
+import org.example.library.model.Track;
+import org.example.library.model.User;
 import org.example.library.repository.ReportRepository;
+import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +20,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.WeekFields;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -342,22 +351,53 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
 
     return ResponseEntity.ok(response);
 }
-// thong ke post tạo theo ngày
-    @GetMapping("/getPostBeetWeen/{startDate}/{endDate}")
-    public ResponseEntity<?> GetPostBeetWeen(@PathVariable("startDate") String startDateStr,
-                                             @PathVariable("endDate") String endDateStr) {
+
+// Thống kê User tạo theo tuần
+    @GetMapping("/getUserBeetWeenWeek/{startDate}/{endDate}")
+    public ResponseEntity<?> getUserBeetWeenWeek(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
         Map<String, Object> response = new HashMap<>();
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Cập nhật định dạng nếu cần
-            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-            Map<LocalDateTime, Long> userCountMap = postService.countPostByDateRange(startDate, endDate);
+            int startYear = Integer.parseInt(startDateStr.substring(0, 4));
+            int startWeek = Integer.parseInt(startDateStr.substring(6));
+            int endYear = Integer.parseInt(endDateStr.substring(0, 4));
+            int endWeek = Integer.parseInt(endDateStr.substring(6));
+
+            LocalDate startDate = LocalDate.of(startYear, 1, 1).with(WeekFields.ISO.weekOfYear(), startWeek);
+            LocalDate endDate = LocalDate.of(endYear, 1, 1).with(WeekFields.ISO.weekOfYear(), endWeek);
+
+            Map<LocalDate, Long> userCountMap = userService.countUsersByWeekRange(startDate, endDate);
             response.put("status", true);
-            response.put("message", "Succesfull");
+            response.put("message", "Successful");
             response.put("data", userCountMap);
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Thống kê User tạo theo tháng
+    @GetMapping("/getUserBetweenMonth/{startDate}/{endDate}")
+    public ResponseEntity<?> getUserBetweenMonth(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth startDate = YearMonth.parse(startDateStr, formatter);
+            YearMonth endDate = YearMonth.parse(endDateStr, formatter);
+
+            // Gọi hàm đếm user theo tháng trong userService
+            Map<YearMonth, Long> userCountMap = userService.countUsersByMonthRange(startDate, endDate);
+
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex.getMessage());
             response.put("data", null);
         }
         return ResponseEntity.ok(response);
@@ -399,6 +439,56 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Thống kê Track tạo theo tuần
+    @GetMapping("/getTrackBeetWeenWeek/{startDate}/{endDate}")
+    public ResponseEntity<?> getTrackBeetWeenWeek(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int startYear = Integer.parseInt(startDateStr.substring(0, 4));
+            int startWeek = Integer.parseInt(startDateStr.substring(6));
+            int endYear = Integer.parseInt(endDateStr.substring(0, 4));
+            int endWeek = Integer.parseInt(endDateStr.substring(6));
+
+            LocalDate startDate = LocalDate.of(startYear, 1, 1).with(WeekFields.ISO.weekOfYear(), startWeek);
+            LocalDate endDate = LocalDate.of(endYear, 1, 1).with(WeekFields.ISO.weekOfYear(), endWeek);
+
+            Map<LocalDate, Long> userCountMap = trackService.countUsersByWeekRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Thống kê Track tạo theo tháng
+    @GetMapping("/getTrackBetweenMonth/{startDate}/{endDate}")
+    public ResponseEntity<?> getTrackBetweenMonth(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth startDate = YearMonth.parse(startDateStr, formatter);
+            YearMonth endDate = YearMonth.parse(endDateStr, formatter);
+            Map<YearMonth, Long> userCountMap = trackService.countUsersByMonthRange(startDate, endDate);
+
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex.getMessage());
             response.put("data", null);
         }
         return ResponseEntity.ok(response);
@@ -449,6 +539,172 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
 
+    //Album Static
+
+    //thong ke Album tạo theo ngày
+    @GetMapping("/getAlbumBeetWeen/{startDate}/{endDate}")
+    public ResponseEntity<?> GetAlbumBeetWeen(@PathVariable("startDate") String startDateStr,
+                                             @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            Map<LocalDate, Long> userCountMap = albumService.countUsersByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Thống kê Album tạo theo tuần
+    @GetMapping("/getAlbumBeetWeenWeek/{startDate}/{endDate}")
+    public ResponseEntity<?> getAlbumBeetWeenWeek(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int startYear = Integer.parseInt(startDateStr.substring(0, 4));
+            int startWeek = Integer.parseInt(startDateStr.substring(6));
+            int endYear = Integer.parseInt(endDateStr.substring(0, 4));
+            int endWeek = Integer.parseInt(endDateStr.substring(6));
+
+            LocalDate startDate = LocalDate.of(startYear, 1, 1).with(WeekFields.ISO.weekOfYear(), startWeek);
+            LocalDate endDate = LocalDate.of(endYear, 1, 1).with(WeekFields.ISO.weekOfYear(), endWeek);
+
+            Map<LocalDate, Long> userCountMap = albumService.countUsersByWeekRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Thống kê Album tạo theo tháng
+    @GetMapping("/getAlbumBetweenMonth/{startDate}/{endDate}")
+    public ResponseEntity<?> getAlbumBetweenMonth(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth startDate = YearMonth.parse(startDateStr, formatter);
+            YearMonth endDate = YearMonth.parse(endDateStr, formatter);
+
+            // Gọi hàm đếm user theo tháng trong userService
+            Map<YearMonth, Long> userCountMap = albumService.countUsersByMonthRange(startDate, endDate);
+
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex.getMessage());
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    //PlayList static
+
+    //thong ke PlayList tạo theo ngày
+    @GetMapping("/getPlayListBeetWeen/{startDate}/{endDate}")
+    public ResponseEntity<?> GetPlayListBeetWeen(@PathVariable("startDate") String startDateStr,
+                                             @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            Map<LocalDate, Long> userCountMap = playlistService.countUsersByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Thống kê PlayList tạo theo tuần
+    @GetMapping("/getPlayListBeetWeenWeek/{startDate}/{endDate}")
+    public ResponseEntity<?> getPlayListBeetWeenWeek(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int startYear = Integer.parseInt(startDateStr.substring(0, 4));
+            int startWeek = Integer.parseInt(startDateStr.substring(6));
+            int endYear = Integer.parseInt(endDateStr.substring(0, 4));
+            int endWeek = Integer.parseInt(endDateStr.substring(6));
+
+            LocalDate startDate = LocalDate.of(startYear, 1, 1).with(WeekFields.ISO.weekOfYear(), startWeek);
+            LocalDate endDate = LocalDate.of(endYear, 1, 1).with(WeekFields.ISO.weekOfYear(), endWeek);
+
+            Map<LocalDate, Long> userCountMap = playlistService.countUsersByWeekRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+
+    // Thống kê PlayList tạo theo tháng
+    @GetMapping("/getPlayListBetweenMonth/{startDate}/{endDate}")
+    public ResponseEntity<?> getPlayListBetweenMonth(@PathVariable("startDate") String startDateStr,
+                                                 @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+            YearMonth startDate = YearMonth.parse(startDateStr, formatter);
+            YearMonth endDate = YearMonth.parse(endDateStr, formatter);
+
+            // Gọi hàm đếm user theo tháng trong userService
+            Map<YearMonth, Long> userCountMap = playlistService.countUsersByMonthRange(startDate, endDate);
+
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userCountMap);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex.getMessage());
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    // Thống kê nguoi dung dang nhieu track nhat
+    @GetMapping("/getMostTrackUploader/{startDate}/{endDate}")
+    public ResponseEntity<?> getMostTrackUploader(  @PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                    @PathVariable("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Successful");
+            response.put("data", userService.getTop10UsersWithMostTracks(startDate, endDate));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex.getMessage());
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
 
     //detail rp for track
     @GetMapping("/getReport/{id}")
@@ -466,7 +722,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
     //ban theo rp ID
-    @GetMapping("/ApproveRPTrack/{id}")
+    @PutMapping("/ApproveRPTrack/{id}")
     public ResponseEntity<?> ApproveRPTrack(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -482,7 +738,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     }
 
     //ban theo rp ID
-    @GetMapping("/DeniedRPTrack/{id}")
+    @PutMapping("/DeniedRPTrack/{id}")
     public ResponseEntity<?> DeniedRPTrack(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -497,7 +753,102 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
 
-
+    //followed nhiều nhất
+    @GetMapping("/getMostFollowed")
+    public ResponseEntity<?> GetMostFollowed(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",userService.getTop10MostFollowedUsers());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+// load for table
+//user
+@GetMapping("/getUserToTable/{startDate}/{endDate}")
+public ResponseEntity<?> getUserToTable(@PathVariable("startDate") String startDateStr,
+                                             @PathVariable("endDate") String endDateStr) {
+    Map<String, Object> response = new HashMap<>();
+    try {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+        List<User> users =userService.getUsersByDateRange(startDate, endDate);
+        response.put("status", true);
+        response.put("message", "Succesfull");
+        response.put("data", users);
+    } catch (Exception ex) {
+        response.put("status", false);
+        response.put("message", ex);
+        response.put("data", null);
+    }
+    return ResponseEntity.ok(response);
+}
+    //track
+        @GetMapping("/getTrackToTable/{startDate}/{endDate}")
+    public ResponseEntity<?> getTrackToTable(@PathVariable("startDate") String startDateStr,
+                                            @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            List<Track> users =trackService.getTracksByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", users);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    //Album
+    @GetMapping("/getAlbumToTable/{startDate}/{endDate}")
+    public ResponseEntity<?> getAlbumToTable(@PathVariable("startDate") String startDateStr,
+                                            @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            List<Albums> users =albumService.getAlbumsByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", users);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    //PlayList
+    @GetMapping("/getPlayListToTable/{startDate}/{endDate}")
+    public ResponseEntity<?> getPlayListToTable(@PathVariable("startDate") String startDateStr,
+                                            @PathVariable("endDate") String endDateStr) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+            List<Playlist> users =playlistService.getPlaylistsByDateRange(startDate, endDate);
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", users);
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
 
     //trộm của như
     @GetMapping("/getTrackCommentbyId/{trackId}")

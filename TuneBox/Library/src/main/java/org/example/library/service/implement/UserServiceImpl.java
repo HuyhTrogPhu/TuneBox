@@ -19,8 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -508,7 +509,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByReportTrue();
 
     };
-
+//static for Social admin
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> userCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
@@ -517,9 +518,57 @@ public class UserServiceImpl implements UserService {
             userCountMap.put(currentDate, count);
             currentDate = currentDate.plusDays(1);
         }
+        return userCountMap;
+    }
+    public List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        return userRepository.findAllByCreateDateBetween(startDate, endDate);
+    }
+
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+            LocalDate currentWeekEnd = currentWeekStart.with(DayOfWeek.SUNDAY);
+            Long count = userRepository.countByCreateDateBetween(currentWeekStart, currentWeekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+            Long count = userRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
 
         return userCountMap;
     }
+    public List<Object[]> getTop10MostFollowedUsers() {
+        return userRepository.findTop10MostFollowedUsers();
+    }
+    public List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate) {
+        // Lấy dữ liệu từ repository
+        LocalDateTime startDateTime = startDate.atStartOfDay(); // Từ 00:00:00 của ngày bắt đầu
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Object[]> result = userRepository.findTop10UsersWithMostTracks(startDateTime, endDateTime);
+
+        // Chuyển đổi dữ liệu từ Object[] sang Map
+        return result.stream()
+                .map(record -> Map.of(
+                        "userId", record[0],
+                        "trackCount", record[1]
+                ))
+                .collect(Collectors.toList());
+    }
+
+
     @Override
     public void updateBackground(Long userId, MultipartFile image) {
         try {

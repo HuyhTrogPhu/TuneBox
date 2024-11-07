@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.HashMap;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -351,25 +349,65 @@ public class TrackServiceImpl implements TrackService {
                 .map(TrackMapper::mapperTrackDto)
                 .collect(Collectors.toList());
     }
-public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate){
+    public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> trackCountMap = new HashMap<>();
 
         LocalDate currentDate = startDate;
         while (!currentDate.isAfter(endDate)) {
-            Long count = trackRepository.countByCreateDate(currentDate);
+            // Define the start and end of the day for the current date
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(LocalTime.MAX);
+
+            // Count tracks within the day's range
+            Long count = trackRepository.countByCreateDateBetween(startOfDay, endOfDay);
             trackCountMap.put(currentDate, count);
+
+            // Move to the next day
             currentDate = currentDate.plusDays(1);
         }
         return trackCountMap;
+    }
 
-}
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
 
+        while (!currentMonth.isAfter(endMonth)) {
+
+            LocalDateTime monthStart = currentMonth.atDay(1).atStartOfDay();
+            LocalDateTime monthEnd = currentMonth.atEndOfMonth().atTime(23, 59, 59);
+
+            Long count = trackRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        return userCountMap;
+    }
+    public List<Track> getTracksByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();  // 00:00:00 on startDate
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 23:59:59.999 on endDate
+        return trackRepository.findAllByCreateDateBetween(startDateTime, endDateTime);
+    }
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+
+            LocalDateTime weekStart = currentWeekStart.atStartOfDay();
+            LocalDateTime weekEnd = currentWeekStart.with(DayOfWeek.SUNDAY).atTime(23, 59, 59);
+
+            Long count = trackRepository.countByCreateDateBetween(weekStart, weekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
     public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate) {
         // Convert LocalDate to LocalDateTime
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
         List<Object[]> results = trackRepository.countTracksByGenreAndDateRange(startDateTime, endDateTime);
-
         Map<String, Long> trackCountMap = new HashMap<>();
         for (Object[] result : results) {
             String genre = (String) result[0];
