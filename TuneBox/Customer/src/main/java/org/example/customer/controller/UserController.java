@@ -11,11 +11,13 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +26,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
 
 import static org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames.CLIENT_ID;
 
@@ -38,6 +42,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private TalentService talentService;
@@ -55,13 +62,50 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired
-    private OrderService orderService;
-        @Autowired
-        private  EmailService emailService;
 
-        @Autowired
-        private VerificationCodeService verificationCodeService;
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private VerificationCodeService verificationCodeService;
+
+    // check signUp form
+    @GetMapping("/check-signUp")
+    public ResponseEntity<?> checkSignUp(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+
+        // list userName
+        List<String> userNames = userRepository.findAllUserNames();
+
+        // list email
+        List<String> emails = userRepository.findAllUserEmails();
+
+        // Kiểm tra userName và email đã tồn tại hay chưa
+        if (userNames.contains(userName)) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        if (userName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username not null");
+        }
+
+        if (emails.contains(email)) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+        if (email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email not null");
+        }
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Password not null");
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -76,7 +120,7 @@ public class UserController {
 
         // Kiểm tra và ghi log thông tin nhận được
         if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+            throw new IllegalArgumentException("Password must not be null");
         }
 
         // Mã hóa mật khẩu
@@ -137,6 +181,7 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
@@ -237,6 +282,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
+
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserProfile(userId, userUpdateRequest);
@@ -251,12 +297,6 @@ public class UserController {
             List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
             List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
             List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
-
-            // In ra dữ liệu kết quả tìm kiếm
-            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
-            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
-            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
-            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
 
             // Tạo response chứa tất cả kết quả
             Map<String, Object> response = new HashMap<>();
@@ -284,6 +324,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         User user = userRepository.findByEmail(email);
