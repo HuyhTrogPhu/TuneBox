@@ -1,4 +1,4 @@
-package org.example.customer.Controller;
+package org.example.customer.controller;
 
 import org.example.library.dto.ReplyDto;
 import org.example.library.service.ReplyService;
@@ -69,8 +69,7 @@ public class ReplyController {
         ReplyDto updatedReply = replyService.updateReply(replyId, userId, replyDto);
         return ResponseEntity.ok(updatedReply);
     }
-
-
-
-
 }
+
+
+

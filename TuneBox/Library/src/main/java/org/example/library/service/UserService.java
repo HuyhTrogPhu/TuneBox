@@ -26,7 +26,12 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
-    // get user in profile page
+//    void changePassword(String email, String oldPassword, String newPassword);
+
+    List<UserDto> findAllUsers();
+
+    List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
+
     ProfileSettingDto getUserProfileSetting(Long userId);
 
     // Lấy số lượng followers của user
@@ -69,6 +74,8 @@ public interface UserService {
     List<UserSell> getUserNotSell();
 
     List<UserDto> findAllUser();
+
+    List<ListUserForMessageDto> findAllUserForMessage();
 
     @Transactional
     void updateBirthday(Long userId, Date newBirthday);
@@ -119,4 +126,9 @@ public interface UserService {
 
     // list user sell between years
     List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
+    void updateAvatar(Long userId, MultipartFile image);
+
+    void updateBackground(Long userId, MultipartFile image);
+
+    List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
 }

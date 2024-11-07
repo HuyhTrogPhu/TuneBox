@@ -17,7 +17,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    User findByUserName(String username);
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
+
     // get user by username or email
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")

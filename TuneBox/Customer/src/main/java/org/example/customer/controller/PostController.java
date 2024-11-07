@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -74,38 +77,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Lấy tất cả bài viết của người dùng từ ID
-    @GetMapping("/current-user")
-    public ResponseEntity<List<PostDto>> getPostsByCurrentUser(@RequestParam("userId") Long userId) {
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
-        }
-
-        List<PostDto> posts = postService.getPostsByUserId(userId);
-        if (posts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(posts, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}/visibility")
-    public ResponseEntity<Void> changePostVisibility(@PathVariable Long id, @RequestParam("hidden") boolean hidden) {
-        try {
-            postService.changePostVisibility(id, hidden);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    // Phương thức lấy tất cả các bài viết
-//    @GetMapping("/all")
-//    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-//        List<PostDto> posts = postService.getAllPosts(currentUserId);
-//        return new ResponseEntity<>(posts, HttpStatus.OK);
-//    }
       @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
         try {
@@ -134,6 +105,7 @@ public class PostController {
         postDto.setId(id);
         postDto.setContent(content);
 
+
         try {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
@@ -157,6 +129,7 @@ public class PostController {
         }
     }
 
+
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
@@ -170,20 +143,12 @@ public class PostController {
 
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<PostDto>> getPostsByUserId(@PathVariable Long userId) {
-        if (userId == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        List<PostDto> posts = postService.getPostsByUserId(userId);
-        System.out.println("Posts for user ID " + userId + ": " + posts);
-
-        if (posts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable Long userId, Principal principal) {
+        String currentUsername = principal.getName();
+        List<PostDto> posts = postService.getPostsByUserId(userId, currentUsername);
+        return ResponseEntity.ok(posts);
     }
+
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostDto> getPostByPostId(@PathVariable Long postId) {
@@ -202,5 +167,32 @@ public class PostController {
 
         return new ResponseEntity<>(postDto, HttpStatus.OK); // Trả về bài viết với trạng thái 200 OK
     }
+
+    // ẩn bài viết
+    @PutMapping("/{postId}/toggle-visibility")
+    public ResponseEntity<Map<String, Object>> toggleVisibility(@PathVariable Long postId, Principal principal) {
+        Post post = postService.findPostById(postId);
+        System.out.println("Người dùng: " + principal.getName() + " đang cố gắng thay đổi trạng thái bài viết: " + postId);
+
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về null nếu bài viết không tồn tại
+        }
+
+        // Kiểm tra quyền truy cập
+        if (!postService.userCanToggleHidden(postId, principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Trả về null nếu không có quyền
+        }
+
+        // Chuyển đổi trạng thái hidden
+        boolean newVisibility = !post.isHidden();
+        post.setHidden(newVisibility);
+        postService.save(post); // Lưu lại thay đổi
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", newVisibility ? "Bài viết đã được ẩn." : "Bài viết đã được hiện.");
+        response.put("isHidden", newVisibility);
+        return ResponseEntity.ok(response);
+    }
+
 
 }

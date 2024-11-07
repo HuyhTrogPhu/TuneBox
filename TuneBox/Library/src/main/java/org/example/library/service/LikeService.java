@@ -2,6 +2,7 @@ package org.example.library.service;
 
 import org.example.library.dto.LikeDto;
 import org.example.library.model.Like;
+import org.example.library.model.Post;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface LikeService {
     List<LikeDto> getAllByUserId(Long userId);
     List<LikeDto> getAllAlbumByUserId(Long userId);
     List<LikeDto> getAllPlayListByUserId(Long userId);
+
+    List<Post> getLikedPostsByUser(Long userId);
 }

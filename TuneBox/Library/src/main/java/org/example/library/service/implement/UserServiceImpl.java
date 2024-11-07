@@ -12,7 +12,6 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -288,6 +288,36 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+    @Override
+    public List<ListUserForMessageDto> findAllUserForMessage() {
+        // Lấy danh sách tất cả User từ repository
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> {
+                    ListUserForMessageDto dto = new ListUserForMessageDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUserName());
+                    dto.setNickName(user.getUserInformation().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
     @Override
     @Transactional
     public void updateBirthday(Long userId, Date birthday) {
@@ -466,6 +496,21 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public void updateAvatar(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
+        }
+    }
+
+        @Override
     public List<SearchDto> searchTrack(String keyword) {
         return userRepository.searchTrack(keyword);
     }
@@ -478,6 +523,54 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<SearchDto> searchPlaylist(String keyword) {
         return userRepository.searchPlaylist(keyword);
+    }
+
+    @Override
+    public List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId) {
+        List<User> users = userRepository.findAll();
+        // Lọc bỏ người gửi
+        users = users.stream()
+                .filter(user -> !user.getId().equals(senderId)) // loại bỏ người dùng đã đăng nhập
+                .collect(Collectors.toList());
+        // Chuyển đổi danh sách người dùng thành danh sách UserMessageDTO
+        List<UserMessageDTO> userMessageDTOs = users.stream()
+                .map(user -> new UserMessageDTO(user.getId(), user.getId(), senderId)) // Gán id và senderId
+                .collect(Collectors.toList());
+        return userMessageDTOs;
+    }
+
+
+    @Override
+    public void updateBackground(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+
+            // Tải lên hình ảnh lên Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Cập nhật URL hình nền
+            userInformation.setBackground(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading background image to Cloudinary", e);
+        }
+    }
+    @Override
+    public List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId) {
+        List<User> usersNotFollowed = userRepository.findUsersNotFollowedBy(userId);
+
+        return usersNotFollowed.stream().map(user -> {
+            String avatar = user.getUserInformation() != null ? user.getUserInformation().getAvatar() : null;
+            return new UserNameAvatarUsernameDto(
+                    user.getId(),
+                    user.getUserName(),
+                    avatar,
+                    user.getUserInformation() != null ? user.getUserInformation().getName() : null
+            );
+        }).collect(Collectors.toList());
     }
 
 }

@@ -14,12 +14,13 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 
     @Query("SELECT c FROM Chat c WHERE (c.sender = :user1 AND c.receiver = :user2) OR (c.sender = :user2 AND c.receiver = :user1)")
     Optional<Chat> findChatBetweenUsers(@Param("user1") User user1, @Param("user2") User user2);
+
 //
 //    List<Chat> findBySenderOrderByCreationDateDesc(User sender);
 //
 //    List<Chat> findByReceiverOrderByCreationDateDesc(User receiver);
-
-    @Query("SELECT c FROM Chat c WHERE (c.sender = :sender AND c.receiver = :receiver) OR (c.sender = :receiver AND c.receiver = :sender)")
-    Optional<Chat> findBySenderAndReceiver(@Param("sender") User sender, @Param("receiver") User receiver);
+//
+//    @Query("SELECT c FROM Chat c WHERE (c.sender = :sender AND c.receiver = :receiver) OR (c.sender = :receiver AND c.receiver = :sender)")
+//    Optional<Chat> findBySenderAndReceiver(@Param("sender") User sender, @Param("receiver") User receiver);
 
 }

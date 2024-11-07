@@ -1,7 +1,7 @@
 package org.example.library.repository;
 
 import org.example.library.model.Post;
-import org.example.library.model.PostReport;
+import org.example.library.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "(SELECT b.blocked.id FROM Block b WHERE b.blocker.id = :currentUserId) " +
             "AND p.user.id NOT IN " +
             "(SELECT b.blocker.id FROM Block b WHERE b.blocked.id = :currentUserId) " +
-            "AND p.hidden = false") // Thêm điều kiện này để lọc các bài viết bị ẩn
+            "AND p.hidden = false")
     List<Post> findPostsExcludingBlockedUsers(@Param("currentUserId") Long currentUserId);
 
 
@@ -31,9 +31,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTopTrendingPosts();
 
     // Định nghĩa phương thức để lấy báo cáo
-    @Query("SELECT pr FROM PostReport pr")
-    List<PostReport> findAllReports();
+    @Query("SELECT pr FROM Report pr")
+    List<Report> findAllReports();
 
     @Query("SELECT p FROM Post p WHERE p.content LIKE %:keyword%")
     List<Post> findByKeyword(@Param("keyword") String keyword);
+
+    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
+
 }

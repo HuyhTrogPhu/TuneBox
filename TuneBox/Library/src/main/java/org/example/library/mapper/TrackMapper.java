@@ -1,4 +1,3 @@
-
 package org.example.library.mapper;
 
 import org.example.library.dto.TrackDto;
@@ -23,6 +22,7 @@ public class TrackMapper {
         Set<Long> albumIds = track.getAlbums() != null ?
                 track.getAlbums().stream().map(Albums::getId).collect(Collectors.toSet()) : null;
 
+
         return new TrackDto(
                 track.getId(),
                 track.getName(),
@@ -36,6 +36,8 @@ public class TrackMapper {
                 track.getGenre() != null ? track.getGenre().getId() : null,
                 track.getGenre() != null ? track.getGenre().getName() : null,
                 track.getCreator() != null ? track.getCreator().getId() : null,
+                track.getCreator() != null ? track.getCreator().getUserInformation().getAvatar() : null,
+                track.getCreator() != null ? track.getCreator().getUserInformation().getName() : null,
                 track.getCreator() != null ? track.getCreator().getUserName() : null,
                 albumIds,  // Chuyển albumIds vào đây
                 playlist,
@@ -69,8 +71,7 @@ public class TrackMapper {
         track.setCreator(creator);  // Assume user is already fetched or managed elsewhere
 
         Set<Albums> albums = trackDto.getAlbumIds() != null ?
-                trackDto.getAlbumIds().stream().map(id -> {
-                    Albums album = new Albums();
+                trackDto.getAlbumIds().stream().map(id -> {Albums album = new Albums();
                     album.setId(id);
                     return album;
                 }).collect(Collectors.toSet()) : null;

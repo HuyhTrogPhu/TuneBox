@@ -25,4 +25,6 @@ public interface TrackService {
 
     List<TrackDto> searchTracks (String keywords);
 
+        TrackDto getTracksById(Long trackId);
+
 }
