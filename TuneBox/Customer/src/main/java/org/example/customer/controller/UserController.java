@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.MediaType;
 
@@ -59,11 +60,49 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
-        @Autowired
-        private  EmailService emailService;
+    @Autowired
+    private EmailService emailService;
 
-        @Autowired
-        private VerificationCodeService verificationCodeService;
+    @Autowired
+    private VerificationCodeService verificationCodeService;
+
+    // check signUp form
+    @GetMapping("/check-signUp")
+    public ResponseEntity<?> checkSignUp(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+
+        // list userName
+        List<String> userNames = userRepository.findAllUserNames();
+
+        // list email
+        List<String> emails = userRepository.findAllUserEmails();
+
+        // Kiểm tra userName và email đã tồn tại hay chưa
+        if (userNames.contains(userName)) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        if (userName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username not null");
+        }
+
+        if (emails.contains(email)) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+        if (email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email not null");
+        }
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Password not null");
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -78,7 +117,7 @@ public class UserController {
 
         // Kiểm tra và ghi log thông tin nhận được
         if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+            throw new IllegalArgumentException("Password must not be null");
         }
 
         // Mã hóa mật khẩu
@@ -157,7 +196,6 @@ public class UserController {
     }
 
 
-
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -226,6 +264,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
+
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserProfile(userId, userUpdateRequest);
@@ -267,6 +306,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         User user = userRepository.findByEmail(email);
@@ -289,8 +329,6 @@ public class UserController {
 
         return ResponseEntity.ok("The password change link has been sent to your email.");
     }
-
-
 
 
     // Thêm phương thức đổi mật khẩu
@@ -323,8 +361,6 @@ public class UserController {
 
         return ResponseEntity.ok("Mật khẩu đã được đổi thành công");
     }
-
-
 
 
 }
