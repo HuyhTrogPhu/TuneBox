@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat them cua Phong">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat truoc khi merge Phong">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserUpdateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,29 +60,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;QuocTrung&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "Spring Boot.CustomerApplication.executor": "Run",
+    "Spring Boot.EcommerceAdminApplication.executor": "Run",
+    "Spring Boot.LibraryApplication.executor": "Run",
+    "Spring Boot.SocialAdminApplication.executor": "Run",
+    "git-widget-placeholder": "QuocTrung",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "run.configurations.included.in.services": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FPT_poly\DuAnTotNghiep\TuneBox\TuneBox\Customer\src\main\java\org\example\customer\config" />
@@ -101,7 +99,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.EcommerceAdminApplication">
+  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
@@ -175,7 +173,7 @@
       <workItem from="1730880802694" duration="171000" />
       <workItem from="1730892264524" duration="2160000" />
       <workItem from="1730923568304" duration="921000" />
-      <workItem from="1730950598944" duration="5616000" />
+      <workItem from="1730950598944" duration="8694000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -305,7 +303,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730911755995</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="cap nhat truoc khi merge Phong">
+      <option name="closed" value="true" />
+      <created>1730958047616</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1730958047616</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,7 +339,8 @@
     <MESSAGE value="Update background" />
     <MESSAGE value="cap nhat moi thu moi len" />
     <MESSAGE value="cap nhat them cua Phong" />
-    <option name="LAST_COMMIT_MESSAGE" value="cap nhat them cua Phong" />
+    <MESSAGE value="cap nhat truoc khi merge Phong" />
+    <option name="LAST_COMMIT_MESSAGE" value="cap nhat truoc khi merge Phong" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
