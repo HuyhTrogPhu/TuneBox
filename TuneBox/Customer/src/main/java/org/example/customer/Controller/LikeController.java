@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import org.example.library.dto.LikeDto;
 import org.example.library.dto.TrackDto;
 import org.example.library.model.Like;
+import org.example.library.model.Post;
 import org.example.library.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class LikeController {
         }
     }
 
-//add like cho playlist
+    //add like cho playlist
     @PostMapping("/addPlaylist")
     public ResponseEntity<LikeDto> addLikePlaylist(@RequestBody LikeDto likeDto) {
         try {
@@ -88,11 +89,11 @@ public class LikeController {
         }
     }
 
-//    delete like Playlist
+    //    delete like Playlist
     @DeleteMapping("/removePlaylist")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
                                            @RequestParam Long playlistId
-                                           ) {
+    ) {
         try {
             likeService.removeLikePlaylist(userId, playlistId);
             return ResponseEntity.ok().build();
