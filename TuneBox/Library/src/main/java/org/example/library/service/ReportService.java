@@ -19,6 +19,8 @@ public interface ReportService {
     Report2Dto resolveReport(Long reportId, boolean hidePost);
 
     Report2Dto getReport2ById(Long id);
+    ReportDto updateApprove(Long id);
+    ReportDto updateDenied(Long id);
 
     void restorePost(Long reportId);
     Report2Dto dismissReport(Long reportId, String reason);

@@ -9,19 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BrandSalesDto {
+public class StatisticalBrandDto {
 
     private Long brandId;
 
     private String brandName;
-
-    private String instrumentName;
-
-    private String image;
-
-    private double costPrice;
-
-    private int quantity;
-
-    private Long totalSold;
 }

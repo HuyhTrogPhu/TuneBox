@@ -21,11 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,6 +107,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> get5Posts() {
+        List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+        List<Post> last5Posts = posts.size() > 5 ? posts.subList(posts.size() - 5, posts.size()) : posts;
+
+        return last5Posts.stream()
+                .map(PostMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
         List<Post> posts;
 
@@ -128,6 +136,11 @@ public class PostServiceImpl implements PostService {
         return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
     }
 
+    @Override
+    public PostDto getPostById(Long PostId) {
+        Optional<Post> post = postRepository.findById(PostId);
+        return PostMapper.toDto(post.get());
+    }
     @Override
     public PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
 
@@ -318,6 +331,23 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+    public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDateTime, Long> postCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        //for de lay data
+        while (!currentDate.isAfter(endDate)) {
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(23, 59, 59, 999999999); // Thay đổi tại đây
+            Long count = postRepository.countByCreatedAtBetween(startOfDay, endOfDay);
+            postCountMap.put(startOfDay, count);
+            currentDate = currentDate.plusDays(1);
+        }
+
+        System.out.println("Post Count Map: " + postCountMap);
+        return postCountMap;
+    }
+
+
 
 
     @Override

@@ -1,4 +1,3 @@
-
 package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;

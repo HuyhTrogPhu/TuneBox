@@ -4,10 +4,69 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat truoc khi merge Phong">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
+      <change afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/StaticsEcomAdminAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/StatisticalBrandDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/TrackStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/UserInforMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/AlbumService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserInforService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumServiceImplement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserInforServiceImplement.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StaticSocialAdmin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/StatisticalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/controller/StatisticalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumsDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/AlbumsDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BrandSalesDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/BrandSalesDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CategorySalesDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CategorySalesDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentSalesDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentSalesDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumsMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/AlbumsMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/AlbumStyle.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/AlbumStyle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Albums.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Albums.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Like.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Like.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/AlbumsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/AlbumsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BrandRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/BrandRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CategoryInsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CommentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/CommentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PlaylistRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PlaylistRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ReportRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ReportRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/BrandService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/BrandService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/FollowService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/FollowService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlaylistService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PlaylistService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/AlbumsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/BrandServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/BrandServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/FollowServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/FollowServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PlaylistServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PlayListServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/config/MyCloudinaryConfig.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,11 +84,10 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="GiaBao" />
+        <entry key="$PROJECT_DIR$" value="GiaBao2.0FormTrungBranchWithLove" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -37,9 +95,6 @@
     &quot;assignee&quot;: &quot;halayra&quot;
   }
 }</component>
-  <component name="GitRewordedCommitMessages">
-    <option name="onto" value="5164d59cdb53b14a49dac94f67f160379910d605" />
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
@@ -60,30 +115,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "Spring Boot.CustomerApplication.executor": "Run",
-    "Spring Boot.EcommerceAdminApplication.executor": "Run",
-    "Spring Boot.LibraryApplication.executor": "Run",
-    "Spring Boot.SocialAdminApplication.executor": "Run",
-    "git-widget-placeholder": "QuocTrung",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "run.configurations.included.in.services": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SocialAdminApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;QuocTrung&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FPT_poly\DuAnTotNghiep\TuneBox\TuneBox\Customer\src\main\java\org\example\customer\config" />
@@ -99,7 +154,41 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
+  <component name="RunManager" selected="Spring Boot.CustomerApplication">
+    <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
+      <module name="Customer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.customer.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in DuAnTotNghiep" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="DuAnTotNghiep" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="EcommerceAdmin" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="EcommerceAdmin" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
@@ -131,6 +220,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in DuAnTotNghiep" />
+        <item itemvalue="Application.CustomerApplication" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -153,27 +248,10 @@
       <workItem from="1728305162768" duration="14857000" />
       <workItem from="1728357263814" duration="164000" />
       <workItem from="1728359274760" duration="4462000" />
-      <workItem from="1729753314143" duration="1283000" />
-      <workItem from="1729821373967" duration="12866000" />
-      <workItem from="1729857619605" duration="8842000" />
-      <workItem from="1729912503810" duration="521000" />
-      <workItem from="1729913852880" duration="3602000" />
-      <workItem from="1730458850693" duration="13303000" />
-      <workItem from="1730492233595" duration="675000" />
-      <workItem from="1730557279995" duration="4107000" />
-      <workItem from="1730566632488" duration="147000" />
-      <workItem from="1730567375151" duration="2406000" />
-      <workItem from="1730602799581" duration="8865000" />
-      <workItem from="1730627242110" duration="320000" />
-      <workItem from="1730647067364" duration="4704000" />
-      <workItem from="1730691268500" duration="11772000" />
-      <workItem from="1730707111537" duration="5436000" />
-      <workItem from="1730761363796" duration="133000" />
-      <workItem from="1730761504574" duration="8082000" />
-      <workItem from="1730880802694" duration="171000" />
-      <workItem from="1730892264524" duration="2160000" />
-      <workItem from="1730923568304" duration="921000" />
-      <workItem from="1730950598944" duration="8694000" />
+      <workItem from="1728663834379" duration="13925000" />
+      <workItem from="1728687951455" duration="8353000" />
+      <workItem from="1730993370904" duration="631000" />
+      <workItem from="1731066514617" duration="644000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -191,127 +269,23 @@
       <option name="project" value="LOCAL" />
       <updated>1728317883783</updated>
     </task>
-    <task id="LOCAL-00003" summary="cap nhat">
+    <task id="LOCAL-00003" summary="Done Like Track &lt;3">
       <option name="closed" value="true" />
-      <created>1729096702866</created>
+      <created>1728680249788</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1729096702866</updated>
+      <updated>1728680249789</updated>
     </task>
-    <task id="LOCAL-00004" summary="cap nhat sua sau tham hoa merge code">
+    <task id="LOCAL-00004" summary="Lan 2">
       <option name="closed" value="true" />
-      <created>1729136058291</created>
+      <created>1730967030663</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1729136058291</updated>
+      <updated>1730967030663</updated>
     </task>
-    <task id="LOCAL-00005" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729752548460</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1729752548460</updated>
-    </task>
-    <task id="LOCAL-00006" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729752552440</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1729752552440</updated>
-    </task>
-    <task id="LOCAL-00007" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729753357611</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1729753357612</updated>
-    </task>
-    <task id="LOCAL-00008" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729753948645</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1729753948645</updated>
-    </task>
-    <task id="LOCAL-00009" summary="sau tham hoa">
-      <option name="closed" value="true" />
-      <created>1729754070094</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1729754070094</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Update report (post,Track)">
-      <option name="closed" value="true" />
-      <created>1730472159447</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1730472159447</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Update background">
-      <option name="closed" value="true" />
-      <created>1730666693191</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1730666693191</updated>
-    </task>
-    <task id="LOCAL-00012" summary="cap nhat moi thu moi len">
-      <option name="closed" value="true" />
-      <created>1730875434437</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1730875434437</updated>
-    </task>
-    <task id="LOCAL-00013" summary="cap nhat them cua Phong">
-      <option name="closed" value="true" />
-      <created>1730909724341</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1730909724341</updated>
-    </task>
-    <task id="LOCAL-00014" summary="cap nhat them cua Phong">
-      <option name="closed" value="true" />
-      <created>1730911228131</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1730911228131</updated>
-    </task>
-    <task id="LOCAL-00015" summary="cap nhat them cua Phong">
-      <option name="closed" value="true" />
-      <created>1730911328494</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1730911328494</updated>
-    </task>
-    <task id="LOCAL-00016" summary="cap nhat them cua Phong">
-      <option name="closed" value="true" />
-      <created>1730911755995</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1730911755995</updated>
-    </task>
-    <task id="LOCAL-00017" summary="cap nhat truoc khi merge Phong">
-      <option name="closed" value="true" />
-      <created>1730958047616</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1730958047616</updated>
-    </task>
-    <option name="localTasksCounter" value="18" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -329,18 +303,11 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="commit" />
     <MESSAGE value="cap nhat comment" />
-    <MESSAGE value="cap nhat" />
-    <MESSAGE value="cap nhat sua sau tham hoa merge code" />
-    <MESSAGE value="cập nhật xem list bạn bè, theo dõi, được theo dõi" />
-    <MESSAGE value="sau tham hoa" />
-    <MESSAGE value="Update report (post,Track)" />
-    <MESSAGE value="Update background" />
-    <MESSAGE value="cap nhat moi thu moi len" />
-    <MESSAGE value="cap nhat them cua Phong" />
-    <MESSAGE value="cap nhat truoc khi merge Phong" />
-    <option name="LAST_COMMIT_MESSAGE" value="cap nhat truoc khi merge Phong" />
+    <MESSAGE value="Done Like Track &lt;3" />
+    <MESSAGE value="Lan 2" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.YearMonth;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
 @Service
-public class PlaylistServiceImpl implements PlaylistService {
-
+public class PlayListServiceImp implements PlaylistService {
+    @Autowired
+    private PlaylistRepository playlistRepository;
     @Autowired
     private AlbumsRepository albumsRepository;
 
@@ -38,9 +38,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Autowired
     private Cloudinary cloudinary;
-    @Autowired
-    private PlaylistRepository playlistRepository;
-
 
     @Override
     public PlaylistDto createPlaylist(PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId) {
@@ -220,6 +217,60 @@ public class PlaylistServiceImpl implements PlaylistService {
         return playlists.stream().map(PlaylistMapper::mapperPlaylistDto).collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<PlaylistDto> findAll() {
+        return playlistRepository.findAll()
+                .stream()
+                .map(PlaylistMapper::mapperPlaylistDto)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public PlaylistDto findByPlaylistId(Long playlistId) {
+        PlaylistDto playlistDTO =PlaylistMapper.mapperPlaylistDto(playlistRepository.findById(playlistId).get());
+    return playlistDTO;
+    }
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            Long count = playlistRepository.countByCreateDate(currentDate);
+            userCountMap.put(currentDate, count);
+            currentDate = currentDate.plusDays(1);
+        }
+        return userCountMap;
+    }
+
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+            LocalDate currentWeekEnd = currentWeekStart.with(DayOfWeek.SUNDAY);
+            Long count = playlistRepository.countByCreateDateBetween(currentWeekStart, currentWeekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+            Long count = playlistRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        return userCountMap;
+    }
+    public List<Playlist> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate) {
+        return playlistRepository.findAllByCreateDateBetween(startDate, endDate);
+    }
 
     @Override
     public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId) {

@@ -1,9 +1,9 @@
 package org.example.ecommerceadmin.controller;
 
 import org.example.library.dto.*;
-import org.example.library.service.InstrumentService;
-import org.example.library.service.OrderService;
-import org.example.library.service.UserService;
+import org.example.library.repository.BrandRepository;
+import org.example.library.repository.CategoryInsRepository;
+import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +28,18 @@ public class StatisticalController {
 
     @Autowired
     private InstrumentService instrumentService;
+
+    @Autowired
+    private CategoryInsRepository categoryInsRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private BrandService brandService;
 
     // get list user sell the most
     @GetMapping("/user-sell-most")
@@ -155,8 +167,6 @@ public class StatisticalController {
     @GetMapping("/instrument")
     public ResponseEntity<?> getStatisticalInstrument() {
         try {
-
-
             List<InstrumentSalesDto> mostSoldToday = instrumentService.instrumentSalesTheMostOfDay();
             List<InstrumentSalesDto> leastSoldToday = instrumentService.instrumentSalesTheLeastOfDay();
             List<InstrumentSalesDto> mostSoldThisWeek = instrumentService.instrumentSalesTheMostOfWeek();
@@ -165,7 +175,6 @@ public class StatisticalController {
             List<InstrumentSalesDto> leastSoldThisMonth = instrumentService.instrumentSalesTheLeastOfMonth();
 
             Map<String, Object> response = new HashMap<>();
-
 
             response.put("mostSoldToday", mostSoldToday);
             response.put("leastSoldToday", leastSoldToday);
@@ -195,6 +204,133 @@ public class StatisticalController {
             revenue.put("revenueOfWeek", revenueOfWeek != null ? revenueOfWeek : 0.0);
             revenue.put("revenueOfMonth", revenueOfMonth != null ? revenueOfMonth : 0.0);
             revenue.put("revenueOfYear", revenueOfYear != null ? revenueOfYear : 0.0);
+
+            return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // statistical category
+    @GetMapping("/category")
+    public ResponseEntity<?> getStatisticsCategory(){
+        try {
+            List<CategorySalesDto> mostSalesDay = categoryInsRepository.getCategorySalesTheMostDay();
+            List<CategorySalesDto> mostSalesWeek = categoryInsRepository.getCategorySalesTheMostWeek();
+            List<CategorySalesDto> mostSalesMonth = categoryInsRepository.getCategorySalesTheMostMonth();
+            List<CategorySalesDto> leastSalesDay = categoryInsRepository.getCategorySalesTheLeastDay();
+            List<CategorySalesDto> leastSalesWeek = categoryInsRepository.getCategorySalesTheLeastWeek();
+            List<CategorySalesDto> leastSalesMonth = categoryInsRepository.getCategorySalesTheLeastMonth();
+
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("mostSoldToday", mostSalesDay);
+            response.put("leastSoldToday", leastSalesDay);
+            response.put("mostSoldThisWeek", mostSalesWeek);
+            response.put("leastSoldThisWeek", leastSalesWeek);
+            response.put("mostSoldThisMonth", mostSalesMonth);
+            response.put("leastSoldThisMonth", leastSalesMonth);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get id and name category
+    @GetMapping("/categoryForSta")
+    public ResponseEntity<?> getNameAndIdCategory() {
+        try {
+            // Get id and name category
+            List<StatisticalCategoryDto> statisticalCategories = categoryService.getIdsAndNamesCategory();
+            return ResponseEntity.ok(statisticalCategories);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // get revenue category by category id
+    @GetMapping("/revenue-category/{categoryId}")
+    public ResponseEntity<?> getRevenueCategory(@PathVariable Long categoryId) {
+        try {
+            Double revenueCategoryOfDay = categoryService.getRevenueCategoryByDay(categoryId);
+            Double revenueCategoryOfWeek = categoryService.getRevenueCategoryByWeek(categoryId);
+            Double revenueCategoryOfMonth = categoryService.getRevenueCategoryByMonth(categoryId);
+            Double revenueCategoryOfYear = categoryService.getRevenueCategoryByYear(categoryId);
+
+            Map<String, Double> revenue = new HashMap<>();
+            revenue.put("revenueOfDay", revenueCategoryOfDay!= null? revenueCategoryOfDay : 0.0);
+            revenue.put("revenueOfWeek", revenueCategoryOfWeek!= null? revenueCategoryOfWeek : 0.0);
+            revenue.put("revenueOfMonth", revenueCategoryOfMonth!= null? revenueCategoryOfMonth : 0.0);
+            revenue.put("revenueOfYear", revenueCategoryOfYear!= null? revenueCategoryOfYear : 0.0);
+
+            return ResponseEntity.ok(revenue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+
+    // statistical brand
+    @GetMapping("/brand")
+    public ResponseEntity<?> getStatisticsBrand(){
+        try {
+            List<BrandSalesDto> mostSalesDay = brandRepository.getBrandSalesTheMostOdDay();
+            List<BrandSalesDto> mostSalesWeek = brandRepository.getBrandSalesTheMostOfWeek();
+            List<BrandSalesDto> mostSalesMonth = brandRepository.getBrandSalesTheMostOfMonth();
+            List<BrandSalesDto> leastSalesDay = brandRepository.getBrandSalesTheLeastOdDay();
+            List<BrandSalesDto> leastSalesWeek = brandRepository.getBrandSalesTheLeastOfWeek();
+            List<BrandSalesDto> leastSalesMonth = brandRepository.getBrandSalesTheLeastOfMonth();
+
+            Map<String, Object> response = new HashMap<>();
+
+            response.put("mostSoldToday", mostSalesDay);
+            response.put("leastSoldToday", leastSalesDay);
+            response.put("mostSoldThisWeek", mostSalesWeek);
+            response.put("leastSoldThisWeek", leastSalesWeek);
+            response.put("mostSoldThisMonth", mostSalesMonth);
+            response.put("leastSoldThisMonth", leastSalesMonth);
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+
+    // get id and name brand
+    @GetMapping("/brandForSta")
+    public ResponseEntity<?> getNameAndIdBrand() {
+        try {
+            // Get id and name brand
+            List<StatisticalBrandDto> statisticalBrands = brandService.getIdsAndNamesBrand();
+            return ResponseEntity.ok(statisticalBrands);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // revenue brand by brand id
+    @GetMapping("/revenue-brand/{brandId}")
+    public ResponseEntity<?> getRevenueBrand(@PathVariable Long brandId) {
+        try {
+            Double revenueBrandOfDay = brandService.getRevenueByBrandIdOfDay(brandId);
+            Double revenueBrandOfWeek = brandService.getRevenueByBrandIdOfWeek(brandId);
+            Double revenueBrandOfMonth = brandService.getRevenueByBrandIdOfMonth(brandId);
+            Double revenueBrandOfYear = brandService.getRevenueByBrandIdOfYear(brandId);
+
+            Map<String, Double> revenue = new HashMap<>();
+            revenue.put("revenueOfDay", revenueBrandOfDay!= null? revenueBrandOfDay : 0.0);
+            revenue.put("revenueOfWeek", revenueBrandOfWeek!= null? revenueBrandOfWeek : 0.0);
+            revenue.put("revenueOfMonth", revenueBrandOfMonth!= null? revenueBrandOfMonth : 0.0);
+            revenue.put("revenueOfYear", revenueBrandOfYear!= null? revenueBrandOfYear : 0.0);
 
             return ResponseEntity.ok(revenue);
         } catch (Exception e) {

@@ -13,11 +13,9 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,6 +42,9 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
+    private OrderService orderService;
+
+    @Autowired
     private TalentService talentService;
 
     @Autowired
@@ -59,6 +60,8 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
+
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -133,6 +136,7 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
@@ -143,12 +147,13 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
+
 
 
     // Phương thức để lấy userId từ cookie
@@ -332,6 +337,17 @@ public class UserController {
     public ResponseEntity<List<ListUserForMessageDto>> getAllUsers() {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
+    }
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 }

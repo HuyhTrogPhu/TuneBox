@@ -6,12 +6,13 @@ import org.example.library.dto.*;
 import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.springframework.data.domain.Pageable;
-import org.example.library.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -101,11 +102,21 @@ public interface UserService {
     void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 
 
-    public List<SearchDto> searchPlaylist(String keyword);
-    public List<SearchDto> searchAlbum(String keyword);
-    public List<SearchDto> searchTrack(String keyword);
-    public List<SearchDto> searchUser(String keyword);
+     List<SearchDto> searchPlaylist(String keyword);
+     List<SearchDto> searchAlbum(String keyword);
+     List<SearchDto> searchTrack(String keyword);
+     List<SearchDto> searchUser(String keyword);
 
+     long countUser();
+
+    Optional<User> findById(Long userId);
+    List<User> findByReportTrue();
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+    Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+    Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+    List<Object[]> getTop10MostFollowedUsers();
+    List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate);
+    List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
     // list user sell by day
     List<UserSell> getUserSellTheMostDay(LocalDate date);
 

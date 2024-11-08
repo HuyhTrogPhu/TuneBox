@@ -35,60 +35,58 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
 
 
     // Bán chạy nhất trong ngày
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Order o JOIN o.orderDetails od JOIN od.instrument i " +
             "WHERE o.orderDate = CURRENT_DATE " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) DESC")
     List<InstrumentSalesDto> getInstrumentSalesTheMostOfDay();
 
 
     // Bán chạy nhất trong tuần
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Order o JOIN o.orderDetails od JOIN od.instrument i " +
             "WHERE YEAR(o.orderDate) = YEAR(CURRENT_DATE) AND WEEK(o.orderDate) = WEEK(CURRENT_DATE) " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) DESC")
     List<InstrumentSalesDto> getInstrumentSalesTheMostOfWeek();
 
 
     // Bán chạy nhất trong tháng
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Order o JOIN o.orderDetails od JOIN od.instrument i " +
             "WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE) AND YEAR(o.orderDate) = YEAR(CURRENT_DATE) " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) DESC")
     List<InstrumentSalesDto> getInstrumentSalesTheMostOfMonth();
 
 
-
-
     // Bán ít nhất trong ngày
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Instrument i LEFT JOIN OrderDetail od ON i.id = od.instrument.id " +
             "LEFT JOIN od.order o " +
             "WHERE (o.orderDate = CURRENT_DATE OR o.orderDate IS NULL) " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) ASC")
     List<InstrumentSalesDto> getInstrumentSalesTheLeastOfDay();
 
 
     // Bán ít nhất trong tuần
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Instrument i LEFT JOIN OrderDetail od ON i.id = od.instrument.id " +
             "LEFT JOIN od.order o " +
             "WHERE (YEAR(o.orderDate) = YEAR(CURRENT_DATE) AND WEEK(o.orderDate) = WEEK(CURRENT_DATE)) OR o.orderDate IS NULL " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) ASC")
     List<InstrumentSalesDto> getInstrumentSalesTheLeastOfWeek();
 
 
     // Bán ít nhất trong tháng
-    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, SUM(od.quantity)) " +
+    @Query("SELECT new org.example.library.dto.InstrumentSalesDto(i.id, i.name, i.image, i.costPrice, i.quantity, SUM(od.quantity)) " +
             "FROM Instrument i LEFT JOIN OrderDetail od ON i.id = od.instrument.id " +
             "LEFT JOIN od.order o " +
             "WHERE (MONTH(o.orderDate) = MONTH(CURRENT_DATE) AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)) OR o.orderDate IS NULL " +
-            "GROUP BY i.id, i.name " +
+            "GROUP BY i.id, i.name, i.image, i.costPrice, i.quantity " +
             "ORDER BY SUM(od.quantity) ASC")
     List<InstrumentSalesDto> getInstrumentSalesTheLeastOfMonth();
 
