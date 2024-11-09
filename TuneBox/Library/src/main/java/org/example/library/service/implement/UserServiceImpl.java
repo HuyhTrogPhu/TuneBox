@@ -290,6 +290,44 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+    @Override
+    public List<ListUserForMessageDto> findAllUserForMessage() {
+        // Lấy danh sách tất cả User từ repository
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> {
+                    ListUserForMessageDto dto = new ListUserForMessageDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUserName());
+
+                    // Check if userInformation is not null
+                    if (user.getUserInformation() != null) {
+                        dto.setNickName(user.getUserInformation().getName());
+                    } else {
+                        // Set a default value if userInformation is null
+                        dto.setNickName("No name available");
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
     @Override
     @Transactional
     public void updateBirthday(Long userId, Date birthday) {
@@ -498,6 +536,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId) {
+        List<User> users = userRepository.findAll();
+        // Lọc bỏ người gửi
+        users = users.stream()
+                .filter(user -> !user.getId().equals(senderId)) // loại bỏ người dùng đã đăng nhập
+                .collect(Collectors.toList());
+        // Chuyển đổi danh sách người dùng thành danh sách UserMessageDTO
+        List<UserMessageDTO> userMessageDTOs = users.stream()
+                .map(user -> new UserMessageDTO(user.getId(), user.getId(), senderId)) // Gán id và senderId
+                .collect(Collectors.toList());
+        return userMessageDTOs;
+    }
+
+
+    @Override
     public void updateBackground(Long userId, MultipartFile image) {
         try {
             User user = userRepository.findById(userId)
@@ -529,5 +582,6 @@ public class UserServiceImpl implements UserService {
             );
         }).collect(Collectors.toList());
     }
+
 
 }

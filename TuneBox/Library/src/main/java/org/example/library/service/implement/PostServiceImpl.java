@@ -3,17 +3,17 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReportDto;
 import org.example.library.mapper.PostMapper;
-import org.example.library.mapper.PostReportMapper;
+import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
-import org.example.library.model.PostReport;
+import org.example.library.model.Report;
 import org.example.library.model.User;
+import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.PostRepository;
+import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,13 +33,17 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final ReportRepository reportRepository;
+    private final Cloudinary cloudinary;
 
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ReportRepository  reportRepository, Cloudinary cloudinary) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.reportRepository = reportRepository;
+        this.cloudinary = cloudinary;
     }
-    @Autowired
-            private Cloudinary cloudinary;
+
+
 
     @Override
     public PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException {
@@ -184,6 +188,25 @@ public class PostServiceImpl implements PostService {
         // Xóa bài viết khỏi cơ sở dữ liệu
         postRepository.delete(post);
     }
+
+    @Override
+    public void updateReportPost(Post post) {
+        List<Report> reports = reportRepository.findByPost(post);
+
+        if (reports.isEmpty()) {
+            throw new RuntimeException("No reports found for the post with ID: " + post.getId());
+        }
+        for (Report report : reports) {
+            report.setStatus(ReportStatus.RESOLVED);
+            reportRepository.save(report);
+        }
+    }
+
+    @Override
+    public Post findThisPostById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+
     public void changePostVisibility(Long postId, boolean hidden) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
@@ -227,22 +250,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostReportDto> findAllReports() {
-        List<PostReport> reports = postRepository.findAllReports(); // Giả sử bạn đã có phương thức này trong repository
-        return reports.stream()
-                .map(report -> new PostReportDto(
-                        report.getId(),
-                        report.getContent(),
-                        report.getReporter(),
-                        report.getReportedPostId(),
-                        report.getReason(),
-                        report.getDateReported(),
-                        PostReportMapper.checkSensitiveContent(report.getContent())
-                ))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public long countTotalPosts() {
         return postRepository.count(); // Sử dụng phương thức count() của PostRepository
     }
@@ -255,6 +262,27 @@ public class PostServiceImpl implements PostService {
         // Chuyển đổi danh sách Post thành PostDto
         return posts.stream()
                 .map(PostMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDto> getReportedPosts() {
+        // Lấy danh sách các report từ reportRepository thay vì postRepository
+        List<Report> reports = reportRepository.findAll(); // Lấy tất cả các báo cáo
+
+        return reports.stream()
+                .map(report -> {
+                    ReportDto reportDto = new ReportDto();
+                    // Set các thuộc tính của ReportDto từ Report entity
+                    reportDto.setId(report.getId()); // ID của báo cáo
+                    reportDto.setPostId(report.getPost().getId()); // ID của bài viết bị báo cáo
+                    reportDto.setUserId(report.getUser().getId()); // ID của người dùng đã báo cáo
+                    reportDto.setReason(report.getReason()); // Lý do báo cáo
+                    reportDto.setCreateDate(report.getCreateDate()); // Ngày tạo báo cáo
+                    reportDto.setStatus(report.getStatus()); // Trạng thái báo cáo
+
+                    return reportDto; // Trả về ReportDto
+                })
                 .collect(Collectors.toList());
     }
 
@@ -290,6 +318,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+
 
     @Override
     public boolean userCanToggleHidden(Long postId, String username) {

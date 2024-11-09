@@ -1,10 +1,7 @@
 package org.example.customer.controller;
 
 
-import org.example.library.dto.OrderDetailInfoDto;
-import org.example.library.dto.OrderDto;
-import org.example.library.dto.UserCheckOut;
-import org.example.library.dto.UserIsInvoice;
+import org.example.library.dto.*;
 import org.example.library.model.Order;
 import org.example.library.service.EmailService;
 import org.example.library.service.implement.OrderServiceImpl;
@@ -109,6 +106,17 @@ public class OrderController {
         Order order = orderService.getOrderById(orderId);
         OrderDto orderDto = orderService.mapToDto(order);
         return ResponseEntity.ok(orderDto);
+    }
+
+    @PutMapping("/order/{orderId}/status")
+    public ResponseEntity<String> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderListDto orderListDto) {
+        try {
+            orderService.updateOrderStatus(orderId, orderListDto.getStatus(), orderListDto.getDeliveryDate(), orderListDto.getPaymentStatus());
+            return ResponseEntity.ok("Order status updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update order status");
+        }
     }
 
 }

@@ -1,10 +1,9 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.MessageDTO;
-import org.example.library.dto.MessageWebSocketDTO;
-import org.example.library.dto.UserMessageDTO;
+import org.example.library.dto.*;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
+import org.example.library.model.OtherAttachment;
 import org.example.library.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -15,6 +14,9 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -32,12 +34,14 @@ public class ChatWebSocketController {
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload MessageWebSocketDTO messageWebSocketDTO) {
         try {
-            // Chuyển đổi MessageWebSocketDTO thành Message
+            if (messageWebSocketDTO.getSenderId() == null) {
+                throw new IllegalArgumentException("Sender ID cannot be null");
+            }
             Message message = messageMapper.toModel(messageWebSocketDTO);
 
             Message savedMessage = messageService.saveMessage(message);
 
-            MessageWebSocketDTO savedMessageDTO = new MessageWebSocketDTO();
+            MessageWebSocketDTO savedMessageDTO = messageMapper.toDto(savedMessage);
             savedMessageDTO.setId(savedMessage.getId());
             savedMessageDTO.setSenderId
                     (new UserMessageDTO(savedMessage.getSender().getId()));
@@ -45,6 +49,23 @@ public class ChatWebSocketController {
                     (new UserMessageDTO(savedMessage.getReceiver().getId()));
             savedMessageDTO.setContent(savedMessage.getContent());
             savedMessageDTO.setCreationDate(savedMessage.getDateTime());
+
+            if (messageWebSocketDTO.getAttachments() != null && !messageWebSocketDTO.getAttachments().isEmpty()) {
+                List<OtherAttachment> attachments = messageWebSocketDTO.getAttachments().stream()
+                        .map(attachmentDto -> {
+                            OtherAttachment attachment = new OtherAttachment();
+                            attachment.setFileName(attachmentDto.getFileName());
+                            attachment.setFileUrl(attachmentDto.getFileUrl());
+                            attachment.setMimeType(attachmentDto.getMimeType());
+                            attachment.setContentType(attachmentDto.getMimeType());
+                            attachment.setSize(attachmentDto.getSize());
+                            attachment.setMessage(message);
+                            return attachment;
+                        })
+                        .collect(Collectors.toList());
+                message.setAttachments(attachments);
+            }
+
 
             // Gửi tin nhắn cho người gửi
             messagingTemplate.convertAndSendToUser(

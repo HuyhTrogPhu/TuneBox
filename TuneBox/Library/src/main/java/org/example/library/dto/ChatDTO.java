@@ -1,5 +1,6 @@
 package org.example.library.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatDTO {
+
     private Long id;
     private LocalDateTime creationDate;
     private Long senderId;

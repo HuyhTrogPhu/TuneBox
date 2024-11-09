@@ -1,7 +1,9 @@
 package org.example.socialadmin.controller;
 
+import org.example.library.Exception.PostNotFoundException;
 import org.example.library.dto.PostDto;
-import org.example.library.service.PostService;
+import org.example.library.dto.ReportDto;
+import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,57 +35,28 @@ public class PostAdminController {
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
         try {
-            List<PostDto> newPosts = postService.findNewPosts();
+            List<PostDto> newPosts = postService.findNewPosts(); // Giả định có phương thức lấy bài mới
             return ResponseEntity.ok(newPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @GetMapping("/trending")
-    public ResponseEntity<List<PostDto>> getTrendingPosts() {
-        try {
-            List<PostDto> trendingPosts = postService.findTrendingPosts();
-            return ResponseEntity.ok(trendingPosts);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-
-//    @GetMapping("/reports")
-//    public ResponseEntity<List<PostReportDto>> getPostReports() {
-//        try {
-//            // Lấy danh sách báo cáo
-//            List<PostReportDto> reports = postService.findAllReports();
-//            SensitiveContentService sensitiveContentService = new SensitiveContentService();
-//
-//            for (PostReportDto report : reports) {
-//                if (sensitiveContentService.containsSensitiveContent(report.getContent())) {
-//                    report.setSensitive(true); // Đánh dấu bài đăng có nội dung nhạy cảm
-//                } else {
-//                    report.setSensitive(false); // Bài đăng không có nội dung nhạy cảm
-//                }
-//            }
-//
-//            // Trả về danh sách báo cáo đã được đánh dấu
-//            return ResponseEntity.ok(reports);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
-
-
     @GetMapping("/total")
     public ResponseEntity<Long> getTotalPosts() {
         try {
-            long totalPosts = postService.countTotalPosts();
+            long totalPosts = postService.countTotalPosts(); // Gọi phương thức để lấy tổng số bài viết
             return ResponseEntity.ok(totalPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
+    //report
+    @GetMapping("/report")
+    public List<ReportDto> getPendingReports() {
+        return postService.getReportedPosts();
+    }
 
 
     //search theo id
@@ -97,7 +70,7 @@ public class PostAdminController {
         }
     }
 
-//update post
+    //update post
     @PutMapping("/{id}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable Long id,
@@ -119,20 +92,13 @@ public class PostAdminController {
         try {
             postService.deletePost(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
+        } catch (PostNotFoundException e) {  // Ngoại lệ cụ thể khi không tìm thấy bài viết
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post not found with id: " + id);
-        }
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<PostDto>> searchPostsByKeyword(@RequestParam("keyword") String keyword) {
-        try {
-            List<PostDto> posts = postService.searchPostsByKeyword(keyword);
-            return ResponseEntity.ok(posts);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting post");
         }
     }
 
+    //xu ly bai viet
 
 }

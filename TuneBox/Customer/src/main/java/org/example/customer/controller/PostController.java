@@ -77,13 +77,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Phương thức lấy tất cả các bài viết
-//    @GetMapping("/all")
-//    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-//        List<PostDto> posts = postService.getAllPosts(currentUserId);
-//        return new ResponseEntity<>(posts, HttpStatus.OK);
-//    }
       @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
         try {
@@ -112,7 +105,6 @@ public class PostController {
         postDto.setId(id);
         postDto.setContent(content);
 
-
         try {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
@@ -135,7 +127,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
-
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")

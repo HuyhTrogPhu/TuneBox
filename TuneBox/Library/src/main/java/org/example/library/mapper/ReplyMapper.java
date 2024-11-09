@@ -5,8 +5,9 @@ import org.example.library.dto.ReplyDto;
 import org.example.library.model.Reply;
 import org.example.library.model.User;
 import org.example.library.model.Comment;
-import org.example.library.repository.CommentRepository; // Importing necessary repository
+import org.example.library.repository.CommentRepository;
 import org.springframework.stereotype.Component;
+
 
 import java.time.LocalDateTime;
 
@@ -40,7 +41,7 @@ public class ReplyMapper {
             replyDTO.setCommentId(reply.getParentComment().getId());
         }
 
-        // Set parentReplyId từ parentReply nếu có
+        // Set parentReplyId từ parentReply
         if (reply.getParentReply() != null) {
             replyDTO.setParentReplyId(reply.getParentReply().getId());
         }

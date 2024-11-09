@@ -9,4 +9,8 @@ public interface MessageService {
 
     List<Message> getMessagesBetween(Long userId1, Long userId2); // Lấy tin nhắn giữa hai người dùng
 
+    Message revokeMessage(Long messageId, Long userId); //thu hồi tin nhắn
+
+    Message findMessageById(Long messageId); // Tìm tin nhắn theo ID
+
 }

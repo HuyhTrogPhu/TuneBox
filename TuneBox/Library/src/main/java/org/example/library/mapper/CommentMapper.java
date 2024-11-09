@@ -21,8 +21,19 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
-        commentDTO.setPostId(comment.getPost().getId());
+//        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
+//        commentDTO.setPostId(comment.getPost().getId());
+
+        // Kiểm tra null cho UserInformation
+        if (comment.getUser().getUserInformation() != null) {
+            commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
+        } else {
+            commentDTO.setUserNickname("Unknown");  // Hoặc một giá trị mặc định
+        }
+
+        if (comment.getPost() != null) {
+            commentDTO.setPostId(comment.getPost().getId());
+        }
         commentDTO.setEdited(comment.isEdited());
 
         return commentDTO;
@@ -37,10 +48,19 @@ public class CommentMapper {
         commentDTO.setContent(comment.getContent());
         commentDTO.setCreationDate(comment.getCreationDate());
         commentDTO.setUserId(comment.getUser().getId());
-        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
-        commentDTO.setEdited(comment.isEdited());
+//        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
+//        commentDTO.setTrackId(comment.getTrack().getId());
 
-        commentDTO.setTrackId(comment.getTrack().getId());
+        if (comment.getUser().getUserInformation() != null) {
+            commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
+        } else {
+            commentDTO.setUserNickname("Unknown");
+        }
+
+        if (comment.getTrack() != null) {
+            commentDTO.setTrackId(comment.getTrack().getId());
+        }
+        commentDTO.setEdited(comment.isEdited());
 
         return commentDTO;
     }

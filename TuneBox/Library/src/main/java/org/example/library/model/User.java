@@ -1,7 +1,6 @@
 package org.example.library.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-public class User {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,8 +37,8 @@ public class User {
 
     private LocalDate createDate;
 
+
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
     @JoinColumn(name = "user_information_id", referencedColumnName = "id")
     private UserInformation userInformation;
 
@@ -48,11 +48,13 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "inspired_id", referencedColumnName = "inspired_id"))
     private Set<InspiredBy> inspiredBy;
 
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_talent",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "talent_id", referencedColumnName = "talent_id"))
     private Set<Talent> talent;
+
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_genre", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
@@ -61,7 +63,12 @@ public class User {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @JsonBackReference
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Report> reports;
 
 
     @OneToMany(mappedBy = "blocker")
@@ -79,12 +86,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orderList;
 
-    @OneToMany(mappedBy = "creator")
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "creator")
     private Set<Albums> albums;
-
 
     @OneToMany(mappedBy = "sender")
     private Set<Chat> sentChats;
@@ -95,12 +101,15 @@ public class User {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Message> messages;
 
-
     @OneToMany(mappedBy = "user")
     private Set<Like> likes;
 
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Set<Post> posts; // Thuộc tính này sẽ đại diện cho các bài viết của người dùng
 
     public User(Long blockerId) {
         this.id = blockerId;

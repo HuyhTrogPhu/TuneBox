@@ -88,8 +88,6 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
 
-
-
     @Override
     public List<ReplyDto> getRepliesByComment(Long commentId) {
         // Tìm comment cha

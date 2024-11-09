@@ -58,7 +58,7 @@ public class UserConfiguration {
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
                         .requestMatchers("/api/**","/user/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
-                        .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
+                        .requestMatchers("/SocialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth
