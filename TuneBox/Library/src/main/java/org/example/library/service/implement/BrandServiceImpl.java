@@ -4,7 +4,9 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.example.library.dto.BrandSalesDto;
 import org.example.library.dto.BrandsDto;
+import org.example.library.dto.StatisticalBrandDto;
 import org.example.library.mapper.BrandMapper;
 import org.example.library.model.Brand;
 import org.example.library.repository.BrandRepository;
@@ -132,6 +134,61 @@ public class BrandServiceImpl implements BrandService {
     public Brand getManagedBrand(Long id) {
         return brandRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Brand not found"));
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheMost() {
+        return brandRepository.getBrandSalesTheMostOdDay();
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheMostOfWeek() {
+        return brandRepository.getBrandSalesTheMostOfWeek();
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheMostOfMonth() {
+        return brandRepository.getBrandSalesTheMostOfMonth();
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheLeast() {
+        return brandRepository.getBrandSalesTheLeastOdDay();
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheLeastOfWeek() {
+        return brandRepository.getBrandSalesTheLeastOfWeek();
+    }
+
+    @Override
+    public List<BrandSalesDto> getBrandSalesTheLeastOfMonth() {
+        return brandRepository.getBrandSalesTheLeastOfMonth();
+    }
+
+    @Override
+    public List<StatisticalBrandDto> getIdsAndNamesBrand() {
+        return brandRepository.getStatisticalBrand();
+    }
+
+    @Override
+    public Double getRevenueByBrandIdOfDay(Long brandId) {
+        return brandRepository.getRevenueByBrandIdOfDay(brandId);
+    }
+
+    @Override
+    public Double getRevenueByBrandIdOfWeek(Long brandId) {
+        return brandRepository.getRevenueByBrandIdOfWeek(brandId);
+    }
+
+    @Override
+    public Double getRevenueByBrandIdOfMonth(Long brandId) {
+        return brandRepository.getRevenueByBrandIdOfMonth(brandId);
+    }
+
+    @Override
+    public Double getRevenueByBrandIdOfYear(Long brandId) {
+        return brandRepository.getRevenueByBrandIdOfYear(brandId);
     }
 
 
