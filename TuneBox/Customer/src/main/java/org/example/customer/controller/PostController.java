@@ -1,10 +1,12 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.dto.UserTag;
 import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
+import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class PostController {
 
     private final PostService postService;
     private final NotificationService notificationService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private LikeRepository likeRepository;
@@ -201,6 +206,16 @@ public class PostController {
         }
 
         return new ResponseEntity<>(postDto, HttpStatus.OK); // Trả về bài viết với trạng thái 200 OK
+    }
+
+    // list user tagName
+    @GetMapping("/tagName")
+    public ResponseEntity<List<UserTag>> getUserTagList() {
+        List<UserTag> userTags = userService.getUserTags();
+        if (userTags.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userTags, HttpStatus.OK);
     }
 
 }

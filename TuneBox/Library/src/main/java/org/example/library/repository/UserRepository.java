@@ -21,6 +21,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.userName FROM User u")
     List<String> findAllUserNames();
 
+    // list user tagname
+    @Query("select new org.example.library.dto.UserTag(u.id, u.userName) " +
+            "from User u")
+    List<UserTag> findUserTags();
+
     // list email
     @Query("SELECT u.email FROM User u")
     List<String> findAllUserEmails();

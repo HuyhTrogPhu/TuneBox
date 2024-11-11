@@ -28,7 +28,7 @@ public class Albums {
     private String title;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String albumImage;
 
     @Size(min = 10, max = 1000)

@@ -26,10 +26,10 @@ public class Track {
     private String name;
 
     @Lob
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String trackImage;
 
-    @Column(columnDefinition = "LONGBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String trackFile;
 
     private String description;

@@ -181,6 +181,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserTag> getUserTags() {
+        return userRepository.findUserTags();
+    }
+
+    @Override
     public Long getFollowersCount(Long userId) {
         return followRepository.countFollowersByUserId(userId);
     }
