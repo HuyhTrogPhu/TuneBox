@@ -4,15 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="hihi">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat fix friend list">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/LikeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/EcommerceAdminConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/MyCloudinaryConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/java/org/example/ecommerceadmin/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/UserServiceConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/SendTrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/SendTrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/CloudinaryConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/config/CloudinaryConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/config/SecurityConfiggg.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/config/SecurityConfiggg.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +43,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="QuocTrung" />
+        <entry key="$PROJECT_DIR$" value="XuanTruong" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,11 +57,11 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
-    &quot;accountId&quot;: &quot;0b5de1f3-c52d-414b-b5eb-2774c7915b64&quot;
+    &quot;accountId&quot;: &quot;f7858ff9-959f-43df-afb4-670d33901c15&quot;
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -63,40 +76,27 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "JUnit.All in DuAnTotNghiep.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.CustomerApplication.executor": "Run",
     "Spring Boot.EcommerceAdminApplication.executor": "Run",
     "Spring Boot.LibraryApplication.executor": "Run",
-    "Spring Boot.SocialAdminApplication.executor": "Run",
-    "git-widget-placeholder": "GiaNhu",
+    "git-widget-placeholder": "Merging GiaNhu",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
     "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\FPT_poly\DuAnTotNghiep\TuneBox\TuneBox\Customer\src\main\java\org\example\customer\config" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.example.library.service.implement" />
-      <recent name="org.example.customer.Controller" />
-      <recent name="org.example.library.mapper" />
-      <recent name="org.example.library.service" />
-      <recent name="org.example.library.utils" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -109,7 +109,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.EcommerceAdminApplication">
+  <component name="RunManager" selected="Spring Boot.CustomerApplication">
     <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
       <module name="Customer" />
@@ -188,8 +188,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -207,60 +207,8 @@
       <workItem from="1728357263814" duration="164000" />
       <workItem from="1728359274760" duration="4462000" />
       <workItem from="1728663834379" duration="13925000" />
-      <workItem from="1728687951455" duration="8696000" />
-      <workItem from="1728750008674" duration="3318000" />
-      <workItem from="1728765705228" duration="879000" />
-      <workItem from="1728832896054" duration="6885000" />
-      <workItem from="1728876994422" duration="9457000" />
-      <workItem from="1728927156051" duration="1602000" />
-      <workItem from="1728962459220" duration="13961000" />
-      <workItem from="1729043290909" duration="17834000" />
-      <workItem from="1729095637997" duration="3715000" />
-      <workItem from="1729133563376" duration="5396000" />
-      <workItem from="1729144152971" duration="2541000" />
-      <workItem from="1729147141151" duration="1096000" />
-      <workItem from="1729189894792" duration="1677000" />
-      <workItem from="1729267703696" duration="11009000" />
-      <workItem from="1729286690472" duration="1751000" />
-      <workItem from="1729325858989" duration="2099000" />
-      <workItem from="1729331243433" duration="1222000" />
-      <workItem from="1729351037762" duration="7236000" />
-      <workItem from="1729509164669" duration="20777000" />
-      <workItem from="1729588235497" duration="1473000" />
-      <workItem from="1729827875285" duration="12571000" />
-      <workItem from="1729913713931" duration="6275000" />
-      <workItem from="1729923567665" duration="1201000" />
-      <workItem from="1729924934568" duration="1870000" />
-      <workItem from="1729936890073" duration="2753000" />
-      <workItem from="1729958646178" duration="10000" />
-      <workItem from="1729958666437" duration="2770000" />
-      <workItem from="1729964415901" duration="3846000" />
-      <workItem from="1729982244269" duration="1006000" />
-      <workItem from="1729983791436" duration="2408000" />
-      <workItem from="1730019661193" duration="2550000" />
-      <workItem from="1730022582184" duration="3990000" />
-      <workItem from="1730041966837" duration="11902000" />
-      <workItem from="1730061016811" duration="1309000" />
-      <workItem from="1730064466690" duration="8296000" />
-      <workItem from="1730084218466" duration="16761000" />
-      <workItem from="1730120733397" duration="10792000" />
-      <workItem from="1730145320645" duration="585000" />
-      <workItem from="1730178792192" duration="5648000" />
-      <workItem from="1730208208516" duration="27000" />
-      <workItem from="1730259940810" duration="9406000" />
-      <workItem from="1730309010977" duration="6352000" />
-      <workItem from="1730321658245" duration="9503000" />
-      <workItem from="1730346240746" duration="682000" />
-      <workItem from="1730348112995" duration="2052000" />
-      <workItem from="1730350527778" duration="5012000" />
-      <workItem from="1730389635579" duration="654000" />
-      <workItem from="1730427959887" duration="6697000" />
-      <workItem from="1730518684825" duration="6835000" />
-      <workItem from="1730570426684" duration="3041000" />
-      <workItem from="1730689967221" duration="1776000" />
-      <workItem from="1730859898419" duration="8074000" />
-      <workItem from="1730884154953" duration="817000" />
-      <workItem from="1730952598659" duration="7437000" />
+      <workItem from="1728687951455" duration="8353000" />
+      <workItem from="1730196763168" duration="586000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -286,119 +234,7 @@
       <option name="project" value="LOCAL" />
       <updated>1728680249789</updated>
     </task>
-    <task id="LOCAL-00004" summary="comment Track">
-      <option name="closed" value="true" />
-      <created>1728724018915</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1728724018915</updated>
-    </task>
-    <task id="LOCAL-00005" summary="update reply">
-      <option name="closed" value="true" />
-      <created>1728890866636</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1728890866636</updated>
-    </task>
-    <task id="LOCAL-00006" summary="comment">
-      <option name="closed" value="true" />
-      <created>1729051602978</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1729051602978</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Albums">
-      <option name="closed" value="true" />
-      <created>1729061705783</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1729061705783</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Albums 80%">
-      <option name="closed" value="true" />
-      <created>1729594166379</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1729594166379</updated>
-    </task>
-    <task id="LOCAL-00009" summary="merge">
-      <option name="closed" value="true" />
-      <created>1729923985928</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1729923985928</updated>
-    </task>
-    <task id="LOCAL-00010" summary="list post liked">
-      <option name="closed" value="true" />
-      <created>1730070727423</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1730070727423</updated>
-    </task>
-    <task id="LOCAL-00011" summary="search, list like Feed">
-      <option name="closed" value="true" />
-      <created>1730137559936</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1730137559936</updated>
-    </task>
-    <task id="LOCAL-00012" summary="update">
-      <option name="closed" value="true" />
-      <created>1730193183788</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1730193183788</updated>
-    </task>
-    <task id="LOCAL-00013" summary="update tiep">
-      <option name="closed" value="true" />
-      <created>1730247755628</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1730247755628</updated>
-    </task>
-    <task id="LOCAL-00014" summary="update tiep">
-      <option name="closed" value="true" />
-      <created>1730272058677</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1730272058677</updated>
-    </task>
-    <task id="LOCAL-00015" summary="update">
-      <option name="closed" value="true" />
-      <created>1730348253713</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1730348253713</updated>
-    </task>
-    <task id="LOCAL-00016" summary="update">
-      <option name="closed" value="true" />
-      <created>1730884921800</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1730884921800</updated>
-    </task>
-    <task id="LOCAL-00017" summary="hihi">
-      <option name="closed" value="true" />
-      <created>1730968127701</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1730968127701</updated>
-    </task>
-    <option name="localTasksCounter" value="18" />
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -419,19 +255,7 @@
     <MESSAGE value="commit" />
     <MESSAGE value="cap nhat comment" />
     <MESSAGE value="Done Like Track &lt;3" />
-    <MESSAGE value="comment Track" />
-    <MESSAGE value="update reply" />
-    <MESSAGE value="comment" />
-    <MESSAGE value="Albums" />
-    <MESSAGE value="create album" />
-    <MESSAGE value="Albums 80%" />
-    <MESSAGE value="merge" />
-    <MESSAGE value="list post liked" />
-    <MESSAGE value="search, list like Feed" />
-    <MESSAGE value="update tiep" />
-    <MESSAGE value="update" />
-    <MESSAGE value="hihi" />
-    <option name="LAST_COMMIT_MESSAGE" value="hihi" />
+    <option name="LAST_COMMIT_MESSAGE" value="Done Like Track &lt;3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

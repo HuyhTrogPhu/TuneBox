@@ -12,6 +12,7 @@ import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("ECOMADMIN"));
+            user.setRole(roleRepository.findByName("CUSTOMER"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -300,7 +301,15 @@ public class UserServiceImpl implements UserService {
                     ListUserForMessageDto dto = new ListUserForMessageDto();
                     dto.setId(user.getId());
                     dto.setUsername(user.getUserName());
-                    dto.setNickName(user.getUserInformation().getName());
+
+                    // Check if userInformation is not null
+                    if (user.getUserInformation() != null) {
+                        dto.setNickName(user.getUserInformation().getName());
+                    } else {
+                        // Set a default value if userInformation is null
+                        dto.setNickName("No name available");
+                    }
+
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -573,5 +582,6 @@ public class UserServiceImpl implements UserService {
             );
         }).collect(Collectors.toList());
     }
+
 
 }

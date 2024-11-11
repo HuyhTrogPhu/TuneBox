@@ -18,7 +18,7 @@ public class PostMapper {
         dto.setUserNickname(post.getUser() != null ? post.getUser().getUserInformation().getName() : null);
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));
         dto.setCreatedAt(post.getCreatedAt());
-//        dto,setDescription(post.getDescription());
+        dto.setIdShare(post.getIdShare());
         dto.setLikeCount(post.getLikes() != null ? post.getLikes().size() : 0);
         dto.setCommentCount(post.getComments() != null ? post.getComments().size() : 0);
         return dto;
@@ -30,6 +30,7 @@ public class PostMapper {
 
         Post entity = new Post();
         entity.setId(postDto.getId());
+        entity.setIdShare(postDto.getIdShare());
         entity.setHidden(postDto.isHidden());
         entity.setContent(postDto.getContent());
         entity.setImages(PostImageMapper.toEntitySet(postDto.getImages()));

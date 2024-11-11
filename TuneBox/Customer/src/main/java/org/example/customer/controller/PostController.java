@@ -40,7 +40,13 @@ public class PostController {
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "images", required = false) MultipartFile[] images,
             @RequestParam(value = "createdAt", required = false) String createdAt,
+            @RequestParam(value = "IdShare", required = false) String IdShare,
             @RequestParam("userId") Long userId) {
+
+        Long idShareLong = null;
+        if (IdShare != null && !IdShare.isEmpty()) {
+            idShareLong = Long.parseLong(IdShare);
+        }
 
         if (userId == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Kiểm tra nếu userId không hợp lệ
@@ -48,6 +54,7 @@ public class PostController {
 
         PostDto postDto = new PostDto();
         postDto.setContent(content);
+        postDto.setIdShare(idShareLong);
         try {
             // Kiểm tra nếu cả 'content' và 'images' đều trống
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
@@ -105,7 +112,6 @@ public class PostController {
         postDto.setId(id);
         postDto.setContent(content);
 
-
         try {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
@@ -128,7 +134,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
-
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")

@@ -17,7 +17,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
-    User findByUserName(String username);
+    // list username
+    @Query("SELECT u.userName FROM User u")
+    List<String> findAllUserNames();
+
+    // list email
+    @Query("SELECT u.email FROM User u")
+    List<String> findAllUserEmails();
+
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
+
     // get user by username or email
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
@@ -162,6 +172,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserNotSell();
 
 
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
+
+
     // search
     @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.name, ui.avatar,  us.userName) " +
             "from UserInformation ui join ui.user us where ui.name like :keyword or us.userName like :keyword")
@@ -178,6 +192,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new org.example.library.dto.SearchDto(p.creator.userInformation.name, p.id, p.title, p.imagePlaylist, p.creator.userName) " +
             "from Playlist p where p.title like :keyword or p.type like :keyword or p.creator.userName like :keyword  or p.creator.userInformation.name like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
+
+
+//    User findByUserName(String username);
+
 
 
     // get list user sell by day

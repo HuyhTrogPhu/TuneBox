@@ -3,30 +3,24 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
 import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.MediaType;
-
-import static org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames.CLIENT_ID;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -55,7 +49,8 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -195,7 +190,6 @@ public class UserController {
     }
 
 
-
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -227,7 +221,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -277,6 +271,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
+
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserProfile(userId, userUpdateRequest);
@@ -445,5 +440,7 @@ public class UserController {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
     }
+
+
 
 }
