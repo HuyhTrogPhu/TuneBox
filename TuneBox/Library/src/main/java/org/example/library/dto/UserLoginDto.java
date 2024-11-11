@@ -21,4 +21,11 @@ public class UserLoginDto {
     private String password;
 
     private RoleDto role;
+
+    public UserLoginDto(Long id,String email,String userName,String password) {
+        this.id = id;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+    }
 }

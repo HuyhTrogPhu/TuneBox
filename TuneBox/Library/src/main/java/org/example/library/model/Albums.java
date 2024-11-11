@@ -1,5 +1,9 @@
+
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.example.library.model.AlbumStyle;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -10,9 +14,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
-
+import java.util.HashSet;
 @Getter
 @Setter
 @AllArgsConstructor
@@ -43,7 +46,7 @@ public class Albums {
 
     private Date reportDate;
 
-    private boolean status;
+    private Boolean status ;
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
@@ -51,6 +54,7 @@ public class Albums {
 
     @ManyToOne
     @JoinColumn(name = "albumCreator_id", nullable = false)
+    @JsonIgnore
     private User creator;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -59,7 +63,8 @@ public class Albums {
             joinColumns = @JoinColumn(name = "albums_id"),
             inverseJoinColumns = @JoinColumn(name = "track_id")
     )
-    private Set<Track> tracks = new HashSet<>(); //tao 1 tap hop rong
+    @JsonManagedReference
+    private Set<Track> tracks = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "album_style_id")

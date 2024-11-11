@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,8 +35,10 @@ public class TrackController {
 
     //creat Track
     @PostMapping
-    public ResponseEntity<TrackDto> createTrack(@RequestParam("name") String name, @RequestParam("trackImage") MultipartFile trackImage,
-                                                @RequestParam("trackFile") MultipartFile trackFile, @RequestParam("description") String description,
+    public ResponseEntity<TrackDto> createTrack(@RequestParam("name") String name,
+                                                @RequestParam("trackImage") MultipartFile trackImage,
+                                                @RequestParam("trackFile") MultipartFile trackFile,
+                                                @RequestParam("description") String description,
                                                 @RequestParam("status") boolean status,
                                                 @RequestParam("report") boolean report,
                                                 @RequestParam("genre") Genre genre, @RequestParam("user") User user) {
@@ -46,7 +49,7 @@ public class TrackController {
             trackDto.setDescription(description);
             trackDto.setStatus(status);
             trackDto.setReport(report);
-            trackDto.setCreateDate(LocalDate.now());
+            trackDto.setCreateDate(LocalDateTime.now());
             trackDto.setReportDate(null); // Assume report date is null for now
 
             TrackDto createdTrack = trackService.createTrack(trackDto, trackImage, trackFile, user.getId(), genre.getId());

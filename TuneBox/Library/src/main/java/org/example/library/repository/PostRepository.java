@@ -1,7 +1,7 @@
 package org.example.library.repository;
 
 import org.example.library.model.Post;
-import org.example.library.model.PostReport;
+import org.example.library.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,9 +31,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTopTrendingPosts();
 
     // Định nghĩa phương thức để lấy báo cáo
-    @Query("SELECT pr FROM PostReport pr")
-    List<PostReport> findAllReports();
+    @Query("SELECT pr FROM Report pr")
+    List<Report> findAllReports();
 
     @Query("SELECT p FROM Post p WHERE p.content LIKE %:keyword%")
     List<Post> findByKeyword(@Param("keyword") String keyword);
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt <= :endDate")
+    Long countByCreatedAtBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
+
 }

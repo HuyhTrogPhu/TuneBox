@@ -3,13 +3,16 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
+import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -27,7 +30,12 @@ public interface UserService {
 
     Optional<UserFollowDto> getUserFollowById(Long userId);
 
-    // get user in profile page
+//    void changePassword(String email, String oldPassword, String newPassword);
+
+    List<UserDto> findAllUsers();
+
+    List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId);
+
     ProfileSettingDto getUserProfileSetting(Long userId);
 
     // get list user tagName
@@ -74,6 +82,8 @@ public interface UserService {
 
     List<UserDto> findAllUser();
 
+    List<ListUserForMessageDto> findAllUserForMessage();
+
     @Transactional
     void updateBirthday(Long userId, Date newBirthday);
 
@@ -95,11 +105,21 @@ public interface UserService {
     void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 
 
-    public List<SearchDto> searchPlaylist(String keyword);
-    public List<SearchDto> searchAlbum(String keyword);
-    public List<SearchDto> searchTrack(String keyword);
-    public List<SearchDto> searchUser(String keyword);
+     List<SearchDto> searchPlaylist(String keyword);
+     List<SearchDto> searchAlbum(String keyword);
+     List<SearchDto> searchTrack(String keyword);
+     List<SearchDto> searchUser(String keyword);
 
+     long countUser();
+
+    Optional<User> findById(Long userId);
+    List<User> findByReportTrue();
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+    Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+    Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+    List<Object[]> getTop10MostFollowedUsers();
+    List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate);
+    List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
     // list user sell by day
     List<UserSell> getUserSellTheMostDay(LocalDate date);
 
@@ -125,4 +145,9 @@ public interface UserService {
     List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
 
 
+    void updateAvatar(Long userId, MultipartFile image);
+
+    void updateBackground(Long userId, MultipartFile image);
+
+    List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
 }

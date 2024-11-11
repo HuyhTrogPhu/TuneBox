@@ -5,7 +5,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.*;
+import org.example.library.model.Genre;
+import org.example.library.model.InspiredBy;
+import org.example.library.model.Talent;
+import org.example.library.model.UserInformation;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,7 +64,8 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-
+    @Autowired
+    private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -188,12 +197,13 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
+
 
 
     // Phương thức để lấy userId từ cookie
@@ -227,7 +237,7 @@ public class UserController {
             return ResponseEntity.ok(profileUser);
         } catch (Exception e) {
             e.printStackTrace();
-            return (ResponseEntity<UserProfileDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -250,6 +260,19 @@ public class UserController {
         } catch (Exception e) {
             e.printStackTrace();
             return (ResponseEntity<ProfileSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    // get user in account page
+    @GetMapping("/{userId}/accountSetting")
+    public ResponseEntity<AccountSettingDto> getUserAccount(@PathVariable Long userId) {
+        try {
+            AccountSettingDto userAccount = userService.getAccountSetting(userId);
+            return ResponseEntity.ok(userAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<AccountSettingDto>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -295,6 +318,71 @@ public class UserController {
         }
     }
 
+    @PostMapping("/users/{userId}/background")
+    public ResponseEntity<?> updateBackground(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateBackground(userId, image);
+        return ResponseEntity.ok("Background updated successfully.");
+    }
+    @PutMapping("/{userId}/avatar")
+    public ResponseEntity<Void> updateAvatar(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
+        userService.updateAvatar(userId, image);
+        return ResponseEntity.ok().build();
+    }
+    // Cập nhật giới tính
+    @PutMapping("/{userId}/gender")
+    public ResponseEntity<String> setGender(@PathVariable Long userId, @RequestBody String newGender) {
+        try {
+            String sanitizedGender = newGender.replace("\"", ""); // Xóa dấu ngoặc kép
+            userService.updateGender(userId, sanitizedGender);
+            return ResponseEntity.ok("Giới tính đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating gender");
+        }
+    }
+    // Cập nhật ngày sinh
+    @PutMapping("/{userId}/birthday")
+    public ResponseEntity<String> setBirthday(@PathVariable Long userId, @RequestBody String newBirthday) {
+        try {
+            // Làm sạch chuỗi ngày sinh bằng cách loại bỏ dấu nháy đôi
+            newBirthday = newBirthday.replace("\"", "").trim();
+
+            // Chuyển đổi chuỗi thành Date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date birthday = dateFormat.parse(newBirthday);
+
+            userService.updateBirthday(userId, birthday); // Cập nhật ngày sinh
+            return ResponseEntity.ok("Ngày sinh đã thay đổi thành công");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Ngày sinh không hợp lệ");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating birthday");
+        }
+    }
+    @PutMapping("/{userId}/email")
+    public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestBody EmailUpdateRequest emailUpdateRequest) {
+        try {
+            userService.updateEmail(userId, emailUpdateRequest.getNewEmail()); // Sử dụng getNewEmail từ DTO
+            return ResponseEntity.ok("Email đã thay đổi thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
+        }
+    }
+
+    @GetMapping("/not-followed/{userId}")
+    public ResponseEntity<List<UserNameAvatarUsernameDto>> getUsersNotFollowed(@PathVariable Long userId) {
+        List<UserNameAvatarUsernameDto> users = userService.getUsersNotFollowed(userId);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ListUserForMessageDto>> getAllUsers() {
+        List<ListUserForMessageDto> users = userService.findAllUserForMessage();
+        return ResponseEntity.ok(users);
+    }
     // get list orders by user id
     @GetMapping("/{userId}/orders")
     public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {

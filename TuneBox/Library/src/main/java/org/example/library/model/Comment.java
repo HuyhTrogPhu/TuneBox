@@ -2,6 +2,7 @@ package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,4 +51,3 @@ public class Comment {
 
     private boolean edited;
 }
-

@@ -24,6 +24,19 @@ public class GenreServiceImpl implements GenreService {
     @Autowired
     private GenreRepository genreRepository;
 
+    @Override
+    public List<GenreUserDto> findNameGenre() {
+        return genreRepository.findNameGenre();
+    }
+
+    @Override
+    public List<Genre> findAllGenre() {
+        List<Genre> genres = genreRepository.findAll();
+        if(genres.isEmpty()) {
+            throw new RuntimeException("No genres found");
+        }
+        return genres;
+    }
 
     @Override
     public List<GenreDto> findAll() {
@@ -31,10 +44,5 @@ public class GenreServiceImpl implements GenreService {
         return genres.stream()
                 .map(genre -> new GenreDto(genre.getId(), genre.getName())) // Giả sử GenreDto có id và name
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<GenreUserDto> findNameGenre() {
-        return genreRepository.findNameGenre();
     }
 }

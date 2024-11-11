@@ -20,8 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("CUSTOMER"));
+            user.setRole(roleRepository.findByName("SOCIALADMIN"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -293,6 +294,36 @@ public class UserServiceImpl implements UserService {
 
         return userDtos;
     }
+
+    @Override
+    public List<ListUserForMessageDto> findAllUserForMessage() {
+        // Lấy danh sách tất cả User từ repository
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> {
+                    ListUserForMessageDto dto = new ListUserForMessageDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUserName());
+                    dto.setNickName(user.getUserInformation().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserDto> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> userDtos = new ArrayList<>();
+
+        for (User user : users) {
+            UserDto userDto = UserMapper.mapToUserDto(user);
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
     @Override
     @Transactional
     public void updateBirthday(Long userId, Date birthday) {
@@ -471,6 +502,21 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    public void updateAvatar(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+            userInformation.setAvatar(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading image to Cloudinary", e);
+        }
+    }
+
+        @Override
     public List<SearchDto> searchTrack(String keyword) {
         return userRepository.searchTrack(keyword);
     }
@@ -483,6 +529,126 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<SearchDto> searchPlaylist(String keyword) {
         return userRepository.searchPlaylist(keyword);
+    }
+
+    @Override
+    public List<UserMessageDTO> findAllReceiversExcludingSender(Long senderId) {
+        List<User> users = userRepository.findAll();
+        // Lọc bỏ người gửi
+        users = users.stream()
+                .filter(user -> !user.getId().equals(senderId)) // loại bỏ người dùng đã đăng nhập
+                .collect(Collectors.toList());
+        // Chuyển đổi danh sách người dùng thành danh sách UserMessageDTO
+        List<UserMessageDTO> userMessageDTOs = users.stream()
+                .map(user -> new UserMessageDTO(user.getId(), user.getId(), senderId)) // Gán id và senderId
+                .collect(Collectors.toList());
+        return userMessageDTOs;
+    }
+
+
+    @Override
+    public void updateBackground(Long userId, MultipartFile image) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            UserInformation userInformation = user.getUserInformation();
+
+            // Tải lên hình ảnh lên Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("url");
+
+            // Cập nhật URL hình nền
+            userInformation.setBackground(imageUrl);
+            userRepository.save(user); // Lưu thay đổi
+        } catch (IOException e) {
+            throw new RuntimeException("Error uploading background image to Cloudinary", e);
+        }
+    }
+    @Override
+    public List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId) {
+        List<User> usersNotFollowed = userRepository.findUsersNotFollowedBy(userId);
+
+        return usersNotFollowed.stream().map(user -> {
+            String avatar = user.getUserInformation() != null ? user.getUserInformation().getAvatar() : null;
+            return new UserNameAvatarUsernameDto(
+                    user.getId(),
+                    user.getUserName(),
+                    avatar,
+                    user.getUserInformation() != null ? user.getUserInformation().getName() : null
+            );
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public long countUser() {
+        return userRepository.countByIdNotNull();
+    }
+    @Override
+    public Optional<User> findById(Long userId) {
+        return userRepository.findById(userId);
+    }
+    @Override
+    public List<User> findByReportTrue(){
+        return userRepository.findByReportTrue();
+
+    };
+    //static for Social admin
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            Long count = userRepository.countByCreateDate(currentDate);
+            userCountMap.put(currentDate, count);
+            currentDate = currentDate.plusDays(1);
+        }
+        return userCountMap;
+    }
+    public List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        return userRepository.findAllByCreateDateBetween(startDate, endDate);
+    }
+
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+            LocalDate currentWeekEnd = currentWeekStart.with(DayOfWeek.SUNDAY);
+            Long count = userRepository.countByCreateDateBetween(currentWeekStart, currentWeekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+            Long count = userRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+
+        return userCountMap;
+    }
+    public List<Object[]> getTop10MostFollowedUsers() {
+        return userRepository.findTop10MostFollowedUsers();
+    }
+    public List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate) {
+        // Lấy dữ liệu từ repository
+        LocalDateTime startDateTime = startDate.atStartOfDay(); // Từ 00:00:00 của ngày bắt đầu
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Object[]> result = userRepository.findTop10UsersWithMostTracks(startDateTime, endDateTime);
+
+        // Chuyển đổi dữ liệu từ Object[] sang Map
+        return result.stream()
+                .map(record -> Map.of(
+                        "userId", record[0],
+                        "trackCount", record[1]
+                ))
+                .collect(Collectors.toList());
     }
 
 }

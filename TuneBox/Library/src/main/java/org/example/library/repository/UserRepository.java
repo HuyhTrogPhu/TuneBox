@@ -106,6 +106,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserName(String userName);
 
+
+
     // get list user sell the most
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
@@ -181,17 +183,23 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<SearchDto> searchUser(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
-            "from Track t where t.name like :keyword or t.description like :keyword or t.genre.name like :keyword or t.creator.userName like :keyword")
+            "from Track t where t.name like :keyword  or t.genre.name like :keyword or t.creator.userName like :keyword")
     List<SearchDto> searchTrack(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(a.id, a.title, a.description, a.albumImage, a.creator.userName) " +
-            "from Albums a where a.title like :keyword or a.description like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
+            "from Albums a where a.title like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
     List<SearchDto> searchAlbum(@Param("keyword") String keyword);
 
-    @Query("SELECT new org.example.library.dto.SearchDto(p.id, p.title, p.imagePlaylist, p.creator.userName) " +
-            "from Playlist p where p.title like :keyword or p.description like :keyword or p.type like :keyword or p.creator.userName like :keyword")
+    @Query("SELECT new org.example.library.dto.SearchDto(p.creator.userInformation.name, p.id, p.title, p.imagePlaylist, p.creator.userName) " +
+            "from Playlist p where p.title like :keyword or p.type like :keyword or p.creator.userName like :keyword  or p.creator.userInformation.name like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
+//    User findByUserName(String username);
+
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
 
     // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
@@ -262,5 +270,27 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ORDER BY SUM(o.totalPrice) DESC")
     List<UserSell> getUserSellBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
 
+    long countByIdNotNull();
+    List<User> findByReportTrue();
+    Long countByCreateDate(LocalDate createDate);
+    Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT u.user_name, COUNT(f.followed_id) AS follower_count " +
+            "FROM users u " +
+            "JOIN follow f ON u.user_id = f.followed_id " +
+            "GROUP BY u.user_name " +
+            "ORDER BY follower_count DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> findTop10MostFollowedUsers();
+    @Query(value = "SELECT u.user_name, COUNT(t.track_id) AS track_count " +
+            "FROM users u " +
+            "JOIN track t ON u.user_id = t.user_id " +
+            "WHERE t.created_at BETWEEN :startDate AND :endDate " +
+            "GROUP BY u.user_name " +
+            "ORDER BY track_count DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
+                                                @Param("endDate") LocalDateTime  endDate);
+
+    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 
 }

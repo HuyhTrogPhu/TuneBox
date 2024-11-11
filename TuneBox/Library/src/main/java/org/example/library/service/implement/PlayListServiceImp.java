@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.AlbumsDto;
 import org.example.library.dto.PlaylistDto;
 import org.example.library.mapper.AlbumsMapper;
@@ -14,18 +15,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.YearMonth;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
 @Service
-public class PlaylistServiceImpl implements PlaylistService {
-
+public class PlayListServiceImp implements PlaylistService {
+    @Autowired
+    private PlaylistRepository playlistRepository;
     @Autowired
     private AlbumsRepository albumsRepository;
 
@@ -37,9 +38,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Autowired
     private Cloudinary cloudinary;
-    @Autowired
-    private PlaylistRepository playlistRepository;
-
 
     @Override
     public PlaylistDto createPlaylist(PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId) {
@@ -102,7 +100,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public PlaylistDto updatePlaylist(Long PlaylistID, PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId) {
+    public PlaylistDto updatePlaylist(Long PlaylistID, PlaylistDto playlistDto, MultipartFile imagePlaylist, Long userId, List<Long> trackIds) {
         try {
 
             Playlist editPlaylist = playlistRepository.findById(PlaylistID).orElseThrow(
@@ -143,18 +141,22 @@ public class PlaylistServiceImpl implements PlaylistService {
             editPlaylist.setStatus(false); // Trạng thái mặc định
             editPlaylist.setReport(false); // Báo cáo mặc định
 
-            // Xử lý danh sách track
-            if (playlistDto.getTracks() != null) {
-                Set<Track> tracks = playlistDto.getTracks().stream()
-                        .map(trackId -> {
-                            // Tìm kiếm track từ cơ sở dữ liệu
-                            Track track = trackRepository.findById(trackId).orElseThrow(
-                                    () -> new RuntimeException("Track not found with ID: " + trackId)
-                            );
-                            return track; // Trả về track đã được quản lý
-                        }).collect(Collectors.toSet());
-                editPlaylist.setTracks(tracks); // Cập nhật danh sách track cho album
+            // Giữ lại track hiện có
+            Set<Track> currentTracks = editPlaylist.getTracks();
+
+            // Thêm track mới vào danh sách
+            if (trackIds != null) {
+                for (Long trackId : trackIds) {
+                    Track track = trackRepository.findById(trackId).orElseThrow(
+                            () -> new RuntimeException("Track not found with ID: " + trackId)
+                    );
+                    currentTracks.add(track);
+                }
             }
+
+            // Cập nhật playlist với các thông tin mới
+            editPlaylist.setTracks(currentTracks);
+
 
             playlistRepository.save(editPlaylist);
 
@@ -213,6 +215,90 @@ public class PlaylistServiceImpl implements PlaylistService {
     public List<PlaylistDto> getAllPlaylist() {
         List<Playlist> playlists = playlistRepository.findAll();
         return playlists.stream().map(PlaylistMapper::mapperPlaylistDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<PlaylistDto> findAll() {
+        return playlistRepository.findAll()
+                .stream()
+                .map(PlaylistMapper::mapperPlaylistDto)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public PlaylistDto findByPlaylistId(Long playlistId) {
+        PlaylistDto playlistDTO =PlaylistMapper.mapperPlaylistDto(playlistRepository.findById(playlistId).get());
+    return playlistDTO;
+    }
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            Long count = playlistRepository.countByCreateDate(currentDate);
+            userCountMap.put(currentDate, count);
+            currentDate = currentDate.plusDays(1);
+        }
+        return userCountMap;
+    }
+
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+            LocalDate currentWeekEnd = currentWeekStart.with(DayOfWeek.SUNDAY);
+            Long count = playlistRepository.countByCreateDateBetween(currentWeekStart, currentWeekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+            Long count = playlistRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        return userCountMap;
+    }
+    public List<Playlist> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate) {
+        return playlistRepository.findAllByCreateDateBetween(startDate, endDate);
+    }
+
+    @Override
+    public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId) {
+        try {
+            // Tìm playlist theo playlistId
+            Playlist playlist = playlistRepository.findById(playlistId).orElseThrow(
+                    () -> new RuntimeException("Playlist not found")
+            );
+
+            // Tìm track theo trackId
+            Track track = trackRepository.findById(trackId).orElseThrow(
+                    () -> new RuntimeException("Track not found with ID: " + trackId)
+            );
+
+            // Xóa track khỏi playlist
+            if (playlist.getTracks().contains(track)) {
+                playlist.getTracks().remove(track);
+                track.getPlaylists().remove(playlist); // Xóa playlist khỏi tập hợp playlists của track
+                playlistRepository.save(playlist); // Lưu cập nhật vào cơ sở dữ liệu
+            } else {
+                throw new RuntimeException("Track not found in the playlist");
+            }
+
+            return PlaylistMapper.mapperPlaylistDto(playlist);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

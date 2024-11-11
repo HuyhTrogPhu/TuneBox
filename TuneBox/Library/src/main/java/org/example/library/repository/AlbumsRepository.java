@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AlbumsRepository extends JpaRepository<Albums, Long> {
@@ -14,4 +16,8 @@ public interface AlbumsRepository extends JpaRepository<Albums, Long> {
     @Query("SELECT a FROM Albums a WHERE lower(a.title) LIKE lower(concat('%', :keywords, '%')) " +
             "OR lower(a.description) LIKE lower(concat('%', :keywords, '%'))")
     List<Albums> searchByKeywords(@Param("keywords") String keywords);
+    List<Albums> findAllByReportTrue();
+    Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    Long countByCreateDate(LocalDate currentDate);
+    List<Albums> findAllByCreateDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

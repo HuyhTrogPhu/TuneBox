@@ -1,6 +1,7 @@
 package org.example.library.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class AlbumStyle {
     private String name;
 
     @OneToMany(mappedBy = "albumStyle")
+    @JsonIgnore
     private Set<Albums> albums;
 
 }

@@ -2,6 +2,7 @@ package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,7 +26,8 @@ public class Genre {
     @JsonIgnore
     private Set<User> user;
 
-    @OneToMany(mappedBy = "genre")
+    @OneToMany(mappedBy = "genre",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "genre")
