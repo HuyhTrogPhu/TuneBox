@@ -22,4 +22,5 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Long> {
     Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
     Long countByCreateDate(LocalDate currentDate);
     List<Playlist> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+
 }

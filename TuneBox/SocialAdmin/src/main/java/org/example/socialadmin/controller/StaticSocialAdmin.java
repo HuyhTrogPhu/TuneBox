@@ -143,7 +143,6 @@ public class StaticSocialAdmin {
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data", userService.findById(UserId));
-            response.put("dataInformation", userService.findById(UserId));
 
         } catch (Exception ex) {
             response.put("status", false);
@@ -167,10 +166,25 @@ public class StaticSocialAdmin {
             response.put("message", ex);
             response.put("data", null);
         }
+            return ResponseEntity.ok(response);
+    }
+    @GetMapping("/getUserPlayList/{id}")
+    public ResponseEntity<?> GetUserPlayList(@PathVariable("id") Long UserId){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", playlistService.getbyUserId(UserId));
 
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/getAlbums/{id}")
+
+        @GetMapping("/getAlbums/{id}")
     public ResponseEntity<?> GetAlbmumById(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -778,10 +792,9 @@ public ResponseEntity<?> getUserToTable(@PathVariable("startDate") String startD
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startDate = LocalDate.parse(startDateStr, formatter);
         LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-        List<User> users =userService.getUsersByDateRange(startDate, endDate);
         response.put("status", true);
         response.put("message", "Succesfull");
-        response.put("data", users);
+        response.put("data", userService.getUsersByDateRange(startDate, endDate));
     } catch (Exception ex) {
         response.put("status", false);
         response.put("message", ex);
@@ -818,10 +831,9 @@ public ResponseEntity<?> getUserToTable(@PathVariable("startDate") String startD
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate startDate = LocalDate.parse(startDateStr, formatter);
             LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-            List<Albums> users =albumService.getAlbumsByDateRange(startDate, endDate);
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", users);
+            response.put("data", albumService.getAlbumsByDateRange(startDate, endDate));
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -838,10 +850,10 @@ public ResponseEntity<?> getUserToTable(@PathVariable("startDate") String startD
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate startDate = LocalDate.parse(startDateStr, formatter);
             LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-            List<Playlist> users =playlistService.getPlaylistsByDateRange(startDate, endDate);
+
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", users);
+            response.put("data", playlistService.getPlaylistsByDateRange(startDate, endDate));
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);

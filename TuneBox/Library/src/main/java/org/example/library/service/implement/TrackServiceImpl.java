@@ -384,7 +384,6 @@ public class TrackServiceImpl implements TrackService {
 
             LocalDateTime monthStart = currentMonth.atDay(1).atStartOfDay();
             LocalDateTime monthEnd = currentMonth.atEndOfMonth().atTime(23, 59, 59);
-
             Long count = trackRepository.countByCreateDateBetween(monthStart, monthEnd);
             userCountMap.put(currentMonth, count);
             currentMonth = currentMonth.plusMonths(1);

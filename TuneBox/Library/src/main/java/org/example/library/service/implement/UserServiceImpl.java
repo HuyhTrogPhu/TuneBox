@@ -51,6 +51,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserInformationRepository userInformationRepository;
 
+    @Autowired
+    private TrackRepository trackRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
         try {
@@ -231,6 +240,7 @@ public class UserServiceImpl implements UserService {
     public UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId) {
         return userRepository.getUserDetailEcommerceAdmin(userId);
     }
+
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
                 .map(user -> {
@@ -277,12 +287,41 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDto> findAllUser() {
+    public List<UserSocialAdminDto> findAllUser() {
         List<User> users = userRepository.findAll();
-        List<UserDto> userDtos = new ArrayList<>();
+        List<UserSocialAdminDto> userDtos = new ArrayList<>();
 
         for (User user : users) {
-            UserDto userDto = UserMapper.mapToUserDto(user);
+            List<Track> listTracks = new ArrayList<>(user.getTracks());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+            long likeCount = likeRepository.countByUserId(user.getId());
+            long commentCount = commentRepository.countByUserId(user.getId());
+            long postCount = user.getPosts().size();
+            long odersCount =user.getOrderList().size();
+            UserSocialAdminDto userDto = new UserSocialAdminDto(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getUserName(),
+                    user.getCreateDate(),
+                    user.getFollowers().size(),
+                    user.getFollowing().size(),
+                    postCount,
+                    trackDtos,
+                    odersCount,
+                    user.getUserInformation(),
+                    likeCount,
+                    commentCount
+            );
             userDtos.add(userDto);
         }
 
@@ -578,9 +617,43 @@ public class UserServiceImpl implements UserService {
         return userRepository.countByIdNotNull();
     }
     @Override
-    public Optional<User> findById(Long userId) {
-        return userRepository.findById(userId);
+    public UserSocialAdminDto findById(Long userId) {
+        User user =  userRepository.findById(userId).get();
+        List<Track> listTracks = new ArrayList<>(user.getTracks());
+        List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                .map(track -> new TrackDtoSocialAdmin(
+                        track.getId(),
+                        track.getName(),
+                        track.getCreateDate(),
+                        track.isReport(),
+                        track.getReportDate(),
+                        track.getCreator().getUserName(),
+                        track.getLikes().size()
+                ))
+                .collect(Collectors.toList());
+        long postCount = user.getPosts().size();
+        long odersCount =user.getOrderList().size();
+        long likeCount = likeRepository.countByUserId(user.getId());
+        long commentCount = commentRepository.countByUserId(user.getId());
+        UserSocialAdminDto userDto = new UserSocialAdminDto(
+                user.getId(),
+                user.getEmail(),
+                user.getUserName(),
+                user.getCreateDate(),
+                user.getFollowers().size(),
+                user.getFollowing().size(),
+                postCount,
+                trackDtos,
+                odersCount,
+                user.getUserInformation(),
+                likeCount,
+                commentCount
+        );
+
+        return userDto;
     }
+
+
     @Override
     public List<User> findByReportTrue(){
         return userRepository.findByReportTrue();
@@ -597,8 +670,46 @@ public class UserServiceImpl implements UserService {
         }
         return userCountMap;
     }
-    public List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate) {
-        return userRepository.findAllByCreateDateBetween(startDate, endDate);
+
+    @Override
+    public List<UserSocialAdminDto> getUsersByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<User> users =  userRepository.findAllByCreateDateBetween(startDate, endDate);
+        List<UserSocialAdminDto> userDtos = new ArrayList<>();
+        for (User user : users) {
+            List<Track> listTracks = new ArrayList<>(user.getTracks());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+            long likeCount = likeRepository.countByUserId(user.getId());
+            long commentCount = commentRepository.countByUserId(user.getId());
+            long postCount = user.getPosts().size();
+            long odersCount =user.getOrderList().size();
+            UserSocialAdminDto userDto = new UserSocialAdminDto(
+                    user.getId(),
+                    user.getEmail(),
+                    user.getUserName(),
+                    user.getCreateDate(),
+                    user.getFollowers().size(),
+                    user.getFollowing().size(),
+                    postCount,
+                    trackDtos,
+                    odersCount,
+                    user.getUserInformation(),
+                    likeCount,
+                    commentCount
+            );
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
     }
 
     public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {

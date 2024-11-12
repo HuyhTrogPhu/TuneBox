@@ -3,9 +3,10 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.library.dto.AlbumsDto;
+import org.example.library.dto.PLayListDetailSocialAdminDto;
 import org.example.library.dto.PlaylistDto;
-import org.example.library.mapper.AlbumsMapper;
+import org.example.library.dto.*;
+import org.example.library.mapper.AlbumMapper;
 import org.example.library.mapper.PlaylistMapper;
 import org.example.library.model.*;
 import org.example.library.repository.*;
@@ -23,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 
+
 @Service
 public class PlayListServiceImp implements PlaylistService {
     @Autowired
@@ -35,6 +37,9 @@ public class PlayListServiceImp implements PlaylistService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -195,7 +200,7 @@ public class PlayListServiceImp implements PlaylistService {
     @Override
     public PlaylistDto getPlaylistById(Long playlistID) {
         Playlist playlist = playlistRepository.findById(playlistID).orElseThrow(
-                () -> new RuntimeException("Album not found")
+                () -> new RuntimeException("Playlist not found")
         );
         return PlaylistMapper.mapperPlaylistDto(playlist);
     }
@@ -226,12 +231,39 @@ public class PlayListServiceImp implements PlaylistService {
                 .collect(Collectors.toList());
 
     }
-
+//fix hereeeee
     @Override
-    public PlaylistDto findByPlaylistId(Long playlistId) {
-        PlaylistDto playlistDTO =PlaylistMapper.mapperPlaylistDto(playlistRepository.findById(playlistId).get());
-    return playlistDTO;
+    public PLayListDetailSocialAdminDto findByPlaylistId(Long playlistID) {
+        Playlist playlist = playlistRepository.findById(playlistID).orElseThrow(
+                () -> new RuntimeException("Album not found")
+        );
+        List<Track> listTracks = trackRepository.findAllByPlaylistsId(playlist.getId());
+        long countLike =likeRepository.countByplaylistId(playlist.getId());
+        List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                .map(track -> new TrackDtoSocialAdmin(
+                        track.getId(),
+                        track.getName(),
+                        track.getCreateDate(),
+                        track.isReport(),
+                        track.getReportDate(),
+                        track.getCreator().getUserName(),
+                        track.getLikes().size()
+                ))
+                .collect(Collectors.toList());
+
+        PLayListDetailSocialAdminDto playlistDto = new PLayListDetailSocialAdminDto(
+                playlist.getId(),
+                playlist.getTitle(),
+                playlist.getCreateDate(),
+                trackDtos,
+                playlist.getDescription(),
+                countLike,
+                playlist.getImagePlaylist()
+        );
+
+        return playlistDto;
     }
+
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> userCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
@@ -255,6 +287,7 @@ public class PlayListServiceImp implements PlaylistService {
         }
         return userCountMap;
     }
+
     public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
         Map<YearMonth, Long> userCountMap = new HashMap<>();
         YearMonth currentMonth = startMonth;
@@ -268,9 +301,41 @@ public class PlayListServiceImp implements PlaylistService {
         }
         return userCountMap;
     }
-    public List<Playlist> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate) {
-        return playlistRepository.findAllByCreateDateBetween(startDate, endDate);
+
+    public List<PLayListDetailSocialAdminDto> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<Playlist> playlists = playlistRepository.findAllByCreateDateBetween(startDate, endDate);
+        List<PLayListDetailSocialAdminDto> playlistDtos = new ArrayList<>();
+
+        for (Playlist playlist : playlists) {
+            List<Track> listTracks = trackRepository.findAllByPlaylistsId(playlist.getId());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+            long countLike =likeRepository.countByplaylistId(playlist.getId());
+
+            PLayListDetailSocialAdminDto playlistDto = new PLayListDetailSocialAdminDto(
+                    playlist.getId(),
+                    playlist.getTitle(),
+                    playlist.getCreateDate(),
+                    trackDtos,
+                    playlist.getDescription(),
+                    countLike,
+                    playlist.getImagePlaylist()
+            );
+            playlistDtos.add(playlistDto);
+        }
+
+        return playlistDtos;
     }
+
 
     @Override
     public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId) {
@@ -300,6 +365,19 @@ public class PlayListServiceImp implements PlaylistService {
             return null;
         }
     }
+
+    @Override
+    public List<PlaylistDto> getbyUserId(Long UserId){
+
+        List<Playlist> playList = playlistRepository.findByCreatorId(UserId);
+        if (playList.isEmpty()) {
+            throw new EntityNotFoundException("No playList found for user ID: " + UserId);
+        }
+        return playList.stream()
+                .map(PlaylistMapper::mapperPlaylistDto)
+                .collect(Collectors.toList());
+    }
+
 
 
 }
