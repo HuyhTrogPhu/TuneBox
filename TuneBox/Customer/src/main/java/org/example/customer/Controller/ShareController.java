@@ -1,24 +1,22 @@
     package org.example.customer.controller;
 
-    import org.example.library.dto.AlbumsDto;
-    import org.example.library.dto.PlaylistDto;
-    import org.example.library.dto.TrackDto;
+    import org.example.library.dto.*;
     //import org.example.library.dto.UserDTO;
-    import org.example.library.dto.UserMessageDTO;
     import org.example.library.service.*;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
+    import java.util.Collections;
     import java.util.List;
 
     @RestController
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @RequestMapping("/api/share")
     public class ShareController {
-
-        @Autowired
-        private UserService userService;
 
         @Autowired
         private TrackService trackService;
@@ -38,10 +36,27 @@
         @Autowired
         private PlaylistService playlistService;
 
+        @Autowired
+        private MessageService messageService;
+
+        @Autowired
+        private InstrumentService instrumentService;
+
+        @Autowired
+        private SendInstrumentService sendInstrumentService;
+
+        private static final Logger logger = LoggerFactory.getLogger(ShareController.class);
+
+
         @GetMapping("/users/receivers")
-        public ResponseEntity<List<UserMessageDTO>> getAllReceiversExcludingSender(@RequestParam Long senderId) {
-            List<UserMessageDTO> receivers = userService.findAllReceiversExcludingSender(senderId);
-            return ResponseEntity.ok(receivers);
+        public ResponseEntity<List<ListUserForMessageDto>> getAllReceiversExcludingSender(@RequestParam Long userId) {
+            try {
+                List<ListUserForMessageDto> friends = messageService.findAllAcceptedFriends(userId);
+                return ResponseEntity.ok(friends);
+            } catch (Exception e) {
+                logger.error("Error fetching friends for user {}: {}", userId, e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+            }
         }
 
         // API tìm kiếm track
@@ -82,5 +97,19 @@
             sendPlaylistService.sendPlaylistMessage(senderId, receiverId, playlistId);
             return ResponseEntity.ok().build();
         }
+
+        // API tìm kiếm instrument
+        @GetMapping("/product/{productId}")
+        public ResponseEntity<InstrumentDto> getProductForSharing(@PathVariable Long productId) {
+            InstrumentDto instrument = instrumentService.getInstrumentById(productId);
+            return ResponseEntity.ok(instrument);
+        }
+        //API gửi instrument
+        @PostMapping("/product")
+        public ResponseEntity<Void> sendProduct(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long productId) {
+            sendInstrumentService.sendInstrumentMessage(senderId, receiverId, productId);
+            return ResponseEntity.ok().build();
+        }
+
 
     }

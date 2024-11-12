@@ -19,8 +19,8 @@ public class PostMapper {
         dto.setImages(PostImageMapper.toDtoSet(post.getImages()));
         dto.setCreatedAt(post.getCreatedAt());
 //        dto,setDescription(post.getDescription());
-        dto.setLikeCount(post.getLikes().size());
-        dto.setCommentCount(post.getComments().size());
+        dto.setLikeCount(post.getLikes() != null ? post.getLikes().size() : 0);
+        dto.setCommentCount(post.getComments() != null ? post.getComments().size() : 0);
         return dto;
     }
 
