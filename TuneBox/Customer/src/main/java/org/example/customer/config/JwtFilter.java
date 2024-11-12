@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // Bỏ qua các endpoint không cần xác thực JWT
-        if (!path.equals("/login") && path.startsWith("/api")) {
+        if (!path.equals("/login")) {
             String authorizationHeader = request.getHeader("Authorization");
             String username = null;
             String jwt = null;

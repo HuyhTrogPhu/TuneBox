@@ -145,4 +145,8 @@ public interface UserService {
     void updateBackground(Long userId, MultipartFile image);
 
     List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
+
+    <T> Optional<T> findByEmail(String email);
+
+    Object createUser(String email);
 }

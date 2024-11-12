@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -54,7 +56,7 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user").permitAll()
+                        .requestMatchers("/login","/api/auth/google", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
                         .requestMatchers("/api/**","/user/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
@@ -101,5 +103,10 @@ public class CustomerConfiguration {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        String googleJwkSetUri = "https://www.googleapis.com/oauth2/v3/certs";
+        return NimbusJwtDecoder.withJwkSetUri(googleJwkSetUri).build();
     }
 }

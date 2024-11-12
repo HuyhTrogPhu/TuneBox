@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class CustomerServiceConfig implements UserDetailsService {
+public class    CustomerServiceConfig implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
