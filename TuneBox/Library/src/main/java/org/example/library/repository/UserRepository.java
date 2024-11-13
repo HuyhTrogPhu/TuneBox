@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,14 +24,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // list user tagname
     @Query("select new org.example.library.dto.UserTag(u.id, u.userName) " +
-            "from User u")
+            "from Friend f join f.user u where f.accepted = true")
     List<UserTag> findUserTags();
 
     // list email
     @Query("SELECT u.email FROM User u")
     List<String> findAllUserEmails();
 
-    User findByUserName(String username);
     // get user by username or email
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
@@ -178,7 +178,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     // search
-    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name) " +
+    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name,us.userName) " +
             "from UserInformation ui join ui.user us where ui.name like :keyword")
     List<SearchDto> searchUser(@Param("keyword") String keyword);
 

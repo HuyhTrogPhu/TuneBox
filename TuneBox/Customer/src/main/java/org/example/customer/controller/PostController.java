@@ -1,10 +1,12 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.dto.UserTag;
 import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
+import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class PostController {
 
     private final PostService postService;
     private final NotificationService notificationService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private LikeRepository likeRepository;
@@ -192,5 +197,10 @@ public class PostController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/tagName")
+    public ResponseEntity<List<UserTag>> getPostsByTagName() {
+        List<UserTag> userTag = userService.getUserTags();
+        return ResponseEntity.ok(userTag);
+    }
 
 }

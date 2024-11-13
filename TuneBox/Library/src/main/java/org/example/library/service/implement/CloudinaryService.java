@@ -13,7 +13,6 @@ import java.util.Map;
 public class CloudinaryService {
 
     @Autowired
-    @Qualifier("myCloudinary")  // Thêm dòng này
     private Cloudinary cloudinary;
 
     public Map uploadFile(MultipartFile file) throws IOException {
