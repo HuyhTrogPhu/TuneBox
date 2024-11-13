@@ -46,7 +46,7 @@ public class CustomerConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
@@ -58,7 +58,6 @@ public class CustomerConfiguration {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/login","/api/auth/google", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
-                        .requestMatchers("/api/**","/user/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .anyRequest().authenticated()
