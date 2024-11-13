@@ -23,4 +23,5 @@ public class PLayListDetailSocialAdminDto {
     private String description;
     private Long LikeCount;
     private String image;
+    private String Creator;
 }

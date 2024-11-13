@@ -19,7 +19,7 @@ public interface PlaylistService {
       List<PlaylistDto> searchPlaylist(String keyword);
       List<PlaylistDto> getAllPlaylist();
      PLayListDetailSocialAdminDto findByPlaylistId(Long playlistId);
-     List<PlaylistDto> findAll();
+     List<PLayListDetailSocialAdminDto> findAll();
     List<PlaylistDto> getbyUserId(Long UserId);
     Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);

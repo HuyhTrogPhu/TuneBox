@@ -191,7 +191,7 @@ public class StaticSocialAdmin {
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("dataAlbums", albumService.findByAlbumsByID(Id));
-            response.put("dataTracks",trackService.findByTracksByAlbumId(Id));
+            response.put("dataTracks", trackService.findByTracksByAlbumId(Id));
 
         } catch (Exception ex) {
             response.put("status", false);
@@ -217,6 +217,24 @@ public class StaticSocialAdmin {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/getAllPlayList")
+    public ResponseEntity<?> getAllPlayList(){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", playlistService.findAll());
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/getDetailTrack/{id}")
     public ResponseEntity<?> GetDetailTrack(@PathVariable("id") Long Id){
@@ -249,21 +267,7 @@ public class StaticSocialAdmin {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/getAllPlayList")
-    public ResponseEntity<?> GetAllPlayList(){
-        Map<String, Object> response = new HashMap<>();
-        try {
-            response.put("status", true);
-            response.put("message", "Succesfull");
-            response.put("data", playlistService.findAll());
-        } catch (Exception ex) {
-            response.put("status", false);
-            response.put("message", ex);
-            response.put("data", null);
-        }
 
-        return ResponseEntity.ok(response);
-    }
 //get PLayList by ID
     @GetMapping("/getPLayList/{id}")
     public ResponseEntity<?> GetPLayListById(@PathVariable("id") Long Id){

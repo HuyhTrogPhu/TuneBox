@@ -22,4 +22,5 @@ public class AlbumSocialDto {
     private List<TrackDtoSocialAdmin> tracks;
     private String Creator;
     private String description;
+    private String Image;
 }

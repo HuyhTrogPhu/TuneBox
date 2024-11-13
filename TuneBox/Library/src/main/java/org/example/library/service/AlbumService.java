@@ -11,8 +11,8 @@ import java.util.Map;
 
 public interface AlbumService {
     public List<AlbumsDto> getbyUserId(Long UserId);
-    public List<AlbumsDto> getAll();
-    public AlbumsDto findByAlbumsByID(Long id);
+    public List<AlbumSocialDto> getAll();
+    public AlbumSocialDto findByAlbumsByID(Long id);
     public List<AlbumsDto> getAllReported();
     Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);

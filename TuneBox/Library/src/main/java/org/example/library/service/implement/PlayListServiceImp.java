@@ -224,11 +224,39 @@ public class PlayListServiceImp implements PlaylistService {
 
 
     @Override
-    public List<PlaylistDto> findAll() {
-        return playlistRepository.findAll()
-                .stream()
-                .map(PlaylistMapper::mapperPlaylistDto)
-                .collect(Collectors.toList());
+    public List<PLayListDetailSocialAdminDto> findAll() {
+        List<Playlist> playlists = playlistRepository.findAll();
+        List<PLayListDetailSocialAdminDto> playlistDtos = new ArrayList<>();
+
+        for (Playlist playlist : playlists) {
+            List<Track> listTracks = trackRepository.findAllByPlaylistsId(playlist.getId());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+            long countLike =likeRepository.countByplaylistId(playlist.getId());
+
+            PLayListDetailSocialAdminDto playlistDto = new PLayListDetailSocialAdminDto(
+                    playlist.getId(),
+                    playlist.getTitle(),
+                    playlist.getCreateDate(),
+                    trackDtos,
+                    playlist.getDescription(),
+                    countLike,
+                    playlist.getImagePlaylist(),
+                    playlist.getCreator().getUserName()
+            );
+            playlistDtos.add(playlistDto);
+        }
+
+        return playlistDtos;
 
     }
 //fix hereeeee
@@ -258,7 +286,8 @@ public class PlayListServiceImp implements PlaylistService {
                 trackDtos,
                 playlist.getDescription(),
                 countLike,
-                playlist.getImagePlaylist()
+                playlist.getImagePlaylist(),
+                playlist.getCreator().getUserName()
         );
 
         return playlistDto;
@@ -328,7 +357,8 @@ public class PlayListServiceImp implements PlaylistService {
                     trackDtos,
                     playlist.getDescription(),
                     countLike,
-                    playlist.getImagePlaylist()
+                    playlist.getImagePlaylist(),
+                    playlist.getCreator().getUserName()
             );
             playlistDtos.add(playlistDto);
         }
