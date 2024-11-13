@@ -26,6 +26,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<String> findAllUserEmails();
 
 
+    Optional<User> findByEmail(String email);
+
+
     // get user by username or email
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
@@ -180,11 +183,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<SearchDto> searchUser(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
-            "from Track t where t.name like :keyword or t.description like :keyword or t.genre.name like :keyword or t.creator.userName like :keyword")
+            "from Track t where t.name like :keyword  or t.genre.name like :keyword or t.creator.userName like :keyword")
     List<SearchDto> searchTrack(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(a.id, a.title, a.description, a.albumImage, a.creator.userName) " +
-            "from Albums a where a.title like :keyword or a.description like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
+            "from Albums a where a.title like :keyword or a.genre.name like :keyword or a.albumStyle.name like :keyword or a.creator.userName like :keyword")
     List<SearchDto> searchAlbum(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(p.creator.userInformation.name, p.id, p.title, p.imagePlaylist, p.creator.userName) " +
@@ -265,6 +268,27 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "GROUP BY u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email " +
             "ORDER BY SUM(o.totalPrice) DESC")
     List<UserSell> getUserSellBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
+    long countByIdNotNull();
+    List<User> findByReportTrue();
+    Long countByCreateDate(LocalDate createDate);
+    Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    @Query(value = "SELECT u.user_name, COUNT(f.followed_id) AS follower_count " +
+            "FROM users u " +
+            "JOIN follow f ON u.user_id = f.followed_id " +
+            "GROUP BY u.user_name " +
+            "ORDER BY follower_count DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> findTop10MostFollowedUsers();
+    @Query(value = "SELECT u.user_name, COUNT(t.track_id) AS track_count " +
+            "FROM users u " +
+            "JOIN track t ON u.user_id = t.user_id " +
+            "WHERE t.created_at BETWEEN :startDate AND :endDate " +
+            "GROUP BY u.user_name " +
+            "ORDER BY track_count DESC " +
+            "LIMIT 10", nativeQuery = true)
+    List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
+                                                @Param("endDate") LocalDateTime  endDate);
 
+    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 
 }

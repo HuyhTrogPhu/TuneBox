@@ -1,18 +1,14 @@
 package org.example.library.mapper;
 
 import org.example.library.dto.AlbumsDto;
-import org.example.library.dto.TrackDto;
 import org.example.library.model.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AlbumsMapper {
-
-
-
-    // Phương thức chuyển đổi từ Albums sang AlbumsDto
-    // Phương thức chuyển đổi từ Albums sang AlbumsDto
+public class AlbumMapper {
     public static AlbumsDto mapperAlbumsDto(Albums album) {
         return new AlbumsDto(
                 album.getId(),

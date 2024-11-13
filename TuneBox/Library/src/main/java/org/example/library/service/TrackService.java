@@ -1,22 +1,26 @@
 package org.example.library.service;
 
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackStatus;
 import org.example.library.model.Track;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 public interface TrackService {
 
-        public TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+         TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
         List<TrackDto> getAllTracks();
 
         TrackDto getTrackById(Long trackId);
 
-        public TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
+         TrackDto updateTrack(Long trackId, TrackDto trackDto, MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-        public void deleteTrack(Long trackId);
+         void deleteTrack(Long trackId);
 
         List<TrackDto> getTracksByUserId(Long userId);
 
@@ -27,4 +31,13 @@ public interface TrackService {
 
         TrackDto getTracksById(Long trackId);
 
+     TrackStatus getTrackCountCommentandLike(Long Id);
+     List<TrackDto> getAll();
+     List<TrackDto> findByTracksByAlbumId(Long id);
+    public List<TrackDto> findReportedTrack();
+    public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate);
+    public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate);
+    Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+    Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+    List<Track> getTracksByDateRange(LocalDate startDate, LocalDate endDate);
 }

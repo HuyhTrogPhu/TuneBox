@@ -10,9 +10,9 @@ import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +51,8 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
+
+
 
     @Autowired
     private EmailService emailService;
@@ -181,14 +183,49 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
 
+    // check signUp form
+    @GetMapping("/check-signUp")
+    public ResponseEntity<?> checkSignUp(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
 
+        // list userName
+        List<String> userNames = userRepository.findAllUserNames();
+
+        // list email
+        List<String> emails = userRepository.findAllUserEmails();
+
+        // Kiểm tra userName và email đã tồn tại hay chưa
+        if (userNames.contains(userName)) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        if (userName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username not null");
+        }
+
+        if (emails.contains(email)) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+        if (email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email not null");
+        }
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Password not null");
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
@@ -285,6 +322,12 @@ public class UserController {
             List<SearchDto> trackResults = userService.searchTrack("%" + keyword + "%");
             List<SearchDto> albumResults = userService.searchAlbum("%" + keyword + "%");
             List<SearchDto> playlistResults = userService.searchPlaylist("%" + keyword + "%");
+
+            // In ra dữ liệu kết quả tìm kiếm
+            System.out.println("Kết quả tìm kiếm cho người dùng: " + userResults);
+            System.out.println("Kết quả tìm kiếm cho bài hát: " + trackResults);
+            System.out.println("Kết quả tìm kiếm cho album: " + albumResults);
+            System.out.println("Kết quả tìm kiếm cho danh sách phát: " + playlistResults);
 
             // Tạo response chứa tất cả kết quả
             Map<String, Object> response = new HashMap<>();
@@ -435,7 +478,16 @@ public class UserController {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
     }
-
-
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
 }

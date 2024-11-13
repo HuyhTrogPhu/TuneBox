@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: EcommerceAdmin
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/tuneBox
+    username: root
+    password: 1111
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tuneboxvietnam@gmail.com
+    password: znuo qxwy kjtd xmqz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
+cloudinary:
+  cloud-name: dslm1fjny
+  api-key: 687813197331129
+  api-secret: tGla5A5ZY2Jqp24sfTHtEN1ATds
+
+server:
+  port: 8081
