@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("SOCIALADMIN"));
+            user.setRole(roleRepository.findByName("CUSTOMER"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -577,6 +577,19 @@ public class UserServiceImpl implements UserService {
                     user.getUserInformation() != null ? user.getUserInformation().getName() : null
             );
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User createUser(String email) {
+        User newUser = new User();
+        newUser.setEmail(email);
+        // Bạn có thể thiết lập các thuộc tính khác nếu có
+        return userRepository.save(newUser); // Lưu người dùng mới vào cơ sở dữ liệu
     }
 
     @Override

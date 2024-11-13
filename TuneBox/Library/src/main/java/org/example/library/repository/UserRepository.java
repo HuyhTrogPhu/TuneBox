@@ -16,7 +16,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
+
 
     // list username
     @Query("SELECT u.userName FROM User u")
@@ -293,4 +294,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 
+    // list username
+    @Query("SELECT u.userName FROM User u")
+    List<String> findAllUserNames();
+
+    // list email
+    @Query("SELECT u.email FROM User u")
+    List<String> findAllUserEmails();
 }
