@@ -14,22 +14,25 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CustomerServiceConfig implements UserDetailsService {
+public class    CustomerServiceConfig implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(username);
+        // Tìm kiếm người dùng bằng email trước
+        Optional<User> userOptional = userRepository.findOptionalByEmail(username);
 
-        if (!userOptional.isPresent()) {
-            userOptional = userRepository.findByUserName(username);
+        // Nếu không tìm thấy bằng email, tìm kiếm bằng username (trước dấu @)
+        if (userOptional.isEmpty()) {
+            userOptional = userRepository.findByUserName(username.split("@")[0]);
         }
 
         User user = userOptional.orElseThrow(() ->
-                new UsernameNotFoundException("User not found with username: " + username));
+                new UsernameNotFoundException("User not found with username or email: " + username));
 
+        System.out.println("User found: " + user.getUserName());
         return new CustomerDetail(user);
     }
 

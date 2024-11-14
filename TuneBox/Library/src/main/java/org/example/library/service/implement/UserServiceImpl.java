@@ -14,6 +14,7 @@ import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInformationRepository userInformationRepository;
+
 
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
@@ -575,7 +577,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findOptionalByEmail(email);
     }
 
     @Override

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -36,6 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                 String jwt = authorizationHeader.substring(7);
                 try {
+                    boolean isGoogleToken = jwtUtil.isGoogleToken(jwt);
                     String username = jwtUtil.extractUsername(jwt);
                     System.out.println("Extracted Username: " + username);
 
@@ -44,8 +48,17 @@ public class JwtFilter extends OncePerRequestFilter {
                         System.out.println("User Details: " + userDetails);
 
                         if (jwtUtil.validateToken(jwt, userDetails)) {
+                            Collection<? extends GrantedAuthority> authorities;
+                            if (isGoogleToken) {
+                                // Lấy quyền từ Google token
+                                authorities = jwtUtil.extractGoogleRoles(jwt);
+                            } else {
+                                // Lấy quyền từ token của hệ thống
+                                authorities = userDetails.getAuthorities();
+                            }
+
                             UsernamePasswordAuthenticationToken authToken =
-                                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                                    new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
                             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                             SecurityContextHolder.getContext().setAuthentication(authToken);
                             System.out.println("Authentication Successful");
@@ -64,5 +77,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
 }

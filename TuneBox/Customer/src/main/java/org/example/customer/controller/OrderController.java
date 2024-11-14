@@ -1,8 +1,7 @@
 package org.example.customer.controller;
 
 
-import org.example.library.dto.OrderDto;
-import org.example.library.dto.UserCheckOut;
+import org.example.library.dto.*;
 import org.example.library.model.Order;
 import org.example.library.service.EmailService;
 import org.example.library.service.implement.OrderServiceImpl;
@@ -82,17 +81,42 @@ public class OrderController {
 
 
 
-    @GetMapping("/getOrdersByUserId/{userId}")
-    public ResponseEntity<List<OrderDto>> getOrdersByUserId(@PathVariable Long userId) {
-        List<OrderDto> orders = null;
-        return ResponseEntity.ok(orders);
+    @GetMapping("/orders/{userId}")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
     }
-
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<OrderDetailInfoDto> getOrderDetailByOrderId(@PathVariable Long orderId) {
+        try {
+            OrderDetailInfoDto orderDetailInfoDto = orderService.getOrderDetailByOrderId(orderId);
+            return ResponseEntity.ok(orderDetailInfoDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
     @GetMapping("/getOrderById/{orderId}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId);
         OrderDto orderDto = orderService.mapToDto(order);
         return ResponseEntity.ok(orderDto);
+    }
+
+    @PutMapping("/order/{orderId}/status")
+    public ResponseEntity<String> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderListDto orderListDto) {
+        try {
+            orderService.updateOrderStatus(orderId, orderListDto.getStatus(), orderListDto.getDeliveryDate(), orderListDto.getPaymentStatus());
+            return ResponseEntity.ok("Order status updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update order status");
+        }
     }
 
 }

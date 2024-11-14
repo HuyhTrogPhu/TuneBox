@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,7 +16,19 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
+
+    Optional<User> findOptionalByEmail(String email);
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
+    // list username
+    @Query("SELECT u.userName FROM User u")
+    List<String> findAllUserNames();
+
+    // list email
+    @Query("SELECT u.email FROM User u")
+    List<String> findAllUserEmails();
+
 
 
     // get user by username or email
@@ -95,8 +106,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserName(String userName);
 
-
-
     // get list user sell the most
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
@@ -165,6 +174,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where o.id is null")
     List<UserSell> getUserNotSell();
 
+
+
+
     // search
     @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.name, ui.avatar,  us.userName) " +
             "from UserInformation ui join ui.user us where ui.name like :keyword or us.userName like :keyword")
@@ -182,7 +194,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from Playlist p where p.title like :keyword or p.type like :keyword or p.creator.userName like :keyword  or p.creator.userInformation.name like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
-    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
 
 //    User findByUserName(String username);
 
@@ -259,8 +270,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserSellBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
     long countByIdNotNull();
     List<User> findByReportTrue();
+
     Long countByCreateDate(LocalDate createDate);
     Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
     @Query(value = "SELECT u.user_name, COUNT(f.followed_id) AS follower_count " +
             "FROM users u " +
             "JOIN follow f ON u.user_id = f.followed_id " +
@@ -268,6 +281,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ORDER BY follower_count DESC " +
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10MostFollowedUsers();
+
     @Query(value = "SELECT u.user_name, COUNT(t.track_id) AS track_count " +
             "FROM users u " +
             "JOIN track t ON u.user_id = t.user_id " +
@@ -277,14 +291,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
                                                 @Param("endDate") LocalDateTime  endDate);
-
-    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
-
-    // list username
-    @Query("SELECT u.userName FROM User u")
-    List<String> findAllUserNames();
-
-    // list email
-    @Query("SELECT u.email FROM User u")
-    List<String> findAllUserEmails();
 }

@@ -86,5 +86,22 @@ public class ShopController {
         }
     }
 
+    @GetMapping("/instruments/{id}/quantity")
+    public ResponseEntity<?> getInstrumentQuantity(@PathVariable Long id) {
+        try {
+            Integer quantity = instrumentService.getInstrumentQuantityById(id);
+            if (quantity != null) {
+                return ResponseEntity.ok(quantity);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Instrument not found or quantity not available");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error retrieving instrument quantity: " + e.getMessage());
+        }
+    }
+
+
 
 }
