@@ -25,7 +25,7 @@ public class CustomerServiceConfig implements UserDetailsService {
         Optional<User> userOptional = userRepository.findByEmail(username);
 
         // Nếu không tìm thấy bằng email, tìm kiếm bằng username (trước dấu @)
-        if (!userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
             userOptional = userRepository.findByUserName(username.split("@")[0]);
         }
 
