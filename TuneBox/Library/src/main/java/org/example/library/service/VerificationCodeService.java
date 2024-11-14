@@ -7,25 +7,28 @@ import org.example.library.repository.VerificationCodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class VerificationCodeService {
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
-@Autowired
-private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     public void save(VerificationCode verificationCode) {
         verificationCodeRepository.save(verificationCode);
     }
 
     public boolean isValidCode(String email, String code) {
         // Lấy userId từ email
-        User user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user == null) { // Kiểm tra xem người dùng có tồn tại không
             throw new RuntimeException("User not found");
         }
 
-        Long userId = user.getId(); // Lấy userId từ đối tượng User
+        Long userId = user.orElseThrow().getId(); // Lấy userId từ đối tượng User
         VerificationCode verificationCode = verificationCodeRepository.findByUserId(userId);
 
         return verificationCode != null && verificationCode.getCode().equals(code);
@@ -33,13 +36,13 @@ private UserRepository userRepository;
 
     public void deleteCode(String email, String code) {
         // Lấy userId từ email
-        User user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if (user == null) { // Kiểm tra xem người dùng có tồn tại không
             throw new RuntimeException("User not found");
         }
 
-        Long userId = user.getId(); // Lấy userId từ đối tượng User
+        Long userId = user.orElseThrow().getId(); // Lấy userId từ đối tượng User
         verificationCodeRepository.deleteByUserIdAndCode(userId, code);
     }
 

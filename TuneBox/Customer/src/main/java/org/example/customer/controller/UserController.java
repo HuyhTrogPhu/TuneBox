@@ -201,43 +201,6 @@ public class UserController {
         }
     }
 
-    // check signUp form
-    @GetMapping("/check-signUp")
-    public ResponseEntity<?> checkSignUp(
-            @RequestParam("userName") String userName,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password) {
-
-        // list userName
-        List<String> userNames = userRepository.findAllUserNames();
-
-        // list email
-        List<String> emails = userRepository.findAllUserEmails();
-
-        // Kiểm tra userName và email đã tồn tại hay chưa
-        if (userNames.contains(userName)) {
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        if (userName.isEmpty()) {
-            return ResponseEntity.badRequest().body("Username not null");
-        }
-
-        if (emails.contains(email)) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-        if (email.isEmpty()) {
-            return ResponseEntity.badRequest().body("Email not null");
-        }
-
-        // Kiểm tra và ghi log thông tin nhận được
-        if (password == null || password.isEmpty()) {
-            return ResponseEntity.badRequest().body("Password not null");
-        }
-
-        return ResponseEntity.ok().build();
-
-    }
-
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -429,7 +392,7 @@ public class UserController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
-        User user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
         if (user == null) {
             return ResponseEntity.badRequest().body("Email không tồn tại");
         }
@@ -439,7 +402,7 @@ public class UserController {
         String token = UUID.randomUUID().toString();
 
         // Lưu mã xác nhận và token cho người dùng
-        verificationCodeService.save(new VerificationCode(user.getId(), code, token));
+        verificationCodeService.save(new VerificationCode(user.orElseThrow().getId(), code, token));
 
         // Tạo liên kết để đổi mật khẩu
         String resetPasswordLink = "http://localhost:3000/reset-password?token=" + token;
