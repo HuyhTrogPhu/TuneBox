@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
+
+    Optional<User> findOptionalByEmail(String email);
 
     // list username
     @Query("SELECT u.userName FROM User u")
@@ -25,8 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.email FROM User u")
     List<String> findAllUserEmails();
 
-
-    Optional<User> findByEmail(String email);
 
 
     // get user by username or email
@@ -173,8 +174,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserNotSell();
 
 
-    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
-    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
 
 
     // search
@@ -198,7 +197,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    User findByUserName(String username);
 
-
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
 
     // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
@@ -270,8 +270,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserSell> getUserSellBetweenYears(@Param("startYear") int startYear, @Param("endYear") int endYear);
     long countByIdNotNull();
     List<User> findByReportTrue();
+
     Long countByCreateDate(LocalDate createDate);
     Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
     @Query(value = "SELECT u.user_name, COUNT(f.followed_id) AS follower_count " +
             "FROM users u " +
             "JOIN follow f ON u.user_id = f.followed_id " +
@@ -279,6 +281,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ORDER BY follower_count DESC " +
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10MostFollowedUsers();
+
     @Query(value = "SELECT u.user_name, COUNT(t.track_id) AS track_count " +
             "FROM users u " +
             "JOIN track t ON u.user_id = t.user_id " +
@@ -288,7 +291,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
                                                 @Param("endDate") LocalDateTime  endDate);
-
-    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
-
 }

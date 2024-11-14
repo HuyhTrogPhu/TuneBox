@@ -22,7 +22,7 @@ public class    CustomerServiceConfig implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Tìm kiếm người dùng bằng email
-        Optional<User> userOptional = userRepository.findByEmail(username);
+        Optional<User> userOptional = userRepository.findOptionalByEmail(username);
 
         // Nếu không tìm thấy bằng email, tìm kiếm bằng username (trước dấu @)
         if (userOptional.isPresent()) {
