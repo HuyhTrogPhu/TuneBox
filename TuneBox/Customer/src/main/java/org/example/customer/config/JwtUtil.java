@@ -23,8 +23,13 @@ public class JwtUtil {
 
     // Trích xuất username từ token
     public String extractUsername(String token) {
-        return extractClaim(token, claims -> claims.get("sub").toString());
+        if (isGoogleToken(token)) {
+            return extractClaim(token, claims -> claims.get("sub").toString());
+        } else {
+            return extractClaim(token, Claims::getSubject);
+        }
     }
+
 
     // Trích xuất ngày hết hạn từ token
     public Date extractExpiration(String token) {
@@ -35,13 +40,17 @@ public class JwtUtil {
     }
 
     // Trích xuất claim cụ thể từ token
-    public <T> T extractClaim(String token, Function<Map<String, Object>, T> claimsResolver) {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         if (isGoogleToken(token)) {
-            return extractClaimFromGoogleToken(token, claimsResolver);
+            return extractClaimFromGoogleToken(token, claims -> {
+                Claims internalClaims = Jwts.claims(claims);
+                return claimsResolver.apply(internalClaims);
+            });
         }
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
 
     // Giải mã và lấy toàn bộ claims từ token
     private Claims extractAllClaims(String token) {
@@ -62,7 +71,7 @@ public class JwtUtil {
             return validateGoogleToken(token, userDetails);
         }
 
-        final String usernameFromToken = extractUsername(token).split("@")[0];
+        final String usernameFromToken = extractUsername(token);
         final String usernameFromUserDetails = userDetails.getUsername();
 
         System.out.println("Validating token for username from token: " + usernameFromToken);
@@ -74,18 +83,23 @@ public class JwtUtil {
         return tokenValid;
     }
 
-
-
     // Kiểm tra nếu token là của Google
     private Boolean isGoogleToken(String token) {
         try {
+            // Nếu token không chứa dấu '.' thì chắc chắn là token tự tạo
+            if (!token.contains(".")) {
+                return false;
+            }
+
             Jwt jwt = jwtDecoder.decode(token);
             String issuer = jwt.getClaimAsString("iss");
             return issuer != null && issuer.contains("accounts.google.com");
         } catch (Exception e) {
+            System.out.println("Error determining if token is Google token: " + e.getMessage());
             return false;
         }
     }
+
 
     // Giải mã và trích xuất claim từ Google token
     private <T> T extractClaimFromGoogleToken(String token, Function<Map<String, Object>, T> claimsResolver) {
@@ -121,7 +135,6 @@ public class JwtUtil {
             return false;
         }
     }
-
 
 
     // Tạo JWT

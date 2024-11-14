@@ -21,19 +21,17 @@ public class CustomerServiceConfig implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Tìm kiếm người dùng bằng email
         Optional<User> userOptional = userRepository.findByEmail(username);
 
-        // Nếu không tìm thấy bằng email, tìm kiếm bằng username (trước dấu @)
-        if (userOptional.isPresent()) {
-            userOptional = userRepository.findByUserName(username.split("@")[0]);
+        if (!userOptional.isPresent()) {
+            userOptional = userRepository.findByUserName(username);
         }
 
         User user = userOptional.orElseThrow(() ->
                 new UsernameNotFoundException("User not found with username: " + username));
 
-        System.out.println("User found: " + user.getUserName());
         return new CustomerDetail(user);
     }
+
 
 }
