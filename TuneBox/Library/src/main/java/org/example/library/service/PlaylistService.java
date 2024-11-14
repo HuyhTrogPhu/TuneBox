@@ -15,5 +15,6 @@ public interface PlaylistService {
       List<PlaylistDto> searchPlaylist(String keyword);
       List<PlaylistDto> getAllPlaylist();
 
+      public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId);
 
 }

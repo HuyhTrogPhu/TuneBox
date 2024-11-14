@@ -1,5 +1,6 @@
 package org.example.library.service;
 
+import org.example.library.dto.ListUserForMessageDto;
 import org.example.library.model.Message;
 
 import java.util.List;
@@ -12,5 +13,7 @@ public interface MessageService {
     Message revokeMessage(Long messageId, Long userId); //thu hồi tin nhắn
 
     Message findMessageById(Long messageId); // Tìm tin nhắn theo ID
+
+    List<ListUserForMessageDto> findAllAcceptedFriends(Long userId);
 
 }

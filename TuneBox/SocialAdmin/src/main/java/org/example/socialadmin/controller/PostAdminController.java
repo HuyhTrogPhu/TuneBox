@@ -2,7 +2,9 @@ package org.example.socialadmin.controller;
 
 import org.example.library.Exception.PostNotFoundException;
 import org.example.library.dto.PostDto;
+import org.example.library.dto.PostReactionDto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.UserInfoDto;
 import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,7 @@ public class PostAdminController {
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
         try {
-            List<PostDto> newPosts = postService.findNewPosts(); // Giả định có phương thức lấy bài mới
+            List<PostDto> newPosts = postService.findNewPosts();
             return ResponseEntity.ok(newPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -99,6 +101,14 @@ public class PostAdminController {
         }
     }
 
-    //xu ly bai viet
+    @GetMapping("/search-info/{postId}")  // đổi tên param từ id thành postId
+    public ResponseEntity<UserInfoDto> getSearchInfo(@PathVariable Long postId) {
+        try {
+            UserInfoDto userInfoDto = postService.getSearchInfo(postId);
+            return ResponseEntity.ok(userInfoDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
 }

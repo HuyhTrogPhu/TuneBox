@@ -36,7 +36,6 @@ public class PlaylistController {
     public ResponseEntity<PlaylistDto> createPlaylist(@RequestParam("title") String title, @RequestParam("imagePlaylist") MultipartFile imagePlaylist,
                                                     @RequestParam("description") String description,
                                                     @RequestParam("status") boolean status,
-
                                                     @RequestParam("report") boolean report, @RequestParam("user") Long userId, @RequestParam("type") String type,
                                                     @RequestParam(value = "trackIds", required = false) List<Long> trackIds) {
         Set<Long> trackIdSet = new HashSet<>(trackIds);
@@ -134,5 +133,17 @@ public class PlaylistController {
     public ResponseEntity<List<PlaylistDto>> getAllTracks() {
         List<PlaylistDto> list = playlistService.getAllPlaylist();
         return ResponseEntity.ok(list);
+    }
+
+    @DeleteMapping("/{playlistId}/tracks/{trackId}")
+    public ResponseEntity<String> removeTrackFromPlaylist(
+            @PathVariable Long playlistId,
+            @PathVariable Long trackId) {
+        try {
+            playlistService.removeTrackFromPlaylist(playlistId, trackId);
+            return ResponseEntity.ok("Track được xóa khỏi playlist thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Không thể xóa track khỏi playlist: " + e.getMessage());
+        }
     }
 }

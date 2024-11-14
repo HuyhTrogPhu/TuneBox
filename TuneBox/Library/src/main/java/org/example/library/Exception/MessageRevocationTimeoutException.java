@@ -3,9 +3,9 @@ package org.example.library.Exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class MessageRevocationTimeoutException extends RuntimeException {
+    public MessageRevocationTimeoutException(String message) {
         super(message);
     }
 }

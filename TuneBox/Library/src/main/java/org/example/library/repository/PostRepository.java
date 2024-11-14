@@ -1,7 +1,9 @@
 package org.example.library.repository;
 
+import org.example.library.dto.PostReactionDto;
 import org.example.library.model.Post;
 import org.example.library.model.Report;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,5 +40,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByKeyword(@Param("keyword") String keyword);
 
     List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
+
+    List<Post> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Sort sort);
 
 }
