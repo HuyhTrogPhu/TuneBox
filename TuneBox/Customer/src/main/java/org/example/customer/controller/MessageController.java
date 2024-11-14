@@ -1,11 +1,9 @@
 package org.example.customer.controller;
 
-import org.example.library.dto.MessageDTO;
-import org.example.library.dto.MessageWebSocketDTO;
-import org.example.library.dto.OtherAttachmentDto;
-import org.example.library.dto.UserMessageDTO;
+import org.example.library.dto.*;
 import org.example.library.mapper.ChatMessageMapper;
 import org.example.library.model.Message;
+import org.example.library.repository.MessageRepository;
 import org.example.library.service.MessageService;
 import org.example.library.service.implement.CloudinaryService;
 import org.slf4j.Logger;
@@ -33,14 +31,21 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
-    private ChatMessageMapper messageMapper;
-
-    @Autowired
     private CloudinaryService cloudinaryService;
 
     @Autowired
     private SimpMessagingTemplate template;
 
+    @GetMapping("/friends")
+    public ResponseEntity<List<ListUserForMessageDto>> getAllFriendsForChat(@RequestParam Long userId) {
+        try {
+            List<ListUserForMessageDto> friends = messageService.findAllAcceptedFriends(userId);
+            return ResponseEntity.ok(friends);
+        } catch (Exception e) {
+            logger.error("Error fetching friends for user {}: {}", userId, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
 
     @GetMapping("/between")
     public ResponseEntity<List<MessageDTO>> getMessagesBetween(@RequestParam Long userId1, @RequestParam Long userId2) {
@@ -114,7 +119,6 @@ public class MessageController {
         try {
             Message revokedMessage = messageService.revokeMessage(id, userId);
 
-            // Tạo DTO để trả về
             MessageWebSocketDTO revokedMessageDTO = new MessageWebSocketDTO();
             revokedMessageDTO.setId(revokedMessage.getId());
             revokedMessageDTO.setSenderId(new UserMessageDTO(revokedMessage.getSender().getId()));

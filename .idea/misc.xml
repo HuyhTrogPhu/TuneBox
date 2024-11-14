@@ -4,11 +4,7 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/TuneBox/SocialAdmin/pom.xml" />
-        <option value="$PROJECT_DIR$/TuneBox/Library/pom.xml" />
         <option value="$PROJECT_DIR$/TuneBox/pom.xml" />
-        <option value="$PROJECT_DIR$/TuneBox/Customer/pom.xml" />
-        <option value="$PROJECT_DIR$/TuneBox/EcommerceAdmin/pom.xml" />
       </list>
     </option>
   </component>

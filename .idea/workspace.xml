@@ -4,12 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="lego">
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/MessageRevocationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/MessageRevocationTimeoutException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/UnauthorizedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostReactionDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInfoDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/SendAlbumRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/SendInstrumentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/SendPlaylistRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/SendAlbumService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/SendInstrumentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/SendPlaylistService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendAlbumServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendInstrumentServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendPlaylistServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/MessageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/MessageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ListUserForMessageDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/ListUserForMessageDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/SearchDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserThisIdDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Friend.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Friend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/MessageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/MessageRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/MessageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/MessageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CloudinaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/CloudinaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/MessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/MessageServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/PostAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/PostAdminController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,20 +55,32 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="QuocTrung" />
+        <entry key="$PROJECT_DIR$" value="GiaBao" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;halayra&quot;
+  }
+}</component>
+  <component name="GitRewordedCommitMessages">
+    <option name="onto" value="5164d59cdb53b14a49dac94f67f160379910d605" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
+    &quot;accountId&quot;: &quot;f7858ff9-959f-43df-afb4-670d33901c15&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2majaHCdOnWZr93uoNP2yt7dSev" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -56,35 +96,28 @@
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.SocialAdminApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;XuanTruong&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;QuocTrung&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/TuneBox-XuanTruong&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.example.customer.config" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FPT_poly\DuAnTotNghiep\TuneBox\TuneBox\Customer\src\main\java\org\example\customer\config" />
     </key>
   </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
+        <option value="KtorApplicationConfigurationType" />
         <option value="MicronautRunConfigurationType" />
         <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
@@ -92,40 +125,6 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.CustomerApplication">
-    <configuration name="CustomerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.example.customer.CustomerApplication" />
-      <module name="Customer" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.example.customer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in DuAnTotNghiep" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="DuAnTotNghiep" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="TuneBox" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="TuneBox" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
@@ -158,25 +157,17 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.CustomerApplication" />
-      <item itemvalue="JUnit.All in DuAnTotNghiep" />
       <item itemvalue="Spring Boot.CustomerApplication" />
       <item itemvalue="Spring Boot.EcommerceAdminApplication" />
       <item itemvalue="Spring Boot.LibraryApplication" />
       <item itemvalue="Spring Boot.SocialAdminApplication" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JUnit.All in DuAnTotNghiep" />
-        <item itemvalue="Application.CustomerApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
       </set>
     </attachedChunks>
   </component>
@@ -189,51 +180,10 @@
       <option name="presentableId" value="Default" />
       <updated>1727321644143</updated>
       <workItem from="1727321647230" duration="168000" />
-      <workItem from="1727507412957" duration="8406000" />
-      <workItem from="1727615323794" duration="6377000" />
-      <workItem from="1727663776241" duration="13028000" />
-      <workItem from="1727753652794" duration="3389000" />
-      <workItem from="1727780806373" duration="1354000" />
-      <workItem from="1727837865440" duration="2864000" />
-      <workItem from="1727841496846" duration="4305000" />
-      <workItem from="1727849901811" duration="1647000" />
-      <workItem from="1727862401344" duration="3954000" />
-      <workItem from="1727956923416" duration="10346000" />
-      <workItem from="1728294068682" duration="13895000" />
-      <workItem from="1728359683470" duration="8086000" />
-      <workItem from="1728387912391" duration="2158000" />
-      <workItem from="1728448640492" duration="458000" />
-      <workItem from="1728724055620" duration="33000" />
-      <workItem from="1728821798220" duration="2678000" />
-      <workItem from="1728875776865" duration="2650000" />
-      <workItem from="1728878948894" duration="8419000" />
-      <workItem from="1728909661115" duration="12534000" />
-      <workItem from="1728962688512" duration="6007000" />
-      <workItem from="1729255655928" duration="24000" />
-      <workItem from="1729255687355" duration="48000" />
-      <workItem from="1729255769545" duration="317000" />
-      <workItem from="1729256190819" duration="2408000" />
-      <workItem from="1729409701872" duration="2000" />
-      <workItem from="1729740413216" duration="702000" />
-      <workItem from="1729836238599" duration="3121000" />
-      <workItem from="1729857065861" duration="5609000" />
-      <workItem from="1730091228309" duration="1913000" />
-      <workItem from="1730103012793" duration="3234000" />
-      <workItem from="1730135685964" duration="64000" />
-      <workItem from="1730176508663" duration="3288000" />
-      <workItem from="1730271951321" duration="18000" />
-      <workItem from="1730279603051" duration="343000" />
-      <workItem from="1730279999354" duration="661000" />
-      <workItem from="1730292403906" duration="3141000" />
-      <workItem from="1730344770684" duration="1693000" />
-      <workItem from="1730528897629" duration="5259000" />
-      <workItem from="1730720304797" duration="9698000" />
-      <workItem from="1730773591374" duration="3261000" />
-      <workItem from="1730879607959" duration="270000" />
-      <workItem from="1730894244951" duration="1983000" />
-      <workItem from="1730986453761" duration="85000" />
-      <workItem from="1731134045305" duration="2571000" />
-      <workItem from="1731555377241" duration="377000" />
+      <workItem from="1727507412957" duration="7257000" />
+      <workItem from="1728305162768" duration="14857000" />
+      <workItem from="1728357263814" duration="164000" />
+      <workItem from="1728359274760" duration="4462000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -243,191 +193,39 @@
       <option name="project" value="LOCAL" />
       <updated>1727321699555</updated>
     </task>
-    <task id="LOCAL-00002" summary="update brand function">
+    <task id="LOCAL-00002" summary="cap nhat comment">
       <option name="closed" value="true" />
-      <created>1727515877629</created>
+      <created>1728317883783</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1727515877629</updated>
+      <updated>1728317883783</updated>
     </task>
-    <task id="LOCAL-00003" summary="update costPrice in InstrumentController">
+    <task id="LOCAL-00003" summary="cap nhat">
       <option name="closed" value="true" />
-      <created>1727613750419</created>
+      <created>1729096702866</created>
       <option name="number" value="00003" />
       <option name="presentableId" value="LOCAL-00003" />
       <option name="project" value="LOCAL" />
-      <updated>1727613750419</updated>
+      <updated>1729096702866</updated>
     </task>
-    <task id="LOCAL-00004" summary="update search sort and edit in InstrumentController">
+    <task id="LOCAL-00004" summary="cap nhat sua sau tham hoa merge code">
       <option name="closed" value="true" />
-      <created>1727663844854</created>
+      <created>1729136058291</created>
       <option name="number" value="00004" />
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
-      <updated>1727663844854</updated>
+      <updated>1729136058291</updated>
     </task>
-    <task id="LOCAL-00005" summary="update">
+    <task id="LOCAL-00005" summary="lego">
       <option name="closed" value="true" />
-      <created>1727672547227</created>
+      <created>1731568829287</created>
       <option name="number" value="00005" />
       <option name="presentableId" value="LOCAL-00005" />
       <option name="project" value="LOCAL" />
-      <updated>1727672547227</updated>
+      <updated>1731568829287</updated>
     </task>
-    <task id="LOCAL-00006" summary="update">
-      <option name="closed" value="true" />
-      <created>1727673596921</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1727673596921</updated>
-    </task>
-    <task id="LOCAL-00007" summary="done instrument">
-      <option name="closed" value="true" />
-      <created>1727678881155</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1727678881155</updated>
-    </task>
-    <task id="LOCAL-00008" summary="done brandpage and brandDetail">
-      <option name="closed" value="true" />
-      <created>1727853103708</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1727853103708</updated>
-    </task>
-    <task id="LOCAL-00009" summary="update brand ins customer">
-      <option name="closed" value="true" />
-      <created>1727863373253</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1727863373253</updated>
-    </task>
-    <task id="LOCAL-00010" summary="commit">
-      <option name="closed" value="true" />
-      <created>1727931594207</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1727931594207</updated>
-    </task>
-    <task id="LOCAL-00011" summary="commit 10.7">
-      <option name="closed" value="true" />
-      <created>1728306936404</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1728306936404</updated>
-    </task>
-    <task id="LOCAL-00012" summary="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom">
-      <option name="closed" value="true" />
-      <created>1728366320420</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1728366320420</updated>
-    </task>
-    <task id="LOCAL-00013" summary="commit edit add del cart">
-      <option name="closed" value="true" />
-      <created>1728716021349</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1728716021349</updated>
-    </task>
-    <task id="LOCAL-00014" summary="hoan thanh order cod">
-      <option name="closed" value="true" />
-      <created>1728918972894</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1728918972894</updated>
-    </task>
-    <task id="LOCAL-00015" summary="update">
-      <option name="closed" value="true" />
-      <created>1729740429435</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1729740429435</updated>
-    </task>
-    <task id="LOCAL-00016" summary="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java">
-      <option name="closed" value="true" />
-      <created>1729841570041</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1729841570041</updated>
-    </task>
-    <task id="LOCAL-00017" summary="cao nhạt">
-      <option name="closed" value="true" />
-      <created>1730135731455</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1730135731455</updated>
-    </task>
-    <task id="LOCAL-00018" summary="cập nhật jwt, phân quyen">
-      <option name="closed" value="true" />
-      <created>1730296463203</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1730296463203</updated>
-    </task>
-    <task id="LOCAL-00019" summary="update customerorder, Google (chưa làm được), Quên Pass">
-      <option name="closed" value="true" />
-      <created>1730808816182</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1730808816182</updated>
-    </task>
-    <task id="LOCAL-00020" summary="update jwt, mang  xa hoi">
-      <option name="closed" value="true" />
-      <created>1730879656557</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1730879656557</updated>
-    </task>
-    <task id="LOCAL-00021" summary="mới nhất 11.7">
-      <option name="closed" value="true" />
-      <created>1730958853265</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1730958853265</updated>
-    </task>
-    <task id="LOCAL-00022" summary="mới nhất 11.7 v2">
-      <option name="closed" value="true" />
-      <created>1730962619290</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1730962619290</updated>
-    </task>
-    <task id="LOCAL-00023" summary="committ">
-      <option name="closed" value="true" />
-      <created>1731051705405</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1731051705405</updated>
-    </task>
-    <task id="LOCAL-00024" summary="commit merge nqtrung">
-      <option name="closed" value="true" />
-      <created>1731135636981</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1731135636981</updated>
-    </task>
-    <option name="localTasksCounter" value="25" />
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -445,28 +243,12 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update brand function" />
-    <MESSAGE value="update costPrice in InstrumentController" />
-    <MESSAGE value="update search sort and edit in InstrumentController" />
-    <MESSAGE value="done instrument" />
-    <MESSAGE value="done brandpage and brandDetail" />
-    <MESSAGE value="update brand ins customer" />
-    <MESSAGE value="commit 10.7" />
-    <MESSAGE value="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom" />
-    <MESSAGE value="commit edit add del cart" />
     <MESSAGE value="commit" />
-    <MESSAGE value="hoan thanh order cod" />
-    <MESSAGE value="update" />
-    <MESSAGE value="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java" />
-    <MESSAGE value="cao nhạt" />
-    <MESSAGE value="cập nhật jwt, phân quyen" />
-    <MESSAGE value="update customerorder, Google (chưa làm được), Quên Pass" />
-    <MESSAGE value="update jwt, mang  xa hoi" />
-    <MESSAGE value="mới nhất 11.7" />
-    <MESSAGE value="mới nhất 11.7 v2" />
-    <MESSAGE value="committ" />
-    <MESSAGE value="commit merge nqtrung" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit merge nqtrung" />
+    <MESSAGE value="cap nhat comment" />
+    <MESSAGE value="cap nhat" />
+    <MESSAGE value="cap nhat sua sau tham hoa merge code" />
+    <MESSAGE value="lego" />
+    <option name="LAST_COMMIT_MESSAGE" value="lego" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

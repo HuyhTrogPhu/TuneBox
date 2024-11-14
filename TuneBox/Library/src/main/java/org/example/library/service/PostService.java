@@ -2,7 +2,9 @@ package org.example.library.service;
 
 import jakarta.transaction.Transactional;
 import org.example.library.dto.PostDto;
+import org.example.library.dto.PostReactionDto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.UserInfoDto;
 import org.example.library.model.Post;
 //import org.example.library.dto.PostReportDto;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,4 +74,5 @@ public interface PostService {
 
 //    List<PostReportDto> findAllReports(); // Phương thức lấy danh sách báo cáo
 
+    UserInfoDto getSearchInfo(Long postId);
 }
