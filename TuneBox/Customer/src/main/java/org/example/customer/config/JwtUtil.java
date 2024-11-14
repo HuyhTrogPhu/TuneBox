@@ -4,14 +4,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
@@ -77,7 +82,7 @@ public class JwtUtil {
 
 
     // Kiểm tra nếu token là của Google
-    private Boolean isGoogleToken(String token) {
+    Boolean isGoogleToken(String token) {
         try {
             Jwt jwt = jwtDecoder.decode(token);
             String issuer = jwt.getClaimAsString("iss");
@@ -122,7 +127,11 @@ public class JwtUtil {
         }
     }
 
-
+    public Collection<? extends GrantedAuthority> extractGoogleRoles(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        List<String> roles = jwt.getClaimAsStringList("scope");
+        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
 
     // Tạo JWT
     public String generateToken(String username, String role) {
