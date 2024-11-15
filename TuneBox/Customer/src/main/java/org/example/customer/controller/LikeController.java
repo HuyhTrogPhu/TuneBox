@@ -25,7 +25,7 @@ public class LikeController {
     public ResponseEntity<LikeDto> addLike(@RequestBody LikeDto likeDto) {
         try {
             // Kiểm tra nếu likeDto không hợp lệ
-            if (likeDto.getUserId() == null || (likeDto.getPostId() == null && likeDto.getTrackId() == null)) {
+            if (likeDto.getUserId() == null || likeDto.getPostId() == null) {
                 return ResponseEntity.badRequest().body(null);
             }
 
