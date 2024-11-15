@@ -15,5 +15,13 @@ public class BrandSalesDto {
 
     private String brandName;
 
-    private int totalSold;
+    private String instrumentName;
+
+    private String image;
+
+    private double costPrice;
+
+    private int quantity;
+
+    private Long totalSold;
 }

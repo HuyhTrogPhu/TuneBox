@@ -59,7 +59,6 @@ public class FollowController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
     @GetMapping("/{userId}/followers")
     public ResponseEntity<List<FollowedUserDto>> getFollowers(@PathVariable Long userId) {
         try {
@@ -70,7 +69,6 @@ public class FollowController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
     @GetMapping("/{userId}/following")
     public ResponseEntity<List<FollowedUserDto>> getFollowing(@PathVariable Long userId) {
         try {
@@ -81,4 +79,5 @@ public class FollowController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }

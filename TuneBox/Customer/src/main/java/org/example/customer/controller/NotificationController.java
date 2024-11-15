@@ -1,6 +1,7 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.NotificationDTO;
+import org.example.library.model.Notification;
 import org.example.library.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/notifications")
@@ -43,4 +45,6 @@ public class NotificationController {
         notificationService.deleteAllReadNotifications(userId);
         return ResponseEntity.ok("Đã xóa tất cả thông báo đã đọc.");
     }
+
+
 }

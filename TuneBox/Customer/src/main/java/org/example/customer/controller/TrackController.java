@@ -35,8 +35,10 @@ public class TrackController {
 
     //creat Track
     @PostMapping
-    public ResponseEntity<TrackDto> createTrack(@RequestParam("name") String name, @RequestParam("trackImage") MultipartFile trackImage,
-                                                @RequestParam("trackFile") MultipartFile trackFile, @RequestParam("description") String description,
+    public ResponseEntity<TrackDto> createTrack(@RequestParam("name") String name,
+                                                @RequestParam("trackImage") MultipartFile trackImage,
+                                                @RequestParam("trackFile") MultipartFile trackFile,
+                                                @RequestParam("description") String description,
                                                 @RequestParam("status") boolean status,
                                                 @RequestParam("report") boolean report,
                                                 @RequestParam("genre") Genre genre, @RequestParam("user") User user) {

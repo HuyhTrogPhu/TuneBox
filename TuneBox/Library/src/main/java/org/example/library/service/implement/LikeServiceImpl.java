@@ -1,21 +1,15 @@
 package org.example.library.service.implement;
 
 import org.example.library.dto.LikeDto;
-import org.example.library.dto.NotificationDTO;
 import org.example.library.mapper.LikeMapper;
-import org.example.library.mapper.TrackMapper;
 import org.example.library.model.*;
 import org.example.library.repository.*;
 import org.example.library.service.LikeService;
 import org.example.library.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +20,6 @@ public class LikeServiceImpl implements LikeService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TrackRepository trackRepository;
-    private LikeServiceImpl likeService;
     @Autowired
     private PlaylistRepository playlistRepository;
     @Autowired

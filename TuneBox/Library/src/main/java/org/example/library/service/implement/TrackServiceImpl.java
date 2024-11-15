@@ -3,21 +3,22 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackDtoSocialAdmin;
+import org.example.library.dto.TrackStatus;
+import org.example.library.dto.UserDto;
 import org.example.library.mapper.TrackMapper;
 import org.example.library.model.Genre;
 import org.example.library.model.Track;
 import org.example.library.model.User;
-import org.example.library.repository.GenreRepository;
-import org.example.library.repository.TrackRepository;
-import org.example.library.repository.UserRepository;
+import org.example.library.repository.*;
 import org.example.library.service.TrackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -30,6 +31,11 @@ public class TrackServiceImpl implements TrackService {
     @Autowired
     private TrackRepository trackRepository;
 
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private LikeRepository  likeRepository;
     @Autowired
     private GenreRepository genreRepository;
 
@@ -321,5 +327,113 @@ public class TrackServiceImpl implements TrackService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public TrackStatus getTrackCountCommentandLike(Long Id) {
+        TrackStatus trackStatus = new TrackStatus();
+        trackStatus.setCommentCount(commentRepository.countByTrackId(Id));
+        trackStatus.setLikeCount(likeRepository.countByTrackId(Id));
+
+        return trackStatus;
+    }
+@Override
+    public List<TrackDto> getAll(){
+        return trackRepository.findAll()
+                .stream()
+                .map(TrackMapper::mapperTrackDto)
+                .collect(Collectors.toList());
+}
+
+@Override
+    public List<TrackDto> findByTracksByAlbumId(Long id) {
+       return trackRepository.findTracksByAlbumId(id)
+               .stream()
+               .map(TrackMapper::mapperTrackDto)
+               .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TrackDtoSocialAdmin> findReportedTrack() {
+       List<Track> listTracks = trackRepository.findByReportTrue();
+        System.out.println("List RP"+listTracks);
+       List<TrackDtoSocialAdmin> ListDto = listTracks.stream()
+                  .map(track -> new TrackDtoSocialAdmin(
+                        track.getId(),
+                        track.getName(),
+                        track.getCreateDate(),
+                        track.isReport(),
+                        track.getReportDate(),
+                        track.getCreator().getUserName(),
+                        track.getLikes().size()
+                ))
+                .collect(Collectors.toList());
+        System.out.println("listDto"+ListDto);
+          return ListDto;
+    }
+    public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> trackCountMap = new HashMap<>();
+
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            // Define the start and end of the day for the current date
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(LocalTime.MAX);
+
+            // Count tracks within the day's range
+            Long count = trackRepository.countByCreateDateBetween(startOfDay, endOfDay);
+            trackCountMap.put(currentDate, count);
+
+            // Move to the next day
+            currentDate = currentDate.plusDays(1);
+        }
+        return trackCountMap;
+    }
+
+    public Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth) {
+        Map<YearMonth, Long> userCountMap = new HashMap<>();
+        YearMonth currentMonth = startMonth;
+
+        while (!currentMonth.isAfter(endMonth)) {
+
+            LocalDateTime monthStart = currentMonth.atDay(1).atStartOfDay();
+            LocalDateTime monthEnd = currentMonth.atEndOfMonth().atTime(23, 59, 59);
+            Long count = trackRepository.countByCreateDateBetween(monthStart, monthEnd);
+            userCountMap.put(currentMonth, count);
+            currentMonth = currentMonth.plusMonths(1);
+        }
+        return userCountMap;
+    }
+    public List<Track> getTracksByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();  // 00:00:00 on startDate
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 23:59:59.999 on endDate
+        return trackRepository.findAllByCreateDateBetween(startDateTime, endDateTime);
+    }
+    public Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDate, Long> userCountMap = new HashMap<>();
+        LocalDate currentWeekStart = startDate.with(DayOfWeek.MONDAY);
+
+        while (!currentWeekStart.isAfter(endDate)) {
+
+            LocalDateTime weekStart = currentWeekStart.atStartOfDay();
+            LocalDateTime weekEnd = currentWeekStart.with(DayOfWeek.SUNDAY).atTime(23, 59, 59);
+
+            Long count = trackRepository.countByCreateDateBetween(weekStart, weekEnd);
+            userCountMap.put(currentWeekStart, count);
+            currentWeekStart = currentWeekStart.plusWeeks(1);
+        }
+        return userCountMap;
+    }
+    public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate) {
+        // Convert LocalDate to LocalDateTime
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Object[]> results = trackRepository.countTracksByGenreAndDateRange(startDateTime, endDateTime);
+        Map<String, Long> trackCountMap = new HashMap<>();
+        for (Object[] result : results) {
+            String genre = (String) result[0];
+            Long count = (Long) result[1];
+            trackCountMap.put(genre, count);
+        }
+        return trackCountMap;
+    }
 
 }
