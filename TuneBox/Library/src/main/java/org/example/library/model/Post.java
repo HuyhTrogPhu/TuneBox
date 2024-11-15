@@ -44,5 +44,6 @@ public class Post {
 
     private String description;
 
+    private String category;
 
 }

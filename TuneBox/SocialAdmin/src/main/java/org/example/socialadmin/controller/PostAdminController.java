@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -25,14 +28,28 @@ public class PostAdminController {
 
     //search all bai viet
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
+    public ResponseEntity<List<PostDto>> getAllPosts(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) LocalDate specificDate) {
         try {
-            List<PostDto> posts = postService.findAllPosts();
+            List<PostDto> posts;
+            if (specificDate != null) {
+                posts = postService.findPostsBySpecificDate(specificDate);
+            } else if (startDate != null && endDate != null) {
+                posts = postService.findPostsByDateRange(startDate, endDate);
+            } else {
+                posts = postService.findAllPosts();
+            }
             return ResponseEntity.ok(posts);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+
+
 
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
