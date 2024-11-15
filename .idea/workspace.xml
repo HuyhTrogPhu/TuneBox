@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="popopopopopo">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +70,9 @@
     "Spring Boot.CustomerApplication.executor": "Run",
     "Spring Boot.EcommerceAdminApplication.executor": "Run",
     "Spring Boot.LibraryApplication.executor": "Run",
+    "Spring Boot.SocialAdminApplication.executor": "Run",
     "git-widget-placeholder": "QuocTrung",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -154,6 +158,8 @@
       <workItem from="1728357263814" duration="164000" />
       <workItem from="1728359274760" duration="4462000" />
       <workItem from="1731644455264" duration="1002000" />
+      <workItem from="1731651452215" duration="638000" />
+      <workItem from="1731652493702" duration="387000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
