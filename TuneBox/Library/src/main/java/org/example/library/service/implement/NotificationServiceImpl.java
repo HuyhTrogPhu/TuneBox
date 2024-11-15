@@ -171,4 +171,27 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.deleteAll(readNotifications);
     }
 
+    @Override
+    public void createNotificationForUser(User user, String message, String type) {
+        Notification notification = new Notification();
+        notification.setUserId(user.getId());
+        notification.setMessage(message);
+        notification.setType(type);
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setRead(false);  // Thêm trạng thái chưa đọc
+
+        // Lưu vào database
+        notificationRepository.save(notification);
+
+        // Gửi realtime notification qua WebSocket
+        NotificationDTO notificationDTO = notificationMapper.toDTO(notification);
+        messagingTemplate.convertAndSendToUser(
+                user.getId().toString(),
+                "/queue/notifications",
+                notificationDTO
+        );
+    }
+
+
+
 }
