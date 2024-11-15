@@ -290,7 +290,7 @@ public class UserServiceImpl implements UserService {
     public List<UserSocialAdminDto> findAllUser() {
         List<User> users = userRepository.findAll();
         List<UserSocialAdminDto> userDtos = new ArrayList<>();
-
+            System.out.println("In find all");
         for (User user : users) {
             List<Track> listTracks = new ArrayList<>(user.getTracks());
             List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
@@ -305,8 +305,8 @@ public class UserServiceImpl implements UserService {
                     ))
                     .collect(Collectors.toList());
             long likeCount = likeRepository.countByUserId(user.getId());
-         long commentCount = commentRepository.countByUserId(user.getId());
-          List<Report> listReport = new ArrayList<>(user.getReports());
+            long commentCount = commentRepository.countByUserId(user.getId());
+            //   List<Report> listReport = new ArrayList<>(user.getReports());
             long postCount = user.getPosts().size();
             long odersCount =user.getOrderList().size();
             UserSocialAdminDto userDto = new UserSocialAdminDto(
@@ -321,8 +321,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount,
-                    user.getReports()
+                    commentCount
+                    //   listReport
             );
             userDtos.add(userDto);
         }
@@ -639,7 +639,7 @@ public class UserServiceImpl implements UserService {
         long likeCount = likeRepository.countByUserId(user.getId());
         long commentCount = commentRepository.countByUserId(user.getId());
 
-        List<Report> listReport = new ArrayList<>(user.getReports());
+        //      List<Report> listReport = new ArrayList<>(user.getReports());
 
         UserSocialAdminDto userDto = new UserSocialAdminDto(
                 user.getId(),
@@ -653,8 +653,8 @@ public class UserServiceImpl implements UserService {
                 odersCount,
                 user.getUserInformation(),
                 likeCount,
-                commentCount,
-                listReport
+                commentCount
+                //           listReport
         );
 
         return userDto;
@@ -697,7 +697,7 @@ public class UserServiceImpl implements UserService {
                     .collect(Collectors.toList());
             long likeCount = likeRepository.countByUserId(user.getId());
          long commentCount = commentRepository.countByUserId(user.getId());
-        List<Report> listReport = new ArrayList<>(user.getReports());
+ //           List<Report> listReport = new ArrayList<>(user.getReports());
             long postCount = user.getPosts().size();
             long odersCount =user.getOrderList().size();
             UserSocialAdminDto userDto = new UserSocialAdminDto(
@@ -712,8 +712,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount,
-                    listReport
+                    commentCount
+                    //                 listReport
             );
             userDtos.add(userDto);
         }

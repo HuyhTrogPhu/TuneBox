@@ -41,6 +41,6 @@ public class UserSocialAdminDto {
 
     private long LikeCount;
 
-    private List<Report> reports;
+    //   private List<Report> reports;
 
 }
