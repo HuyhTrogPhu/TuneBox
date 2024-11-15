@@ -40,7 +40,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByPost(Post post);
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
-    List<Report> findByStatusAndTypeAndPost(ReportStatus status, String type, Post post);
+    List<Report> findByStatusAndType(ReportStatus status, String type);
 
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
