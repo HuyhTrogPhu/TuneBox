@@ -630,6 +630,9 @@ public class UserServiceImpl implements UserService {
     public long countUser() {
         return userRepository.countByIdNotNull();
     }
+
+
+
     @Override
     public UserSocialAdminDto findById(Long userId) {
         User user =  userRepository.findById(userId).get();
