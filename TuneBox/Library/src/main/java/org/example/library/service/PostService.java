@@ -9,6 +9,7 @@ import org.example.library.model.Post;
 //import org.example.library.dto.PostReportDto;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +49,6 @@ public interface PostService {
 //    PostDto getPostByPostId(Long postId);
 
 
-    List<PostDto> findAllPosts();
 
     List<PostDto> findNewPosts(); // Phương thức lấy bài mới
 
@@ -65,4 +65,10 @@ public interface PostService {
 //    List<PostReportDto> findAllReports(); // Phương thức lấy danh sách báo cáo
 
     UserInfoDto getSearchInfo(Long postId);
+
+    List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate);
+
+    List<PostDto> findAllPosts();
+
+    List<PostDto> findPostsBySpecificDate(LocalDate specificDate);
 }

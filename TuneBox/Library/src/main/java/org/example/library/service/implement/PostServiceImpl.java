@@ -218,17 +218,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
-    @Override
-    public List<PostDto> findAllPosts() {
-        List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
-                    return postDto; // Trả về PostDto đã được thiết lập userName
-                })
-                .collect(Collectors.toList());
-    }
+
 
     @Override
     public List<PostDto> findNewPosts() {
@@ -348,4 +338,45 @@ public class PostServiceImpl implements PostService {
                 user.getCreateDate().atStartOfDay()
         );
     }
+
+    @Override
+    public List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post);
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
+                    return postDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDto> findAllPosts() {
+        List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
+                    return postDto; // Trả về PostDto đã được thiết lập userName
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDto> findPostsBySpecificDate(LocalDate specificDate) {
+        LocalDateTime startDateTime = specificDate.atStartOfDay();
+        LocalDateTime endDateTime = specificDate.atTime(23, 59, 59);
+        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post);
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
+                    return postDto;
+                })
+                .collect(Collectors.toList());
+    }
+
 }

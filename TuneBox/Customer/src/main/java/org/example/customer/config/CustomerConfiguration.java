@@ -54,7 +54,7 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user").permitAll()
+                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user","/social-statistical").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("CUSTOMER")
                         .requestMatchers("/api/**","/user/**").authenticated()
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
