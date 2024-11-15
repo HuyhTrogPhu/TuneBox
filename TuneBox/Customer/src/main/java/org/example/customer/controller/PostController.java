@@ -105,7 +105,6 @@ public class PostController {
         postDto.setId(id);
         postDto.setContent(content);
 
-
         try {
             if ((content == null || content.trim().isEmpty()) && (images == null || images.length == 0)) {
                 throw new IllegalArgumentException("At least one image or content must be provided");
@@ -128,7 +127,6 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
-
 
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")

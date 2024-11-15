@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 import org.example.library.dto.NotificationDTO;
+import org.example.library.model.Notification;
 import org.example.library.model.Post;
 import org.example.library.model.User;
 
@@ -25,5 +26,8 @@ public interface NotificationService {
     void deleteNotification(Long notificationId);
 
     void deleteAllReadNotifications(Long userId);
+
+
+    void createNotificationForUser(User user, String message, String type);  // Đổi tên method này
 }
 

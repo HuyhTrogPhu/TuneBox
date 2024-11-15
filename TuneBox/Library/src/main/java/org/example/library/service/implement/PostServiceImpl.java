@@ -3,14 +3,14 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
-//import org.example.library.dto.PostReportDto;
 import org.example.library.dto.PostReactionDto;
 import org.example.library.dto.ReportDto;
 import org.example.library.dto.UserInfoDto;
 import org.example.library.mapper.PostMapper;
-//import org.example.library.mapper.PostReportMapper;
-import org.example.library.model.*;
-//import org.example.library.model.PostReport;
+import org.example.library.model.Post;
+import org.example.library.model.PostImage;
+import org.example.library.model.Report;
+import org.example.library.model.User;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.PostRepository;
 import org.example.library.repository.ReportRepository;
@@ -27,8 +27,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -112,6 +112,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> get5Posts() {
+        return List.of();
+    }
+
+    @Override
     public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
         List<Post> posts;
 
@@ -129,6 +134,11 @@ public class PostServiceImpl implements PostService {
         }
 
         return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(Long PostId) {
+        return null;
     }
 
     @Override
@@ -240,6 +250,10 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<PostDto> findTrendingPosts() {
+        return List.of();
+    }
 
 
     @Override
@@ -311,6 +325,23 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+    public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDateTime, Long> postCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        //for de lay data
+        while (!currentDate.isAfter(endDate)) {
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(23, 59, 59, 999999999); // Thay đổi tại đây
+            Long count = postRepository.countByCreatedAtBetween(startOfDay, endOfDay);
+            postCountMap.put(startOfDay, count);
+            currentDate = currentDate.plusDays(1);
+        }
+
+        System.out.println("Post Count Map: " + postCountMap);
+        return postCountMap;
+    }
+
+
 
 
     @Override

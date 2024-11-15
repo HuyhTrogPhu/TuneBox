@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collection;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -27,26 +30,46 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String path = request.getRequestURI();
+        System.out.println("Request URI: " + path);
 
-        // Bỏ qua các endpoint không cần xác thực JWT
-        if (!path.equals("/login")) {
+        if (!path.equals("/login") && !path.equals("/register")) {
             String authorizationHeader = request.getHeader("Authorization");
-            String username = null;
-            String jwt = null;
+            System.out.println("Authorization Header: " + authorizationHeader);
 
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                jwt = authorizationHeader.substring(7);
-                username = jwtUtil.extractUsername(jwt);
-            }
+                String jwt = authorizationHeader.substring(7);
+                try {
+                    boolean isGoogleToken = jwtUtil.isGoogleToken(jwt);
+                    String username = jwtUtil.extractUsername(jwt);
+                    System.out.println("Extracted Username: " + username);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        System.out.println("User Details: " + userDetails);
 
-                if (jwtUtil.validateToken(jwt,userDetails)) {
-                    var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                } else {
+                        if (jwtUtil.validateToken(jwt, userDetails)) {
+                            Collection<? extends GrantedAuthority> authorities;
+                            if (isGoogleToken) {
+                                // Lấy quyền từ Google token
+                                authorities = jwtUtil.extractGoogleRoles(jwt);
+                            } else {
+                                // Lấy quyền từ token của hệ thống
+                                authorities = userDetails.getAuthorities();
+                            }
+
+                            UsernamePasswordAuthenticationToken authToken =
+                                    new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                            SecurityContextHolder.getContext().setAuthentication(authToken);
+                            System.out.println("Authentication Successful");
+                        } else {
+                            System.out.println("Invalid JWT token");
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error decoding JWT token: " + e.getMessage());
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                     return;
                 }
@@ -54,5 +77,4 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         chain.doFilter(request, response);
     }
-
 }

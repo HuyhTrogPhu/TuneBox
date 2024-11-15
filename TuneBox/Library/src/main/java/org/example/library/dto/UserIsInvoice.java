@@ -28,4 +28,6 @@ public class UserIsInvoice {
     private String status;
 
     private String shippingMethod;
+
+    private String paymentStatus;
 }

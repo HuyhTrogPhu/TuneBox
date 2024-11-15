@@ -1,5 +1,6 @@
 package org.example.customer.controller;
 
+
 import org.example.customer.config.JwtUtil;
 import org.example.library.Exception.ResourceNotFoundException;
 import org.example.library.dto.Report2Dto;
@@ -73,7 +74,6 @@ public class ReportController {
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-
         @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);
@@ -121,18 +121,6 @@ public class ReportController {
         }
     }
 
-    @PutMapping("/{reportId}/resolve")
-    public ResponseEntity<Report2Dto> resolveReport(
-            @PathVariable Long reportId,
-            @RequestParam boolean hidePost) {
-        try {
-            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
-            return ResponseEntity.ok(resolvedReport);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
     @PutMapping("/{reportId}/restore")
     public ResponseEntity<Void> restorePost(@PathVariable Long reportId) {
         try {
@@ -152,6 +140,20 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+    @PutMapping("/{reportId}/resolve")
+    public ResponseEntity<Report2Dto> resolveReport(
+            @PathVariable Long reportId,
+            @RequestParam boolean hidePost) {
+        try {
+            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
+            return ResponseEntity.ok(resolvedReport);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
     @PutMapping("/{postId}/dismiss")
     public ResponseEntity<List<Report2Dto>> dismissAllReports(

@@ -3,35 +3,24 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
-import org.example.library.model.Genre;
-import org.example.library.model.InspiredBy;
-import org.example.library.model.Talent;
-import org.example.library.model.UserInformation;
+import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.MediaType;
-
-
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
@@ -42,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private TalentService talentService;
@@ -59,6 +51,16 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
+
+
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private VerificationCodeService verificationCodeService;
+
+
     // Register
     @PostMapping("/register")
     public ResponseEntity<?> register(
@@ -73,7 +75,7 @@ public class UserController {
 
         // Kiểm tra và ghi log thông tin nhận được
         if (password == null || password.isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+            throw new IllegalArgumentException("Password must not be null");
         }
 
         // Mã hóa mật khẩu
@@ -86,6 +88,7 @@ public class UserController {
         UserDto registeredUser = userService.register(userDto, userInformationDto, image);
         return ResponseEntity.ok(registeredUser);
     }
+
 
 
     // get list talents
@@ -133,6 +136,7 @@ public class UserController {
             UserLoginDto user = optionalUser.get();
 
             if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+
                 // Lấy tên vai trò từ đối tượng RoleDto
                 String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
 
@@ -143,13 +147,49 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
 
+    // check signUp form
+    @GetMapping("/check-signUp")
+    public ResponseEntity<?> checkSignUp(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+
+        // list userName
+        List<String> userNames = userRepository.findAllUserNames();
+
+        // list email
+        List<String> emails = userRepository.findAllUserEmails();
+
+        // Kiểm tra userName và email đã tồn tại hay chưa
+        if (userNames.contains(userName)) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        if (userName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username not null");
+        }
+
+        if (emails.contains(email)) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+        if (email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email not null");
+        }
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Password not null");
+        }
+
+        return ResponseEntity.ok().build();
+
+    }
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
@@ -268,6 +308,76 @@ public class UserController {
         }
     }
 
+    // get list orders by user id
+    @GetMapping("/{userId}/orders")
+    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
+        try {
+            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
+            return ResponseEntity.ok(userIsInvoices);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Email không tồn tại");
+        }
+
+        // Tạo mã xác nhận và token
+        String code = UUID.randomUUID().toString();
+        String token = UUID.randomUUID().toString();
+
+        // Lưu mã xác nhận và token cho người dùng
+        verificationCodeService.save(new VerificationCode(user.getId(), code, token));
+
+        // Tạo liên kết để đổi mật khẩu
+        String resetPasswordLink = "http://localhost:3000/reset-password?token=" + token;
+
+        // Gửi liên kết qua email
+        emailService.sendPasswordResetLink(email, resetPasswordLink);
+
+        return ResponseEntity.ok("The password change link has been sent to your email.");
+    }
+
+
+
+
+
+    // Thêm phương thức đổi mật khẩu
+    @PostMapping("/reset-password")
+    @Transactional
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        // Kiểm tra token và mật khẩu mới
+        System.out.println("Nhận yêu cầu đổi mật khẩu với token: " + token);
+        System.out.println("Mật khẩu mới: " + newPassword);
+
+        // Kiểm tra token
+        VerificationCode verificationCode = verificationCodeService.findByToken(token);
+        if (verificationCode == null) {
+            return ResponseEntity.badRequest().body("Token không hợp lệ");
+        }
+
+        // Mã hóa mật khẩu mới
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        // Cập nhật mật khẩu cho người dùng
+        User user = userRepository.findById(verificationCode.getUserId()).orElse(null);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("Người dùng không tồn tại");
+        }
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        // Xóa token sau khi sử dụng
+        verificationCodeService.deleteToken(token);
+
+        return ResponseEntity.ok("Mật khẩu đã được đổi thành công");
+    }
+
     @PostMapping("/users/{userId}/background")
     public ResponseEntity<?> updateBackground(@PathVariable Long userId, @RequestParam("image") MultipartFile image) {
         userService.updateBackground(userId, image);
@@ -333,5 +443,7 @@ public class UserController {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
     }
+    // get list orders by user id
+
 
 }

@@ -34,7 +34,6 @@ public class Comment {
     private List<Reply> replies = new ArrayList<>(); // Danh sách các reply liên quan
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "track_id")
     private Track track;
 
