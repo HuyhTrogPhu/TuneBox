@@ -326,7 +326,6 @@ public class UserServiceImpl implements UserService {
             );
             userDtos.add(userDto);
         }
-
         return userDtos;
     }
 

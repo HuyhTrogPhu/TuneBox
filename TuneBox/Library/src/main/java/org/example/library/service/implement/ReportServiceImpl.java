@@ -1,8 +1,7 @@
 package org.example.library.service.implement;
 
 import org.example.library.Exception.ResourceNotFoundException;
-import org.example.library.dto.Report2Dto;
-import org.example.library.dto.ReportDto;
+import org.example.library.dto.*;
 import org.example.library.mapper.ReportMapper;
 import org.example.library.model.*;
 import org.example.library.model_enum.ReportStatus;
@@ -10,6 +9,8 @@ import org.example.library.repository.*;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -211,7 +214,7 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
-
+//NGB rp fix
     @Override
     public ReportDto updateApprove(Long id) {
         Report report = reportRepository.findById(id).get();
@@ -225,5 +228,89 @@ public class ReportServiceImpl implements ReportService {
         report.setStatus(ReportStatus.DISMISSED);
         reportRepository.save(report);
         return reportMapper.toDto(report);
+    }
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithTracks(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithAlbum(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithPost(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    @Override
+   public ReportDtoSocialAdmin findById(Long id){
+        Report rp = reportRepository.findById(id).get();
+return new ReportDtoSocialAdmin(
+        rp.getId(),
+        rp.getCreateDate(),
+        rp.getPost() != null ? rp.getPost().getId() : null,
+        rp.getTrack() != null ? rp.getTrack().getId() : null,
+        rp.getTrack() != null ? rp.getTrack().getName() : null,
+        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+        rp.getUser() != null ? rp.getUser().getId() : null,
+        rp.getUser() != null ? rp.getUser().getUserName() : null,
+        rp.getStatus(),
+        rp.getResolvedAt(),
+        rp.getDescription(),
+        rp.getType(),
+        rp.getReason()
+);
     }
 }
