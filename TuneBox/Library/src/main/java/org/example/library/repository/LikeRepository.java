@@ -24,7 +24,7 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     long countByTrackId(Long trackId);
     long countByplaylistId(Long playlistId);
     long countByAlbumsId(Long albumId);
-
+    long countByUserId(Long userId);
     List<Like> findByUserId(Long userId);
 
 

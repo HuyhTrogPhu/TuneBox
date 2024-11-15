@@ -1,5 +1,6 @@
 package org.example.customer.controller;
 
+
 import org.example.customer.config.JwtUtil;
 import org.example.library.Exception.ResourceNotFoundException;
 import org.example.library.dto.Report2Dto;
@@ -73,7 +74,6 @@ public class ReportController {
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-
         @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);

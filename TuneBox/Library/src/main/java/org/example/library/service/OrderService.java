@@ -94,5 +94,4 @@ public interface OrderService {
     List<StatisticalOrder> getOrdersByShippingMethodFast();
 
 
-
 }

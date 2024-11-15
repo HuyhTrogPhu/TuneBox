@@ -87,7 +87,6 @@ public class ReportServiceImpl implements ReportService {
         }
 
         Report report = reportMapper.toEntity(reportDto);
-
         report.setCreateDate(LocalDate.now());
         report.setStatus(ReportStatus.PENDING);
 
@@ -290,6 +289,21 @@ public class ReportServiceImpl implements ReportService {
 
 
 
+
+    @Override
+    public ReportDto updateApprove(Long id) {
+        Report report = reportRepository.findById(id).get();
+        report.setStatus(ReportStatus.RESOLVED);
+        reportRepository.save(report);
+        return reportMapper.toDto(report);
+    }
+    @Override
+    public ReportDto updateDenied(Long id) {
+        Report report = reportRepository.findById(id).get();
+        report.setStatus(ReportStatus.DISMISSED);
+        reportRepository.save(report);
+        return reportMapper.toDto(report);
+    }
 }
 
 

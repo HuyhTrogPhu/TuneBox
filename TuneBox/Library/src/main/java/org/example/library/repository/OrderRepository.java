@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // get order by user id
     @Query("select new org.example.library.dto.UserIsInvoice(o.id ,o.orderDate, o.deliveryDate, o.tax, o.totalPrice," +
-            "o.totalItems, o.paymentMethod, o.status, o.shippingMethod)" +
+            "o.totalItems, o.paymentMethod, o.status, o.shippingMethod, o.paymentStatus)" +
             "from User u join u.orderList o where u.id = :userId")
     List<UserIsInvoice> findByUserId(Long userId);
 
@@ -198,6 +198,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "where LOWER(od.shippingMethod) = 'fast'")
     List<StatisticalOrder> getListOrderByShippingMethodFast();
 
-
+    List<Order> findOrderByUserId(Long userId);
 
 }

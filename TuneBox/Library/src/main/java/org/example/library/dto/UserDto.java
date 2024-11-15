@@ -63,12 +63,6 @@ public class UserDto {
     @JsonIgnore
     private List<Message> messages;
 
-
-
-
-
-
-
     public String getUserNameOrEmail() {
         if ((userName == null || userName.isEmpty()) && (email == null || email.isEmpty())) {
             throw new IllegalArgumentException("Username or email must not be null or empty");
