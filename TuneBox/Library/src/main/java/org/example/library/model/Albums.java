@@ -1,6 +1,7 @@
 
 package org.example.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.example.library.model.AlbumStyle;
@@ -50,6 +51,7 @@ public class Albums {
 
     @ManyToOne
     @JoinColumn(name = "genre_id", nullable = false)
+    @JsonBackReference
     private Genre genre;
 
     @ManyToOne
