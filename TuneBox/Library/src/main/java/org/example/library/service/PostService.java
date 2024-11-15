@@ -75,4 +75,9 @@ public interface PostService {
 //    List<PostReportDto> findAllReports(); // Phương thức lấy danh sách báo cáo
 
     UserInfoDto getSearchInfo(Long postId);
+
+    List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate);
+
+
+    List<PostDto> findPostsBySpecificDate(LocalDate specificDate);
 }
