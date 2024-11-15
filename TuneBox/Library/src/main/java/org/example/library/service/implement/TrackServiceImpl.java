@@ -3,6 +3,7 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackDtoSocialAdmin;
 import org.example.library.dto.TrackStatus;
 import org.example.library.dto.UserDto;
 import org.example.library.mapper.TrackMapper;
@@ -351,11 +352,22 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<TrackDto> findReportedTrack() {
-        return trackRepository.findByReportTrue()
-                .stream()
-                .map(TrackMapper::mapperTrackDto)
+    public List<TrackDtoSocialAdmin> findReportedTrack() {
+       List<Track> listTracks = trackRepository.findByReportTrue();
+        System.out.println("List RP"+listTracks);
+       List<TrackDtoSocialAdmin> ListDto = listTracks.stream()
+                  .map(track -> new TrackDtoSocialAdmin(
+                        track.getId(),
+                        track.getName(),
+                        track.getCreateDate(),
+                        track.isReport(),
+                        track.getReportDate(),
+                        track.getCreator().getUserName(),
+                        track.getLikes().size()
+                ))
                 .collect(Collectors.toList());
+        System.out.println("listDto"+ListDto);
+          return ListDto;
     }
     public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> trackCountMap = new HashMap<>();
@@ -384,7 +396,6 @@ public class TrackServiceImpl implements TrackService {
 
             LocalDateTime monthStart = currentMonth.atDay(1).atStartOfDay();
             LocalDateTime monthEnd = currentMonth.atEndOfMonth().atTime(23, 59, 59);
-
             Long count = trackRepository.countByCreateDateBetween(monthStart, monthEnd);
             userCountMap.put(currentMonth, count);
             currentMonth = currentMonth.plusMonths(1);

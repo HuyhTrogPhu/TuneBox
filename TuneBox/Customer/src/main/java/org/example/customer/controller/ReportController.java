@@ -2,6 +2,7 @@ package org.example.customer.controller;
 
 
 import org.example.customer.config.JwtUtil;
+import org.example.library.Exception.ResourceNotFoundException;
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
 import org.example.library.model.Post;
@@ -11,6 +12,7 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,13 +20,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
@@ -98,28 +98,27 @@ public class ReportController {
     }
 
     @GetMapping("/pending")
-    public ResponseEntity<List<Report2Dto>> getPendingReports() {
+    public ResponseEntity<List<Report2Dto>> getPendingReports(
+            @RequestParam(required = false)  LocalDate startDate,
+            @RequestParam(required = false)  LocalDate endDate,
+            @RequestParam(required = false)  LocalDate specificDate) {
         try {
-            List<Report2Dto> pendingReports = reportService.getPendingReports(); // Gọi phương thức không phân trang
+            List<Report2Dto> pendingReports;
+            if (specificDate != null) {
+                pendingReports = reportService.getPendingReportsBySpecificDate(specificDate);
+            } else if (startDate != null && endDate != null) {
+                pendingReports = reportService.getPendingReportsByDateRange(startDate, endDate);
+            } else {
+                pendingReports = reportService.getAllPendingReports();
+            }
             return ResponseEntity.ok(pendingReports);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Error fetching pending reports: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @PutMapping("/{reportId}/resolve")
-    public ResponseEntity<Report2Dto> resolveReport(@PathVariable Long reportId, @RequestParam boolean hidePost) {
-        try {
-            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
-            return ResponseEntity.ok(resolvedReport);
-        } catch (RuntimeException e) {
-            // Thêm logging
-            System.out.println("Error resolving report: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
     @PutMapping("/{reportId}/restore")
     public ResponseEntity<Void> restorePost(@PathVariable Long reportId) {
         try {
@@ -139,6 +138,37 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+    @PutMapping("/{reportId}/resolve")
+    public ResponseEntity<Report2Dto> resolveReport(
+            @PathVariable Long reportId,
+            @RequestParam boolean hidePost) {
+        try {
+            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
+            return ResponseEntity.ok(resolvedReport);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+
+    @PutMapping("/{postId}/dismiss")
+    public ResponseEntity<List<Report2Dto>> dismissAllReports(
+            @PathVariable Long postId,
+            @RequestParam String reason) {
+        try {
+            List<Report2Dto> dismissedReports = reportService.dismissAllReports(postId, reason);
+            return ResponseEntity.ok(dismissedReports);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }
 
 

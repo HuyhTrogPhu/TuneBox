@@ -19,7 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     Optional<User> findOptionalByEmail(String email);
-    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
 
     // list username
     @Query("SELECT u.userName FROM User u")
@@ -29,13 +28,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.email FROM User u")
     List<String> findAllUserEmails();
 
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
 
 
     // get user by username or email
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
     Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
-
     // get user check out info
     @Query("select new org.example.library.dto.UserCheckOut(u.id, u.email, u.userName) " +
             "from User u WHERE u.id = :userId")
@@ -174,9 +174,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where o.id is null")
     List<UserSell> getUserNotSell();
 
-
-
-
     // search
     @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.name, ui.avatar,  us.userName) " +
             "from UserInformation ui join ui.user us where ui.name like :keyword or us.userName like :keyword")
@@ -291,4 +288,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
                                                 @Param("endDate") LocalDateTime  endDate);
+
 }

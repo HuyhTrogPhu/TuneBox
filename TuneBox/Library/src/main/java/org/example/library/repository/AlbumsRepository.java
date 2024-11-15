@@ -19,5 +19,5 @@ public interface AlbumsRepository extends JpaRepository<Albums, Long> {
     List<Albums> findAllByReportTrue();
     Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
     Long countByCreateDate(LocalDate currentDate);
-    List<Albums> findAllByCreateDateBetween(LocalDateTime startDate, LocalDateTime endDate);
+    List<Albums> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 }

@@ -2,7 +2,9 @@ package org.example.socialadmin.controller;
 
 import org.example.library.Exception.PostNotFoundException;
 import org.example.library.dto.PostDto;
+import org.example.library.dto.PostReactionDto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.UserInfoDto;
 import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -18,24 +23,38 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class PostAdminController {
 
-    @Autowired
-    private PostService postService; // Tiêm PostService
+   @Autowired
+   private PostService postService;
 
     //search all bai viet
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
+    public ResponseEntity<List<PostDto>> getAllPosts(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) LocalDate specificDate) {
         try {
-            List<PostDto> posts = postService.findAllPosts();
+            List<PostDto> posts;
+            if (specificDate != null) {
+                posts = postService.findPostsBySpecificDate(specificDate);
+            } else if (startDate != null && endDate != null) {
+                posts = postService.findPostsByDateRange(startDate, endDate);
+            } else {
+                posts = postService.findAllPosts();
+            }
             return ResponseEntity.ok(posts);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
+
+
+
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
         try {
-            List<PostDto> newPosts = postService.findNewPosts(); // Giả định có phương thức lấy bài mới
+            List<PostDto> newPosts = postService.findNewPosts();
             return ResponseEntity.ok(newPosts);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -99,6 +118,14 @@ public class PostAdminController {
         }
     }
 
-    //xu ly bai viet
+    @GetMapping("/search-info/{postId}")  // đổi tên param từ id thành postId
+    public ResponseEntity<UserInfoDto> getSearchInfo(@PathVariable Long postId) {
+        try {
+            UserInfoDto userInfoDto = postService.getSearchInfo(postId);
+            return ResponseEntity.ok(userInfoDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
 }

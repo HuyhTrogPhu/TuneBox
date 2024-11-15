@@ -1,6 +1,6 @@
 package org.example.library.service;
 
-import org.example.library.dto.AlbumsDto;
+import org.example.library.dto.PLayListDetailSocialAdminDto;
 import org.example.library.dto.PlaylistDto;
 import org.example.library.model.Playlist;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,12 +18,13 @@ public interface PlaylistService {
       void deletePLaylist(Long playlistID);
       List<PlaylistDto> searchPlaylist(String keyword);
       List<PlaylistDto> getAllPlaylist();
-    public PlaylistDto findByPlaylistId(Long playlistId);
-      public List<PlaylistDto> findAll();
+     PLayListDetailSocialAdminDto findByPlaylistId(Long playlistId);
+     List<PLayListDetailSocialAdminDto> findAll();
+    List<PlaylistDto> getbyUserId(Long UserId);
     Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
     Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
-    List<Playlist> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate);
+    List<PLayListDetailSocialAdminDto> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate);
 
 
       public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId);

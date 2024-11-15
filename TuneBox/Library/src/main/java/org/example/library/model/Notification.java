@@ -30,4 +30,5 @@ public class Notification {
     private boolean read = false;
 
     private Long postId;
+    private String type;
 }

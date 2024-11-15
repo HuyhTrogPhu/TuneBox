@@ -77,9 +77,6 @@ public class LikeController {
         }
     }
 
-
-
-
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeLike(@RequestParam Long userId,
                                            @RequestParam(required = false) Long postId,
@@ -108,7 +105,7 @@ public class LikeController {
     //    delete like album
     @DeleteMapping("/removeAlbum")
     public ResponseEntity<Void> removeLikeAlbum(@RequestParam Long userId,
-                                                @RequestParam Long albumId
+                                           @RequestParam Long albumId
     ) {
         try {
             likeService.removeLikeAlbum(userId, albumId);
@@ -184,7 +181,7 @@ public class LikeController {
         return ResponseEntity.ok(liked);
     }
 
-    //    album
+//    album
     @GetMapping("/allAlbums/{userId}")
     public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
         List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
@@ -211,4 +208,3 @@ public class LikeController {
 
 
 }
-
