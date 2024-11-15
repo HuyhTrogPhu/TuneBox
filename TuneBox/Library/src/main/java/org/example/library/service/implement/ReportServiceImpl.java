@@ -9,6 +9,7 @@ import org.example.library.mapper.ReportMapper;
 import org.example.library.model.*;
 import org.example.library.model_enum.ReportStatus;
 import org.example.library.repository.*;
+import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,12 @@ public class ReportServiceImpl implements ReportService {
     private PostService postService;
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private NotificationServiceImpl notificationServiceImpl;
 
 
     @Override
@@ -213,18 +219,43 @@ public class ReportServiceImpl implements ReportService {
                 + ". Action taken: " + (hidePost ? "Post hidden" : "Post remains visible"));
 
         Report savedReport = reportRepository.save(report);
-        NotificationDTO notification = new NotificationDTO(
-                "Cảm ơn bạn đã góp phần xây dựng cộng đồng lành mạnh. Báo cáo của bạn đã được xử lý.",
-                "REPORT_RESOLVED",
-                LocalDateTime.now()
-        );
-        messagingTemplate.convertAndSendToUser(
-                report.getUser().getUserName(),
-                "/queue/notifications",
-                notification
-        );
+
+        String message = "Cảm ơn bạn đã góp phần xây dựng cộng đồng lành mạnh. Báo cáo của bạn đã được xử lý.";
+        notificationService.createNotificationForUser(report.getUser(), message, "REPORT_RESOLVED");
 
         return reportMapper.toReport2Dto(savedReport);
+    }
+
+    @Override
+    @Transactional
+    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
+        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
+
+        if (reports.isEmpty()) {
+            throw new ResourceNotFoundException("No pending reports found for post: " + postId);
+        }
+
+        if (reason == null || reason.trim().isEmpty()) {
+            throw new IllegalArgumentException("Dismiss reason cannot be empty");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Report2Dto> dismissedReports = new ArrayList<>();
+
+        for (Report report : reports) {
+            report.setStatus(ReportStatus.DISMISSED);
+            report.setReason(reason);
+            report.setResolvedAt(now);
+            report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
+
+            Report savedReport = reportRepository.save(report);
+            dismissedReports.add(reportMapper.toReport2Dto(savedReport));
+
+            String message = "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.";
+            notificationServiceImpl.createNotificationForUser(report.getUser(), message, "REPORT_DISMISSED");
+        }
+
+        return dismissedReports;
     }
 
 
@@ -257,49 +288,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
-    @Override
-    @Transactional
-    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
-        // Find all pending reports for the post
-        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
 
-        if (reports.isEmpty()) {
-            throw new ResourceNotFoundException("No pending reports found for post: " + postId);
-        }
-
-        // Validate reason
-        if (reason == null || reason.trim().isEmpty()) {
-            throw new IllegalArgumentException("Dismiss reason cannot be empty");
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        List<Report2Dto> dismissedReports = new ArrayList<>();
-
-        for (Report report : reports) {
-            // Update report status
-            report.setStatus(ReportStatus.DISMISSED);
-            report.setReason(reason);
-            report.setResolvedAt(now);
-            report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
-
-            Report savedReport = reportRepository.save(report);
-            dismissedReports.add(reportMapper.toReport2Dto(savedReport));
-
-            // Send notification to reporter
-            NotificationDTO notification = new NotificationDTO(
-                    "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.",
-                    "REPORT_DISMISSED",
-                    now
-            );
-            messagingTemplate.convertAndSendToUser(
-                    report.getUser().getUserName(),
-                    "/queue/notifications",
-                    notification
-            );
-        }
-
-        return dismissedReports;
-    }
 
 }
 

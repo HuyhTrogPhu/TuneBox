@@ -121,18 +121,6 @@ public class ReportController {
         }
     }
 
-    @PutMapping("/{reportId}/resolve")
-    public ResponseEntity<Report2Dto> resolveReport(
-            @PathVariable Long reportId,
-            @RequestParam boolean hidePost) {
-        try {
-            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
-            return ResponseEntity.ok(resolvedReport);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
     @PutMapping("/{reportId}/restore")
     public ResponseEntity<Void> restorePost(@PathVariable Long reportId) {
         try {
@@ -152,6 +140,20 @@ public class ReportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
+    @PutMapping("/{reportId}/resolve")
+    public ResponseEntity<Report2Dto> resolveReport(
+            @PathVariable Long reportId,
+            @RequestParam boolean hidePost) {
+        try {
+            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
+            return ResponseEntity.ok(resolvedReport);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 
     @PutMapping("/{postId}/dismiss")
     public ResponseEntity<List<Report2Dto>> dismissAllReports(
