@@ -90,7 +90,6 @@ public class UserController {
     }
 
 
-
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
@@ -189,7 +188,6 @@ public class UserController {
 
         return ResponseEntity.ok().build();
 
-    }
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {

@@ -48,7 +48,9 @@ public class CustomerConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+
         authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
         http
@@ -107,3 +109,5 @@ public class CustomerConfiguration {
         return NimbusJwtDecoder.withJwkSetUri(googleJwkSetUri).build();
     }
 }
+
+

@@ -44,6 +44,8 @@ public class Post {
 
     private String description;
 
+    private Long IdShare;
+
     private String category;
 
 }

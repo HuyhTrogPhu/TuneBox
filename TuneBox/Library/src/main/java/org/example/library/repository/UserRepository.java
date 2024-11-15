@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u.email FROM User u")
     List<String> findAllUserEmails();
 
+    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
+
 
 
     // get user by username or email
@@ -189,7 +191,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from Playlist p where p.title like :keyword or p.type like :keyword or p.creator.userName like :keyword  or p.creator.userInformation.name like :keyword")
     List<SearchDto> searchPlaylist(@Param("keyword") String keyword);
 
-    Optional<User> findByUserName(String userName); // Định nghĩa phương thức findByUsername
 
 //    User findByUserName(String username);
 
