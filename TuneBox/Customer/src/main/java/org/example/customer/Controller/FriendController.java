@@ -73,9 +73,6 @@ public class FriendController {
     @GetMapping("/count/{userId}")
     public ResponseEntity<Long> getFriendCount(@PathVariable Long userId) {
         Long friendCount = friendService.countFriends(userId);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("Friend count for userId " + userId + ": " + friendCount);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         return ResponseEntity.ok(friendCount);
     }
 

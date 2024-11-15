@@ -6,12 +6,13 @@ import org.example.library.dto.*;
 import org.example.library.model.User;
 import org.example.library.model.UserInformation;
 import org.springframework.data.domain.Pageable;
-import org.example.library.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -76,7 +77,7 @@ public interface UserService {
     // get user not sell
     List<UserSell> getUserNotSell();
 
-    List<UserDto> findAllUser();
+    List<UserSocialAdminDto> findAllUser();
 
     List<ListUserForMessageDto> findAllUserForMessage();
 
@@ -101,10 +102,26 @@ public interface UserService {
     void updateUserProfile(Long userId, UserUpdateRequest userUpdateRequest);
 
 
-    public List<SearchDto> searchPlaylist(String keyword);
-    public List<SearchDto> searchAlbum(String keyword);
-    public List<SearchDto> searchTrack(String keyword);
-    public List<SearchDto> searchUser(String keyword);
+     List<SearchDto> searchPlaylist(String keyword);
+     List<SearchDto> searchAlbum(String keyword);
+     List<SearchDto> searchTrack(String keyword);
+     List<SearchDto> searchUser(String keyword);
+
+     long countUser();
+
+    UserSocialAdminDto findById(Long userId);
+    List<User> findByReportTrue();
+    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
+    Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+
+    Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+
+    List<Object[]> getTop10MostFollowedUsers();
+
+    List<UserSocialAdminDto> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
+    List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate);
 
     // list user sell by day
     List<UserSell> getUserSellTheMostDay(LocalDate date);
@@ -134,4 +151,8 @@ public interface UserService {
     void updateBackground(Long userId, MultipartFile image);
 
     List<UserNameAvatarUsernameDto> getUsersNotFollowed(Long userId);
+
+    <T> Optional<T> findByEmail(String email);
+
+    Object createUser(String email);
 }

@@ -3,8 +3,10 @@ package org.example.library.service.implement;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.example.library.dto.PostDto;
-import org.example.library.mapper.PostMapper;
+import org.example.library.dto.PostReactionDto;
 import org.example.library.dto.ReportDto;
+import org.example.library.dto.UserInfoDto;
+import org.example.library.mapper.PostMapper;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
 import org.example.library.model.Report;
@@ -14,18 +16,19 @@ import org.example.library.repository.PostRepository;
 import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -109,6 +112,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDto> get5Posts() {
+        return List.of();
+    }
+
+    @Override
     public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
         List<Post> posts;
 
@@ -126,6 +134,11 @@ public class PostServiceImpl implements PostService {
         }
 
         return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDto getPostById(Long PostId) {
+        return null;
     }
 
     @Override
@@ -168,7 +181,6 @@ public class PostServiceImpl implements PostService {
             }
             post.setImages(postImages); // Gán tập hình ảnh mới vào bài viết
         }
-        post.setEdited(true); // Đánh dấu bài viết đã được thay đổi
 
         // Lưu bài viết đã cập nhật vào database
         Post updatedPost = postRepository.save(post);
@@ -216,38 +228,33 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
 
-    @Override
-    public List<PostDto> findAllPosts() {
-        List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
-                    return postDto; // Trả về PostDto đã được thiết lập userName
-                })
-                .collect(Collectors.toList());
-    }
+
 
     @Override
     public List<PostDto> findNewPosts() {
-        List<Post> newPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")); // Sắp xếp bài viết mới nhất lên đầu
+        // Lấy thời gian đầu ngày và cuối ngày hiện tại
+        LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
+        LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
+
+        // Lấy các bài viết trong khoảng thời gian của ngày hôm nay
+        List<Post> newPosts = postRepository.findAllByCreatedAtBetween(
+                startOfToday, endOfToday, Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+
         return newPosts.stream()
                 .map(post -> {
                     PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
                     postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
-                    return postDto; // Trả về PostDto đã được thiết lập userName
+                    return postDto;
                 })
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<PostDto> findTrendingPosts() {
-        // Giả sử bạn có một cách nào đó để xác định bài viết xu hướng
-        List<Post> trendingPosts = postRepository.findTopTrendingPosts(); // Giả sử bạn đã có phương thức này trong repository
-        return trendingPosts.stream()
-                .map(PostMapper::toDto)
-                .collect(Collectors.toList());
+        return List.of();
     }
+
 
     @Override
     public long countTotalPosts() {
@@ -318,6 +325,23 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+    public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
+        Map<LocalDateTime, Long> postCountMap = new HashMap<>();
+        LocalDate currentDate = startDate;
+        //for de lay data
+        while (!currentDate.isAfter(endDate)) {
+            LocalDateTime startOfDay = currentDate.atStartOfDay();
+            LocalDateTime endOfDay = currentDate.atTime(23, 59, 59, 999999999); // Thay đổi tại đây
+            Long count = postRepository.countByCreatedAtBetween(startOfDay, endOfDay);
+            postCountMap.put(startOfDay, count);
+            currentDate = currentDate.plusDays(1);
+        }
+
+        System.out.println("Post Count Map: " + postCountMap);
+        return postCountMap;
+    }
+
+
 
 
     @Override
@@ -330,5 +354,60 @@ public class PostServiceImpl implements PostService {
         return post.getUser().getUserName().equals(username);
     }
 
+    @Override
+    public UserInfoDto getSearchInfo(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
+
+        User user = post.getUser(); // lấy user từ post
+
+        return new UserInfoDto(
+                user.getId(),
+                user.getEmail(),
+                user.getUserName(),
+                user.getUserInformation().getAvatar(),
+                user.getCreateDate().atStartOfDay()
+        );
+    }
+
+    @Override
+    public List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post);
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
+                    return postDto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDto> findAllPosts() {
+        List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
+                    return postDto; // Trả về PostDto đã được thiết lập userName
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDto> findPostsBySpecificDate(LocalDate specificDate) {
+        LocalDateTime startDateTime = specificDate.atStartOfDay();
+        LocalDateTime endDateTime = specificDate.atTime(23, 59, 59);
+        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
+        return posts.stream()
+                .map(post -> {
+                    PostDto postDto = PostMapper.toDto(post);
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
+                    return postDto;
+                })
+                .collect(Collectors.toList());
+    }
 
 }

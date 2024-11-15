@@ -1,4 +1,3 @@
-
 package org.example.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -32,6 +31,7 @@ public class Genre {
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "genre")
+    @JsonManagedReference
     private Set<Albums> albums;
 
 

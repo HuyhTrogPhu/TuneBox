@@ -10,9 +10,9 @@ import org.example.library.model.*;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +53,8 @@ public class UserController {
     private UserInformationService userInformationService;
     @Autowired
     private JwtUtil jwtUtil;
+
+
 
     @Autowired
     private EmailService emailService;
@@ -126,6 +128,7 @@ public class UserController {
     }
 
 
+
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
@@ -182,13 +185,12 @@ public class UserController {
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Mật khẩu không đúng");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
-
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
@@ -271,7 +273,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Optional.empty());
         }
     }
-
     @PutMapping(value = "/{userId}/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
         userService.updateUserProfile(userId, userUpdateRequest);
@@ -342,6 +343,8 @@ public class UserController {
 
         return ResponseEntity.ok("The password change link has been sent to your email.");
     }
+
+
 
 
     // Thêm phương thức đổi mật khẩu
