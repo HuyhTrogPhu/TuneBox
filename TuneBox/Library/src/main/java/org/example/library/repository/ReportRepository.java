@@ -34,9 +34,14 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     boolean existsByUserIdAndAlbumId(Long userId, Long albumId);
 
     List<Report> findAll(); // Truy xuất tất cả các báo cáo
+
+
     List<Report> findByStatus(ReportStatus status); // Phương thức này đã có
     List<Report> findByPost(Post post);
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
+
+    List<Report> findByStatusAndType(ReportStatus status, String type);
+
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
     List<Report> findByStatusAndDateRange(

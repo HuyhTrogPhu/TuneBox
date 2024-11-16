@@ -166,7 +166,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional(readOnly = true)
     public List<Report2Dto> getAllPendingReports() {
-        List<Report> pendingReports = reportRepository.findByStatus(ReportStatus.PENDING);
+        List<Report> pendingReports = reportRepository.findByStatusAndType(ReportStatus.PENDING, "post");
         return mapReportsToDto(pendingReports);
     }
 

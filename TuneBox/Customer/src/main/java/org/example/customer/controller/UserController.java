@@ -21,8 +21,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
@@ -62,42 +60,6 @@ public class UserController {
     @Autowired
     private VerificationCodeService verificationCodeService;
 
-    // check signUp form
-    @GetMapping("/check-signUp")
-    public ResponseEntity<?> checkSignUp(
-            @RequestParam("userName") String userName,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password) {
-
-        // list userName
-        List<String> userNames = userRepository.findAllUserNames();
-
-        // list email
-        List<String> emails = userRepository.findAllUserEmails();
-
-        // Kiểm tra userName và email đã tồn tại hay chưa
-        if (userNames.contains(userName)) {
-            return ResponseEntity.badRequest().body("Username already exists");
-        }
-        if (userName.isEmpty()) {
-            return ResponseEntity.badRequest().body("Username not null");
-        }
-
-        if (emails.contains(email)) {
-            return ResponseEntity.badRequest().body("Email already exists");
-        }
-        if (email.isEmpty()) {
-            return ResponseEntity.badRequest().body("Email not null");
-        }
-
-        // Kiểm tra và ghi log thông tin nhận được
-        if (password == null || password.isEmpty()) {
-            return ResponseEntity.badRequest().body("Password not null");
-        }
-
-        return ResponseEntity.ok().build();
-
-    }
 
     // Register
     @PostMapping("/register")
@@ -190,6 +152,43 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
+    }
+
+    // check signUp form
+    @GetMapping("/check-signUp")
+    public ResponseEntity<?> checkSignUp(
+            @RequestParam("userName") String userName,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password) {
+
+        // list userName
+        List<String> userNames = userRepository.findAllUserNames();
+
+        // list email
+        List<String> emails = userRepository.findAllUserEmails();
+
+        // Kiểm tra userName và email đã tồn tại hay chưa
+        if (userNames.contains(userName)) {
+            return ResponseEntity.badRequest().body("Username already exists");
+        }
+        if (userName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Username not null");
+        }
+
+        if (emails.contains(email)) {
+            return ResponseEntity.badRequest().body("Email already exists");
+        }
+        if (email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email not null");
+        }
+
+        // Kiểm tra và ghi log thông tin nhận được
+        if (password == null || password.isEmpty()) {
+            return ResponseEntity.badRequest().body("Password not null");
+        }
+
+        return ResponseEntity.ok().build();
+
     }
 
     // Phương thức để lấy userId từ cookie
@@ -347,6 +346,7 @@ public class UserController {
 
 
 
+
     // Thêm phương thức đổi mật khẩu
     @PostMapping("/reset-password")
     @Transactional
@@ -443,7 +443,7 @@ public class UserController {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
     }
-
+    // get list orders by user id
 
 
 }
