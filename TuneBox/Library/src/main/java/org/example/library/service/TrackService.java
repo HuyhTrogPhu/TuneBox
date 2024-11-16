@@ -1,6 +1,7 @@
 package org.example.library.service;
 
 import org.example.library.dto.TrackDto;
+import org.example.library.dto.TrackDtoSocialAdmin;
 import org.example.library.dto.TrackStatus;
 import org.example.library.model.Track;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,7 @@ public interface TrackService {
      TrackStatus getTrackCountCommentandLike(Long Id);
      List<TrackDto> getAll();
      List<TrackDto> findByTracksByAlbumId(Long id);
-    public List<TrackDto> findReportedTrack();
+    public List<TrackDtoSocialAdmin> findReportedTrack();
     public Map<LocalDate, Long> countTrackByDateRange(LocalDate startDate, LocalDate endDate);
     public Map<String, Long> getTrackCountsByGenreAndDateRange(LocalDate startDate, LocalDate endDate);
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);

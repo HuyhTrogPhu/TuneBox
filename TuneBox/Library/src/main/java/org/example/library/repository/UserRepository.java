@@ -16,7 +16,9 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByEmail(String email);
+    User findByEmail(String email);
+
+    Optional<User> findOptionalByEmail(String email);
 
 
     // list username
@@ -36,7 +38,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
             "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
     Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
-
     // get user check out info
     @Query("select new org.example.library.dto.UserCheckOut(u.id, u.email, u.userName) " +
             "from User u WHERE u.id = :userId")
@@ -107,8 +108,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserName(String userName);
 
-
-
     // get list user sell the most
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
             "from UserInformation ui join ui.user u join u.orderList o " +
@@ -177,10 +176,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where o.id is null")
     List<UserSell> getUserNotSell();
 
-
     // search
-    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.avatar, ui.name,us.userName) " +
-            "from UserInformation ui join ui.user us where ui.name like :keyword")
+    @Query("SELECT new org.example.library.dto.SearchDto(us.id, ui.name, ui.avatar,  us.userName) " +
+            "from UserInformation ui join ui.user us where ui.name like :keyword or us.userName like :keyword")
     List<SearchDto> searchUser(@Param("keyword") String keyword);
 
     @Query("SELECT new org.example.library.dto.SearchDto(t.id, t.id, t.name, t.description, t.trackImage, t.creator.userName) " +
@@ -273,8 +271,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     long countByIdNotNull();
     List<User> findByReportTrue();
+
     Long countByCreateDate(LocalDate createDate);
+
     Long countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+
+    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+
     @Query(value = "SELECT u.user_name, COUNT(f.followed_id) AS follower_count " +
             "FROM users u " +
             "JOIN follow f ON u.user_id = f.followed_id " +
@@ -282,6 +285,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "ORDER BY follower_count DESC " +
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10MostFollowedUsers();
+
+
     @Query(value = "SELECT u.user_name, COUNT(t.track_id) AS track_count " +
             "FROM users u " +
             "JOIN track t ON u.user_id = t.user_id " +
@@ -292,7 +297,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
                                                 @Param("endDate") LocalDateTime  endDate);
 
-    List<User> findAllByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 
 
 }

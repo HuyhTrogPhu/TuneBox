@@ -80,7 +80,7 @@ public interface UserService {
     // get user not sell
     List<UserSell> getUserNotSell();
 
-    List<UserDto> findAllUser();
+    List<UserSocialAdminDto> findAllUser();
 
     List<ListUserForMessageDto> findAllUserForMessage();
 
@@ -112,14 +112,20 @@ public interface UserService {
 
      long countUser();
 
-    Optional<User> findById(Long userId);
+    UserSocialAdminDto findById(Long userId);
     List<User> findByReportTrue();
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
+
     Map<LocalDate, Long> countUsersByWeekRange(LocalDate startDate, LocalDate endDate);
+
     List<Object[]> getTop10MostFollowedUsers();
+
+    List<UserSocialAdminDto> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
     List<Map<String, Object>> getTop10UsersWithMostTracks(LocalDate startDate, LocalDate endDate);
-    List<User> getUsersByDateRange(LocalDate startDate, LocalDate endDate);
+
     // list user sell by day
     List<UserSell> getUserSellTheMostDay(LocalDate date);
 
@@ -143,7 +149,6 @@ public interface UserService {
 
     // list user sell between years
     List<UserSell> getUserSellBetweenYear(int startYear, int endYear);
-
 
     void updateAvatar(Long userId, MultipartFile image);
 

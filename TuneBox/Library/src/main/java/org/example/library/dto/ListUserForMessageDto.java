@@ -11,4 +11,5 @@ public class ListUserForMessageDto {
     private Long id;
     private String username;
     private String nickName;
+    private String avatar;
 }

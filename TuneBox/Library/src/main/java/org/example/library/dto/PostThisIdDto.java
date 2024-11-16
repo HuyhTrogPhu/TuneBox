@@ -11,6 +11,6 @@ import org.example.library.model.User;
 @NoArgsConstructor
 public class PostThisIdDto {
     private Long postId;
-    private Long postOwner;
+    private String postOwner;
     private boolean hidden;
 }

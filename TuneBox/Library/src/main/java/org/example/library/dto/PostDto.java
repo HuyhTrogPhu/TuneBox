@@ -14,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class PostDto {
     private Long id;
+    private Long IdShare;
     private String content;
     private Long userId;
     private String userNickname;

@@ -19,4 +19,12 @@ public class NotificationDTO {
     private String avatarUrl; // Đường dẫn đến avatar của người nhận thông báo
     private boolean isRead; // Trạng thái đã đọc thông báo
     private Long postId; // ID của bài viết mà thông báo này liên quan đến
+    private String type;
+
+    public NotificationDTO(String message, String type, LocalDateTime createdAt) {
+        this.message = message;
+        this.type = type;
+        this.createdAt = createdAt;
+    }
+
 }

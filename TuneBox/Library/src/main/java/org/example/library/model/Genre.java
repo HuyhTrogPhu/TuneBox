@@ -31,6 +31,7 @@ public class Genre {
     private Set<Track> tracks;
 
     @OneToMany(mappedBy = "genre")
+    @JsonManagedReference
     private Set<Albums> albums;
 
 

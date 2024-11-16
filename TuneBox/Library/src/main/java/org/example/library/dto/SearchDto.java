@@ -39,6 +39,12 @@ public class SearchDto {
     private String imagePlaylist;
     private String userNamePlaylist;
 
+    public SearchDto(Long id, String avatar, String name) {
+        this.id = id;
+        this.avatar = avatar;
+        this.name = name;
+    }
+
     // Constructor cho user
     public SearchDto(Long id, String name, String avatar, String userName) {
         this(id, name, avatar, userName,null, null, null, null, null, null, null, null, null, null, null, null, null,null);

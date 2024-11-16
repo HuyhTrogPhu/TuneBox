@@ -3,6 +3,7 @@ package org.example.customer.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
 import org.example.library.model.*;
@@ -24,8 +25,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -138,6 +137,7 @@ public class UserController {
     }
 
 
+
     // get list talents
     @GetMapping("/list-talent")
     public ResponseEntity<List<Talent>> listTalent() {
@@ -200,6 +200,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên đăng nhập hoặc email không tồn tại");
         }
     }
+
 
     // Phương thức để lấy userId từ cookie
     private String getUserIdFromCookie(HttpServletRequest request) {
@@ -379,16 +380,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
     // get list orders by user id
-    @GetMapping("/{userId}/orders")
-    public ResponseEntity<List<UserIsInvoice>> getAllOrdersByUserId(@PathVariable Long userId) {
-        try {
-            List<UserIsInvoice> userIsInvoices = orderService.getOrderByUserId(userId);
-            return ResponseEntity.ok(userIsInvoices);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+
 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {

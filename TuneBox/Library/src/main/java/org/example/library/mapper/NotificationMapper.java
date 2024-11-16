@@ -23,7 +23,9 @@ public class NotificationMapper {
                 notification.getUserId(),
                 avatarUrl,
                 notification.isRead(),
-                notification.getPostId()
+                notification.getPostId(),
+                notification.getType()
+
         );
     }
 
@@ -34,7 +36,8 @@ public class NotificationMapper {
                 notificationDTO.getUserId(),
                 notificationDTO.getCreatedAt(),
                 notificationDTO.isRead(),
-                notificationDTO.getPostId()
+                notificationDTO.getPostId(),
+                notificationDTO.getType()
         );
     }
 }

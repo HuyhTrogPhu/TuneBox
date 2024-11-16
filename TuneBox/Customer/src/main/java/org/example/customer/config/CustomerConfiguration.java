@@ -48,7 +48,9 @@ public class CustomerConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception  {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+
         authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
         http
@@ -56,7 +58,7 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login", "/register", "/user/**", "/api/**", "/customer/**","/api/messages/**","/ws/**","/user").permitAll()
+                        .requestMatchers("/login","/api/auth/google", "/register", "/user/**", "/api/**","/api/reports/**", "/customer/**","/api/messages/**","/ws/**","/user","/social-statistical").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
                         .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
@@ -107,3 +109,5 @@ public class CustomerConfiguration {
         return NimbusJwtDecoder.withJwkSetUri(googleJwkSetUri).build();
     }
 }
+
+

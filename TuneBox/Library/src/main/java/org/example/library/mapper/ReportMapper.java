@@ -72,10 +72,10 @@ public class ReportMapper {
 
         PostThisIdDto postDto = new PostThisIdDto();
         postDto.setPostId(report.getPost().getId());
-        postDto.setPostOwner(report.getPost().getUser().getId());
+        postDto.setPostOwner(report.getPost().getUser().getUserInformation().getName());
         postDto.setHidden(report.getPost().isHidden());
         dto.setPost(postDto);
-        dto.setReporterId(report.getUser().getId());
+        dto.setReporterId(report.getUser().getUserName());
         dto.setReason(report.getReason());
         dto.setCreateDate(report.getCreateDate());
         dto.setStatus(report.getStatus());

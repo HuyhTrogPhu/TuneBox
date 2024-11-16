@@ -2,20 +2,21 @@ package org.example.library.service.implement;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.example.library.dto.AlbumsDto;
+import org.example.library.dto.AlbumSocialDto;
 import org.example.library.dto.PlaylistDto;
+import org.example.library.dto.TrackDtoSocialAdmin;
 import org.example.library.mapper.AlbumMapper;
 
 import org.example.library.model.Albums;
+import org.example.library.model.Track;
 import org.example.library.repository.AlbumsRepository;
+import org.example.library.repository.TrackRepository;
 import org.example.library.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -24,28 +25,95 @@ public class AlbumServiceImplement implements AlbumService {
     @Autowired
     AlbumsRepository albumsRepository;
 
+    @Autowired
+    private TrackRepository trackRepository;
+
+
     @Override
-    public AlbumsDto getbyUserId(Long UserId){
+    public List<AlbumsDto> getbyUserId(Long UserId){
 
         List<Albums> albumsList = albumsRepository.findByCreatorId(UserId);
         if (albumsList.isEmpty()) {
             throw new EntityNotFoundException("No albums found for user ID: " + UserId);
         }
-        Albums albums = albumsList.get(0);
-        return AlbumMapper.mapperAlbumsDto(albums);
+
+        return albumsList.stream().
+                map(AlbumMapper::mapperAlbumsDto)
+                .collect(Collectors.toList());
     }
+
+
     @Override
-    public List<AlbumsDto> getAll(){
-        return albumsRepository.findAll()
-        .stream()
-        .map(AlbumMapper::mapperAlbumsDto)
-        .collect(Collectors.toList());
+    public List<AlbumSocialDto> getAll(){
+        List<Albums> listAlbums = albumsRepository.findAll();
+        List<AlbumSocialDto> listAlbumsDtos = new ArrayList<>();
+
+        // Duyệt qua từng album
+        for (Albums album : listAlbums) {
+            List<Track> listTracks = trackRepository.findAllByAlbumsId(album.getId());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+
+            AlbumSocialDto albumDto = new AlbumSocialDto(
+                    album.getId(),
+                    album.getTitle(),
+                    album.getCreateDate(),
+                    album.isReport(),
+                    album.getReportDate(),
+                    trackDtos,
+                    album.getCreator().getUserName(),
+                    album.getDescription(),
+                    album.getAlbumImage()
+
+            );
+
+            listAlbumsDtos.add(albumDto);
+        }
+
+        return listAlbumsDtos;
     }
+
+
+
     @Override
-    public AlbumsDto findByAlbumsByID(Long id) {
-        AlbumsDto albumsDto = AlbumMapper.mapperAlbumsDto(albumsRepository.findById(id).get());
-        return albumsDto;
-    }
+    public AlbumSocialDto findByAlbumsByID(Long id) {
+      Albums album = albumsRepository.findById(id).get();
+        List<Track> listTracks = trackRepository.findAllByAlbumsId(album.getId());
+        List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                .map(track -> new TrackDtoSocialAdmin(
+                        track.getId(),
+                        track.getName(),
+                        track.getCreateDate(),
+                        track.isReport(),
+                        track.getReportDate(),
+                        track.getCreator().getUserName(),
+                        track.getLikes().size()
+                ))
+                .collect(Collectors.toList());
+
+        AlbumSocialDto albumDto = new AlbumSocialDto(
+                album.getId(),
+                album.getTitle(),
+                album.getCreateDate(),
+                album.isReport(),
+                album.getReportDate(),
+                trackDtos,
+                album.getCreator().getUserName(),
+                album.getDescription(),
+                album.getAlbumImage()
+
+        );
+        return albumDto;
+}
 
     @Override
     public List<AlbumsDto> getAllReported(){
@@ -54,11 +122,46 @@ public class AlbumServiceImplement implements AlbumService {
                 .map(AlbumMapper::mapperAlbumsDto)
                 .collect(Collectors.toList());
     }
-    public List<Albums> getAlbumsByDateRange(LocalDate startDate, LocalDate endDate) {
-        LocalDateTime startDateTime = startDate.atStartOfDay();
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
-        return albumsRepository.findAllByCreateDateBetween(startDateTime, endDateTime);
+
+
+    public List<AlbumSocialDto> getAlbumsByDateRange(LocalDate startDate, LocalDate endDate) {
+        List<Albums> listAlbums = albumsRepository.findAllByCreateDateBetween(startDate, endDate);
+        List<AlbumSocialDto> listAlbumsDtos = new ArrayList<>();
+
+        // Duyệt qua từng album
+        for (Albums album : listAlbums) {
+            List<Track> listTracks = trackRepository.findAllByAlbumsId(album.getId());
+            List<TrackDtoSocialAdmin> trackDtos = listTracks.stream()
+                    .map(track -> new TrackDtoSocialAdmin(
+                            track.getId(),
+                            track.getName(),
+                            track.getCreateDate(),
+                            track.isReport(),
+                            track.getReportDate(),
+                            track.getCreator().getUserName(),
+                            track.getLikes().size()
+                    ))
+                    .collect(Collectors.toList());
+
+            AlbumSocialDto albumDto = new AlbumSocialDto(
+                    album.getId(),
+                    album.getTitle(),
+                    album.getCreateDate(),
+                    album.isReport(),
+                    album.getReportDate(),
+                    trackDtos,
+                    album.getCreator().getUserName(),
+                    album.getDescription(),
+                    album.getAlbumImage()
+
+            );
+
+            listAlbumsDtos.add(albumDto);
+        }
+
+        return listAlbumsDtos;
     }
+
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> userCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
