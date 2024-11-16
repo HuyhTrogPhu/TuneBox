@@ -1,6 +1,5 @@
 package org.example.customer.controller;
 
-import org.example.library.model.RespondModel;
 import org.example.library.service.InspiredByService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +7,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -19,16 +21,17 @@ public class InspiredByController {
 
     @GetMapping ("/getall")
     public ResponseEntity<?> FindAll() {
-        RespondModel response = new RespondModel();
+        Map<String, Object> response = new HashMap<>();
+
         try {
-            response.setStatus(true);
-            response.setMessage("succesfull");
-            response.setData(InsSer.findAll());
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",InsSer.findAll());
 
         } catch (Exception ex) {
-            response.setMessage(ex.getMessage());
-            response.setData(null);
-            response.setStatus(false);
+            response.put("status", false);
+            response.put("message", null);
+            response.put("data",false);
         }
         return ResponseEntity.ok(response);
     }
