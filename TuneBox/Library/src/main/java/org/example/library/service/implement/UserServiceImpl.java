@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
             user.setUserInformation(userInformation);
 
-            user.setRole(roleRepository.findByName("SOCIALADMIN"));
+            user.setRole(roleRepository.findByName("CUSTOMER"));
             user.setEmail(userDto.getEmail());
             user.setUserName(userDto.getUserName());
             user.setPassword(userDto.getPassword());
@@ -240,7 +240,6 @@ public class UserServiceImpl implements UserService {
     public UserDetailEcommerce getUserDetailEcommerceAdmin(Long userId) {
         return userRepository.getUserDetailEcommerceAdmin(userId);
     }
-
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
                 .map(user -> {
@@ -614,9 +613,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findOptionalByEmail(email);
+    }
+
+    @Override
+    public User createUser(String email) {
+        User newUser = new User();
+        newUser.setEmail(email);
+        // Bạn có thể thiết lập các thuộc tính khác nếu có
+        return userRepository.save(newUser); // Lưu người dùng mới vào cơ sở dữ liệu
+    }
+
+    @Override
     public long countUser() {
         return userRepository.countByIdNotNull();
     }
+
+
+
     @Override
     public UserSocialAdminDto findById(Long userId) {
         User user =  userRepository.findById(userId).get();

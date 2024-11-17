@@ -21,4 +21,16 @@ public class CloudinaryService {
                 .upload(file.getBytes(), 
                         Map.of("resource_type", "auto"));
     }
+
+    public boolean deleteFile(String publicId) {
+        try {
+            // Gọi Cloudinary API để xóa tệp
+            Map result = cloudinary.uploader().destroy(publicId, Map.of());
+            return "ok".equals(result.get("result"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

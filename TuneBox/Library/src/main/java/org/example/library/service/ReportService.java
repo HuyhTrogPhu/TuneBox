@@ -6,6 +6,7 @@ import org.example.library.dto.ReportDtoSocialAdmin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReportService {
@@ -17,7 +18,6 @@ public interface ReportService {
 
     List<ReportDto> getAllReports();
 
-    List<Report2Dto> getPendingReports(); // Thêm phương thức không phân trang
 
     Report2Dto resolveReport(Long reportId, boolean hidePost);
 
@@ -29,5 +29,14 @@ public interface ReportService {
     Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable);
      ReportDtoSocialAdmin findById(Long id);
     void restorePost(Long reportId);
-    Report2Dto dismissReport(Long reportId, String reason);
+
+//    Report2Dto dismissReport(Long reportId, String reason);
+
+    List<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate);
+
+    List<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate);
+
+    List<Report2Dto> getAllPendingReports();
+
+    List<Report2Dto> dismissAllReports(Long postId, String reason);
 }
