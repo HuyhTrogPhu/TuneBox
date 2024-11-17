@@ -21,28 +21,18 @@ public class CartController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addToCart(@RequestBody Instrument cartItem, @RequestParam int quantity, HttpSession session) {
-        shoppingCartService.addItemToCart(session, cartItem, quantity);
-        return ResponseEntity.ok("Đã thêm vào giỏ hàng.");
+    @GetMapping("/{userId}")
+    public ResponseEntity<ShoppingCartDto> getCart(@PathVariable Long userId) {
+        ShoppingCartDto cart = shoppingCartService.getCartForUser(userId);
+        return ResponseEntity.ok(cart);
     }
 
-    @PostMapping("/sync")
-    public ResponseEntity<String> syncCart(@RequestBody List<CartItemDto> cartItems, HttpSession session) {
-        shoppingCartService.updateCart(session, cartItems);
-        return ResponseEntity.ok("Giỏ hàng đã được đồng bộ.");
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> saveCart(@PathVariable Long userId, @RequestBody ShoppingCartDto cartDto) {
+        shoppingCartService.saveCart(userId, cartDto);
+        return ResponseEntity.ok("Cart saved successfully.");
     }
 
-    @GetMapping("/items")
-    public ResponseEntity<ShoppingCartDto> getCartItems(HttpSession session) {
-        ShoppingCartDto cartDTO = shoppingCartService.getCart(session);
-        return ResponseEntity.ok(cartDTO);
-    }
 
-    @DeleteMapping("/remove/{instrumentId}")
-    public ResponseEntity<String> removeItem(@PathVariable Long instrumentId, HttpSession session) {
-        shoppingCartService.removeItemFromCart(session, instrumentId);
-        return ResponseEntity.ok("Đã xóa sản phẩm khỏi giỏ hàng.");
-    }
     private List<OrderDetailDto> orderDetails = new ArrayList<>();
 }

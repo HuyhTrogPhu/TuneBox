@@ -13,7 +13,9 @@ import org.example.library.model.Instrument;
 @NoArgsConstructor
 public class CartItemDto {
 
-    private Instrument instrument;
-
-    private int quantity;
+    private Long instrumentId; // Chỉ lưu ID của nhạc cụ
+    private String name;       // Tên nhạc cụ
+    private String image;      // URL hình ảnh nhạc cụ
+    private Double costPrice;  // Giá của nhạc cụ
+    private Integer quantity;  // Số lượng
 }
