@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.library.model_enum.ReportStatus;
 
@@ -12,8 +13,10 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Report {
 
     @Id

@@ -2,6 +2,7 @@ package org.example.socialadmin.controller;
 
 import org.example.library.dto.CommentDTO;
 import org.example.library.dto.ReplyDto;
+import org.example.library.dto.ReportDtoSocialAdmin;
 import org.example.library.model.Albums;
 import org.example.library.model.Playlist;
 import org.example.library.model.Track;
@@ -11,6 +12,9 @@ import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -495,6 +499,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     public ResponseEntity<?> getTrackBetweenMonth(@PathVariable("startDate") String startDateStr,
                                                  @PathVariable("endDate") String endDateStr) {
         Map<String, Object> response = new HashMap<>();
+
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
             YearMonth startDate = YearMonth.parse(startDateStr, formatter);
@@ -514,12 +519,16 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
 
     // thong ke reports
     @GetMapping("/getTrackReport")
-    public ResponseEntity<?> getTrackReport() {
+    public ResponseEntity<?> getTrackReport(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithTracks(pageable);
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", reportRepository.findAllReportsWithTracks());
+            response.put("data", reportPage.getContent());
+            response.put("totalPages", reportPage.getTotalPages());
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -528,12 +537,17 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
     @GetMapping("/getAlbumReport")
-    public ResponseEntity<?> getAlbumReport() {
+    public ResponseEntity<?> getAlbumReport(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithAlbum(pageable);
+
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", reportRepository.findAllReportsWithAlbum());
+            response.put("data",reportPage.getContent());
+            response.put("totalPages", reportPage.getTotalPages());
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -543,12 +557,17 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     }
 
     @GetMapping("/getPostReport")
-    public ResponseEntity<?> getPostReport() {
+    public ResponseEntity<?> getPostReport(@RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithPost(pageable);
+
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", reportRepository.findAllReportsWithPost());
+            response.put("data", reportPage.getContent());
+            response.put("totalPages", reportPage.getTotalPages());
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -731,7 +750,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
-            response.put("data", reportRepository.findById(Id));
+            response.put("data", reportService.findById(Id));
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -740,7 +759,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
     //ban theo rp ID
-    @PutMapping("/ApproveRPTrack/{id}")
+    @PutMapping("/ApproveRP/{id}")
     public ResponseEntity<?> ApproveRPTrack(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -756,7 +775,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     }
 
     //ban theo rp ID
-    @PutMapping("/DeniedRPTrack/{id}")
+    @PutMapping("/DeniedRP/{id}")
     public ResponseEntity<?> DeniedRPTrack(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
