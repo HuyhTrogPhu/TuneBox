@@ -10,11 +10,14 @@ import java.util.List;
 
 public interface ShoppingCartService {
 
-    ShoppingCartDto getCart(HttpSession session);
+//    ShoppingCartDto getCart(HttpSession session);
 
-    void addItemToCart(HttpSession session, Instrument newItem, int quantity);
+//    void addItemToCart(HttpSession session, Instrument newItem, int quantity);
 
-    void updateCart(HttpSession session, List<CartItemDto> items);
+//    void updateCart(HttpSession session, List<CartItemDto> items);
+//
+//    void removeItemFromCart(HttpSession session, Long itemId);
 
-    void removeItemFromCart(HttpSession session, Long itemId);
+    ShoppingCartDto getCartForUser(Long userId);
+    void saveCart(Long userId, ShoppingCartDto cartDto);
 }

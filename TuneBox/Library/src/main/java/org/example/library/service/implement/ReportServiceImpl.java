@@ -1,10 +1,7 @@
 package org.example.library.service.implement;
 
 import org.example.library.Exception.ResourceNotFoundException;
-import org.example.library.dto.NotificationDTO;
-import org.example.library.dto.Report2Dto;
-import org.example.library.dto.ReportDetailDto;
-import org.example.library.dto.ReportDto;
+import org.example.library.dto.*;
 import org.example.library.mapper.ReportMapper;
 import org.example.library.model.*;
 import org.example.library.model_enum.ReportStatus;
@@ -13,6 +10,9 @@ import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -199,8 +199,6 @@ public class ReportServiceImpl implements ReportService {
         return reportDtos;
     }
 
-
-
     @Override
     @Transactional
     public Report2Dto resolveReport(Long reportId, boolean hidePost) {
@@ -287,7 +285,33 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
+    @Override
+    public Report2Dto dismissReport(Long reportId, String reason) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found with id: " + reportId));
+        if (report.getStatus() != ReportStatus.PENDING) {
+            throw new IllegalStateException("Cannot dismiss report. Expected status: PENDING, but was: " + report.getStatus());
+        }
+        report.setStatus(ReportStatus.DISMISSED);
+        report.setReason(reason);
+        Report savedReport = reportRepository.save(report);
+        return reportMapper.toReport2Dto(savedReport);
+    }
 
+
+
+    private Report findReportById(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found with id: " + reportId));
+    }
+
+    private void validateReportStatus(Report report, ReportStatus expectedStatus) {
+        if (report.getStatus() != expectedStatus) {
+            throw new IllegalStateException(
+                    "Invalid report status. Expected: " + expectedStatus + ", but was: " + report.getStatus()
+            );
+        }
+    }
 
 
     @Override
@@ -304,9 +328,88 @@ public class ReportServiceImpl implements ReportService {
         reportRepository.save(report);
         return reportMapper.toDto(report);
     }
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithTracks(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithAlbum(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithPost(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    @Override
+   public ReportDtoSocialAdmin findById(Long id){
+        Report rp = reportRepository.findById(id).get();
+return new ReportDtoSocialAdmin(
+        rp.getId(),
+        rp.getCreateDate(),
+        rp.getPost() != null ? rp.getPost().getId() : null,
+        rp.getTrack() != null ? rp.getTrack().getId() : null,
+        rp.getTrack() != null ? rp.getTrack().getName() : null,
+        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+        rp.getUser() != null ? rp.getUser().getId() : null,
+        rp.getUser() != null ? rp.getUser().getUserName() : null,
+        rp.getStatus(),
+        rp.getResolvedAt(),
+        rp.getDescription(),
+        rp.getType(),
+        rp.getReason()
+);
+    }
 }
-
-
-
-
-
