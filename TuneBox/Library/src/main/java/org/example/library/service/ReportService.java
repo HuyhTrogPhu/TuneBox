@@ -22,6 +22,9 @@ public interface ReportService {
     Report2Dto resolveReport(Long reportId, boolean hidePost);
 
     Report2Dto getReport2ById(Long id);
+
+    Report2Dto dismissReport(Long reportId, String reason);
+
     ReportDto updateApprove(Long id);
     ReportDto updateDenied(Long id);
     Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable);
