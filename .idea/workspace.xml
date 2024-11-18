@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="sửa đăng ký gg">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShopController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/InstrumentDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/InstrumentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/InstrumentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/InstrumentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,6 +218,7 @@
       <workItem from="1731915976006" duration="326000" />
       <workItem from="1731916831310" duration="632000" />
       <workItem from="1731917519857" duration="387000" />
+      <workItem from="1731933551093" duration="5685000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
