@@ -22,7 +22,7 @@ public class VerificationCodeService {
 
     public boolean isValidCode(String email, String code) {
         // Lấy userId từ email
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
 
         if (user == null) { // Kiểm tra xem người dùng có tồn tại không
             throw new RuntimeException("User not found");
@@ -36,7 +36,7 @@ public class VerificationCodeService {
 
     public void deleteCode(String email, String code) {
         // Lấy userId từ email
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email));
 
         if (user == null) { // Kiểm tra xem người dùng có tồn tại không
             throw new RuntimeException("User not found");

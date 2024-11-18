@@ -35,7 +35,7 @@ public class SocialAdmin {
     private String address;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "LONGTEXT")
     private String avatar;
 
     @ManyToOne(fetch = FetchType.EAGER)
