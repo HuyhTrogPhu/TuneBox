@@ -44,6 +44,12 @@
         @Autowired
         private SendInstrumentService sendInstrumentService;
 
+        @Autowired
+        private PostService postService;
+
+        @Autowired
+        private SendPostService sendPostService;
+
         private static final Logger logger = LoggerFactory.getLogger(ShareController.class);
 
 
@@ -90,6 +96,7 @@
             PlaylistDto playlist = playlistService.getPlaylistById(playlistId);
             return ResponseEntity.ok(playlist);
         }
+
         //API gửi playlist
         @PostMapping("/playlist")
         public ResponseEntity<Void> sendPlaylist(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long playlistId) {
@@ -103,6 +110,7 @@
             InstrumentDto instrument = instrumentService.getInstrumentById(productId);
             return ResponseEntity.ok(instrument);
         }
+
         //API gửi instrument
         @PostMapping("/product")
         public ResponseEntity<Void> sendProduct(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long productId) {
@@ -110,5 +118,17 @@
             return ResponseEntity.ok().build();
         }
 
+        // API tìm kiếm Post
+        @GetMapping("/post/{postId}")
+        public ResponseEntity<PostDto> getPostForSharing(@PathVariable Long postId) {
+            PostDto postDto = postService.getPostById(postId);
+            return ResponseEntity.ok(postDto);
+        }
 
+        // API gửi Post
+        @PostMapping("/post")
+        public ResponseEntity<Void> sendPost(@RequestParam Long senderId, @RequestParam Long receiverId, @RequestParam Long postId) {
+            sendPostService.sendPostMessage(senderId, receiverId, postId);
+            return ResponseEntity.ok().build();
+        }
     }

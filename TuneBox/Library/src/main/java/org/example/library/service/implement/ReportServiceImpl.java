@@ -13,6 +13,9 @@ import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -142,47 +145,70 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate) {
-        List<Report> pendingReports = reportRepository.findByStatusAndDateRange(
+    public Page<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndDateRange(
                 ReportStatus.PENDING,
                 startDate,
-                endDate
+                endDate,
+                pageable
         );
-        return mapReportsToDto(pendingReports);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
     }
-
-
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate) {
-        List<Report> pendingReports = reportRepository.findByStatusAndSpecificDate(
+    public Page<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate, Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndSpecificDate(
                 ReportStatus.PENDING,
-                specificDate
+                specificDate,
+                pageable
         );
-        return mapReportsToDto(pendingReports);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getAllPendingReports() {
-        List<Report> pendingReports = reportRepository.findByStatusAndType(ReportStatus.PENDING, "post");
-        return mapReportsToDto(pendingReports);
+    public Page<Report2Dto> getAllPendingReports(Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndType(ReportStatus.PENDING, "post", pageable);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
+    }
+
+
+
+    private Report2Dto mapReportToDto(Report report) {
+        Report2Dto dto = reportMapper.toReport2Dto(report);
+
+        dto.setReason(report.getReason() != null ? report.getReason() : "");
+        dto.setStatus(report.getStatus());
+        dto.setCreateDate(report.getCreateDate() != null ? report.getCreateDate() : LocalDate.now());
+        dto.setDescription(report.getDescription() != null ? report.getDescription() : "");
+
+        return dto;
     }
 
 
 
     private List<Report2Dto> mapReportsToDto(List<Report> reports) {
+        // Nhóm các báo cáo theo bài viết (post)
         Map<Long, List<Report>> groupedReports = reports.stream()
                 .collect(Collectors.groupingBy(report -> report.getPost().getId()));
 
         List<Report2Dto> reportDtos = new ArrayList<>();
 
+        // Lặp qua các nhóm báo cáo cho mỗi bài viết
         for (Map.Entry<Long, List<Report>> entry : groupedReports.entrySet()) {
             List<Report> reportsForPost = entry.getValue();
+
+            // Lấy báo cáo đại diện cho bài viết
             Report representativeReport = reportsForPost.get(0);
+
+            // Tạo DTO cho báo cáo
             Report2Dto dto = reportMapper.toReport2Dto(representativeReport);
 
+            // Tạo danh sách chi tiết báo cáo từ các báo cáo liên quan đến bài viết này
             List<ReportDetailDto> details = reportsForPost.stream()
                     .map(report -> new ReportDetailDto(
                             report.getId(),
@@ -192,12 +218,19 @@ public class ReportServiceImpl implements ReportService {
                     ))
                     .collect(Collectors.toList());
 
+            // Thiết lập danh sách chi tiết báo cáo
             dto.setReportDetails(details);
+
+            // Cập nhật số lượng báo cáo (số lượng báo cáo cho bài viết này)
+            dto.setReportCount(reportsForPost.size()); // Đếm số lượng báo cáo cho bài viết này
+
+            // Thêm DTO vào danh sách
             reportDtos.add(dto);
         }
 
         return reportDtos;
     }
+
 
 
 

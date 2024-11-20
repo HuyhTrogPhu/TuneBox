@@ -35,6 +35,7 @@ public class Post {
     @JoinColumn(name = "user_id") // Tên cột trong bảng Post
     private User user;
 
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     private boolean edited;

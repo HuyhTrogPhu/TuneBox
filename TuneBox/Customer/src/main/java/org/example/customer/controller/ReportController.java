@@ -100,26 +100,26 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<Report2Dto>> getPendingReports(
-            @RequestParam(required = false)  LocalDate startDate,
-            @RequestParam(required = false)  LocalDate endDate,
-            @RequestParam(required = false)  LocalDate specificDate) {
-        try {
-            List<Report2Dto> pendingReports;
-            if (specificDate != null) {
-                pendingReports = reportService.getPendingReportsBySpecificDate(specificDate);
-            } else if (startDate != null && endDate != null) {
-                pendingReports = reportService.getPendingReportsByDateRange(startDate, endDate);
-            } else {
-                pendingReports = reportService.getAllPendingReports();
-            }
-            return ResponseEntity.ok(pendingReports);
-        } catch (Exception e) {
-            System.out.println("Error fetching pending reports: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-    }
+//    @GetMapping("/pending")
+//    public ResponseEntity<List<Report2Dto>> getPendingReports(
+//            @RequestParam(required = false)  LocalDate startDate,
+//            @RequestParam(required = false)  LocalDate endDate,
+//            @RequestParam(required = false)  LocalDate specificDate) {
+//        try {
+//            List<Report2Dto> pendingReports;
+//            if (specificDate != null) {
+//                pendingReports = reportService.getPendingReportsBySpecificDate(specificDate);
+//            } else if (startDate != null && endDate != null) {
+//                pendingReports = reportService.getPendingReportsByDateRange(startDate, endDate);
+//            } else {
+//                pendingReports = reportService.getAllPendingReports();
+//            }
+//            return ResponseEntity.ok(pendingReports);
+//        } catch (Exception e) {
+//            System.out.println("Error fetching pending reports: " + e.getMessage());
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
 
     @PutMapping("/{reportId}/restore")
     public ResponseEntity<Void> restorePost(@PathVariable Long reportId) {

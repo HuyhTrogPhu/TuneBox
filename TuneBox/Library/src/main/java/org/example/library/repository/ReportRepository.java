@@ -3,6 +3,8 @@ package org.example.library.repository;
 import org.example.library.model.Post;
 import org.example.library.model.Report;
 import org.example.library.model_enum.ReportStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,21 +42,23 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findByPost(Post post);
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
-    List<Report> findByStatusAndType(ReportStatus status, String type);
-
+    Page<Report> findByStatusAndType(ReportStatus status, String type, Pageable pageable);
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
-    List<Report> findByStatusAndDateRange(
+    Page<Report> findByStatusAndDateRange(
             @Param("status") ReportStatus status,
             @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
+            @Param("endDate") LocalDate endDate,
+            Pageable pageable
     );
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate = :specificDate")
-    List<Report> findByStatusAndSpecificDate(
+    Page<Report> findByStatusAndSpecificDate(
             @Param("status") ReportStatus status,
-            @Param("specificDate") LocalDate specificDate
+            @Param("specificDate") LocalDate specificDate,
+            Pageable pageable
     );
+
 
 
     @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")

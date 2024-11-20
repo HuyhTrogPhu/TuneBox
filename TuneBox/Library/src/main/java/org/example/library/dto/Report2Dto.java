@@ -20,7 +20,12 @@ public class Report2Dto {
     private ReportStatus status; // Trạng thái báo cáo
     private String description;
     private List<ReportDetailDto> reportDetails;
-    public long getReportCount() {
-        return reportDetails != null ? reportDetails.size() : 0;
+
+    private int reportCount; // Đếm số lượng báo cáo (đã được khởi tạo trong mapReportsToDto)
+
+    // Setter cho reportCount đã có sẵn
+    public void setReportCount(int reportCount) {
+        this.reportCount = reportCount;
     }
+
 }

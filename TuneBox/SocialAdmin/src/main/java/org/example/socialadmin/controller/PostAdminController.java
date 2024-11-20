@@ -1,12 +1,14 @@
 package org.example.socialadmin.controller;
 
 import org.example.library.Exception.PostNotFoundException;
-import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReactionDto;
-import org.example.library.dto.ReportDto;
-import org.example.library.dto.UserInfoDto;
-import org.example.library.service.PostService; // Giả định bạn đã có service cho Post
+import org.example.library.dto.*;
+import org.example.library.service.PostService;
+import org.example.library.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,20 +28,24 @@ public class PostAdminController {
     @Autowired
     private PostService postService; // Tiêm PostService
 
+    @Autowired
+    private ReportService reportService;
+
     //search all bai viet
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(
+    public ResponseEntity<Page<PostDto>> getAllPosts(
             @RequestParam(required = false) LocalDate startDate,
             @RequestParam(required = false) LocalDate endDate,
-            @RequestParam(required = false) LocalDate specificDate) {
+            @RequestParam(required = false) LocalDate specificDate,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         try {
-            List<PostDto> posts;
+            Page<PostDto> posts;
             if (specificDate != null) {
-                posts = postService.findPostsBySpecificDate(specificDate);
+                posts = postService.findPostsBySpecificDate(specificDate, pageable);
             } else if (startDate != null && endDate != null) {
-                posts = postService.findPostsByDateRange(startDate, endDate);
+                posts = postService.findPostsByDateRange(startDate, endDate, pageable);
             } else {
-                posts = postService.findAllPosts();
+                posts = postService.findAllPosts(pageable);
             }
             return ResponseEntity.ok(posts);
         } catch (Exception e) {
@@ -48,9 +54,30 @@ public class PostAdminController {
         }
     }
 
+    @GetMapping("/pending")
+    public ResponseEntity<Page<Report2Dto>> getPendingReports(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(required = false) LocalDate specificDate,
+            @PageableDefault(size = 10, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        try {
+            Page<Report2Dto> pendingReports;
+            if (specificDate != null) {
+                pendingReports = reportService.getPendingReportsBySpecificDate(specificDate, pageable);
+            } else if (startDate != null && endDate != null) {
+                pendingReports = reportService.getPendingReportsByDateRange(startDate, endDate, pageable);
+            } else {
+                pendingReports = reportService.getAllPendingReports(pageable);
+            }
+            return ResponseEntity.ok(pendingReports);
+        } catch (Exception e) {
+            System.out.println("Error fetching pending reports: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
-
+    //search new posts
     @GetMapping("/new")
     public ResponseEntity<List<PostDto>> getNewPosts() {
         try {
@@ -70,13 +97,6 @@ public class PostAdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    //report
-    @GetMapping("/report")
-    public List<ReportDto> getPendingReports() {
-        return postService.getReportedPosts();
-    }
-
 
     //search theo id
     @GetMapping("/{id}")
@@ -118,7 +138,8 @@ public class PostAdminController {
         }
     }
 
-    @GetMapping("/search-info/{postId}")  // đổi tên param từ id thành postId
+    //search-information
+    @GetMapping("/search-info/{postId}")
     public ResponseEntity<UserInfoDto> getSearchInfo(@PathVariable Long postId) {
         try {
             UserInfoDto userInfoDto = postService.getSearchInfo(postId);

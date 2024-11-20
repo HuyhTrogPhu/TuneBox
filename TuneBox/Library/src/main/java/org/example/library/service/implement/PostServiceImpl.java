@@ -2,10 +2,7 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReactionDto;
-import org.example.library.dto.ReportDto;
-import org.example.library.dto.UserInfoDto;
+import org.example.library.dto.*;
 import org.example.library.mapper.PostMapper;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
@@ -17,6 +14,8 @@ import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -258,7 +257,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public long countTotalPosts() {
-        return postRepository.count(); // Sử dụng phương thức count() của PostRepository
+        return postRepository.count();
     }
 
     @Override
@@ -269,27 +268,6 @@ public class PostServiceImpl implements PostService {
         // Chuyển đổi danh sách Post thành PostDto
         return posts.stream()
                 .map(PostMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ReportDto> getReportedPosts() {
-        // Lấy danh sách các report từ reportRepository thay vì postRepository
-        List<Report> reports = reportRepository.findAll(); // Lấy tất cả các báo cáo
-
-        return reports.stream()
-                .map(report -> {
-                    ReportDto reportDto = new ReportDto();
-                    // Set các thuộc tính của ReportDto từ Report entity
-                    reportDto.setId(report.getId()); // ID của báo cáo
-                    reportDto.setPostId(report.getPost().getId()); // ID của bài viết bị báo cáo
-                    reportDto.setUserId(report.getUser().getId()); // ID của người dùng đã báo cáo
-                    reportDto.setReason(report.getReason()); // Lý do báo cáo
-                    reportDto.setCreateDate(report.getCreateDate()); // Ngày tạo báo cáo
-                    reportDto.setStatus(report.getStatus()); // Trạng thái báo cáo
-
-                    return reportDto; // Trả về ReportDto
-                })
                 .collect(Collectors.toList());
     }
 
@@ -325,6 +303,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+
     public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDateTime, Long> postCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
@@ -340,9 +319,6 @@ public class PostServiceImpl implements PostService {
         System.out.println("Post Count Map: " + postCountMap);
         return postCountMap;
     }
-
-
-
 
     @Override
     public boolean userCanToggleHidden(Long postId, String username) {
@@ -361,31 +337,37 @@ public class PostServiceImpl implements PostService {
 
         User user = post.getUser(); // lấy user từ post
 
+        // Giả sử InspiredBy, Talent, Genre là các đối tượng có mối quan hệ với User
+        List<String> inspiredByUserNames = user.getInspiredBy().stream()
+                .map(inspiredBy -> inspiredBy.getName()) // Lấy 'name' từ đối tượng InspiredBy
+                .collect(Collectors.toList());
+
+        List<String> talentUserNames = user.getTalent().stream()
+                .map(talent -> talent.getName()) // Lấy 'name' từ đối tượng Talent
+                .collect(Collectors.toList());
+
+        List<String> genreUserNames = user.getGenre().stream()
+                .map(genre -> genre.getName()) // Lấy 'name' từ đối tượng Genre
+                .collect(Collectors.toList());
         return new UserInfoDto(
                 user.getId(),
                 user.getEmail(),
                 user.getUserName(),
                 user.getUserInformation().getAvatar(),
-                user.getCreateDate().atStartOfDay()
+                user.getCreateDate().atStartOfDay(),
+                user.getFollowers().size(),
+                user.getFollowing().size(),
+                user.getOrderList().size(),
+                user.getAlbums().size(),
+                user.getTracks().size(),
+                inspiredByUserNames,
+                talentUserNames,
+                genreUserNames
         );
     }
 
     @Override
-    public List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate) {
-        LocalDateTime startDateTime = startDate.atStartOfDay();
-        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
-        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post);
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
-                    return postDto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PostDto> findAllPosts() {
+    public List<PostDto> findAllPostsUser() {
         List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
         return posts.stream()
                 .map(post -> {
@@ -397,17 +379,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> findPostsBySpecificDate(LocalDate specificDate) {
+    public Page<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        Page<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime, pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
+    }
+
+    @Override
+    public Page<PostDto> findAllPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
+    }
+
+    @Override
+    public Page<PostDto> findPostsBySpecificDate(LocalDate specificDate, Pageable pageable) {
         LocalDateTime startDateTime = specificDate.atStartOfDay();
         LocalDateTime endDateTime = specificDate.atTime(23, 59, 59);
-        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post);
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
-                    return postDto;
-                })
-                .collect(Collectors.toList());
+        Page<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime, pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
     }
 
 }

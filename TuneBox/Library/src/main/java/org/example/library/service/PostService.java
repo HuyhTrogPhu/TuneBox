@@ -7,6 +7,8 @@ import org.example.library.dto.ReportDto;
 import org.example.library.dto.UserInfoDto;
 import org.example.library.model.Post;
 //import org.example.library.dto.PostReportDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,7 +21,6 @@ public interface PostService {
 
     PostDto savePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
-//    PostDto getPostById(Long id);
 
     List<PostDto> getAllPosts(Long currentUserId);
 
@@ -27,7 +28,7 @@ public interface PostService {
 
     List<PostDto> getPostsByUserId(Long userId, String currentUsername);
 
-    public PostDto getPostById(Long PostId);
+//    public PostDto getPostById(Long PostId);
 
     PostDto updatePost(PostDto postDto, MultipartFile[] images, Long userId) throws IOException;
 
@@ -55,7 +56,6 @@ public interface PostService {
 //    PostDto getPostByPostId(Long postId);
 
 
-    List<PostDto> findAllPosts();
 
     List<PostDto> findNewPosts(); // Phương thức lấy bài mới
 
@@ -66,18 +66,20 @@ public interface PostService {
     List<PostDto> searchPostsByKeyword(String keyword);
 
     boolean userCanToggleHidden(Long postId, String username);
+    List<PostDto> findAllPostsUser();
 
 //    PostDto createPost(PostDto postDto);
  Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate);
-
-    List<ReportDto> getReportedPosts(); // Lấy danh sách các bài viết bị báo cáo
 
 //    List<PostReportDto> findAllReports(); // Phương thức lấy danh sách báo cáo
 
     UserInfoDto getSearchInfo(Long postId);
 
-    List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate);
+    Page<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable);
+    Page<PostDto> findAllPosts(Pageable pageable);
+    Page<PostDto> findPostsBySpecificDate(LocalDate specificDate, Pageable pageable);
 
+    // for share post to chat
+    PostDto getPostById(Long id);
 
-    List<PostDto> findPostsBySpecificDate(LocalDate specificDate);
 }

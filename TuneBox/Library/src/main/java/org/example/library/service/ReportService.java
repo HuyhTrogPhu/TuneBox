@@ -2,6 +2,8 @@ package org.example.library.service;
 
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,11 +28,9 @@ public interface ReportService {
 
 //    Report2Dto dismissReport(Long reportId, String reason);
 
-    List<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate);
-
-    List<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate);
-
-    List<Report2Dto> getAllPendingReports();
+    Page<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable);
+    Page<Report2Dto> getAllPendingReports(Pageable pageable);
+    Page<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate, Pageable pageable);
 
     List<Report2Dto> dismissAllReports(Long postId, String reason);
 }
