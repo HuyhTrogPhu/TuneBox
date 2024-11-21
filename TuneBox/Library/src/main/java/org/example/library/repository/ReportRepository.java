@@ -69,5 +69,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
     Page<Report> findAllReportsWithPost(Pageable pageable);
 
-
+    List<Report>findAllByTrackId(Long trackId);
+    List<Report>findAllByAlbumId(Long albumId);
 }

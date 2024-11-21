@@ -28,6 +28,8 @@ public interface ReportService {
     Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable);
     Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable);
      ReportDtoSocialAdmin findById(Long id);
+    List<ReportDtoSocialAdmin> findByTrackId(Long id);
+    List<ReportDtoSocialAdmin> findByAlbumId(Long id);
     void restorePost(Long reportId);
 
 //    Report2Dto dismissReport(Long reportId, String reason);

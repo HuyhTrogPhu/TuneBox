@@ -110,6 +110,9 @@ public interface UserService {
      long countUser();
 
     UserSocialAdminDto findById(Long userId);
+
+
+
     List<User> findByReportTrue();
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 

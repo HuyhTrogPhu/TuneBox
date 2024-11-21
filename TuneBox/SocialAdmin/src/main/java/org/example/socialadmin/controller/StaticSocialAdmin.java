@@ -536,6 +536,41 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         }
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/getReportByTrack/{trackId}")
+    public ResponseEntity<?> getReportByTrackId(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size,
+                                                @PathVariable("trackId") Long trackId){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findByTrackId(trackId));
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getReportByAlbum/{AlbumId}")
+    public ResponseEntity<?> getReportByAlbumId(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size,
+                                                @PathVariable("AlbumId") Long AlbumId){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findByAlbumId(AlbumId));
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
     @GetMapping("/getAlbumReport")
     public ResponseEntity<?> getAlbumReport(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size) {
@@ -760,7 +795,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     }
     //ban theo rp ID
     @PutMapping("/ApproveRP/{id}")
-    public ResponseEntity<?> ApproveRPTrack(@PathVariable("id") Long Id){
+    public ResponseEntity<?> ApproveRP(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
             response.put("status", true);
@@ -776,7 +811,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
 
     //ban theo rp ID
     @PutMapping("/DeniedRP/{id}")
-    public ResponseEntity<?> DeniedRPTrack(@PathVariable("id") Long Id){
+    public ResponseEntity<?> DeniedRP(@PathVariable("id") Long Id){
         Map<String, Object> response = new HashMap<>();
         try {
             response.put("status", true);
@@ -805,6 +840,9 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         }
         return ResponseEntity.ok(response);
     }
+
+
+
 // load for table
 //user
 @GetMapping("/getUserToTable/{startDate}/{endDate}")
