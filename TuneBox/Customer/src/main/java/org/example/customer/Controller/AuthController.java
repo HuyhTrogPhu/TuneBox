@@ -51,11 +51,11 @@ public class AuthController {
                 response.put("userExists", true);  // Đã có tài khoản
             } else {
                 // Nếu người dùng chưa có, tạo mới tài khoản
-                User newUser = (User) userService.createUser(email);
-                String token = jwtUtil.generateToken(newUser.getEmail(), "USER");
+
+                String token = jwtUtil.generateToken(email, "USER");
 
                 response.put("token", token);
-                response.put("userId", newUser.getId());
+
                 response.put("userExists", false);  // Chưa có tài khoản
             }
 

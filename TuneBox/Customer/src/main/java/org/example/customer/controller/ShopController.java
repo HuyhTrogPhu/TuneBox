@@ -29,6 +29,21 @@ public class ShopController {
     @Autowired
     private InstrumentService instrumentService;
 
+
+    @GetMapping("/instruments/search")
+    public ResponseEntity<List<InstrumentDto>> searchInstruments(@RequestParam("keyword") String keyword) {
+        List<InstrumentDto> instrumentDtos = instrumentService.searchInstruments(keyword);
+
+        // In thông tin các InstrumentDto tìm được ra console
+        System.out.println("Instruments found: ");
+        for (InstrumentDto instrumentDto : instrumentDtos) {
+            System.out.println(instrumentDto);
+        }
+
+        return ResponseEntity.ok(instrumentDtos);
+    }
+
+
     @GetMapping("/categories")
     public ResponseEntity<List<CategoryDto>> getCategories() {
         List<CategoryDto> list = categoryService.getAllCategory();
