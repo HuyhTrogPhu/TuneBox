@@ -321,7 +321,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount
+                    commentCount,
+                    user.getStatus()
                     //   listReport
             );
             userDtos.add(userDto);
@@ -668,7 +669,8 @@ public class UserServiceImpl implements UserService {
                 odersCount,
                 user.getUserInformation(),
                 likeCount,
-                commentCount
+                commentCount,
+                user.getStatus()
                 //           listReport
         );
 
@@ -732,7 +734,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount
+                    commentCount,
+                    user.getStatus()
                     //                 listReport
             );
             userDtos.add(userDto);
