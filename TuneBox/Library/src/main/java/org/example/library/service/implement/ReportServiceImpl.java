@@ -137,6 +137,11 @@ public class ReportServiceImpl implements ReportService {
         return reportMapper.toReport2Dto(report);
     }
 
+    @Override
+    public Report2Dto dismissReport(Long reportId, String reason) {
+        return null;
+    }
+
 
     @Override
     public List<ReportDto> getAllReports() {
@@ -144,6 +149,11 @@ public class ReportServiceImpl implements ReportService {
         return reports.stream()
                 .map(reportMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Report2Dto resolveReport(Long reportId, boolean hidePost) {
+        return null;
     }
 
     @Override
@@ -406,5 +416,10 @@ return new ReportDtoSocialAdmin(
         rp.getType(),
         rp.getReason()
 );
+    }
+
+    @Override
+    public void restorePost(Long reportId) {
+
     }
 }
