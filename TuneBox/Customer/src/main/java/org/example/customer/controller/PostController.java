@@ -3,7 +3,6 @@ package org.example.customer.controller;
 import org.example.library.dto.PostDto;
 import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
-import org.example.library.repository.UserRepository;
 import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
 import org.example.library.service.UserService;
@@ -181,8 +180,15 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Nếu không tìm thấy bài viết
         }
 
+        // Kiểm tra xem bài viết có bị khóa bởi admin hay không
+        Post post = postService.findPostById(postId);
+        if (post.isAdminHidden() || post.isAdminPermanentlyHidden()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Nếu bài viết bị khóa, trả về 403 Forbidden
+        }
+
         return new ResponseEntity<>(postDto, HttpStatus.OK); // Trả về bài viết với trạng thái 200 OK
     }
+
 
     // ẩn bài viết
     @PutMapping("/{postId}/toggle-visibility")
@@ -194,6 +200,11 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về null nếu bài viết không tồn tại
         }
 
+        // Kiểm tra nếu bài viết đã bị khóa bởi admin
+        if (post.isAdminPermanentlyHidden()) {
+            throw new IllegalStateException("Post is permanently hidden by admin");
+        }
+
         // Kiểm tra quyền truy cập
         if (!postService.userCanToggleHidden(postId, principal.getName())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Trả về null nếu không có quyền
@@ -203,12 +214,10 @@ public class PostController {
         boolean newVisibility = !post.isHidden();
         post.setHidden(newVisibility);
         postService.save(post); // Lưu lại thay đổi
-
         Map<String, Object> response = new HashMap<>();
         response.put("message", newVisibility ? "Bài viết đã được ẩn." : "Bài viết đã được hiện.");
         response.put("isHidden", newVisibility);
         return ResponseEntity.ok(response);
     }
-
 
 }

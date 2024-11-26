@@ -5,6 +5,8 @@ import org.example.library.model.Post;
 import org.example.library.repository.PostAdminRepository;
 import org.example.library.service.PostServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -21,11 +23,40 @@ public class PostServiceAdminImpl implements PostServiceAdmin {
     @Autowired
     private PostAdminRepository postAdminRepository;
 
+    private static final int TOP_POSTS_LIMIT = 5;
+
+
+    private PostAdminDto convertToDto(Post post) {
+        return new PostAdminDto(
+                post.getId(),
+                post.getContent(),
+                post.getUser().getUserName(),
+                post.getCreatedAt(),
+                post.getLikes().size(),
+                post.getComments().size(),
+                post.getDescription(),
+                post.isHidden()
+        );
+    }
+
     @Override
     public List<PostAdminDto> getTopPostsByInteractions() {
-        List<Post> posts = postAdminRepository.findTopPostsByInteractions();
-        return posts.stream().map(this::convertToDto).collect(Collectors.toList());
+        // Lấy ngày bắt đầu của tháng hiện tại
+        LocalDateTime startOfMonth = LocalDate.now()
+                .withDayOfMonth(1)
+                .atStartOfDay();
+        // Sử dụng Pageable để giới hạn kết quả trả về
+        Pageable topFive = PageRequest.of(0, TOP_POSTS_LIMIT);
+
+        // Lấy top 5 bài viết từ repository
+        List<Post> posts = postAdminRepository.findTopPostsByInteractions(startOfMonth, topFive);
+
+        // Chuyển đổi các bài viết thành DTO và trả về
+        return posts.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public List<PostAdminDto> findPostsWithImages() {
@@ -286,18 +317,7 @@ public class PostServiceAdminImpl implements PostServiceAdmin {
         return (double) totalInteractions / postAdminRepository.count() * 100;
     }
 
-    private PostAdminDto convertToDto(Post post) {
-        return new PostAdminDto(
-                post.getId(),
-                post.getContent(),
-                post.getUser().getUserName(),
-                post.getCreatedAt(),
-                post.getLikes().size(),
-                post.getComments().size(),
-                post.getDescription(),
-                post.isHidden()
-        );
-    }
+
     // Thống kê theo ngày
     public List<PostStatisticsResponseDto> getTopPostsByDay(LocalDate date, String type) {
         LocalDateTime startOfDay = date.atStartOfDay();

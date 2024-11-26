@@ -51,11 +51,11 @@ public class SendInstrumentServiceImpl implements SendInstrumentService {
         // Lưu tin nhắn vào cơ sở dữ liệu
         try {
             Message savedMessage = messageService.saveMessage(message);
-            logger.info("Saved album message with ID: {} from sender ID: {} to receiver ID: {}",
+            logger.info("Saved instrument message with ID: {} from sender ID: {} to receiver ID: {}",
                     savedMessage.getId(), senderId, receiverId);
         } catch (Exception e) {
-            logger.error("Failed to save album message: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to send album message");
+            logger.error("Failed to save instrument message: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to send instrument message");
         }
     }
 }

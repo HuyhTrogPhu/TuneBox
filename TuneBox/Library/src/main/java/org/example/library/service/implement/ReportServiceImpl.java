@@ -2,6 +2,7 @@ package org.example.library.service.implement;
 
 import org.example.library.Exception.ResourceNotFoundException;
 import org.example.library.dto.*;
+import org.example.library.mapper.PostMapper;
 import org.example.library.mapper.ReportMapper;
 import org.example.library.model.*;
 import org.example.library.model_enum.ReportStatus;
@@ -9,10 +10,15 @@ import org.example.library.repository.*;
 import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
 import org.example.library.service.ReportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -21,9 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +61,8 @@ public class ReportServiceImpl implements ReportService {
     private SimpMessagingTemplate messagingTemplate;
     @Autowired
     private NotificationServiceImpl notificationServiceImpl;
+
+    private static final Logger log = LoggerFactory.getLogger(ReportServiceImpl.class);
 
 
     @Override
@@ -142,47 +148,70 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate) {
-        List<Report> pendingReports = reportRepository.findByStatusAndDateRange(
+    public Page<Report2Dto> getPendingReportsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndDateRange(
                 ReportStatus.PENDING,
                 startDate,
-                endDate
+                endDate,
+                pageable
         );
-        return mapReportsToDto(pendingReports);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
     }
-
-
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate) {
-        List<Report> pendingReports = reportRepository.findByStatusAndSpecificDate(
+    public Page<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate, Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndSpecificDate(
                 ReportStatus.PENDING,
-                specificDate
+                specificDate,
+                pageable
         );
-        return mapReportsToDto(pendingReports);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Report2Dto> getAllPendingReports() {
-        List<Report> pendingReports = reportRepository.findByStatusAndType(ReportStatus.PENDING, "post");
-        return mapReportsToDto(pendingReports);
+    public Page<Report2Dto> getAllPendingReports(Pageable pageable) {
+        Page<Report> pendingReports = reportRepository.findByStatusAndType(ReportStatus.PENDING, "post", pageable);
+        List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
+        return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
+    }
+
+
+
+    private Report2Dto mapReportToDto(Report report) {
+        Report2Dto dto = reportMapper.toReport2Dto(report);
+
+        dto.setReason(report.getReason() != null ? report.getReason() : "");
+        dto.setStatus(report.getStatus());
+        dto.setCreateDate(report.getCreateDate() != null ? report.getCreateDate() : LocalDate.now());
+        dto.setDescription(report.getDescription() != null ? report.getDescription() : "");
+
+        return dto;
     }
 
 
 
     private List<Report2Dto> mapReportsToDto(List<Report> reports) {
+        // Nhóm các báo cáo theo bài viết (post)
         Map<Long, List<Report>> groupedReports = reports.stream()
                 .collect(Collectors.groupingBy(report -> report.getPost().getId()));
 
         List<Report2Dto> reportDtos = new ArrayList<>();
 
+        // Lặp qua các nhóm báo cáo cho mỗi bài viết
         for (Map.Entry<Long, List<Report>> entry : groupedReports.entrySet()) {
             List<Report> reportsForPost = entry.getValue();
+
+            // Lấy báo cáo đại diện cho bài viết
             Report representativeReport = reportsForPost.get(0);
+
+            // Tạo DTO cho báo cáo
             Report2Dto dto = reportMapper.toReport2Dto(representativeReport);
 
+            // Tạo danh sách chi tiết báo cáo từ các báo cáo liên quan đến bài viết này
             List<ReportDetailDto> details = reportsForPost.stream()
                     .map(report -> new ReportDetailDto(
                             report.getId(),
@@ -192,112 +221,78 @@ public class ReportServiceImpl implements ReportService {
                     ))
                     .collect(Collectors.toList());
 
+            // Thiết lập danh sách chi tiết báo cáo
             dto.setReportDetails(details);
+
+            // Cập nhật số lượng báo cáo (số lượng báo cáo cho bài viết này)
+            dto.setReportCount(reportsForPost.size()); // Đếm số lượng báo cáo cho bài viết này
+
+            // Thêm DTO vào danh sách
             reportDtos.add(dto);
         }
 
         return reportDtos;
     }
 
-    @Override
-    @Transactional
-    public Report2Dto resolveReport(Long reportId, boolean hidePost) {
-        Report report = reportRepository.findById(reportId)
-                .filter(r -> r.getStatus() == ReportStatus.PENDING)
-                .orElseThrow(() -> new ResourceNotFoundException("Pending report not found with id: " + reportId));
-
-        Post post = report.getPost();
-        post.setHidden(hidePost);  // Ẩn bài viết nếu hidePost là true
-        postService.updateReportPost(post);  // Cập nhật bài viết
-
-        report.setStatus(ReportStatus.RESOLVED);
-        report.setResolvedAt(LocalDateTime.now());
-        report.setDescription("Report resolved at: " + LocalDateTime.now()
-                + ". Action taken: " + (hidePost ? "Post hidden" : "Post remains visible"));
-
-        Report savedReport = reportRepository.save(report);
-
-        String message = "Cảm ơn bạn đã góp phần xây dựng cộng đồng lành mạnh. Báo cáo của bạn đã được xử lý.";
-        notificationService.createNotificationForUser(report.getUser(), message, "REPORT_RESOLVED");
-
-        return reportMapper.toReport2Dto(savedReport);
-    }
-
-    @Override
-    @Transactional
-    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
-        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
-
-        if (reports.isEmpty()) {
-            throw new ResourceNotFoundException("No pending reports found for post: " + postId);
-        }
-
-        if (reason == null || reason.trim().isEmpty()) {
-            throw new IllegalArgumentException("Dismiss reason cannot be empty");
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        List<Report2Dto> dismissedReports = new ArrayList<>();
-
-        for (Report report : reports) {
-            report.setStatus(ReportStatus.DISMISSED);
-            report.setReason(reason);
-            report.setResolvedAt(now);
-            report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
-
-            Report savedReport = reportRepository.save(report);
-            dismissedReports.add(reportMapper.toReport2Dto(savedReport));
-
-            String message = "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.";
-            notificationServiceImpl.createNotificationForUser(report.getUser(), message, "REPORT_DISMISSED");
-        }
-
-        return dismissedReports;
-    }
-
+//    @Override
+//    @Transactional
+//    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
+//        // Kiểm tra post tồn tại
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
+//
+//        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
+//
+//        if (reports.isEmpty()) {
+//            throw new ResourceNotFoundException("No pending reports found for post: " + postId);
+//        }
+//
+//        if (reason == null || reason.trim().isEmpty()) {
+//            throw new IllegalArgumentException("Dismiss reason cannot be empty");
+//        }
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        List<Report2Dto> dismissedReports = new ArrayList<>();
+//
+//        // Cập nhật trạng thái post
+//        post.setAdminHidden(false); // Đảm bảo post không bị ẩn khi dismiss
+//        post.setHideReason(null);   // Clear hide reason
+//        postRepository.save(post);   // Lưu trạng thái post trước
+//
+//        // Xử lý từng report
+//        for (Report report : reports) {
+//            try {
+//                report.setStatus(ReportStatus.DISMISSED);
+//                report.setReason(reason);
+//                report.setResolvedAt(now);
+//                report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
+//
+//                Report savedReport = reportRepository.save(report);
+//                dismissedReports.add(reportMapper.toReport2Dto(savedReport));
+//
+//                // Tạo thông báo
+//                notificationServiceImpl.createNotificationForUser(
+//                        report.getUser(),
+//                        "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.",
+//                        "REPORT_DISMISSED"
+//                );
+//            } catch (Exception e) {
+//                log.error("Error processing report: " + report.getId(), e);
+//                // Continue processing other reports
+//            }
+//        }
+//
+//        return dismissedReports;
+//    }
 
     @Override
-    @Transactional
-    public void restorePost(Long postId) {
-        // Lấy tất cả các reports có cùng postId và status RESOLVED
-        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.RESOLVED);
-        if (reports.isEmpty()) {
-            throw new ResourceNotFoundException("No resolved reports found for post ID: " + postId);
-        }
-
-        // Lấy post từ report đầu tiên (vì tất cả đều refer đến cùng một post)
-        Post post = reports.get(0).getPost();
-        if (!post.isHidden()) {
-            throw new IllegalStateException("Post is already visible");
-        }
-
-        // Cập nhật post
-        post.setHidden(false);
-        postService.updateReportPost(post);
-
-        // Cập nhật tất cả các reports liên quan
-        LocalDateTime now = LocalDateTime.now();
-        for (Report report : reports) {
-            report.setStatus(ReportStatus.PENDING);
-            report.setDescription(report.getDescription() + "\nPost restored at: " + now);
-            reportRepository.save(report);
-        }
+    @Transactional(readOnly = true)
+    public List<PostDto> getAdminHiddenAndResolvedPosts() {
+        List<Post> posts = reportRepository.findAdminHiddenAndResolvedPosts(ReportStatus.RESOLVED);
+        return posts.stream()
+                .map(PostMapper::toDto)
+                .collect(Collectors.toList());
     }
-
-
-    @Override
-    public Report2Dto dismissReport(Long reportId, String reason) {
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new ResourceNotFoundException("Report not found with id: " + reportId));
-        if (report.getStatus() != ReportStatus.PENDING) {
-            throw new IllegalStateException("Cannot dismiss report. Expected status: PENDING, but was: " + report.getStatus());
-        }
-        report.setStatus(ReportStatus.DISMISSED);
-        report.setReason(reason);
-        Report savedReport = reportRepository.save(report);
-        return reportMapper.toReport2Dto(savedReport);
-    }
-
 
 
     private Report findReportById(Long reportId) {
