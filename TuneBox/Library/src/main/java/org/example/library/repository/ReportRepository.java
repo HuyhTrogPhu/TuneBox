@@ -37,9 +37,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findAll(); // Truy xuất tất cả các báo cáo
 
-
-    List<Report> findByStatus(ReportStatus status); // Phương thức này đã có
     List<Report> findByPost(Post post);
+
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
     Page<Report> findByStatusAndType(ReportStatus status, String type, Pageable pageable);
@@ -59,6 +58,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             Pageable pageable
     );
 
+    @Query("SELECT DISTINCT p FROM Post p JOIN Report r ON r.post = p WHERE p.adminHidden = true AND r.status = :status")
+    List<Post> findAdminHiddenAndResolvedPosts(@Param("status") ReportStatus status);
 
 
     @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")
@@ -72,4 +73,5 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllReportsWithPost();
 
 
+    List<Report> findByPostId(Long postId);
 }

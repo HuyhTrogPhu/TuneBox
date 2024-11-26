@@ -1,10 +1,7 @@
 package org.example.library.service;
 
 import jakarta.transaction.Transactional;
-import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReactionDto;
-import org.example.library.dto.ReportDto;
-import org.example.library.dto.UserInfoDto;
+import org.example.library.dto.*;
 import org.example.library.model.Post;
 //import org.example.library.dto.PostReportDto;
 import org.springframework.data.domain.Page;
@@ -57,7 +54,7 @@ public interface PostService {
 
 
 
-    List<PostDto> findNewPosts(); // Phương thức lấy bài mới
+    CountNewPostInDayDto findNewPosts(); // Phương thức trả về số lượng và danh sách bài viết
 
     List<PostDto> findTrendingPosts();
 
@@ -82,4 +79,12 @@ public interface PostService {
     // for share post to chat
     PostDto getPostById(Long id);
 
+    Post resolvePost(Long reportId, String reason);
+
+    Post restorePost(Long postId);
+
+    List<Report2Dto> dismissAllReports(Long postId, String reason);
+
+
+    List<Report2Dto> getPostReports(Long postId);
 }

@@ -43,6 +43,19 @@ public class Post {
     @Column(name = "is_hidden", nullable = false, columnDefinition = "boolean default false")
     private boolean hidden = false;
 
+    @Column(name = "admin_hidden", nullable = false, columnDefinition = "boolean default false")
+    private boolean adminHidden = false;
+
+    @Column(name = "admin_permanently_hidden", nullable = false, columnDefinition = "boolean default false")
+    private boolean adminPermanentlyHidden = false;
+
+    @Column
+    private String hideReason;
+
+    public boolean isVisible() {
+        return !hidden && !adminHidden && !adminPermanentlyHidden;
+    }
+
     private String description;
 
     private String category;

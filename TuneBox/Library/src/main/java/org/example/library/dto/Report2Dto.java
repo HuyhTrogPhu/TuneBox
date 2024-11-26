@@ -19,6 +19,7 @@ public class Report2Dto {
     private LocalDate createDate; // Ngày tạo báo cáo
     private ReportStatus status; // Trạng thái báo cáo
     private String description;
+    private boolean adminHidden;
     private List<ReportDetailDto> reportDetails;
 
     private int reportCount; // Đếm số lượng báo cáo (đã được khởi tạo trong mapReportsToDto)

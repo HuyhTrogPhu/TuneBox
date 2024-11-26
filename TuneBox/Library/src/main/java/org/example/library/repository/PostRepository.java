@@ -44,11 +44,19 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT COUNT(p) FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt <= :endDate")
     Long countByCreatedAtBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
 
     List<Post> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Sort sort);
 
+    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
+
     @Query("SELECT p FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt <= :endDate")
     Page<Post> findAllByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);
+
+
+    List<Post> findByUser_IdAndAdminPermanentlyHiddenFalse(Long userId);
+
+
+    List<Post> findByAdminHiddenTrue();
+
 
 }

@@ -1,7 +1,9 @@
 package org.example.library.service;
 
+import org.example.library.dto.PostDto;
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
+import org.example.library.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,13 +20,11 @@ public interface ReportService {
     List<ReportDto> getAllReports();
 
 
-    Report2Dto resolveReport(Long reportId, boolean hidePost);
 
     Report2Dto getReport2ById(Long id);
     ReportDto updateApprove(Long id);
     ReportDto updateDenied(Long id);
 
-    void restorePost(Long reportId);
 
 //    Report2Dto dismissReport(Long reportId, String reason);
 
@@ -32,5 +32,10 @@ public interface ReportService {
     Page<Report2Dto> getAllPendingReports(Pageable pageable);
     Page<Report2Dto> getPendingReportsBySpecificDate(LocalDate specificDate, Pageable pageable);
 
-    List<Report2Dto> dismissAllReports(Long postId, String reason);
+//    Report2Dto resolveReport(Long reportId, boolean hidePost, boolean fullClose);
+//    List<Report2Dto> dismissAllReports(Long postId, String reason);
+//    void restorePost(Long reportId);
+
+    List<PostDto> getAdminHiddenAndResolvedPosts();
+
 }
