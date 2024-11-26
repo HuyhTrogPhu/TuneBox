@@ -20,6 +20,7 @@ public class PostDto {
     private Set<PostImageDto> images;
     private LocalDateTime createdAt;
     private boolean hidden;
+    private boolean adminHidden;
     private String avatar;
     private long likeCount;
     private long commentCount;

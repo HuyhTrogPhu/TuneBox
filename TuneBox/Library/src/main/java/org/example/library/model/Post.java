@@ -35,12 +35,26 @@ public class Post {
     @JoinColumn(name = "user_id") // Tên cột trong bảng Post
     private User user;
 
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     private boolean edited;
 
     @Column(name = "is_hidden", nullable = false, columnDefinition = "boolean default false")
     private boolean hidden = false;
+
+    @Column(name = "admin_hidden", nullable = false, columnDefinition = "boolean default false")
+    private boolean adminHidden = false;
+
+    @Column(name = "admin_permanently_hidden", nullable = false, columnDefinition = "boolean default false")
+    private boolean adminPermanentlyHidden = false;
+
+    @Column
+    private String hideReason;
+
+    public boolean isVisible() {
+        return !hidden && !adminHidden && !adminPermanentlyHidden;
+    }
 
     private String description;
 
