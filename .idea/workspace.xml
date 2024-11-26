@@ -4,11 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="update ban user">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="ban user o bat cu dau ma user dang nam">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserSocialAdminDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserSocialAdminDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/Ban_UnbanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/Ban_UnbanController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,7 +241,10 @@
       <workItem from="1732263334829" duration="597000" />
       <workItem from="1732291540682" duration="2785000" />
       <workItem from="1732361156742" duration="5527000" />
-      <workItem from="1732376926984" duration="1836000" />
+      <workItem from="1732376926984" duration="2339000" />
+      <workItem from="1732509738714" duration="7091000" />
+      <workItem from="1732530257349" duration="629000" />
+      <workItem from="1732594898899" duration="1247000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -461,7 +470,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732369696283</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="ban user o bat cu dau ma user dang nam">
+      <option name="closed" value="true" />
+      <created>1732379269256</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1732379269256</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -502,7 +519,8 @@
     <MESSAGE value="commit" />
     <MESSAGE value="update" />
     <MESSAGE value="update ban user" />
-    <option name="LAST_COMMIT_MESSAGE" value="update ban user" />
+    <MESSAGE value="ban user o bat cu dau ma user dang nam" />
+    <option name="LAST_COMMIT_MESSAGE" value="ban user o bat cu dau ma user dang nam" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

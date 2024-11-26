@@ -154,8 +154,8 @@ public class TrackController {
 
     //    get all track
     @GetMapping("/allTrack")
-    public ResponseEntity<List<TrackDto>> getAllTracks() {
-        List<TrackDto> tracks = trackService.getAllTracks();
+    public ResponseEntity<List<TrackDto>> getAllTracks(@RequestParam Long currentUserId) {
+        List<TrackDto> tracks = trackService.getAllTracks(currentUserId);
         return ResponseEntity.ok(tracks);
     }
 

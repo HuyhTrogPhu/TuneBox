@@ -19,8 +19,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "(SELECT b.blocked.id FROM Block b WHERE b.blocker.id = :currentUserId) " +
             "AND p.user.id NOT IN " +
             "(SELECT b.blocker.id FROM Block b WHERE b.blocked.id = :currentUserId) " +
-            "AND p.hidden = false") // Thêm điều kiện này để lọc các bài viết bị ẩn
+            "AND p.hidden = false " +
+            "AND p.user.status = 'ACTIVE'") // Lọc bài viết từ người dùng có trạng thái ACTIVE
     List<Post> findPostsExcludingBlockedUsers(@Param("currentUserId") Long currentUserId);
+
 
 
     List<Post> findByCreatedAtAfter(LocalDateTime date);

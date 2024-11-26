@@ -198,8 +198,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    User findByUserName(String username);
 
-    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId) AND u.status = 'ACTIVE'")
     List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
+
 
     // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +

@@ -92,7 +92,6 @@ public class PostController {
 
       @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
-        userService.checkAccountStatus(currentUserId);
         try {
             List<PostDto> posts = postService.getAllPosts(currentUserId);
             return new ResponseEntity<>(posts, HttpStatus.OK);
