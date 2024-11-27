@@ -181,7 +181,7 @@ public class LikeController {
         return ResponseEntity.ok(liked);
     }
 
-    //    album
+//    album
     @GetMapping("/allAlbums/{userId}")
     public ResponseEntity<List<LikeDto>> getAllAlbumByUserId(@PathVariable Long userId) {
         List<LikeDto> liked = likeService.getAllAlbumByUserId(userId);
