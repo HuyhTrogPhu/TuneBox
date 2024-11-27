@@ -56,6 +56,7 @@ public class UserSocialAdminDto {
 
     private UserStatus status;
 
+
     //   private List<Report> reports;
 
 }

@@ -61,6 +61,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private FriendRepository friendRepository;
+
+    @Autowired
+    private AlbumsRepository albumsRepository;
+
     @Override
     public UserDto register(UserDto userDto, UserInformationDto userInformationDto, MultipartFile image) {
         try {
@@ -316,15 +322,18 @@ public class UserServiceImpl implements UserService {
                     user.getEmail(),
                     user.getUserName(),
                     user.getCreateDate(),
-                    user.getFollowers().size(),
                     user.getFollowing().size(),
+                    user.getFollowers().size(),
+
                     postCount,
                     trackDtos,
                     odersCount,
                     user.getUserInformation(),
+                    commentCount,
                     likeCount,
                     friendCount,
                     Albumcount,
+
                     user.getReportCount(),
                     user.getGenre().stream()
                                     .map(genre -> {
@@ -349,13 +358,8 @@ public class UserServiceImpl implements UserService {
                                 temp.setName(talent.getName());
                                 return temp;
                             })
-                            .collect(Collectors.toList()));
-
-
-                    commentCount,
-                    user.getStatus()
-                    //   listReport
-            );
+                            .collect(Collectors.toList()),
+                    user.getStatus());
             userDtos.add(userDto);
         }
         return userDtos;
@@ -695,12 +699,14 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 user.getUserName(),
                 user.getCreateDate(),
-                user.getFollowers().size(),
                 user.getFollowing().size(),
+
+                user.getFollowers().size(),
                 postCount,
                 trackDtos,
                 odersCount,
                 user.getUserInformation(),
+                commentCount,
                 likeCount,
                 friendCount,
                 Albumcount,
@@ -728,11 +734,8 @@ public class UserServiceImpl implements UserService {
                             temp.setName(talent.getName());
                             return temp;
                         })
-                        .collect(Collectors.toList()));
-                commentCount,
-                user.getStatus()
-                //           listReport
-        );
+                        .collect(Collectors.toList()),
+        user.getStatus());
 
         return userDto;
     }
@@ -796,6 +799,7 @@ public class UserServiceImpl implements UserService {
                     trackDtos,
                     odersCount,
                     user.getUserInformation(),
+                    commentCount,
                     likeCount,
                     friendCount,
                     Albumcount,
@@ -823,12 +827,10 @@ public class UserServiceImpl implements UserService {
                                 temp.setName(talent.getName());
                                 return temp;
                             })
-                            .collect(Collectors.toList()));
-
-                    commentCount,
-                    user.getStatus()
+                            .collect(Collectors.toList()),
+                    user.getStatus());
                     //                 listReport
-            );
+
             userDtos.add(userDto);
         }
 
