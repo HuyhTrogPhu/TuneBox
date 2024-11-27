@@ -44,6 +44,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
+ List<Track> findAllByStatusIsTrue();
  List<Track> findAllByCreateDateBetween(LocalDateTime startDate,LocalDateTime endDate);
  List<Track> findAllByPlaylistsId(@Param("playlistsId") long playlistId);
  List<Track> findAllByAlbumsId(@Param("playlistsId") long playlistId);

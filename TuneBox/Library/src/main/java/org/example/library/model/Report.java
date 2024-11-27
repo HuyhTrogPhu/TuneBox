@@ -38,10 +38,15 @@ public class Report {
     @JoinColumn(name = "album_id", nullable = true)
     private Albums album;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "id_reported", referencedColumnName = "user_id")
+    private User reportedUser;
 
     private String reason;
 //    private LocalDate createDate;

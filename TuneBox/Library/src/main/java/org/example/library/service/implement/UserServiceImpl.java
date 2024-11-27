@@ -13,6 +13,7 @@ import org.example.library.model_enum.UserStatus;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,7 +86,6 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDto.getPassword());
             user.setReport(false);
             user.setCreateDate(LocalDate.now());
-            user.setStatus(UserStatus.ACTIVE);
 
             // Map InspiredBy từ danh sách ID trong DTO
             Set<InspiredBy> inspiredBySet = new HashSet<>();
@@ -309,6 +309,8 @@ public class UserServiceImpl implements UserService {
             //   List<Report> listReport = new ArrayList<>(user.getReports());
             long postCount = user.getPosts().size();
             long odersCount =user.getOrderList().size();
+            long friendCount = friendRepository.countByUserId(user.getId());
+            long Albumcount = albumsRepository.countByCreatorId(user.getId());
             UserSocialAdminDto userDto = new UserSocialAdminDto(
                     user.getId(),
                     user.getEmail(),
@@ -321,6 +323,35 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
+                    friendCount,
+                    Albumcount,
+                    user.getReportCount(),
+                    user.getGenre().stream()
+                                    .map(genre -> {
+                                        Genre temp = new Genre();
+                                        temp.setId(genre.getId());
+                                        temp.setName(genre.getName());
+                                        return temp;
+                                    })
+                                    .collect(Collectors.toList()),
+                    user.getInspiredBy().stream()
+                            .map(inspiredBy -> {
+                                InspiredBy temp = new InspiredBy();
+                                temp.setId(inspiredBy.getId());
+                                temp.setName(inspiredBy.getName());
+                                return temp;
+                            })
+                            .collect(Collectors.toList()),
+                    user.getTalent().stream()
+                            .map(talent -> {
+                                Talent temp = new Talent();
+                                temp.setId(talent.getId());
+                                temp.setName(talent.getName());
+                                return temp;
+                            })
+                            .collect(Collectors.toList()));
+
+
                     commentCount,
                     user.getStatus()
                     //   listReport
@@ -656,6 +687,8 @@ public class UserServiceImpl implements UserService {
         long commentCount = commentRepository.countByUserId(user.getId());
 
         //      List<Report> listReport = new ArrayList<>(user.getReports());
+        long friendCount = friendRepository.countByUserId(user.getId());
+        long Albumcount = albumsRepository.countByCreatorId(user.getId());
 
         UserSocialAdminDto userDto = new UserSocialAdminDto(
                 user.getId(),
@@ -669,6 +702,33 @@ public class UserServiceImpl implements UserService {
                 odersCount,
                 user.getUserInformation(),
                 likeCount,
+                friendCount,
+                Albumcount,
+                user.getReportCount(),
+                user.getGenre().stream()
+                        .map(genre -> {
+                            Genre temp = new Genre();
+                            temp.setId(genre.getId());
+                            temp.setName(genre.getName());
+                            return temp;
+                        })
+                        .collect(Collectors.toList()),
+                user.getInspiredBy().stream()
+                        .map(inspiredBy -> {
+                            InspiredBy temp = new InspiredBy();
+                            temp.setId(inspiredBy.getId());
+                            temp.setName(inspiredBy.getName());
+                            return temp;
+                        })
+                        .collect(Collectors.toList()),
+                user.getTalent().stream()
+                        .map(talent -> {
+                            Talent temp = new Talent();
+                            temp.setId(talent.getId());
+                            temp.setName(talent.getName());
+                            return temp;
+                        })
+                        .collect(Collectors.toList()));
                 commentCount,
                 user.getStatus()
                 //           listReport
@@ -722,6 +782,9 @@ public class UserServiceImpl implements UserService {
  //           List<Report> listReport = new ArrayList<>(user.getReports());
             long postCount = user.getPosts().size();
             long odersCount =user.getOrderList().size();
+            long friendCount = friendRepository.countByUserId(user.getId());
+            long Albumcount = albumsRepository.countByCreatorId(user.getId());
+
             UserSocialAdminDto userDto = new UserSocialAdminDto(
                     user.getId(),
                     user.getEmail(),
@@ -734,6 +797,34 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
+                    friendCount,
+                    Albumcount,
+                    user.getReportCount(),
+                    user.getGenre().stream()
+                            .map(genre -> {
+                                Genre temp = new Genre();
+                                temp.setId(genre.getId());
+                                temp.setName(genre.getName());
+                                return temp;
+                            })
+                            .collect(Collectors.toList()),
+                    user.getInspiredBy().stream()
+                            .map(inspiredBy -> {
+                                InspiredBy temp = new InspiredBy();
+                                temp.setId(inspiredBy.getId());
+                                temp.setName(inspiredBy.getName());
+                                return temp;
+                            })
+                            .collect(Collectors.toList()),
+                    user.getTalent().stream()
+                            .map(talent -> {
+                                Talent temp = new Talent();
+                                temp.setId(talent.getId());
+                                temp.setName(talent.getName());
+                                return temp;
+                            })
+                            .collect(Collectors.toList()));
+
                     commentCount,
                     user.getStatus()
                     //                 listReport
