@@ -23,8 +23,8 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class PostAdminController {
 
-    @Autowired
-    private PostService postService; // Tiêm PostService
+   @Autowired
+   private PostService postService;
 
     //search all bai viet
     @GetMapping

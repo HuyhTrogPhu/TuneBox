@@ -3,6 +3,8 @@ package org.example.library.repository;
 import org.example.library.model.Post;
 import org.example.library.model.Report;
 import org.example.library.model_enum.ReportStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -34,9 +36,14 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     boolean existsByUserIdAndAlbumId(Long userId, Long albumId);
 
     List<Report> findAll(); // Truy xuất tất cả các báo cáo
+
+
     List<Report> findByStatus(ReportStatus status); // Phương thức này đã có
     List<Report> findByPost(Post post);
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
+
+    List<Report> findByStatusAndType(ReportStatus status, String type);
+
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
     List<Report> findByStatusAndDateRange(
@@ -53,14 +60,14 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
 
     @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")
-    List<Report> findAllReportsWithTracks();
+    Page<Report> findAllReportsWithTracks(Pageable pageable);
 
     @Query("SELECT r FROM Report r JOIN r.album t WHERE t IS NOT NULL")
-    List<Report> findAllReportsWithAlbum();
+    Page<Report> findAllReportsWithAlbum(Pageable pageable);
 
 
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
-    List<Report> findAllReportsWithPost();
+    Page<Report> findAllReportsWithPost(Pageable pageable);
 
 
 }

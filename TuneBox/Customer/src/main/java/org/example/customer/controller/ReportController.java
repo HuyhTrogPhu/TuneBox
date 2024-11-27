@@ -25,9 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
@@ -116,6 +113,7 @@ public class ReportController {
             }
             return ResponseEntity.ok(pendingReports);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Error fetching pending reports: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
