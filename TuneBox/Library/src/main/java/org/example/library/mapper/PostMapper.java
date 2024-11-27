@@ -12,6 +12,7 @@ public class PostMapper {
         PostDto dto = new PostDto();
         dto.setId(post.getId());
         dto.setHidden(post.isHidden());
+        dto.setAdminHidden(post.isAdminHidden());
         dto.setContent(post.getContent());
         dto.setUserId(post.getUser() != null ? post.getUser().getId() : null);
         dto.setAvatar(post.getUser().getUserInformation().getAvatar());

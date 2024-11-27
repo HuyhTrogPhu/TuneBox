@@ -4,6 +4,7 @@ import org.example.library.dto.*;
 import org.example.library.service.PostServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,22 @@ public class StatisticalPostController {
     @Autowired
     private PostServiceAdmin postServiceAdmin;
 
+    // Get top trending posts
+    @GetMapping("/trending-posts")
+    public ResponseEntity<?> getTrendingPosts() {
+        try {
+            List<PostAdminDto> posts = postServiceAdmin.getTopPostsByInteractions();
+            if (posts.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching trending posts: " + e.getMessage());
+        }
+    }
+
     // Get current statistics
     @GetMapping("/current-statistics")
     public ResponseEntity<?> getCurrentStatistics() {
@@ -36,17 +53,7 @@ public class StatisticalPostController {
         }
     }
 
-    // Get top trending posts
-    @GetMapping("/trending-posts")
-    public ResponseEntity<?> getTrendingPosts() {
-        try {
-            List<PostAdminDto> posts = postServiceAdmin.getTopPostsByInteractions();
-            return ResponseEntity.ok(posts);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-    }
+
 
     // Get post engagement statistics
     @GetMapping("/engagement-stats")

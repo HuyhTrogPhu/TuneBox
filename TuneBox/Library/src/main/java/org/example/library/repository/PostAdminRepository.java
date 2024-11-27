@@ -3,6 +3,7 @@ package org.example.library.repository;
 import org.example.library.dto.PostEngagementDto;
 import org.example.library.dto.UserInteractionDto;
 import org.example.library.model.Post;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,16 +17,12 @@ import java.util.Map;
 @Repository
 public interface PostAdminRepository extends JpaRepository<Post, String> {
 
-    @Query(nativeQuery = true, value =
-            "SELECT p.*, " +
-                    "(SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) as like_count, " +
-                    "(SELECT COUNT(*) FROM comment c WHERE c.post_id = p.id) as comment_count, " +
-                    "((SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id) + " +
-                    "(SELECT COUNT(*) FROM comment c WHERE c.post_id = p.id)) as interaction_count " +
-                    "FROM post p " +
-                    "HAVING interaction_count > 5 " +
-                    "ORDER BY interaction_count DESC")
-    List<Post> findTopPostsByInteractions();
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.createdAt >= :startDate " +
+            "AND p.hidden = false " +
+            "ORDER BY (SIZE(p.likes) + SIZE(p.comments)) DESC")
+    List<Post> findTopPostsByInteractions(@Param("startDate") LocalDateTime startDate, Pageable pageable);
+
 
     @Query("SELECT p FROM Post p WHERE SIZE(p.images) > 0")
     List<Post> findPostsWithImages();
