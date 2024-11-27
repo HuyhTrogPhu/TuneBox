@@ -312,7 +312,7 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public  List<TrackDto> getAllTracks() {
-        List<Track> tracks = trackRepository.findAllByStatusIsTrue();
+        List<Track> tracks = trackRepository.findAll();
         return tracks.stream().map(TrackMapper::mapperTrackDto).collect(Collectors.toList());
     }
 

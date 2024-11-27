@@ -15,8 +15,8 @@ public class ReportDto {
     private Long postId; // ID của bài post bị báo cáo
     private Long trackId; // ID của track
     private Long albumId; // ID của album
-//    private Post postId; // ID của bài post bị báo cáo
     private Long userId; // ID của người dùng thực hiện báo cáo
+    private Long reportedId; // ID của người bị báo cáo
     private String reason; // Lý do báo cáo
     private LocalDate createDate; // Ngày tạo báo cáo
     private ReportStatus status; // Trạng thái báo cáo

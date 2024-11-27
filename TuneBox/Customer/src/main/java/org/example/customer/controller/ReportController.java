@@ -71,7 +71,7 @@ public class ReportController {
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-        @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);
         return ResponseEntity.ok(reportDto);

@@ -45,10 +45,14 @@ public class UserSocialAdminDto {
 
     private long AlbumCount;
 
+    private long reportCount;
+
     private List<Genre> genre;
 
     private List<InspiredBy> inspiredBy;
 
     private List<Talent> talent;
+
+
 
 }

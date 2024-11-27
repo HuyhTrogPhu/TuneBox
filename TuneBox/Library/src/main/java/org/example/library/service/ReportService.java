@@ -23,13 +23,19 @@ public interface ReportService {
 
     Report2Dto getReport2ById(Long id);
     ReportDto updateApprove(Long id);
+    List<ReportDto> updateApproveTrackId(Long id);
+    List<ReportDto> updateApproveAlbumId(Long id);
     ReportDto updateDenied(Long id);
+    List<ReportDto> updateDeniedTrackId(Long id);
+    List<ReportDto> updateDeniedAlbumId(Long id);
     Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable);
     Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable);
     Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable);
+    Page<ReportDtoSocialAdmin> findAllReportsWithUser(Pageable pageable);
      ReportDtoSocialAdmin findById(Long id);
     List<ReportDtoSocialAdmin> findByTrackId(Long id);
     List<ReportDtoSocialAdmin> findByAlbumId(Long id);
+    List<ReportDtoSocialAdmin> findByReportedId(Long id);
     void restorePost(Long reportId);
 
 //    Report2Dto dismissReport(Long reportId, String reason);

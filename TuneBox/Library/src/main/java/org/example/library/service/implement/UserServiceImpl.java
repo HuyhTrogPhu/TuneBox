@@ -331,6 +331,7 @@ public class UserServiceImpl implements UserService {
                     commentCount,
                     friendCount,
                     Albumcount,
+                    user.getReportCount(),
                     user.getGenre().stream()
                                     .map(genre -> {
                                         Genre temp = new Genre();
@@ -706,6 +707,7 @@ public class UserServiceImpl implements UserService {
                 commentCount,
                 friendCount,
                 Albumcount,
+                user.getReportCount(),
                 user.getGenre().stream()
                         .map(genre -> {
                             Genre temp = new Genre();
@@ -791,8 +793,8 @@ public class UserServiceImpl implements UserService {
                     likeCount,
                     commentCount,
                     friendCount,
-                    Albumcount
-                    ,
+                    Albumcount,
+                    user.getReportCount(),
                     user.getGenre().stream()
                             .map(genre -> {
                                 Genre temp = new Genre();

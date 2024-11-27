@@ -111,6 +111,10 @@ import java.util.Set;
     @JsonManagedReference
     private Set<Post> posts; // Thuộc tính này sẽ đại diện cho các bài viết của người dùng
 
+    @Column(name = "report_count", nullable = false)
+    private int reportCount = 0;
+
+
     public User(Long blockerId) {
         this.id = blockerId;
     }

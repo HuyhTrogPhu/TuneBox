@@ -554,6 +554,45 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getUserReport")
+    public ResponseEntity<?> getUserReport(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size)
+
+    {
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithUser(pageable);
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportPage.getContent());
+            response.put("totalPages", reportPage.getTotalPages());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getReportByReported/{ReportedId}")
+    public ResponseEntity<?> getReportByReportedId(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "10") int size,
+                                                @PathVariable("ReportedId") Long ReportedId){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findByReportedId(ReportedId));
+
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/getReportByAlbum/{AlbumId}")
     public ResponseEntity<?> getReportByAlbumId(@RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "10") int size,
@@ -808,6 +847,34 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
         }
         return ResponseEntity.ok(response);
     }
+    @PutMapping("/ApproveRPTrack/{id}")
+    public ResponseEntity<?> ApproveRPTrack(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateApproveTrackId(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/ApproveRPAlbum/{id}")
+    public ResponseEntity<?> ApproveRPAlbum(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateApproveAlbumId(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
 
     //ban theo rp ID
     @PutMapping("/DeniedRP/{id}")
@@ -817,6 +884,34 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data",reportService.updateDenied(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/DeniedRPTrack/{id}")
+    public ResponseEntity<?> DeniedRPTrack(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateDeniedTrackId(Id));
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/DeniedRPAlbum/{id}")
+    public ResponseEntity<?> DeniedRPAlbum(@PathVariable("id") Long Id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data",reportService.updateDeniedAlbumId(Id));
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
