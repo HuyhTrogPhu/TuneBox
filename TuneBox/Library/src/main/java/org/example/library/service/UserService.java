@@ -4,8 +4,6 @@ package org.example.library.service;
 import jakarta.transaction.Transactional;
 import org.example.library.dto.*;
 import org.example.library.model.User;
-import org.example.library.model.UserInformation;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -110,6 +108,9 @@ public interface UserService {
      long countUser();
 
     UserSocialAdminDto findById(Long userId);
+
+    Optional<User> findByIdUser(Long userId);
+
     List<User> findByReportTrue();
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 
@@ -155,4 +156,10 @@ public interface UserService {
     <T> Optional<T> findByEmail(String email);
 
     Object createUser(String email);
+
+    void banUser(Long userId);
+
+    void unbanUser(Long userId);
+
+    void checkAccountStatus(Long userId);
 }

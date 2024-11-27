@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.library.model_enum.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -47,6 +48,16 @@ public class JwtFilter extends OncePerRequestFilter {
                         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                         System.out.println("User Details: " + userDetails);
 
+                        // **Kiểm tra trạng thái người dùng**
+                        if (userDetails instanceof CustomerDetail) { // Kiểm tra xem UserDetails có phải là CustomerDetail không
+                            CustomerDetail customerDetail = (CustomerDetail) userDetails;
+                            if (customerDetail.getUser().getStatus() == UserStatus.BANNED) {
+                                System.out.println("User is banned");
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tài khoản đã bị khóa.");
+                                return;
+                            }
+                        }
+
                         if (jwtUtil.validateToken(jwt, userDetails)) {
                             Collection<? extends GrantedAuthority> authorities;
                             if (isGoogleToken) {
@@ -78,3 +89,4 @@ public class JwtFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 }
+

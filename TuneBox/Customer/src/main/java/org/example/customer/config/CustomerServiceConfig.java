@@ -3,6 +3,7 @@ package org.example.customer.config;
 
 import jakarta.transaction.Transactional;
 import org.example.library.model.User;
+import org.example.library.model_enum.UserStatus;
 import org.example.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,9 +33,13 @@ public class    CustomerServiceConfig implements UserDetailsService {
         User user = userOptional.orElseThrow(() ->
                 new UsernameNotFoundException("User not found with username or email: " + username));
 
+        // Kiểm tra trạng thái tài khoản
+        if (user.getStatus() == UserStatus.BANNED) {
+            throw new RuntimeException("Account is banned");
+        }
+
         System.out.println("User found: " + user.getUserName());
         return new CustomerDetail(user);
     }
-
 
 }

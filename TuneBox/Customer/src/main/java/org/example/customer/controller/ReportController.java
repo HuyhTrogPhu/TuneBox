@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/reports")
 public class ReportController {
@@ -71,7 +74,7 @@ public class ReportController {
         ReportDto createdReport = reportService.createReport(reportDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdReport);
     }
-        @GetMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ReportDto> getReportById(@PathVariable Long id) {
         ReportDto reportDto = reportService.getReportById(id);
         return ResponseEntity.ok(reportDto);
@@ -97,78 +100,12 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<Report2Dto>> getPendingReports(
-            @RequestParam(required = false)  LocalDate startDate,
-            @RequestParam(required = false)  LocalDate endDate,
-            @RequestParam(required = false)  LocalDate specificDate) {
-        try {
-            List<Report2Dto> pendingReports;
-            if (specificDate != null) {
-                pendingReports = reportService.getPendingReportsBySpecificDate(specificDate);
-            } else if (startDate != null && endDate != null) {
-                pendingReports = reportService.getPendingReportsByDateRange(startDate, endDate);
-            } else {
-                pendingReports = reportService.getAllPendingReports();
-            }
-            return ResponseEntity.ok(pendingReports);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error fetching pending reports: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
-    @PutMapping("/{reportId}/restore")
-    public ResponseEntity<Void> restorePost(@PathVariable Long reportId) {
-        try {
-            Report2Dto reportDto = reportService.getReport2ById(reportId);
-
-            if (reportDto != null && reportDto.getPost() != null) {
-                reportService.restorePost(reportDto.getPost().getPostId());
-                return ResponseEntity.ok().build();
-            } else {
-                System.out.println("Report or Post not found for reportId: " + reportId);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-        } catch (RuntimeException e) {
-            System.out.println("Error restore report: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-    }
 
 
-    @PutMapping("/{reportId}/resolve")
-    public ResponseEntity<Report2Dto> resolveReport(
-            @PathVariable Long reportId,
-            @RequestParam boolean hidePost) {
-        try {
-            Report2Dto resolvedReport = reportService.resolveReport(reportId, hidePost);
-            return ResponseEntity.ok(resolvedReport);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
 
 
-    @PutMapping("/{postId}/dismiss")
-    public ResponseEntity<List<Report2Dto>> dismissAllReports(
-            @PathVariable Long postId,
-            @RequestParam String reason) {
-        try {
-            List<Report2Dto> dismissedReports = reportService.dismissAllReports(postId, reason);
-            return ResponseEntity.ok(dismissedReports);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+
+
+
 
 }
-
-

@@ -101,7 +101,7 @@ public class StaticSocialAdmin {
         try {
             response.put("status", true);
             response.put("message", "PostData");
-            response.put("data",postService.findAllPosts());
+            response.put("data",postService.findAllPostsUser());
         } catch (Exception e) {
             response.put("status", false);
             response.put("message", e.getMessage());

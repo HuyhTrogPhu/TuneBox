@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.library.model.Report;
 import org.example.library.model.UserInformation;
+import org.example.library.model_enum.UserStatus;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -40,6 +41,8 @@ public class UserSocialAdminDto {
     private long commentCount;
 
     private long LikeCount;
+
+    private UserStatus status;
 
     //   private List<Report> reports;
 

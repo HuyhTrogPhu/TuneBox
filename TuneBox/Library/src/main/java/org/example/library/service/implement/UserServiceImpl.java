@@ -9,10 +9,10 @@ import lombok.AllArgsConstructor;
 import org.example.library.dto.*;
 import org.example.library.mapper.UserMapper;
 import org.example.library.model.*;
+import org.example.library.model_enum.UserStatus;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,6 +85,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(userDto.getPassword());
             user.setReport(false);
             user.setCreateDate(LocalDate.now());
+            user.setStatus(UserStatus.ACTIVE);
 
             // Map InspiredBy từ danh sách ID trong DTO
             Set<InspiredBy> inspiredBySet = new HashSet<>();
@@ -320,7 +321,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount
+                    commentCount,
+                    user.getStatus()
                     //   listReport
             );
             userDtos.add(userDto);
@@ -667,11 +669,17 @@ public class UserServiceImpl implements UserService {
                 odersCount,
                 user.getUserInformation(),
                 likeCount,
-                commentCount
+                commentCount,
+                user.getStatus()
                 //           listReport
         );
 
         return userDto;
+    }
+
+    @Override
+    public Optional<User> findByIdUser(Long userId) {
+        return userRepository.findById(userId);
     }
 
 
@@ -726,7 +734,8 @@ public class UserServiceImpl implements UserService {
                     odersCount,
                     user.getUserInformation(),
                     likeCount,
-                    commentCount
+                    commentCount,
+                    user.getStatus()
                     //                 listReport
             );
             userDtos.add(userDto);
@@ -777,6 +786,44 @@ public class UserServiceImpl implements UserService {
                         "trackCount", record[1]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void banUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        user.setStatus(UserStatus.BANNED);
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void unbanUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        user.setStatus(UserStatus.ACTIVE);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void checkAccountStatus(Long userId) {
+        // Tìm người dùng theo ID
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        // Nếu người dùng không tồn tại, ném ngoại lệ
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        User user = userOptional.get();
+
+        // Kiểm tra trạng thái bị khóa (banned)
+        if (user.getStatus()==UserStatus.BANNED) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Your account has been banned. Please contact support."
+            );
+        }
     }
 
 }

@@ -57,6 +57,7 @@ public class AuthController {
                 response.put("token", token);
 
                 response.put("userExists", false);  // Chưa có tài khoản
+
             }
 
             return ResponseEntity.ok(response);

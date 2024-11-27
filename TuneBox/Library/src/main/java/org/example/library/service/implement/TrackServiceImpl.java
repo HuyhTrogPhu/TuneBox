@@ -311,8 +311,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public  List<TrackDto> getAllTracks() {
-        List<Track> tracks = trackRepository.findAll();
+    public  List<TrackDto> getAllTracks(Long currentUserId) {
+        List<Track> tracks = trackRepository.findTrackdefault(currentUserId);
         return tracks.stream().map(TrackMapper::mapperTrackDto).collect(Collectors.toList());
     }
 
