@@ -4,59 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="sửa đăng ký gg">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/UserAlreadyBannedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/UserNotBannedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/Exception/UserNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/CountNewPostInDayDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostWithReasonDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model_enum/UserStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/SendPostRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/SendPostService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendPostServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/Ban_UnbanController.java" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/ShareController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/Controller/ShareController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerConfiguration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/CustomerServiceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/config/JwtFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/NotificationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/NotificationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/TrackController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/PostDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/Report2Dto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/Report2Dto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInfoDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserInfoDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserLoginDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserSocialAdminDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/dto/UserSocialAdminDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/mapper/PostMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model_enum/ReportStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model_enum/ReportStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/FollowRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostAdminRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostAdminRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ReportRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/ReportRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/TrackRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/ReportService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/TrackService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceAdminImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceAdminImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/PostServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/ReportServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendInstrumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendInstrumentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendPlaylistServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/SendPlaylistServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/TrackServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/PostAdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/PostAdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StaticSocialAdmin.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StaticSocialAdmin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StatisticalPostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/java/org/example/socialadmin/controller/StatisticalPostController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +58,6 @@
     "Spring Boot.EcommerceAdminApplication.executor": "Run",
     "Spring Boot.LibraryApplication.executor": "Run",
     "Spring Boot.SocialAdminApplication.executor": "Run",
-    "git-widget-placeholder": "Merging XuanTruong",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/TuneBox-XuanTruong",
     "node.js.detected.package.eslint": "true",
@@ -259,6 +207,7 @@
       <workItem from="1731916831310" duration="632000" />
       <workItem from="1731917519857" duration="387000" />
       <workItem from="1731933551093" duration="5685000" />
+      <workItem from="1733116827942" duration="52000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -476,7 +425,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731908637929</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="commit">
+      <option name="closed" value="true" />
+      <created>1732719199443</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1732719199443</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -515,9 +472,9 @@
     <MESSAGE value="committ" />
     <MESSAGE value="commit merge nqtrung" />
     <MESSAGE value="edit jwwt google" />
-    <MESSAGE value="commit" />
     <MESSAGE value="sửa đăng ký gg" />
-    <option name="LAST_COMMIT_MESSAGE" value="sửa đăng ký gg" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
