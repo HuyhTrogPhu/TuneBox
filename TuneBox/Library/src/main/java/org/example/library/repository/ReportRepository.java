@@ -40,6 +40,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findByStatus(ReportStatus status); // Phương thức này đã có
     List<Report> findByPost(Post post);
+
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
     Page<Report> findByStatusAndType(ReportStatus status, String type, Pageable pageable);
@@ -88,9 +89,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllReportsWithPost();
 
 
-
+    List<Report> findByPostId(Long postId);
     List<Report>findAllByTrackId(Long trackId);
     List<Report>findAllByAlbumId(Long albumId);
     List<Report>findAllByReportedUserId(Long userId);
-    List<Report> findByPostId(Long postId);
 }

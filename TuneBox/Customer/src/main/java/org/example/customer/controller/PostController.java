@@ -5,6 +5,7 @@ import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.NotificationService;
 import org.example.library.service.PostService;
+import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,9 @@ public class PostController {
 
     @Autowired
     private LikeRepository likeRepository;
+
+    @Autowired
+    private UserService userService;
 
     public PostController(PostService postService, NotificationService notificationService) {
         this.postService = postService;
@@ -85,7 +89,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/all")
+      @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
         try {
             List<PostDto> posts = postService.getAllPosts(currentUserId);
@@ -95,6 +99,7 @@ public class PostController {
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // Phương thức cập nhật bài viết
     @PutMapping("/{id}")
@@ -139,6 +144,7 @@ public class PostController {
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+
         try {
             postService.deletePost(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -150,6 +156,9 @@ public class PostController {
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable Long userId, Principal principal) {
+
+        userService.checkAccountStatus(userId);
+
         String currentUsername = principal.getName();
         List<PostDto> posts = postService.getPostsByUserId(userId, currentUsername);
         return ResponseEntity.ok(posts);

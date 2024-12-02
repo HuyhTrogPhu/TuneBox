@@ -16,9 +16,11 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 
     int countByFollowerId(Long userId);
 
-    List<Follow> findByFollowedId(Long userId);
+    @Query("SELECT f FROM Follow f WHERE f.followed.id = :userId AND f.followed.status = 'ACTIVE'")
+    List<Follow> findByFollowedId(@Param("userId") Long userId);
 
-    List<Follow> findByFollowerId(Long userId);
+    @Query("SELECT f FROM Follow f WHERE f.follower.id = :userId AND f.follower.status = 'ACTIVE'")
+    List<Follow> findByFollowerId(@Param("userId")Long userId);
 
     // Lấy số lượng follower của một user
     @Query("SELECT COUNT(f) FROM Follow f WHERE f.followed.id = :userId")

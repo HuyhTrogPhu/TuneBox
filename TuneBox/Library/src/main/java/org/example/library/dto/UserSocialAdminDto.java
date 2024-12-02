@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.library.model_enum.UserStatus;
 import org.example.library.model.*;
 
 import java.time.LocalDate;
@@ -32,7 +33,6 @@ public class UserSocialAdminDto {
 
     private List<TrackDtoSocialAdmin> Tracks;
 
-
     private long OdersCount;
 
     private UserInformation userInformation;
@@ -54,5 +54,9 @@ public class UserSocialAdminDto {
     private List<Talent> talent;
 
 
+    private UserStatus status;
+
+
+    //   private List<Report> reports;
 
 }

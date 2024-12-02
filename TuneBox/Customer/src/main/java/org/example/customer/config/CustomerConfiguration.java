@@ -58,10 +58,12 @@ public class CustomerConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/login","/api/auth/google", "/register", "/user/**", "/api/**","/api/reports/**", "/customer/**","/api/messages/**","/ws/**","/user","/social-statistical").permitAll()
+                        .requestMatchers("/login","/api/auth/google", "/register", "/user/**", "/api/**","/api/reports/**",
+                                "/customer/**","/api/messages/**","/ws/**","/user",
+                                "/social-statistical", "/customer/shop/instruments/search").permitAll()
                         .requestMatchers("/customer/cart/**", "/api/posts/**").hasRole("Customer")
                         .requestMatchers("/e-comAdmin/**").hasRole("EcomAdmin") // Chỉ cho phép ecomadmin
-                        .requestMatchers("/socialAdmin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
+                        .requestMatchers("/socialAdmin/**","api/admin/**").hasRole("SocialAdmin") // Chỉ cho phép socialadmin
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth -> oauth

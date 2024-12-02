@@ -28,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -145,6 +144,11 @@ public class ReportServiceImpl implements ReportService {
         return reportMapper.toReport2Dto(report);
     }
 
+    @Override
+    public Report2Dto dismissReport(Long reportId, String reason) {
+        return null;
+    }
+
 
     @Override
     public List<ReportDto> getAllReports() {
@@ -152,6 +156,11 @@ public class ReportServiceImpl implements ReportService {
         return reports.stream()
                 .map(reportMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Report2Dto resolveReport(Long reportId, boolean hidePost) {
+        return null;
     }
 
     @Override
@@ -337,6 +346,19 @@ public class ReportServiceImpl implements ReportService {
 
 
 
+
+    private Report findReportById(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(() -> new ResourceNotFoundException("Report not found with id: " + reportId));
+    }
+
+    private void validateReportStatus(Report report, ReportStatus expectedStatus) {
+        if (report.getStatus() != expectedStatus) {
+            throw new IllegalStateException(
+                    "Invalid report status. Expected: " + expectedStatus + ", but was: " + report.getStatus()
+            );
+        }
+    }
 
 
     @Override
@@ -710,6 +732,34 @@ public class ReportServiceImpl implements ReportService {
                 ))
                 .collect(Collectors.toList());
         return reportDtos;
+    }
+
+    @Override
+    @Transactional
+    public void restorePost(Long postId) {
+        // Lấy tất cả các reports có cùng postId và status RESOLVED
+        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.RESOLVED);
+        if (reports.isEmpty()) {
+            throw new ResourceNotFoundException("No resolved reports found for post ID: " + postId);
+        }
+
+        // Lấy post từ report đầu tiên (vì tất cả đều refer đến cùng một post)
+        Post post = reports.get(0).getPost();
+        if (!post.isHidden()) {
+            throw new IllegalStateException("Post is already visible");
+        }
+
+        // Cập nhật post
+        post.setHidden(false);
+        postService.updateReportPost(post);
+
+        // Cập nhật tất cả các reports liên quan
+        LocalDateTime now = LocalDateTime.now();
+        for (Report report : reports) {
+            report.setStatus(ReportStatus.PENDING);
+            report.setDescription(report.getDescription() + "\nPost restored at: " + now);
+            reportRepository.save(report);
+        }
     }
 }
 

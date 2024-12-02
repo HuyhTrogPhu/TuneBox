@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.example.library.dto.*;
 import org.example.library.mapper.UserMapper;
 import org.example.library.model.*;
+import org.example.library.model_enum.UserStatus;
 import org.example.library.repository.*;
 import org.example.library.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -227,6 +228,7 @@ public class UserServiceImpl implements UserService {
         userRepository.updateEmailById(userId, newEmail);
     }
 
+
     @Override
     public void setPassword(Long userId, String newPassword) {
         userRepository.updatePasswordById(userId, newPassword);
@@ -321,16 +323,18 @@ public class UserServiceImpl implements UserService {
                     user.getEmail(),
                     user.getUserName(),
                     user.getCreateDate(),
-                    user.getFollowers().size(),
                     user.getFollowing().size(),
+                    user.getFollowers().size(),
+
                     postCount,
                     trackDtos,
                     odersCount,
                     user.getUserInformation(),
-                    likeCount,
                     commentCount,
+                    likeCount,
                     friendCount,
                     Albumcount,
+
                     user.getReportCount(),
                     user.getGenre().stream()
                                     .map(genre -> {
@@ -355,9 +359,8 @@ public class UserServiceImpl implements UserService {
                                 temp.setName(talent.getName());
                                 return temp;
                             })
-                            .collect(Collectors.toList()));
-
-
+                            .collect(Collectors.toList()),
+                    user.getStatus());
             userDtos.add(userDto);
         }
         return userDtos;
@@ -400,7 +403,13 @@ public class UserServiceImpl implements UserService {
         user.getUserInformation().setBirthDay(birthday); // Cập nhật ngày sinh
         userRepository.save(user);
     }
-
+    @Override
+    public void updatePhoneNum(Long userId, String newPhone) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.getUserInformation().setPhoneNumber(newPhone);
+        userRepository.save(user);
+    }
 
     @Override
     @Transactional
@@ -697,14 +706,15 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 user.getUserName(),
                 user.getCreateDate(),
-                user.getFollowers().size(),
                 user.getFollowing().size(),
+
+                user.getFollowers().size(),
                 postCount,
                 trackDtos,
                 odersCount,
                 user.getUserInformation(),
-                likeCount,
                 commentCount,
+                likeCount,
                 friendCount,
                 Albumcount,
                 user.getReportCount(),
@@ -731,9 +741,15 @@ public class UserServiceImpl implements UserService {
                             temp.setName(talent.getName());
                             return temp;
                         })
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList()),
+        user.getStatus());
 
         return userDto;
+    }
+
+    @Override
+    public Optional<User> findByIdUser(Long userId) {
+        return userRepository.findById(userId);
     }
 
 
@@ -790,8 +806,8 @@ public class UserServiceImpl implements UserService {
                     trackDtos,
                     odersCount,
                     user.getUserInformation(),
-                    likeCount,
                     commentCount,
+                    likeCount,
                     friendCount,
                     Albumcount,
                     user.getReportCount(),
@@ -818,7 +834,9 @@ public class UserServiceImpl implements UserService {
                                 temp.setName(talent.getName());
                                 return temp;
                             })
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toList()),
+                    user.getStatus());
+                    //                 listReport
 
             userDtos.add(userDto);
         }
@@ -868,6 +886,44 @@ public class UserServiceImpl implements UserService {
                         "trackCount", record[1]
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void banUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        user.setStatus(UserStatus.BANNED);
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void unbanUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+        user.setStatus(UserStatus.ACTIVE);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void checkAccountStatus(Long userId) {
+        // Tìm người dùng theo ID
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        // Nếu người dùng không tồn tại, ném ngoại lệ
+        if (userOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        User user = userOptional.get();
+
+        // Kiểm tra trạng thái bị khóa (banned)
+        if (user.getStatus()==UserStatus.BANNED) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "Your account has been banned. Please contact support."
+            );
+        }
     }
 
 }
