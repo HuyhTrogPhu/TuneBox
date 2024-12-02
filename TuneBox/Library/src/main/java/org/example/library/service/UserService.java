@@ -48,6 +48,8 @@ public interface UserService {
     // update email in account page
     void updateEmail(Long userId, String newEmail);
 
+    void updatePhoneNum(Long userId, String newPhone);
+
     // set password in account page
     void setPassword(Long userId, String newPassword);
 
