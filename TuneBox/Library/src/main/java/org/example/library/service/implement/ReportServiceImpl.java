@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -734,33 +735,7 @@ public class ReportServiceImpl implements ReportService {
         return reportDtos;
     }
 
-    @Override
-    @Transactional
-    public void restorePost(Long postId) {
-        // Lấy tất cả các reports có cùng postId và status RESOLVED
-        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.RESOLVED);
-        if (reports.isEmpty()) {
-            throw new ResourceNotFoundException("No resolved reports found for post ID: " + postId);
-        }
 
-        // Lấy post từ report đầu tiên (vì tất cả đều refer đến cùng một post)
-        Post post = reports.get(0).getPost();
-        if (!post.isHidden()) {
-            throw new IllegalStateException("Post is already visible");
-        }
-
-        // Cập nhật post
-        post.setHidden(false);
-        postService.updateReportPost(post);
-
-        // Cập nhật tất cả các reports liên quan
-        LocalDateTime now = LocalDateTime.now();
-        for (Report report : reports) {
-            report.setStatus(ReportStatus.PENDING);
-            report.setDescription(report.getDescription() + "\nPost restored at: " + now);
-            reportRepository.save(report);
-        }
-    }
 }
 
 
