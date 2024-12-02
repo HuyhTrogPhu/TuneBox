@@ -426,6 +426,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating birthday");
         }
     }
+    @PutMapping("/{userId}/phone")
+    public ResponseEntity <String> setPhone(@PathVariable Long userId, @RequestBody String newPhone){
+        try {
+            newPhone = newPhone.replace("\"", "").trim();
+            userService.updatePhoneNum(userId, newPhone);
+            return ResponseEntity.ok("PhoneNumber updated successfully");
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating phone number");
+        }
+    }
     @PutMapping("/{userId}/email")
     public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestBody EmailUpdateRequest emailUpdateRequest) {
         try {
@@ -436,6 +447,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
         }
     }
+
 
     @GetMapping("/not-followed/{userId}")
     public ResponseEntity<List<UserNameAvatarUsernameDto>> getUsersNotFollowed(@PathVariable Long userId) {
