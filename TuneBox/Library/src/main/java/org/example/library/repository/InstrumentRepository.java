@@ -20,6 +20,8 @@ public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
     List<Instrument> findByCategoryInsId(Long categoryId);
 
 
+    List<Instrument> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrColorContainingIgnoreCase(String keyword, String keyword2, String keyword3);
+
     //    List instrument use in shop
     @Query("select i.id, i.name from Instrument i where i.status = false")
     public List<Instrument> getSortedInstruments();

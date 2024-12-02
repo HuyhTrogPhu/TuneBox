@@ -41,8 +41,6 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
-    List<Report> findByStatusAndType(ReportStatus status, String type);
-
     Page<Report> findByStatusAndType(ReportStatus status, String type, Pageable pageable);
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
@@ -71,9 +69,15 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Page<Report> findAllReportsWithAlbum(Pageable pageable);
 
 
+    @Query("SELECT r FROM Report r JOIN r.reportedUser t WHERE t IS NOT NULL")
+    Page<Report> findAllReportsWithUser(Pageable pageable);
+
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
     Page<Report> findAllReportsWithPost(Pageable pageable);
 
 
     List<Report> findByPostId(Long postId);
+    List<Report>findAllByTrackId(Long trackId);
+    List<Report>findAllByAlbumId(Long albumId);
+    List<Report>findAllByReportedUserId(Long userId);
 }

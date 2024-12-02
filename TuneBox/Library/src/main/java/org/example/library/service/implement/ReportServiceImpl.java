@@ -78,7 +78,7 @@ public class ReportServiceImpl implements ReportService {
         return false;
     }
 
-        @Override
+    @Override
     public ReportDto createReport(ReportDto reportDto) {
         boolean reportExists = reportRepository.existsByUserIdAndType(
                 reportDto.getUserId(),
@@ -87,19 +87,17 @@ public class ReportServiceImpl implements ReportService {
                 reportDto.getAlbumId(),
                 reportDto.getType()
         );
-
         if (reportExists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Bạn đã báo cáo nội dung này rồi.");
         }
-
         Report report = reportMapper.toEntity(reportDto);
         report.setCreateDate(LocalDate.now());
         report.setStatus(ReportStatus.PENDING);
 
-        User user = userRepository.findById(reportDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
-        report.setUser(user);
 
+     User reportingUser = userRepository.findById(reportDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User không tồn tại"));
+        report.setUser(reportingUser);
         switch (reportDto.getType()) {
             case "post":
                 Post post = postRepository.findById(reportDto.getPostId())
@@ -116,11 +114,17 @@ public class ReportServiceImpl implements ReportService {
                         .orElseThrow(() -> new RuntimeException("Album không tồn tại"));
                 report.setAlbum(album);
                 break;
+            case "user":
+                User reportedUser = userRepository.findById(reportDto.getReportedId()).get();
+                report.setReportedUser(reportedUser);
+                break;
             default:
                 throw new IllegalArgumentException("Loại báo cáo không hợp lệ");
         }
-
+        // Lưu report
         Report savedReport = reportRepository.save(report);
+
+        // Trả về DTO
         return reportMapper.toDto(savedReport);
     }
 
@@ -168,6 +172,8 @@ public class ReportServiceImpl implements ReportService {
         List<Report2Dto> reportDtos = mapReportsToDto(pendingReports.getContent());
         return new PageImpl<>(reportDtos, pageable, pendingReports.getTotalElements());
     }
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -244,56 +250,7 @@ public class ReportServiceImpl implements ReportService {
         return reportDtos;
     }
 
-//    @Override
-//    @Transactional
-//    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
-//        // Kiểm tra post tồn tại
-//        Post post = postRepository.findById(postId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
-//
-//        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
-//
-//        if (reports.isEmpty()) {
-//            throw new ResourceNotFoundException("No pending reports found for post: " + postId);
-//        }
-//
-//        if (reason == null || reason.trim().isEmpty()) {
-//            throw new IllegalArgumentException("Dismiss reason cannot be empty");
-//        }
-//
-//        LocalDateTime now = LocalDateTime.now();
-//        List<Report2Dto> dismissedReports = new ArrayList<>();
-//
-//        // Cập nhật trạng thái post
-//        post.setAdminHidden(false); // Đảm bảo post không bị ẩn khi dismiss
-//        post.setHideReason(null);   // Clear hide reason
-//        postRepository.save(post);   // Lưu trạng thái post trước
-//
-//        // Xử lý từng report
-//        for (Report report : reports) {
-//            try {
-//                report.setStatus(ReportStatus.DISMISSED);
-//                report.setReason(reason);
-//                report.setResolvedAt(now);
-//                report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
-//
-//                Report savedReport = reportRepository.save(report);
-//                dismissedReports.add(reportMapper.toReport2Dto(savedReport));
-//
-//                // Tạo thông báo
-//                notificationServiceImpl.createNotificationForUser(
-//                        report.getUser(),
-//                        "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.",
-//                        "REPORT_DISMISSED"
-//                );
-//            } catch (Exception e) {
-//                log.error("Error processing report: " + report.getId(), e);
-//                // Continue processing other reports
-//            }
-//        }
-//
-//        return dismissedReports;
-//    }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -322,17 +279,83 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportDto updateApprove(Long id) {
         Report report = reportRepository.findById(id).get();
-        report.setStatus(ReportStatus.RESOLVED);
+        if (!report.getStatus().equals("RESOLVED")) {
+            report.setStatus(ReportStatus.RESOLVED);
+            if(report.getType().equals("user")){
+                User reportedUser = userRepository.findById(report.getReportedUser().getId()).get();
+                reportedUser.setReportCount(reportedUser.getReportCount() + 1);
+            }
+        }
         reportRepository.save(report);
         return reportMapper.toDto(report);
     }
+
+    @Override
+    public List<ReportDto> updateApproveTrackId(Long id) {
+        List<Report> listTrackReport = reportRepository.findAllByTrackId(id);
+        for (Report rp : listTrackReport) {
+            updateApprove(rp.getId());
+        }
+        // Chuyển đổi từng phần tử
+        return listTrackReport.stream()
+                .map(reportMapper::toDto) // Chuyển từng phần tử từ Report sang ReportDto
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDto> updateApproveAlbumId(Long id) {
+        List<Report> listTrackReport = reportRepository.findAllByAlbumId(id);
+        for (Report rp : listTrackReport) {
+            updateApprove(rp.getId());
+        }
+        // Chuyển đổi từng phần tử
+        return listTrackReport.stream()
+                .map(reportMapper::toDto) // Chuyển từng phần tử từ Report sang ReportDto
+                .collect(Collectors.toList());
+    }
+
+
+
     @Override
     public ReportDto updateDenied(Long id) {
         Report report = reportRepository.findById(id).get();
-        report.setStatus(ReportStatus.DISMISSED);
+        if (!report.getStatus().equals("DISMISSED")) {
+            report.setStatus(ReportStatus.DISMISSED);
+            if(report.getType().equals("user")){
+                User reportedUser = userRepository.findById(report.getReportedUser().getId()).get();
+                reportedUser.setReportCount(reportedUser.getReportCount() - 1);
+            }
+        }
         reportRepository.save(report);
         return reportMapper.toDto(report);
     }
+
+    @Override
+    public List<ReportDto> updateDeniedTrackId(Long id) {
+        List<Report> listTrackReport = reportRepository.findAllByTrackId(id);
+        for (Report rp : listTrackReport) {
+            updateDenied(rp.getId());
+        }
+        // Chuyển đổi từng phần tử
+        return listTrackReport.stream()
+                .map(reportMapper::toDto) // Chuyển từng phần tử từ Report sang ReportDto
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReportDto> updateDeniedAlbumId(Long id) {
+        List<Report> listTrackReport = reportRepository.findAllByTrackId(id);
+        for (Report rp : listTrackReport) {
+            updateDenied(rp.getId());
+        }
+        // Chuyển đổi từng phần tử
+        return listTrackReport.stream()
+                .map(reportMapper::toDto) // Chuyển từng phần tử từ Report sang ReportDto
+                .collect(Collectors.toList());
+    }
+
+
+
     @Override
     public Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable) {
         Page<Report> reportPage = reportRepository.findAllReportsWithTracks(pageable);  // Truyền pageable vào repository
@@ -346,6 +369,31 @@ public class ReportServiceImpl implements ReportService {
                 rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
                 rp.getUser() != null ? rp.getUser().getId() : null,
                 rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findAllReportsWithUser(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findAllReportsWithUser(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
                 rp.getStatus(),
                 rp.getResolvedAt(),
                 rp.getDescription(),
@@ -368,6 +416,8 @@ public class ReportServiceImpl implements ReportService {
                 rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
                 rp.getUser() != null ? rp.getUser().getId() : null,
                 rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
                 rp.getStatus(),
                 rp.getResolvedAt(),
                 rp.getDescription(),
@@ -389,6 +439,8 @@ public class ReportServiceImpl implements ReportService {
                 rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
                 rp.getUser() != null ? rp.getUser().getId() : null,
                 rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
                 rp.getStatus(),
                 rp.getResolvedAt(),
                 rp.getDescription(),
@@ -398,28 +450,136 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-   public ReportDtoSocialAdmin findById(Long id){
+    public ReportDtoSocialAdmin findById(Long id){
         Report rp = reportRepository.findById(id).get();
-return new ReportDtoSocialAdmin(
-        rp.getId(),
-        rp.getCreateDate(),
-        rp.getPost() != null ? rp.getPost().getId() : null,
-        rp.getTrack() != null ? rp.getTrack().getId() : null,
-        rp.getTrack() != null ? rp.getTrack().getName() : null,
-        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
-        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
-        rp.getUser() != null ? rp.getUser().getId() : null,
-        rp.getUser() != null ? rp.getUser().getUserName() : null,
-        rp.getStatus(),
-        rp.getResolvedAt(),
-        rp.getDescription(),
-        rp.getType(),
-        rp.getReason()
-);
+        return new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        );
+}
+
+    @Override
+    public List<ReportDtoSocialAdmin> findByTrackId(Long id){
+        List<Report> report = reportRepository.findAllByTrackId(id);
+        List<ReportDtoSocialAdmin> reportDtos = report.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+        return reportDtos;
     }
 
     @Override
-    public void restorePost(Long reportId) {
+    public List<ReportDtoSocialAdmin> findByAlbumId(Long id){
+        List<Report> report = reportRepository.findAllByAlbumId(id);
+        List<ReportDtoSocialAdmin> reportDtos = report.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+        return reportDtos;
+    }
 
+    @Override
+    public List<ReportDtoSocialAdmin> findByReportedId(Long id){
+        List<Report> report = reportRepository.findAllByReportedUserId(id);
+        List<ReportDtoSocialAdmin> reportDtos = report.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+        return reportDtos;
+    }
+
+    @Override
+    @Transactional
+    public void restorePost(Long postId) {
+        // Lấy tất cả các reports có cùng postId và status RESOLVED
+        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.RESOLVED);
+        if (reports.isEmpty()) {
+            throw new ResourceNotFoundException("No resolved reports found for post ID: " + postId);
+        }
+
+        // Lấy post từ report đầu tiên (vì tất cả đều refer đến cùng một post)
+        Post post = reports.get(0).getPost();
+        if (!post.isHidden()) {
+            throw new IllegalStateException("Post is already visible");
+        }
+
+        // Cập nhật post
+        post.setHidden(false);
+        postService.updateReportPost(post);
+
+        // Cập nhật tất cả các reports liên quan
+        LocalDateTime now = LocalDateTime.now();
+        for (Report report : reports) {
+            report.setStatus(ReportStatus.PENDING);
+            report.setDescription(report.getDescription() + "\nPost restored at: " + now);
+            reportRepository.save(report);
+        }
     }
 }
+
+
+
+
+
