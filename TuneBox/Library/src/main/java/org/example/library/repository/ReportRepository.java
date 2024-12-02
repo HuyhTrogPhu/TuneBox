@@ -67,18 +67,30 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Page<Report> findAllReportsWithTracks(Pageable pageable);
 
     @Query("SELECT r FROM Report r JOIN r.album t WHERE t IS NOT NULL")
-    Page<Report> findAllReportsWithAlbum(Pageable pageable);
-
+    Page<Report> findByPageReportsWithAlbum(Pageable pageable);
 
     @Query("SELECT r FROM Report r JOIN r.reportedUser t WHERE t IS NOT NULL")
-    Page<Report> findAllReportsWithUser(Pageable pageable);
+    Page<Report> findByPageReportsWithUser(Pageable pageable);
 
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
-    Page<Report> findAllReportsWithPost(Pageable pageable);
+    Page<Report> findByPageReportsWithPost(Pageable pageable);
+
+    @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithTracks();
+
+    @Query("SELECT r FROM Report r JOIN r.album t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithAlbum();
+
+    @Query("SELECT r FROM Report r JOIN r.reportedUser t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithUser();
+
+    @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
+    List<Report> findAllReportsWithPost();
+
+
 
     List<Report>findAllByTrackId(Long trackId);
     List<Report>findAllByAlbumId(Long albumId);
     List<Report>findAllByReportedUserId(Long userId);
-
     List<Report> findByPostId(Long postId);
 }

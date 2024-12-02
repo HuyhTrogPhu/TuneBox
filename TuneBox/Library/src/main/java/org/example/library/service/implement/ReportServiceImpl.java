@@ -28,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -419,7 +420,7 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Override
-    public Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable) {
+    public Page<ReportDtoSocialAdmin> findByPageReportsWithTracks(Pageable pageable) {
         Page<Report> reportPage = reportRepository.findAllReportsWithTracks(pageable);  // Truyền pageable vào repository
         return reportPage.map(rp -> new ReportDtoSocialAdmin(
                 rp.getId(),
@@ -442,32 +443,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Page<ReportDtoSocialAdmin> findAllReportsWithUser(Pageable pageable) {
-        Page<Report> reportPage = reportRepository.findAllReportsWithUser(pageable);  // Truyền pageable vào repository
-        return reportPage.map(rp -> new ReportDtoSocialAdmin(
-                rp.getId(),
-                rp.getCreateDate(),
-                rp.getPost() != null ? rp.getPost().getId() : null,
-                rp.getTrack() != null ? rp.getTrack().getId() : null,
-                rp.getTrack() != null ? rp.getTrack().getName() : null,
-                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
-                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
-                rp.getUser() != null ? rp.getUser().getId() : null,
-                rp.getUser() != null ? rp.getUser().getUserName() : null,
-                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
-                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
-                rp.getStatus(),
-                rp.getResolvedAt(),
-                rp.getDescription(),
-                rp.getType(),
-                rp.getReason()
-        ));
-    }
-
-
-    @Override
-    public Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable) {
-        Page<Report> reportPage = reportRepository.findAllReportsWithAlbum(pageable);  // Truyền pageable vào repository
+    public Page<ReportDtoSocialAdmin> findByPageReportsWithUser(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findByPageReportsWithUser(pageable);  // Truyền pageable vào repository
         return reportPage.map(rp -> new ReportDtoSocialAdmin(
                 rp.getId(),
                 rp.getCreateDate(),
@@ -489,8 +466,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable) {
-        Page<Report> reportPage = reportRepository.findAllReportsWithPost(pageable);  // Truyền pageable vào repository
+    public Page<ReportDtoSocialAdmin> findByPageReportsWithAlbum(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findByPageReportsWithAlbum(pageable);  // Truyền pageable vào repository
         return reportPage.map(rp -> new ReportDtoSocialAdmin(
                 rp.getId(),
                 rp.getCreateDate(),
@@ -510,6 +487,129 @@ public class ReportServiceImpl implements ReportService {
                 rp.getReason()
         ));
     }
+
+    @Override
+    public Page<ReportDtoSocialAdmin> findByPageReportsWithPost(Pageable pageable) {
+        Page<Report> reportPage = reportRepository.findByPageReportsWithPost(pageable);  // Truyền pageable vào repository
+        return reportPage.map(rp -> new ReportDtoSocialAdmin(
+                rp.getId(),
+                rp.getCreateDate(),
+                rp.getPost() != null ? rp.getPost().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getId() : null,
+                rp.getTrack() != null ? rp.getTrack().getName() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                rp.getUser() != null ? rp.getUser().getId() : null,
+                rp.getUser() != null ? rp.getUser().getUserName() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                rp.getStatus(),
+                rp.getResolvedAt(),
+                rp.getDescription(),
+                rp.getType(),
+                rp.getReason()
+        ));
+    }
+
+    //search all RP
+    @Override
+    public List<ReportDtoSocialAdmin> findAllReportsWithUser() {
+        List<Report> reportEntity = reportRepository.findAllReportsWithUser();
+        return reportEntity.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+ ))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<ReportDtoSocialAdmin> findAllReportsWithTracks() {
+        List<Report> reportEntity = reportRepository.findAllReportsWithTracks();
+        return reportEntity.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<ReportDtoSocialAdmin> findAllReportsWithAlbum() {
+        List<Report> reportEntity = reportRepository.findAllReportsWithAlbum();
+        return reportEntity.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<ReportDtoSocialAdmin> findAllReportsWithPost() {
+        List<Report> reportEntity = reportRepository.findAllReportsWithPost();
+        return reportEntity.stream()
+                .map(rp -> new ReportDtoSocialAdmin(
+                        rp.getId(),
+                        rp.getCreateDate(),
+                        rp.getPost() != null ? rp.getPost().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getId() : null,
+                        rp.getTrack() != null ? rp.getTrack().getName() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getId() : null,
+                        rp.getAlbum() != null ? rp.getAlbum().getTitle() : null,
+                        rp.getUser() != null ? rp.getUser().getId() : null,
+                        rp.getUser() != null ? rp.getUser().getUserName() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getId() : null,
+                        rp.getReportedUser() != null ? rp.getReportedUser().getUserName() : null,
+                        rp.getStatus(),
+                        rp.getResolvedAt(),
+                        rp.getDescription(),
+                        rp.getType(),
+                        rp.getReason()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 
     @Override
     public ReportDtoSocialAdmin findById(Long id){
