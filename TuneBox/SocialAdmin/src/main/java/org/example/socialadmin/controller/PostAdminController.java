@@ -71,6 +71,7 @@ public class PostAdminController {
         }
     }
 
+
     @GetMapping("/pending")
     public ResponseEntity<Page<Report2Dto>> getPendingReports(
             @RequestParam(required = false) LocalDate startDate,

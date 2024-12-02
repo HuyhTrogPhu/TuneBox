@@ -58,7 +58,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from UserInformation ui join ui.user u where u.id = :userId")
     UserProfileDto findUserProfileByUserId(@Param("userId") Long userId);
 
-    @Query("select new org.example.library.dto.AccountSettingDto(u.email, ui.birthDay, ui.gender) " +
+    @Query("select new org.example.library.dto.AccountSettingDto(u.email, ui.birthDay, ui.gender, ui.phoneNumber) " +
             "from User u join u.userInformation ui where u.id = :userId")
     AccountSettingDto findAccountSettingProfile(@Param("userId") Long userId);
 
@@ -88,7 +88,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.email = :newEmail WHERE u.id = :userId")
     void updateEmailById(@Param("userId") Long userId, @Param("newEmail") String newEmail);
-
 
     // Cập nhật mật khẩu mới cho user
     @Modifying
@@ -198,7 +197,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    User findByUserName(String username);
 
-    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId) AND u.status = 'ACTIVE'")
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId) AND u.status = 'ACTIVE' AND u.role.id = 1 ")
     List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
 
 

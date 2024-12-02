@@ -228,6 +228,7 @@ public class UserServiceImpl implements UserService {
         userRepository.updateEmailById(userId, newEmail);
     }
 
+
     @Override
     public void setPassword(Long userId, String newPassword) {
         userRepository.updatePasswordById(userId, newPassword);
@@ -402,7 +403,13 @@ public class UserServiceImpl implements UserService {
         user.getUserInformation().setBirthDay(birthday); // Cập nhật ngày sinh
         userRepository.save(user);
     }
-
+    @Override
+    public void updatePhoneNum(Long userId, String newPhone) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.getUserInformation().setPhoneNumber(newPhone);
+        userRepository.save(user);
+    }
 
     @Override
     @Transactional
