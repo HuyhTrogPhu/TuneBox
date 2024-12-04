@@ -35,16 +35,15 @@ public class Playlist {
 
     private LocalDate createDate;
 
-    private boolean report;
+    private boolean report; // delete after
 
-    private LocalDate reportDate;
+    private LocalDate reportDate; // delete after
 
     private boolean status;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "playlist_track",joinColumns = @JoinColumn(name = "playlist_id"),
     inverseJoinColumns = @JoinColumn(name = "track_id"))
-
     private Set<Track> tracks = new HashSet<>(); //tao 1 tap hop rong
 
     @ManyToOne

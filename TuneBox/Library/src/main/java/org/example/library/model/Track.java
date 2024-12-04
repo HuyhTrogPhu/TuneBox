@@ -42,9 +42,9 @@ public class Track {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createDate;
 
-    private boolean report;
+    private boolean report; // delete after
 
-    private Date reportDate;
+    private Date reportDate; // delete after
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "genre_id", referencedColumnName = "genre_id")

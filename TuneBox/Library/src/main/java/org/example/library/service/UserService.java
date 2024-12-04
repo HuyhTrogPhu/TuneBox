@@ -39,7 +39,7 @@ public interface UserService {
     ProfileSettingDto getUserProfileSetting(Long userId);
 
     // get list user tagName
-    List<UserTag> getUserTags();
+    List<UserTag> getUserTags(Long userId);
 
     // Lấy số lượng followers của user
     Long getFollowersCount(Long userId);

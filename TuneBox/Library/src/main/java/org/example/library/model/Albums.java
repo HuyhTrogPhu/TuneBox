@@ -43,9 +43,9 @@ public class Albums {
     @Column(name = "created_at", nullable = false)
     private LocalDate createDate;
 
-    private boolean report;
+    private boolean report; // delete after
 
-    private Date reportDate;
+    private Date reportDate; // delete after
 
     private Boolean status ;
 

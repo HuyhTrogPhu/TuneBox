@@ -33,7 +33,7 @@ import java.util.Set;
 
     private String password;
 
-    private boolean report;
+    private boolean report; // delete after
 
     private LocalDate createDate;
 

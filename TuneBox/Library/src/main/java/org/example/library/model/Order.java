@@ -29,7 +29,7 @@ public class Order {
 
     private LocalDate deliveryDate;
 
-    private double tax;
+    private double tax; // shipping fee
 
     private double totalPrice;
 

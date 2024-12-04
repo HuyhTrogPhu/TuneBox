@@ -205,8 +205,8 @@ public class PostController {
     }
 
     @GetMapping("/tagName")
-    public ResponseEntity<List<UserTag>> getPostsByTagName() {
-        List<UserTag> userTag = userService.getUserTags();
+    public ResponseEntity<List<UserTag>> getPostsByTagName(@RequestParam("userId") Long userId) {
+        List<UserTag> userTag = userService.getUserTags(userId);
         return ResponseEntity.ok(userTag);
     }
 

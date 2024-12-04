@@ -190,8 +190,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserTag> getUserTags() {
-        return userRepository.findUserTags();
+    public List<UserTag> getUserTags(Long userId) {
+        return userRepository.findUserTags(userId);
     }
 
     @Override
