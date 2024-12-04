@@ -42,7 +42,15 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Autowired
     private Cloudinary cloudinary;
 
+    @Override
+    public List<InstrumentDto> searchInstruments(String keyword) {
+        List<Instrument> instruments = instrumentRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseOrColorContainingIgnoreCase(keyword, keyword, keyword);
+        System.out.println("Found instruments: " + instruments.size());  // In ra số lượng nhạc cụ tìm được
 
+        return instruments.stream()
+                .map(InstrumentMapper::mapperInstrumentDto)
+                .collect(Collectors.toList());
+    }
     @Override
     public InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image) {
         try {

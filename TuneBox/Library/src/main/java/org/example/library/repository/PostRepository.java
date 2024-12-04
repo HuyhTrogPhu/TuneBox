@@ -3,6 +3,8 @@ package org.example.library.repository;
 import org.example.library.dto.PostReactionDto;
 import org.example.library.model.Post;
 import org.example.library.model.Report;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,8 +21,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "(SELECT b.blocked.id FROM Block b WHERE b.blocker.id = :currentUserId) " +
             "AND p.user.id NOT IN " +
             "(SELECT b.blocker.id FROM Block b WHERE b.blocked.id = :currentUserId) " +
-            "AND p.hidden = false") // Thêm điều kiện này để lọc các bài viết bị ẩn
+            "AND p.hidden = false " +
+            "AND p.user.status = 'ACTIVE'") // Lọc bài viết từ người dùng có trạng thái ACTIVE
     List<Post> findPostsExcludingBlockedUsers(@Param("currentUserId") Long currentUserId);
+
 
 
     List<Post> findByCreatedAtAfter(LocalDateTime date);
@@ -42,11 +46,19 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT COUNT(p) FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt <= :endDate")
     Long countByCreatedAtBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
 
     List<Post> findAllByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Sort sort);
 
+    List<Post> findByUserIdAndHidden(Long userId, boolean isHidden);
+
     @Query("SELECT p FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt <= :endDate")
-    List<Post> findAllByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    Page<Post> findAllByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, Pageable pageable);
+
+
+    List<Post> findByUser_IdAndAdminPermanentlyHiddenFalse(Long userId);
+
+
+    List<Post> findByAdminHiddenTrue();
+
 
 }

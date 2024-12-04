@@ -2,11 +2,10 @@ package org.example.library.service.implement;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import org.example.library.dto.PostDto;
-import org.example.library.dto.PostReactionDto;
-import org.example.library.dto.ReportDto;
-import org.example.library.dto.UserInfoDto;
+import org.example.library.Exception.ResourceNotFoundException;
+import org.example.library.dto.*;
 import org.example.library.mapper.PostMapper;
+import org.example.library.mapper.ReportMapper;
 import org.example.library.model.Post;
 import org.example.library.model.PostImage;
 import org.example.library.model.Report;
@@ -16,11 +15,16 @@ import org.example.library.repository.PostRepository;
 import org.example.library.repository.ReportRepository;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.PostService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,16 +38,23 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
 
+    private static final Logger log = LoggerFactory.getLogger(ReportServiceImpl.class);
+
+
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ReportRepository reportRepository;
     private final Cloudinary cloudinary;
+    private final ReportMapper reportMapper;
+    private final NotificationServiceImpl notificationServiceImpl;
 
-    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ReportRepository  reportRepository, Cloudinary cloudinary) {
+    public PostServiceImpl(PostRepository postRepository, UserRepository userRepository, ReportRepository  reportRepository, Cloudinary cloudinary, ReportMapper reportMapper, NotificationServiceImpl notificationServiceImpl) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.reportRepository = reportRepository;
         this.cloudinary = cloudinary;
+        this.reportMapper = reportMapper;
+        this.notificationServiceImpl = notificationServiceImpl;
     }
 
 
@@ -107,6 +118,7 @@ public class PostServiceImpl implements PostService {
         // Retrieve all posts excluding those from blocked users or users who have blocked the current user
         List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
         return posts.stream()
+                .filter(post -> !post.isAdminHidden() && !post.isAdminPermanentlyHidden())
                 .map(PostMapper::toDto) // Convert to PostDto
                 .collect(Collectors.toList());
     }
@@ -119,18 +131,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> getPostsByUserId(Long userId, String currentUsername) {
         List<Post> posts;
-
-        // Lấy thông tin người dùng từ userId
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 
-        // Kiểm tra xem người dùng hiện tại có phải là chủ sở hữu của trang cá nhân không
         if (user.getUserName().equals(currentUsername)) {
-            // Nếu là chủ sở hữu, lấy tất cả bài viết
-            posts = postRepository.findByUserId(userId);
+            // Nếu là chủ sở hữu, lấy tất cả bài viết ngoại trừ các bài viết bị admin khóa
+            posts = postRepository.findByUserId(userId).stream()
+                    .filter(post -> !post.isAdminHidden() && !post.isAdminPermanentlyHidden())
+                    .collect(Collectors.toList());
         } else {
-            // Nếu không phải, chỉ lấy các bài viết không bị ẩn
-            posts = postRepository.findByUserIdAndHidden(userId, false);
+            // Nếu không phải chủ sở hữu, chỉ lấy các bài viết không bị ẩn và không bị admin khóa
+            posts = postRepository.findByUserIdAndHidden(userId, false).stream()
+                    .filter(post -> !post.isAdminHidden() && !post.isAdminPermanentlyHidden())
+                    .collect(Collectors.toList());
         }
 
         return posts.stream().map(PostMapper::toDto).collect(Collectors.toList());
@@ -231,24 +244,36 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public List<PostDto> findNewPosts() {
-        // Lấy thời gian đầu ngày và cuối ngày hiện tại
+    public CountNewPostInDayDto findNewPosts() {
+        // Lấy thời gian đầu ngày và cuối ngày hôm nay
         LocalDateTime startOfToday = LocalDate.now().atStartOfDay();
         LocalDateTime endOfToday = LocalDate.now().atTime(LocalTime.MAX);
 
-        // Lấy các bài viết trong khoảng thời gian của ngày hôm nay
+        // Đếm số lượng bài viết trong hôm nay
+        long count = postRepository.countByCreatedAtBetween(startOfToday, endOfToday);
+
+        // Lấy danh sách bài viết trong hôm nay
         List<Post> newPosts = postRepository.findAllByCreatedAtBetween(
                 startOfToday, endOfToday, Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
-        return newPosts.stream()
+        // Chuyển đổi danh sách bài viết sang DTO
+        List<PostDto> postDtos = newPosts.stream()
                 .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post); // Chuyển đổi thành PostDto
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName()); // Lấy tên người dùng
+                    PostDto postDto = PostMapper.toDto(post);
+                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
                     return postDto;
                 })
                 .collect(Collectors.toList());
+
+        // Tạo đối tượng kết quả
+        CountNewPostInDayDto summary = new CountNewPostInDayDto();
+        summary.setCount(count);
+        summary.setPosts(postDtos);
+
+        return summary;
     }
+
 
     @Override
     public List<PostDto> findTrendingPosts() {
@@ -258,7 +283,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public long countTotalPosts() {
-        return postRepository.count(); // Sử dụng phương thức count() của PostRepository
+        return postRepository.count();
     }
 
     @Override
@@ -273,31 +298,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<ReportDto> getReportedPosts() {
-        // Lấy danh sách các report từ reportRepository thay vì postRepository
-        List<Report> reports = reportRepository.findAll(); // Lấy tất cả các báo cáo
-
-        return reports.stream()
-                .map(report -> {
-                    ReportDto reportDto = new ReportDto();
-                    // Set các thuộc tính của ReportDto từ Report entity
-                    reportDto.setId(report.getId()); // ID của báo cáo
-                    reportDto.setPostId(report.getPost().getId()); // ID của bài viết bị báo cáo
-                    reportDto.setUserId(report.getUser().getId()); // ID của người dùng đã báo cáo
-                    reportDto.setReason(report.getReason()); // Lý do báo cáo
-                    reportDto.setCreateDate(report.getCreateDate()); // Ngày tạo báo cáo
-                    reportDto.setStatus(report.getStatus()); // Trạng thái báo cáo
-
-                    return reportDto; // Trả về ReportDto
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public PostDto getPostByPostId(Long postId) {
         // Tìm bài viết bằng postId
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found")); // Ném ngoại lệ nếu không tìm thấy
+
+        // Kiểm tra xem bài viết có bị ẩn hoặc bị khóa bởi admin không
+        if (post.isAdminHidden() || post.isAdminPermanentlyHidden()) {
+            return null; // Trả về null nếu bài viết bị khóa
+        }
 
         // Chuyển đổi bài viết sang DTO
         return PostMapper.toDto(post);
@@ -306,7 +315,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getFilteredPosts(Long currentUserId) {
-        return postRepository.findPostsExcludingBlockedUsers(currentUserId);
+        // Lấy danh sách bài viết, lọc ra các bài viết bị ẩn hoặc bị khóa bởi admin
+        List<Post> posts = postRepository.findPostsExcludingBlockedUsers(currentUserId);
+        return posts.stream()
+                .filter(post -> !post.isAdminHidden() && !post.isAdminPermanentlyHidden())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -325,6 +338,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new RuntimeException("Post not found"));
         return PostMapper.toDto(post);
     }
+
     public Map<LocalDateTime, Long> countPostByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDateTime, Long> postCountMap = new HashMap<>();
         LocalDate currentDate = startDate;
@@ -340,9 +354,6 @@ public class PostServiceImpl implements PostService {
         System.out.println("Post Count Map: " + postCountMap);
         return postCountMap;
     }
-
-
-
 
     @Override
     public boolean userCanToggleHidden(Long postId, String username) {
@@ -361,31 +372,37 @@ public class PostServiceImpl implements PostService {
 
         User user = post.getUser(); // lấy user từ post
 
+        // Giả sử InspiredBy, Talent, Genre là các đối tượng có mối quan hệ với User
+        List<String> inspiredByUserNames = user.getInspiredBy().stream()
+                .map(inspiredBy -> inspiredBy.getName()) // Lấy 'name' từ đối tượng InspiredBy
+                .collect(Collectors.toList());
+
+        List<String> talentUserNames = user.getTalent().stream()
+                .map(talent -> talent.getName()) // Lấy 'name' từ đối tượng Talent
+                .collect(Collectors.toList());
+
+        List<String> genreUserNames = user.getGenre().stream()
+                .map(genre -> genre.getName()) // Lấy 'name' từ đối tượng Genre
+                .collect(Collectors.toList());
         return new UserInfoDto(
                 user.getId(),
                 user.getEmail(),
                 user.getUserName(),
                 user.getUserInformation().getAvatar(),
-                user.getCreateDate().atStartOfDay()
+                user.getCreateDate().atStartOfDay(),
+                user.getFollowers().size(),
+                user.getFollowing().size(),
+                user.getOrderList().size(),
+                user.getAlbums().size(),
+                user.getTracks().size(),
+                inspiredByUserNames,
+                talentUserNames,
+                genreUserNames
         );
     }
 
     @Override
-    public List<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate) {
-        LocalDateTime startDateTime = startDate.atStartOfDay();
-        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
-        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post);
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
-                    return postDto;
-                })
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<PostDto> findAllPosts() {
+    public List<PostDto> findAllPostsUser() {
         List<Post> posts = postRepository.findAll(); // Lấy tất cả các bài viết từ repository
         return posts.stream()
                 .map(post -> {
@@ -397,15 +414,248 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> findPostsBySpecificDate(LocalDate specificDate) {
+    public Page<PostDto> findPostsByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+        Page<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime, pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
+    }
+
+    @Override
+    public Page<PostDto> findAllPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.findAll(pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
+    }
+
+    @Override
+    public Page<PostDto> findPostsBySpecificDate(LocalDate specificDate, Pageable pageable) {
         LocalDateTime startDateTime = specificDate.atStartOfDay();
         LocalDateTime endDateTime = specificDate.atTime(23, 59, 59);
-        List<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime);
-        return posts.stream()
-                .map(post -> {
-                    PostDto postDto = PostMapper.toDto(post);
-                    postDto.setUserNickname(post.getUser().getUserInformation().getName());
-                    return postDto;
+        Page<Post> posts = postRepository.findAllByDateRange(startDateTime, endDateTime, pageable);
+        return posts.map(post -> {
+            PostDto postDto = PostMapper.toDto(post);
+            postDto.setUserNickname(post.getUser().getUserInformation().getName());
+            return postDto;
+        });
+    }
+
+    @Override
+    @Transactional
+    public Post restorePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
+
+        if (post.isAdminPermanentlyHidden()) {
+            throw new IllegalStateException("Cannot restore permanently hidden post");
+        }
+
+        // Đặt lại các trạng thái khi restore
+        post.setAdminHidden(false);
+        post.setHideReason(null);
+        post.setHidden(false);
+
+        // Cập nhật trạng thái của các báo cáo liên quan
+        List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.RESOLVED);
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Report report : reports) {
+            report.setStatus(ReportStatus.DISMISSED);
+            report.setResolvedAt(now);
+            report.setDescription("Report closed due to post restoration at: " + now);
+            reportRepository.save(report);
+        }
+
+        // Lưu và trả về bài viết đã được khôi phục
+        return postRepository.save(post);
+    }
+
+    @Override
+    @Transactional
+    public List<Report2Dto> dismissAllReports(Long postId, String reason) {
+        log.info("Starting dismissAllReports for postId: {} with reason: {}", postId, reason);
+
+        // Validate input parameters
+        if (postId == null) {
+            log.error("PostId cannot be null");
+            throw new IllegalArgumentException("PostId cannot be null");
+        }
+
+        if (reason == null || reason.trim().isEmpty()) {
+            log.error("Dismiss reason cannot be empty for postId: {}", postId);
+            throw new IllegalArgumentException("Dismiss reason cannot be empty");
+        }
+
+        try {
+            // Kiểm tra post tồn tại
+            Post post = postRepository.findById(postId)
+                    .orElseThrow(() -> {
+                        log.error("Post not found with id: {}", postId);
+                        return new ResourceNotFoundException("Post not found: " + postId);
+                    });
+
+            // Lấy tất cả các report PENDING của post
+            List<Report> reports = reportRepository.findByPostIdAndStatus(postId, ReportStatus.PENDING);
+            log.info("Found {} pending reports for postId: {}", reports.size(), postId);
+
+            if (reports.isEmpty()) {
+                log.warn("No pending reports found for postId: {}", postId);
+                throw new ResourceNotFoundException("No pending reports found for post: " + postId);
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            List<Report2Dto> dismissedReports = new ArrayList<>();
+
+            try {
+                // Đảm bảo post không bị ẩn
+                log.debug("Updating post status for postId: {}", postId);
+                post.setAdminHidden(false);
+                post.setHideReason(null);
+                postRepository.save(post);
+            } catch (Exception e) {
+                log.error("Error updating post status for postId: {}", postId, e);
+                throw new RuntimeException("Failed to update post status", e);
+            }
+
+            // Xử lý từng report
+            for (Report report : reports) {
+                try {
+                    log.debug("Processing report id: {} for postId: {}", report.getId(), postId);
+                    report.setStatus(ReportStatus.DISMISSED);
+                    report.setReason(reason);
+                    report.setResolvedAt(now);
+                    report.setDescription("Report dismissed at: " + now + ". Reason: " + reason);
+
+                    Report savedReport = reportRepository.save(report);
+
+                    // Convert to DTO including report details
+                    Report2Dto reportDto = reportMapper.toReport2Dto(savedReport);
+
+                    // Add report details
+                    List<ReportDetailDto> details = new ArrayList<>();
+                    details.add(new ReportDetailDto(
+                            report.getId(),
+                            report.getUser().getUserName(),
+                            report.getReason(),
+                            report.getCreateDate()
+                    ));
+                    reportDto.setReportDetails(details);
+
+                    dismissedReports.add(reportDto);
+
+                    // Tạo thông báo cho người báo cáo
+                    try {
+                        notificationServiceImpl.createNotificationForUser(
+                                report.getUser(),
+                                "Cảm ơn bạn đã gửi báo cáo. Chúng tôi đã xem xét và quyết định bỏ qua báo cáo này.",
+                                "REPORT_DISMISSED"
+                        );
+                    } catch (Exception e) {
+                        log.error("Failed to create notification for report id: {} and user: {}",
+                                report.getId(), report.getUser().getId(), e);
+                    }
+                } catch (Exception e) {
+                    log.error("Error processing report id: {} for postId: {}", report.getId(), postId, e);
+                }
+            }
+
+            log.info("Successfully dismissed {} reports for postId: {}", dismissedReports.size(), postId);
+            return dismissedReports;
+
+        } catch (Exception e) {
+            log.error("Unexpected error in dismissAllReports for postId: {}", postId, e);
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Post resolvePost(Long reportId, String reason) {
+        log.info("Starting resolvePost for reportId: {} with reason: {}", reportId, reason);
+
+        if (reportId == null) {
+            throw new IllegalArgumentException("ReportId cannot be null");
+        }
+
+        if (reason == null || reason.trim().isEmpty()) {
+            throw new IllegalArgumentException("Resolve reason cannot be empty");
+        }
+
+        try {
+            Report report = reportRepository.findById(reportId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Report not found: " + reportId));
+
+            Post post = report.getPost();
+            if (post == null) {
+                throw new ResourceNotFoundException("Post not found for report: " + reportId);
+            }
+
+            // Lấy tất cả các report PENDING của post
+            List<Report> relatedReports = reportRepository.findByPostIdAndStatus(post.getId(), ReportStatus.PENDING);
+
+            LocalDateTime now = LocalDateTime.now();
+
+            // Cập nhật post
+            post.setAdminHidden(true);
+            post.setHidden(true);
+            post.setHideReason(reason);
+
+            // Cập nhật tất cả các report liên quan
+            for (Report relatedReport : relatedReports) {
+                relatedReport.setStatus(ReportStatus.RESOLVED);
+                relatedReport.setResolvedAt(now);
+                relatedReport.setDescription("Resolved due to post action at: " + now + ". Reason: " + reason);
+
+                try {
+                    reportRepository.save(relatedReport);
+
+                    // Gửi thông báo cho người báo cáo
+                    notificationServiceImpl.createNotificationForUser(
+                            relatedReport.getUser(),
+                            "Báo cáo của bạn đã được xử lý. Bài viết đã bị ẩn.",
+                            "REPORT_RESOLVED"
+                    );
+                } catch (Exception e) {
+                    log.error("Error updating related report: {}", relatedReport.getId(), e);
+                }
+            }
+
+            return postRepository.save(post);
+
+        } catch (Exception e) {
+            log.error("Unexpected error in resolvePost for reportId: {}", reportId, e);
+            throw e;
+        }
+    }
+
+    @Override
+    public List<Report2Dto> getPostReports(Long postId) {
+        log.info("Getting reports for post: {}", postId);
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found: " + postId));
+
+        List<Report> reports = reportRepository.findByPostId(postId);
+
+        return reports.stream()
+                .map(report -> {
+                    Report2Dto dto = reportMapper.toReport2Dto(report);
+                    List<ReportDetailDto> details = new ArrayList<>();
+                    details.add(new ReportDetailDto(
+                            report.getId(),
+                            report.getUser().getUserName(),
+                            report.getReason(),
+                            report.getCreateDate()
+                    ));
+                    dto.setReportDetails(details);
+                    return dto;
                 })
                 .collect(Collectors.toList());
     }

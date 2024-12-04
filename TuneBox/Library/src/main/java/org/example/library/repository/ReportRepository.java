@@ -37,26 +37,29 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     List<Report> findAll(); // Truy xuất tất cả các báo cáo
 
-
-    List<Report> findByStatus(ReportStatus status); // Phương thức này đã có
     List<Report> findByPost(Post post);
+
     List<Report> findByPostIdAndStatus(Long postId, ReportStatus status);
 
-    List<Report> findByStatusAndType(ReportStatus status, String type);
-
+    Page<Report> findByStatusAndType(ReportStatus status, String type, Pageable pageable);
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate BETWEEN :startDate AND :endDate")
-    List<Report> findByStatusAndDateRange(
+    Page<Report> findByStatusAndDateRange(
             @Param("status") ReportStatus status,
             @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate
+            @Param("endDate") LocalDate endDate,
+            Pageable pageable
     );
 
     @Query("SELECT r FROM Report r WHERE r.status = :status AND r.createDate = :specificDate")
-    List<Report> findByStatusAndSpecificDate(
+    Page<Report> findByStatusAndSpecificDate(
             @Param("status") ReportStatus status,
-            @Param("specificDate") LocalDate specificDate
+            @Param("specificDate") LocalDate specificDate,
+            Pageable pageable
     );
+
+    @Query("SELECT DISTINCT p FROM Post p JOIN Report r ON r.post = p WHERE p.adminHidden = true AND r.status = :status")
+    List<Post> findAdminHiddenAndResolvedPosts(@Param("status") ReportStatus status);
 
 
     @Query("SELECT r FROM Report r JOIN r.track t WHERE t IS NOT NULL")
@@ -66,8 +69,15 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     Page<Report> findAllReportsWithAlbum(Pageable pageable);
 
 
+    @Query("SELECT r FROM Report r JOIN r.reportedUser t WHERE t IS NOT NULL")
+    Page<Report> findAllReportsWithUser(Pageable pageable);
+
     @Query("SELECT r FROM Report r JOIN r.post t WHERE t IS NOT NULL")
     Page<Report> findAllReportsWithPost(Pageable pageable);
 
 
+    List<Report> findByPostId(Long postId);
+    List<Report>findAllByTrackId(Long trackId);
+    List<Report>findAllByAlbumId(Long albumId);
+    List<Report>findAllByReportedUserId(Long userId);
 }

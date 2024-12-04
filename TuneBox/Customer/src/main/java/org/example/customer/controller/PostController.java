@@ -89,6 +89,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
       @GetMapping("/all")
     public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam Long currentUserId) {
         try {
@@ -99,6 +100,7 @@ public class PostController {
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // Phương thức cập nhật bài viết
     @PutMapping("/{id}")
@@ -143,6 +145,7 @@ public class PostController {
     // Phương thức xóa bài viết
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+
         try {
             postService.deletePost(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -154,6 +157,9 @@ public class PostController {
     // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable Long userId, Principal principal) {
+
+        userService.checkAccountStatus(userId);
+
         String currentUsername = principal.getName();
         List<PostDto> posts = postService.getPostsByUserId(userId, currentUsername);
         return ResponseEntity.ok(posts);
@@ -175,8 +181,15 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Nếu không tìm thấy bài viết
         }
 
+        // Kiểm tra xem bài viết có bị khóa bởi admin hay không
+        Post post = postService.findPostById(postId);
+        if (post.isAdminHidden() || post.isAdminPermanentlyHidden()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN); // Nếu bài viết bị khóa, trả về 403 Forbidden
+        }
+
         return new ResponseEntity<>(postDto, HttpStatus.OK); // Trả về bài viết với trạng thái 200 OK
     }
+
 
     // ẩn bài viết
     @PutMapping("/{postId}/toggle-visibility")
@@ -186,6 +199,11 @@ public class PostController {
 
         if (post == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Trả về null nếu bài viết không tồn tại
+        }
+
+        // Kiểm tra nếu bài viết đã bị khóa bởi admin
+        if (post.isAdminPermanentlyHidden()) {
+            throw new IllegalStateException("Post is permanently hidden by admin");
         }
 
         // Kiểm tra quyền truy cập

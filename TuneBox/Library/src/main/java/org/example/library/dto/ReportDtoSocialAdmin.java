@@ -23,6 +23,8 @@ public class ReportDtoSocialAdmin {
     private String albumName;
     private Long userId;
     private String userName;
+    private Long UserReportedId;
+    private String UserReportedName;
     private ReportStatus status;
     private LocalDateTime resolvedAt;
     private String description;

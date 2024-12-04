@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.library.model.Report;
-import org.example.library.model.UserInformation;
+import org.example.library.model_enum.UserStatus;
+import org.example.library.model.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -40,6 +40,22 @@ public class UserSocialAdminDto {
     private long commentCount;
 
     private long LikeCount;
+
+    private long FriendCount;
+
+    private long AlbumCount;
+
+    private long reportCount;
+
+    private List<Genre> genre;
+
+    private List<InspiredBy> inspiredBy;
+
+    private List<Talent> talent;
+
+
+    private UserStatus status;
+
 
     //   private List<Report> reports;
 

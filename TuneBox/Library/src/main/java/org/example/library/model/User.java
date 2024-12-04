@@ -6,8 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.library.model_enum.UserStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -111,8 +113,16 @@ import java.util.Set;
     @JsonManagedReference
     private Set<Post> posts; // Thuộc tính này sẽ đại diện cho các bài viết của người dùng
 
+    @Column(name = "report_count", nullable = false)
+    private int reportCount = 0;
+
+
     public User(Long blockerId) {
         this.id = blockerId;
     }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
 
 }

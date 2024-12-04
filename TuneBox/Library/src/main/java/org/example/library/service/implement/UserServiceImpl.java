@@ -227,6 +227,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updatePhoneNum(Long userId, String newPhone) {
+
+    }
+
+    @Override
     public void setPassword(Long userId, String newPassword) {
         userRepository.updatePasswordById(userId, newPassword);
     }
@@ -631,6 +636,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void banUser(Long userId) {
+
+    }
+
+    @Override
+    public void unbanUser(Long userId) {
+
+    }
+
+    @Override
+    public void checkAccountStatus(Long userId) {
+
+    }
+
+    @Override
     public long countUser() {
         return userRepository.countByIdNotNull();
     }
@@ -677,6 +697,11 @@ public class UserServiceImpl implements UserService {
         );
 
         return userDto;
+    }
+
+    @Override
+    public Optional<User> findByIdUser(Long userId) {
+        return Optional.empty();
     }
 
 

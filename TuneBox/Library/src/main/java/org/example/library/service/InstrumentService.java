@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface InstrumentService {
 
-
+    List<InstrumentDto> searchInstruments(String keyword);
     InstrumentDto createInstrument(InstrumentDto instrumentDto, MultipartFile image);
 
     List<InstrumentDto> getAllInstrument();

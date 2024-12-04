@@ -53,6 +53,8 @@ public interface UserService {
     // update email in account page
     void updateEmail(Long userId, String newEmail);
 
+    void updatePhoneNum(Long userId, String newPhone);
+
     // set password in account page
     void setPassword(Long userId, String newPassword);
 
@@ -106,14 +108,21 @@ public interface UserService {
 
 
      List<SearchDto> searchPlaylist(String keyword);
+
      List<SearchDto> searchAlbum(String keyword);
+
      List<SearchDto> searchTrack(String keyword);
+
      List<SearchDto> searchUser(String keyword);
 
      long countUser();
 
     UserSocialAdminDto findById(Long userId);
+
+    Optional<User> findByIdUser(Long userId);
+
     List<User> findByReportTrue();
+
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
@@ -159,4 +168,10 @@ public interface UserService {
     <T> Optional<T> findByEmail(String email);
 
     Object createUser(String email);
+
+    void banUser(Long userId);
+
+    void unbanUser(Long userId);
+
+    void checkAccountStatus(Long userId);
 }

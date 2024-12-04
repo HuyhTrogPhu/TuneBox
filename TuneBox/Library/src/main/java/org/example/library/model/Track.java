@@ -37,7 +37,9 @@ public class Track {
 
     private String description;
 
-    private boolean status;
+
+
+    private boolean status = true;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createDate;

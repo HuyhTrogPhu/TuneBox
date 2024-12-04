@@ -15,6 +15,13 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     List<Track> findByCreatorId(Long userId);
     List<Track> findByGenreId(Long genreId);
 
+    @Query("SELECT t FROM Track t WHERE t.creator.id NOT IN" +
+            "(SELECT b.blocked.id FROM Block b WHERE b.blocker.id = :currentUserId)" +
+    "AND t.creator.id NOT IN " +
+    "(SELECT b.blocker.id FROM Block b WHERE b.blocked.id = :currentUserId)" +
+    "AND t.creator.status = 'ACTIVE'")
+    List<Track> findTrackdefault(@Param("currentUserId") Long currentUserId);
+
 //    chuyen doi name thanh chu thường, khong phan biet hoa thuong, caác name or description có %keywword%
     @Query("SELECT t FROM Track t WHERE lower(t.name) LIKE lower(concat('%', :keywords, '%')) " +
             "OR lower(t.description) LIKE lower(concat('%', :keywords, '%'))")
@@ -23,6 +30,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
     // Lay Track theo ID cua Album
     @Query("SELECT a.tracks FROM Albums a WHERE a.id = :albumId")
     List<Track> findTracksByAlbumId(@Param("albumId") Long albumId);
+
     List<Track> findByReportTrue();
 
 
@@ -36,6 +44,7 @@ public interface TrackRepository extends JpaRepository<Track, Long> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
+ List<Track> findAllByStatusIsTrue();
  List<Track> findAllByCreateDateBetween(LocalDateTime startDate,LocalDateTime endDate);
  List<Track> findAllByPlaylistsId(@Param("playlistsId") long playlistId);
  List<Track> findAllByAlbumsId(@Param("playlistsId") long playlistId);

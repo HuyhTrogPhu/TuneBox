@@ -2,6 +2,7 @@ package org.example.library.repository;
 
 import org.example.library.dto.*;
 import org.example.library.model.User;
+import org.example.library.model_enum.UserStatus;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -36,9 +37,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<String> findAllUserEmails();
 
     // get user by username or email
-    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, new org.example.library.dto.RoleDto(r.id, r.name)) " +
-            "FROM User u JOIN u.role r WHERE u.userName = :userName OR u.email = :email")
-    Optional<UserLoginDto> findByUserNameOrEmail(String userName, String email);
+    @Query("SELECT new org.example.library.dto.UserLoginDto(u.id, u.email, u.userName, u.password, " +
+            "new org.example.library.dto.RoleDto(r.id, r.name), u.status) " +
+            "FROM User u JOIN u.role r " +
+            "WHERE u.userName = :userName OR u.email = :email")
+    Optional<UserLoginDto> findByUserNameOrEmail(@Param("userName") String userName, @Param("email") String email);
+
     // get user check out info
     @Query("select new org.example.library.dto.UserCheckOut(u.id, u.email, u.userName) " +
             "from User u WHERE u.id = :userId")
@@ -57,7 +61,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "from UserInformation ui join ui.user u where u.id = :userId")
     UserProfileDto findUserProfileByUserId(@Param("userId") Long userId);
 
-    @Query("select new org.example.library.dto.AccountSettingDto(u.email, ui.birthDay, ui.gender) " +
+    @Query("select new org.example.library.dto.AccountSettingDto(u.email, ui.birthDay, ui.gender, ui.phoneNumber) " +
             "from User u join u.userInformation ui where u.id = :userId")
     AccountSettingDto findAccountSettingProfile(@Param("userId") Long userId);
 
@@ -87,7 +91,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.email = :newEmail WHERE u.id = :userId")
     void updateEmailById(@Param("userId") Long userId, @Param("newEmail") String newEmail);
-
 
     // Cập nhật mật khẩu mới cho user
     @Modifying
@@ -198,8 +201,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    User findByUserName(String username);
 
-    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId)")
+    @Query("SELECT u FROM User u WHERE u.id != :userId AND u.id NOT IN (SELECT f.followed.id FROM Follow f WHERE f.follower.id = :userId) AND u.status = 'ACTIVE' AND u.role.id = 1 ")
     List<User> findUsersNotFollowedBy(@Param("userId") Long userId);
+
 
     // get list user sell by day
     @Query("select new org.example.library.dto.UserSell(u.id, ui.name, ui.phoneNumber, u.userName, ui.location, u.email, count(o.id), sum(o.totalPrice)) " +
@@ -297,7 +301,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "LIMIT 10", nativeQuery = true)
     List<Object[]> findTop10UsersWithMostTracks(@Param("startDate") LocalDateTime startDate,
                                                 @Param("endDate") LocalDateTime  endDate);
-
-
+    void save(Optional<User> user);
+    Optional<User> findByIdAndStatus(Long id, UserStatus status);
 
 }

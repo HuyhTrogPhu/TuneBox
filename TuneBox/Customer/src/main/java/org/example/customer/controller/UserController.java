@@ -7,11 +7,11 @@ import jakarta.transaction.Transactional;
 import org.example.customer.config.JwtUtil;
 import org.example.library.dto.*;
 import org.example.library.model.*;
+import org.example.library.model_enum.UserStatus;
 import org.example.library.repository.UserRepository;
 import org.example.library.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -181,10 +181,14 @@ public class UserController {
         if (optionalUser.isPresent()) {
             UserLoginDto user = optionalUser.get();
 
-            if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            // Kiểm tra trạng thái của người dùng
+            if (user.getStatus() == UserStatus.BANNED) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("ACCOUNT_BANNED");
+            }
 
+            if (passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
                 // Lấy tên vai trò từ đối tượng RoleDto
-                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc một vai trò mặc định khác
+                String role = user.getRole() != null ? user.getRole().getName() : "Customer"; // Hoặc vai trò mặc định khác
 
                 // Tạo JWT token với username và role
                 String jwtToken = jwtUtil.generateToken(user.getUserName(), role);
@@ -356,6 +360,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating birthday");
         }
     }
+    @PutMapping("/{userId}/phone")
+    public ResponseEntity <String> setPhone(@PathVariable Long userId, @RequestBody String newPhone){
+        try {
+            newPhone = newPhone.replace("\"", "").trim();
+            userService.updatePhoneNum(userId, newPhone);
+            return ResponseEntity.ok("PhoneNumber updated successfully");
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating phone number");
+        }
+    }
     @PutMapping("/{userId}/email")
     public ResponseEntity<String> setEmail(@PathVariable Long userId, @RequestBody EmailUpdateRequest emailUpdateRequest) {
         try {
@@ -366,6 +381,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating email");
         }
     }
+
 
     @GetMapping("/not-followed/{userId}")
     public ResponseEntity<List<UserNameAvatarUsernameDto>> getUsersNotFollowed(@PathVariable Long userId) {
@@ -378,7 +394,19 @@ public class UserController {
         List<ListUserForMessageDto> users = userService.findAllUserForMessage();
         return ResponseEntity.ok(users);
     }
-    // get list orders by user id
+
+    @GetMapping("/check-status/{userId}")
+    public ResponseEntity<Map<String, Object>> checkAccountStatus(@PathVariable Long userId) {
+        Optional<User> user = userService.findByIdUser(userId); // Tìm user theo ID
+        boolean isBanned = user.get().getStatus() == UserStatus.BANNED; // Kiểm tra trạng thái
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("isBanned", isBanned); // Trả về trạng thái bị khóa
+
+        return ResponseEntity.ok(response); // Trả về kết quả
+    }
+
+
 
 
     @PostMapping("/forgot-password")

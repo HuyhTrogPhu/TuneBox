@@ -3,6 +3,7 @@ package org.example.customer.config;
 
 
 import org.example.library.model.User;
+import org.example.library.model_enum.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,10 @@ public class CustomerDetail implements UserDetails {
     // Constructor nhận User
     public CustomerDetail(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     @Override
@@ -42,21 +47,23 @@ public class CustomerDetail implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return true; // Luôn không hết hạn
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        // Tài khoản không bị khóa nếu trạng thái không phải là BANNED
+        return user.getStatus() != UserStatus.BANNED;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true; // Luôn không hết hạn
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        // Tài khoản được kích hoạt nếu trạng thái là ACTIVE
+        return user.getStatus() == UserStatus.ACTIVE;
     }
 }

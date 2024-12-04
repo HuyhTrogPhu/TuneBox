@@ -15,7 +15,7 @@ public interface TrackService {
 
          TrackDto createTrack(TrackDto trackDto,MultipartFile imageTrack, MultipartFile trackFile, Long userId, Long genreId);
 
-        List<TrackDto> getAllTracks();
+        List<TrackDto> getAllTracks(Long currentUserId);
 
         TrackDto getTrackById(Long trackId);
 
