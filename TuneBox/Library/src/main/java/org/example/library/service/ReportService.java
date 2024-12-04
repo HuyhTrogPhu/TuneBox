@@ -3,6 +3,7 @@ package org.example.library.service;
 import org.example.library.dto.PostDto;
 import org.example.library.dto.Report2Dto;
 import org.example.library.dto.ReportDto;
+import org.example.library.model.Post;
 import org.example.library.dto.ReportDtoSocialAdmin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ public interface ReportService {
 
 
     Report2Dto resolveReport(Long reportId, boolean hidePost);
+//    Report2Dto resolveReport(Long reportId, boolean hidePost);
 
     Report2Dto getReport2ById(Long id);
 
@@ -35,10 +37,14 @@ public interface ReportService {
     ReportDto updateDenied(Long id);
     List<ReportDto> updateDeniedTrackId(Long id);
     List<ReportDto> updateDeniedAlbumId(Long id);
-    Page<ReportDtoSocialAdmin> findAllReportsWithTracks(Pageable pageable);
-    Page<ReportDtoSocialAdmin> findAllReportsWithAlbum(Pageable pageable);
-    Page<ReportDtoSocialAdmin> findAllReportsWithPost(Pageable pageable);
-    Page<ReportDtoSocialAdmin> findAllReportsWithUser(Pageable pageable);
+    Page<ReportDtoSocialAdmin> findByPageReportsWithTracks(Pageable pageable);
+    Page<ReportDtoSocialAdmin> findByPageReportsWithAlbum(Pageable pageable);
+    Page<ReportDtoSocialAdmin> findByPageReportsWithPost(Pageable pageable);
+    Page<ReportDtoSocialAdmin> findByPageReportsWithUser(Pageable pageable);
+    List<ReportDtoSocialAdmin> findAllReportsWithTracks();
+    List<ReportDtoSocialAdmin> findAllReportsWithAlbum();
+    List<ReportDtoSocialAdmin> findAllReportsWithPost();
+    List<ReportDtoSocialAdmin> findAllReportsWithUser();
      ReportDtoSocialAdmin findById(Long id);
     List<ReportDtoSocialAdmin> findByTrackId(Long id);
     List<ReportDtoSocialAdmin> findByAlbumId(Long id);
