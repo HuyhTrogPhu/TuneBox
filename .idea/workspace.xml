@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="merger trung">
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="UPDATE">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,19 +19,35 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="QuocTrung" />
+        <entry key="$PROJECT_DIR$" value="GiaBao2.0FormTrungBranchWithLove" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;halayra&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/HuyhTrogPhu/TuneBox.git&quot;,
+    &quot;accountId&quot;: &quot;f7858ff9-959f-43df-afb4-670d33901c15&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -58,7 +78,8 @@
     &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.SocialAdminApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;XuanTruong&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;QuocTrung&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/TuneBox-XuanTruong&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -66,7 +87,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
@@ -74,6 +95,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.example.library.Exception" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.example.customer.config" />
     </key>
@@ -87,7 +111,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.CustomerApplication">
+  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="TuneBox" />
       <method v="2">
@@ -142,8 +166,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
       </set>
     </attachedChunks>
   </component>
@@ -204,13 +228,30 @@
       <workItem from="1731586319377" duration="3724000" />
       <workItem from="1731602194896" duration="893000" />
       <workItem from="1731674623028" duration="2116000" />
-      <workItem from="1731915976006" duration="326000" />
-      <workItem from="1731916831310" duration="632000" />
-      <workItem from="1731917519857" duration="387000" />
-      <workItem from="1731933551093" duration="5685000" />
-      <workItem from="1733116827942" duration="52000" />
-      <workItem from="1733116953529" duration="1279000" />
-      <workItem from="1733153411954" duration="324000" />
+      <workItem from="1731930641076" duration="189000" />
+      <workItem from="1732098213969" duration="58000" />
+      <workItem from="1732099685362" duration="662000" />
+      <workItem from="1732107166423" duration="2866000" />
+      <workItem from="1732160560007" duration="4814000" />
+      <workItem from="1732169347815" duration="5260000" />
+      <workItem from="1732177625045" duration="595000" />
+      <workItem from="1732204103582" duration="595000" />
+      <workItem from="1732210735271" duration="2060000" />
+      <workItem from="1732263334829" duration="597000" />
+      <workItem from="1732291540682" duration="2785000" />
+      <workItem from="1732361156742" duration="5527000" />
+      <workItem from="1732376926984" duration="2339000" />
+      <workItem from="1732509738714" duration="7091000" />
+      <workItem from="1732530257349" duration="629000" />
+      <workItem from="1732594898899" duration="1247000" />
+      <workItem from="1732688703983" duration="850000" />
+      <workItem from="1732719126539" duration="816000" />
+      <workItem from="1732769613339" duration="2269000" />
+      <workItem from="1732945770260" duration="595000" />
+      <workItem from="1733055918130" duration="5733000" />
+      <workItem from="1733071824090" duration="1287000" />
+      <workItem from="1733421173126" duration="286000" />
+      <workItem from="1733457418171" duration="2594000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -420,29 +461,29 @@
       <option name="project" value="LOCAL" />
       <updated>1731677208290</updated>
     </task>
-    <task id="LOCAL-00027" summary="sửa đăng ký gg">
+    <task id="LOCAL-00027" summary="update">
       <option name="closed" value="true" />
-      <created>1731908637929</created>
+      <created>1731930759470</created>
       <option name="number" value="00027" />
       <option name="presentableId" value="LOCAL-00027" />
       <option name="project" value="LOCAL" />
-      <updated>1731908637929</updated>
+      <updated>1731930759471</updated>
     </task>
-    <task id="LOCAL-00028" summary="commit">
+    <task id="LOCAL-00028" summary="update ban user">
       <option name="closed" value="true" />
-      <created>1732719199443</created>
+      <created>1732369696283</created>
       <option name="number" value="00028" />
       <option name="presentableId" value="LOCAL-00028" />
       <option name="project" value="LOCAL" />
-      <updated>1732719199443</updated>
+      <updated>1732369696283</updated>
     </task>
-    <task id="LOCAL-00029" summary="commit">
+    <task id="LOCAL-00029" summary="ban user o bat cu dau ma user dang nam">
       <option name="closed" value="true" />
-      <created>1733117049832</created>
+      <created>1732379269256</created>
       <option name="number" value="00029" />
       <option name="presentableId" value="LOCAL-00029" />
       <option name="project" value="LOCAL" />
-      <updated>1733117049832</updated>
+      <updated>1732379269256</updated>
     </task>
     <option name="localTasksCounter" value="30" />
     <servers />
@@ -472,7 +513,6 @@
     <MESSAGE value="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom" />
     <MESSAGE value="commit edit add del cart" />
     <MESSAGE value="hoan thanh order cod" />
-    <MESSAGE value="update" />
     <MESSAGE value="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java" />
     <MESSAGE value="cao nhạt" />
     <MESSAGE value="cập nhật jwt, phân quyen" />
@@ -483,9 +523,11 @@
     <MESSAGE value="committ" />
     <MESSAGE value="commit merge nqtrung" />
     <MESSAGE value="edit jwwt google" />
-    <MESSAGE value="sửa đăng ký gg" />
     <MESSAGE value="commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="commit" />
+    <MESSAGE value="update" />
+    <MESSAGE value="update ban user" />
+    <MESSAGE value="ban user o bat cu dau ma user dang nam" />
+    <option name="LAST_COMMIT_MESSAGE" value="ban user o bat cu dau ma user dang nam" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
