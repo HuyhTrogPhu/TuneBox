@@ -25,8 +25,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: phongphps32337@fpt.edu.vn
-    password: khlo flkn uidk rtom
+    username: tuneboxvietnam@gmail.com
+    password: znuo qxwy kjtd xmqz
     properties:
       mail:
         smtp:
