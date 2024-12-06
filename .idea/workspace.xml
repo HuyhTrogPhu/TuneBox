@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="cap nhat backend phan qantity">
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/model/VerificationCode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/repository/VerificationCodeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/VerificationCodeService.java" afterDir="false" />
+    <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/EmailService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/java/org/example/library/service/implement/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,15 +15,15 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="GiaNhu" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -64,6 +57,7 @@
     &quot;Spring Boot.CustomerApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.EcommerceAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.SocialAdminApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;XuanTruong&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/TuneBox-XuanTruong&quot;,
@@ -93,7 +87,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.CustomerApplication">
+  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="TuneBox" />
       <method v="2">
@@ -138,6 +132,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Spring Boot.CustomerApplication" />
+      <item itemvalue="Spring Boot.EcommerceAdminApplication" />
+      <item itemvalue="Spring Boot.LibraryApplication" />
+      <item itemvalue="Spring Boot.SocialAdminApplication" />
+    </list>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -196,6 +196,23 @@
       <workItem from="1730528897629" duration="5259000" />
       <workItem from="1730720304797" duration="9698000" />
       <workItem from="1730773591374" duration="3261000" />
+      <workItem from="1730879607959" duration="270000" />
+      <workItem from="1730894244951" duration="1983000" />
+      <workItem from="1730986453761" duration="85000" />
+      <workItem from="1731134045305" duration="2571000" />
+      <workItem from="1731555377241" duration="377000" />
+      <workItem from="1731586319377" duration="3724000" />
+      <workItem from="1731602194896" duration="893000" />
+      <workItem from="1731674623028" duration="2116000" />
+      <workItem from="1731915976006" duration="326000" />
+      <workItem from="1731916831310" duration="632000" />
+      <workItem from="1731917519857" duration="387000" />
+      <workItem from="1731933551093" duration="5685000" />
+      <workItem from="1733116827942" duration="52000" />
+      <workItem from="1733116953529" duration="1279000" />
+      <workItem from="1733153411954" duration="1007000" />
+      <workItem from="1733224684722" duration="5188000" />
+      <workItem from="1733311458599" duration="2214000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
@@ -341,7 +358,103 @@
       <option name="project" value="LOCAL" />
       <updated>1730296463203</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="update customerorder, Google (chưa làm được), Quên Pass">
+      <option name="closed" value="true" />
+      <created>1730808816182</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1730808816182</updated>
+    </task>
+    <task id="LOCAL-00020" summary="update jwt, mang  xa hoi">
+      <option name="closed" value="true" />
+      <created>1730879656557</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1730879656557</updated>
+    </task>
+    <task id="LOCAL-00021" summary="mới nhất 11.7">
+      <option name="closed" value="true" />
+      <created>1730958853265</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1730958853265</updated>
+    </task>
+    <task id="LOCAL-00022" summary="mới nhất 11.7 v2">
+      <option name="closed" value="true" />
+      <created>1730962619290</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1730962619290</updated>
+    </task>
+    <task id="LOCAL-00023" summary="committ">
+      <option name="closed" value="true" />
+      <created>1731051705405</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1731051705405</updated>
+    </task>
+    <task id="LOCAL-00024" summary="commit merge nqtrung">
+      <option name="closed" value="true" />
+      <created>1731135636981</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1731135636981</updated>
+    </task>
+    <task id="LOCAL-00025" summary="edit jwwt google">
+      <option name="closed" value="true" />
+      <created>1731566088651</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1731566088651</updated>
+    </task>
+    <task id="LOCAL-00026" summary="commit">
+      <option name="closed" value="true" />
+      <created>1731677208290</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1731677208290</updated>
+    </task>
+    <task id="LOCAL-00027" summary="sửa đăng ký gg">
+      <option name="closed" value="true" />
+      <created>1731908637929</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1731908637929</updated>
+    </task>
+    <task id="LOCAL-00028" summary="commit">
+      <option name="closed" value="true" />
+      <created>1732719199443</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1732719199443</updated>
+    </task>
+    <task id="LOCAL-00029" summary="commit">
+      <option name="closed" value="true" />
+      <created>1733117049832</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1733117049832</updated>
+    </task>
+    <task id="LOCAL-00030" summary="commit">
+      <option name="closed" value="true" />
+      <created>1733154569759</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1733154569759</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -368,13 +481,21 @@
     <MESSAGE value="commit 10.7" />
     <MESSAGE value="them pom cho cloudinary, chinh sua tai anh len cloudinary cac form cua admin ecom" />
     <MESSAGE value="commit edit add del cart" />
-    <MESSAGE value="commit" />
     <MESSAGE value="hoan thanh order cod" />
     <MESSAGE value="update" />
     <MESSAGE value="cap nhat gui mail khi order thanh cong at EmailService, OrderController, VNPayController. sua payStatus at OrderServiceImpl.java" />
     <MESSAGE value="cao nhạt" />
     <MESSAGE value="cập nhật jwt, phân quyen" />
-    <option name="LAST_COMMIT_MESSAGE" value="cập nhật jwt, phân quyen" />
+    <MESSAGE value="update customerorder, Google (chưa làm được), Quên Pass" />
+    <MESSAGE value="update jwt, mang  xa hoi" />
+    <MESSAGE value="mới nhất 11.7" />
+    <MESSAGE value="mới nhất 11.7 v2" />
+    <MESSAGE value="committ" />
+    <MESSAGE value="commit merge nqtrung" />
+    <MESSAGE value="edit jwwt google" />
+    <MESSAGE value="sửa đăng ký gg" />
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
