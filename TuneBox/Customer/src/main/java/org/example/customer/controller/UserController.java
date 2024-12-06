@@ -396,14 +396,25 @@ public class UserController {
     }
 
     @GetMapping("/check-status/{userId}")
-    public ResponseEntity<Map<String, Object>> checkAccountStatus(@PathVariable Long userId) {
-        Optional<User> user = userService.findByIdUser(userId); // Tìm user theo ID
-        boolean isBanned = user.get().getStatus() == UserStatus.BANNED; // Kiểm tra trạng thái
+    public ResponseEntity<?> checkAccountStatus(@PathVariable Long userId) {
+        Optional<User> userOptional = userService.findByIdUser(userId); // Tìm user theo ID
 
+        // Nếu không tìm thấy user, trả về lỗi 404
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found"));
+        }
+
+        // Lấy thông tin user và kiểm tra trạng thái
+        User user = userOptional.get();
+        boolean isBanned = user.getStatus() == UserStatus.BANNED;
+
+        // Tạo response
         Map<String, Object> response = new HashMap<>();
-        response.put("isBanned", isBanned); // Trả về trạng thái bị khóa
+        response.put("isBanned", isBanned);
 
-        return ResponseEntity.ok(response); // Trả về kết quả
+        // Trả về kết quả
+        return ResponseEntity.ok(response);
     }
 
 

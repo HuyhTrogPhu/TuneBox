@@ -56,6 +56,9 @@ public class UserSocialAdminDto {
 
     private UserStatus status;
 
+    public UserSocialAdminDto(Long id, String email, String userName, LocalDate createDate, int size, int size1, long postCount, List<TrackDtoSocialAdmin> trackDtos, long odersCount, UserInformation userInformation, long likeCount, long commentCount) {
+    }
+
 
     //   private List<Report> reports;
 
