@@ -50,6 +50,8 @@ public class AuthController {
                 response.put("userId", user.getId());
                 response.put("userExists", true);  // Đã có tài khoản
             } else {
+                // Nếu người dùng chưa có, tạo mới tài khoản
+
                 String token = jwtUtil.generateToken(email, "USER");
 
                 response.put("token", token);

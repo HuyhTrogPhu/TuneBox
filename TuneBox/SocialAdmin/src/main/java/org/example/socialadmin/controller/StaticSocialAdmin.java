@@ -523,7 +523,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
                                             @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
         Pageable pageable = PageRequest.of(page, size);
-        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithTracks(pageable);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findByPageReportsWithTracks(pageable);
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
@@ -538,7 +538,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     }
     @GetMapping("/getReportByTrack/{trackId}")
     public ResponseEntity<?> getReportByTrackId(@RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "10") int size,
+                                                @RequestParam(defaultValue = "10") int size,
                                                 @PathVariable("trackId") Long trackId){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -561,12 +561,76 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
     {
         Map<String, Object> response = new HashMap<>();
         Pageable pageable = PageRequest.of(page, size);
-        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithUser(pageable);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findByPageReportsWithUser(pageable);
         try {
             response.put("status", true);
             response.put("message", "Succesfull");
             response.put("data", reportPage.getContent());
             response.put("totalPages", reportPage.getTotalPages());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+//get all endpoints
+    @GetMapping("/getAllTrackReport")
+    public ResponseEntity<?> getAllTrackReport()
+    {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findAllReportsWithTracks());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getAllAlbumReport")
+    public ResponseEntity<?> getAllAlbumReport()
+    {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findAllReportsWithAlbum());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getAllPostReport")
+    public ResponseEntity<?> getAllPostReport()
+    {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findAllReportsWithPost());
+        } catch (Exception ex) {
+            response.put("status", false);
+            response.put("message", ex);
+            response.put("data", null);
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getAllUserReport")
+    public ResponseEntity<?> getAllUserReport()
+    {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            response.put("status", true);
+            response.put("message", "Succesfull");
+            response.put("data", reportService.findAllReportsWithUser());
         } catch (Exception ex) {
             response.put("status", false);
             response.put("message", ex);
@@ -615,7 +679,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
                                             @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
         Pageable pageable = PageRequest.of(page, size);
-        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithAlbum(pageable);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findByPageReportsWithAlbum(pageable);
 
         try {
             response.put("status", true);
@@ -635,7 +699,7 @@ public ResponseEntity<?> GetUserBeetWeen(@PathVariable("startDate") String start
                                            @RequestParam(defaultValue = "10") int size) {
         Map<String, Object> response = new HashMap<>();
         Pageable pageable = PageRequest.of(page, size);
-        Page<ReportDtoSocialAdmin> reportPage = reportService.findAllReportsWithPost(pageable);
+        Page<ReportDtoSocialAdmin> reportPage = reportService.findByPageReportsWithPost(pageable);
 
         try {
             response.put("status", true);
