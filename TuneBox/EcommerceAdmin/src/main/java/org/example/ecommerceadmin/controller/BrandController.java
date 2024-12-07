@@ -1,12 +1,7 @@
 package org.example.ecommerceadmin.controller;
 
-import jakarta.servlet.annotation.MultipartConfig;
-import lombok.AllArgsConstructor;
-
 import org.example.library.dto.BrandsDto;
-import org.example.library.model.Brand;
 import org.example.library.service.BrandService;
-import org.example.library.service.implement.BrandServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@AllArgsConstructor
 @RequestMapping("/e-comAdmin/brand")
 public class BrandController {
 

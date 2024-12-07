@@ -114,7 +114,7 @@ public interface UserService {
     Optional<User> findByIdUser(Long userId);
 
     List<User> findByReportTrue();
-    public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
+    Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate);
 
     Map<YearMonth, Long> countUsersByMonthRange(YearMonth startMonth, YearMonth endMonth);
 

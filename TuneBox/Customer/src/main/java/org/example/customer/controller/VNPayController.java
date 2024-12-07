@@ -81,10 +81,10 @@ public class VNPayController {
         for (String fieldName : fieldNames) {
             String fieldValue = vnp_Params.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
-                hashData.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()))
+                hashData.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII))
                         .append('=')
-                        .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                        .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (fieldNames.indexOf(fieldName) < fieldNames.size() - 1) {
                     query.append('&');
                     hashData.append('&');
@@ -94,8 +94,8 @@ public class VNPayController {
 
         // Tính toán giá trị SecureHash
         String vnp_SecureHash = VNPayConfig.hmacSHA512(VNPayConfig.secretKey, hashData.toString());
-        query.append("&vnp_SecureHash=").append(URLEncoder.encode(vnp_SecureHash, StandardCharsets.US_ASCII.toString()));
-        String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + query.toString();
+        query.append("&vnp_SecureHash=").append(URLEncoder.encode(vnp_SecureHash, StandardCharsets.US_ASCII));
+        String paymentUrl = VNPayConfig.vnp_PayUrl + "?" + query;
 
         //gửi mail xác nhan
         UserCheckOut userCheckOut = userService.getUserCheckoutInfo(userId);

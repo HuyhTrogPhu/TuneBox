@@ -49,8 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                         System.out.println("User Details: " + userDetails);
 
                         // **Kiểm tra trạng thái người dùng**
-                        if (userDetails instanceof CustomerDetail) { // Kiểm tra xem UserDetails có phải là CustomerDetail không
-                            CustomerDetail customerDetail = (CustomerDetail) userDetails;
+                        if (userDetails instanceof CustomerDetail customerDetail) { // Kiểm tra xem UserDetails có phải là CustomerDetail không
                             if (customerDetail.getUser().getStatus() == UserStatus.BANNED) {
                                 System.out.println("User is banned");
                                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tài khoản đã bị khóa.");

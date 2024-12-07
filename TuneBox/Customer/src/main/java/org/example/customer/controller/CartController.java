@@ -34,5 +34,5 @@ public class CartController {
     }
 
 
-    private List<OrderDetailDto> orderDetails = new ArrayList<>();
+    private final List<OrderDetailDto> orderDetails = new ArrayList<>();
 }

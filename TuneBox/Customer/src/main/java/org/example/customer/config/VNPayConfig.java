@@ -49,7 +49,7 @@ public class VNPayConfig {
         for (String fieldName : fieldNames) {
             String fieldValue = fields.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
-                sb.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
+                sb.append(fieldName).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (fieldNames.indexOf(fieldName) < fieldNames.size() - 1) {
                     sb.append('&');
                 }

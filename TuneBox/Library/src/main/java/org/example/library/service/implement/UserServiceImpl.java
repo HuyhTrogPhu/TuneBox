@@ -757,7 +757,8 @@ public class UserServiceImpl implements UserService {
     public List<User> findByReportTrue(){
         return userRepository.findByReportTrue();
 
-    };
+    }
+
     //static for Social admin
     public Map<LocalDate, Long> countUsersByDateRange(LocalDate startDate, LocalDate endDate) {
         Map<LocalDate, Long> userCountMap = new HashMap<>();

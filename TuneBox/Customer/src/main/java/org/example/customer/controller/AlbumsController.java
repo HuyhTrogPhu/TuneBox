@@ -1,18 +1,9 @@
 package org.example.customer.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.example.library.dto.*;
-import org.example.library.model.AlbumStyle;
-import org.example.library.model.Genre;
-import org.example.library.model.User;
-import org.example.library.repository.AlbumStyleRepository;
 import org.example.library.service.AlbumStyleService;
 import org.example.library.service.AlbumsService;
-import org.example.library.service.GenreService;
-import org.example.library.service.TrackService;
-import org.example.library.service.implement.AlbumStyleServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +19,14 @@ import java.util.Set;
 @RequestMapping("/customer/albums")
 public class AlbumsController {
 
-    @Autowired
-    private AlbumsService albumsService;
+    private final AlbumsService albumsService;
 
-    @Autowired
-    private AlbumStyleService albumStyleService;
+    private final AlbumStyleService albumStyleService;
+
+    public AlbumsController(AlbumsService albumsService, AlbumStyleService albumStyleService) {
+        this.albumsService = albumsService;
+        this.albumStyleService = albumStyleService;
+    }
 
     //creat Track
     @PostMapping

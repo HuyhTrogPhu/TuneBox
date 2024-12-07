@@ -13,7 +13,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     //    Search by keyword
     @Query("select b from Brand b where b.name like %?1%")
-    public List<Brand> findByKeyword(String keyword);
+    List<Brand> findByKeyword(String keyword);
 
     // get list brand sales the most of day
     @Query("select new org.example.library.dto.BrandSalesDto(b.id, b.name, i.name, i.image, i.costPrice, i.quantity, sum(od.quantity))" +

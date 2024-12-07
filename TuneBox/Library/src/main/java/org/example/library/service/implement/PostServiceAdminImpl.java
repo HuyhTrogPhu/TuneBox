@@ -78,8 +78,8 @@ public class PostServiceAdminImpl implements PostServiceAdmin {
 
     @Override
     public PostStatisticsDto getPostStatistics() {
-        LocalDateTime oneWeekAgo = LocalDateTime.now().minus(7, ChronoUnit.DAYS);
-        LocalDateTime oneMonthAgo = LocalDateTime.now().minus(30, ChronoUnit.DAYS);
+        LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusDays(30);
 
         return PostStatisticsDto.builder()
                 .totalPosts(postAdminRepository.count())
@@ -113,7 +113,7 @@ public class PostServiceAdminImpl implements PostServiceAdmin {
 
     @Override
     public List<DailyPostStatsDto> getDailyPostStats() {
-        LocalDateTime startDate = LocalDateTime.now().minus(30, ChronoUnit.DAYS);
+        LocalDateTime startDate = LocalDateTime.now().minusDays(30);
         List<Object[]> results = postAdminRepository.findDailyPostStatsRaw(startDate);
 
         // Chuyển đổi Object[] thành DailyPostStatsDto

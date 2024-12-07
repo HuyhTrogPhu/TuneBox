@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @SessionScope
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    private static long cartIdCounter = 1;
+    private static final long cartIdCounter = 1;
 @Autowired
      ShoppingCartRepository shoppingCartRepository;
 @Autowired

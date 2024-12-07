@@ -27,6 +27,6 @@ public interface PlaylistService {
     List<PLayListDetailSocialAdminDto> getPlaylistsByDateRange(LocalDate startDate, LocalDate endDate);
 
 
-      public PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId);
+      PlaylistDto removeTrackFromPlaylist(Long playlistId, Long trackId);
 
 }

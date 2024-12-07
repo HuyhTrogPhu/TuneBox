@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface UserInforService{
 
-    public Optional<UserInformation> findById(Long userId);
-    public UserInformationDto updateUserInfor(Long userId, UserInformationDto UserInforDTO);
+    Optional<UserInformation> findById(Long userId);
+    UserInformationDto updateUserInfor(Long userId, UserInformationDto UserInforDTO);
 }
