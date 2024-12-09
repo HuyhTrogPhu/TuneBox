@@ -224,8 +224,13 @@ public class PostController {
 
     @GetMapping("/tagName")
     public ResponseEntity<List<UserTag>> getPostsByTagName(@RequestParam("userId") Long userId) {
-        List<UserTag> userTag = userService.getUserTags(userId);
-        return ResponseEntity.ok(userTag);
+        try {
+            List<UserTag> userTag = userService.getUserTags(userId);
+            return ResponseEntity.ok(userTag);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
