@@ -33,60 +33,63 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         System.out.println("Request URI: " + path);
 
-        if (!path.equals("/login") && !path.equals("/register")) {
-            String authorizationHeader = request.getHeader("Authorization");
-            System.out.println("Authorization Header: " + authorizationHeader);
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String jwt = authorizationHeader.substring(7);
+            System.out.println("Authorization Header: " + jwt);
 
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                String jwt = authorizationHeader.substring(7);
-                try {
-                    boolean isGoogleToken = jwtUtil.isGoogleToken(jwt);
-                    String username = jwtUtil.extractUsername(jwt);
-                    System.out.println("Extracted Username: " + username);
+            try {
+                boolean isGoogleToken = jwtUtil.isGoogleToken(jwt);
+                String username = jwtUtil.extractUsername(jwt);
+                System.out.println("Extracted Username: " + username);
 
-                    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                        System.out.println("User Details: " + userDetails);
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    System.out.println("User Details: " + userDetails);
 
-                        // **Kiểm tra trạng thái người dùng**
-                        if (userDetails instanceof CustomerDetail) { // Kiểm tra xem UserDetails có phải là CustomerDetail không
-                            CustomerDetail customerDetail = (CustomerDetail) userDetails;
-                            if (customerDetail.getUser().getStatus() == UserStatus.BANNED) {
-                                System.out.println("User is banned");
-                                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tài khoản đã bị khóa.");
-                                return;
-                            }
-                        }
-
-                        if (jwtUtil.validateToken(jwt, userDetails)) {
-                            Collection<? extends GrantedAuthority> authorities;
-                            if (isGoogleToken) {
-                                // Lấy quyền từ Google token
-                                authorities = jwtUtil.extractGoogleRoles(jwt);
-                            } else {
-                                // Lấy quyền từ token của hệ thống
-                                authorities = userDetails.getAuthorities();
-                            }
-
-                            UsernamePasswordAuthenticationToken authToken =
-                                    new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
-                            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                            SecurityContextHolder.getContext().setAuthentication(authToken);
-                            System.out.println("Authentication Successful");
-                        } else {
-                            System.out.println("Invalid JWT token");
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                    // **Kiểm tra trạng thái người dùng**
+                    if (userDetails instanceof CustomerDetail) {
+                        CustomerDetail customerDetail = (CustomerDetail) userDetails;
+                        if (customerDetail.getUser().getStatus() == UserStatus.BANNED) {
+                            System.out.println("User is banned");
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Tài khoản đã bị khóa.");
                             return;
                         }
                     }
-                } catch (Exception e) {
-                    System.out.println("Error decoding JWT token: " + e.getMessage());
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
-                    return;
+
+                    if (jwtUtil.validateToken(jwt, userDetails)) {
+                        Collection<? extends GrantedAuthority> authorities;
+                        if (isGoogleToken) {
+                            // Lấy quyền từ Google token
+                            authorities = jwtUtil.extractGoogleRoles(jwt);
+                        } else {
+                            // Lấy quyền từ hệ thống
+                            authorities = userDetails.getAuthorities();
+                        }
+
+                        if (authorities == null || authorities.isEmpty()) {
+                            System.out.println("No authorities found for user");
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Không có quyền truy cập.");
+                            return;
+                        }
+
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                        System.out.println("Authentication Successful: " + SecurityContextHolder.getContext().getAuthentication());
+                    } else {
+                        System.out.println("Invalid JWT token");
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                        return;
+                    }
                 }
+            } catch (Exception e) {
+                System.out.println("Error decoding JWT token: " + e.getMessage());
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
+                return;
             }
         }
         chain.doFilter(request, response);
     }
 }
-

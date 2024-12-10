@@ -295,5 +295,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     void save(Optional<User> user);
     Optional<User> findByIdAndStatus(Long id, UserStatus status);
-
+    // list user tag name
+    @Query("select new org.example.library.dto.UserTag(u.id, u.userName) " +
+            "from Friend f join f.user u where f.accepted = true and u.id <> :userId")
+    List<UserTag> findUserTags(@Param("userId") Long userId);
 }

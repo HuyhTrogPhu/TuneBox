@@ -108,7 +108,8 @@ public interface UserService {
      List<SearchDto> searchUser(String keyword);
 
      long countUser();
-
+    // get list user tagName
+    List<UserTag> getUserTags(Long userId);
     UserSocialAdminDto findById(Long userId);
 
     Optional<User> findByIdUser(Long userId);

@@ -1,6 +1,7 @@
 package org.example.customer.controller;
 
 import org.example.library.dto.PostDto;
+import org.example.library.dto.UserTag;
 import org.example.library.model.Post;
 import org.example.library.repository.LikeRepository;
 import org.example.library.service.NotificationService;
@@ -153,13 +154,17 @@ public class PostController {
         }
     }
 
-    // Lấy tất cả bài viết của người dùng từ ID
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable Long userId, Principal principal) {
-
-        userService.checkAccountStatus(userId);
+        if (principal == null) {
+            System.out.println("Principal is null, user is not authenticated");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
 
         String currentUsername = principal.getName();
+        System.out.println("Current user: " + currentUsername);
+
+        userService.checkAccountStatus(userId);
         List<PostDto> posts = postService.getPostsByUserId(userId, currentUsername);
         return ResponseEntity.ok(posts);
     }
@@ -219,5 +224,14 @@ public class PostController {
         response.put("isHidden", newVisibility);
         return ResponseEntity.ok(response);
     }
-
+    @GetMapping("/tagName")
+    public ResponseEntity<List<UserTag>> getPostsByTagName(@RequestParam("userId") Long userId) {
+        try {
+            List<UserTag> userTag = userService.getUserTags(userId);
+            return ResponseEntity.ok(userTag);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
