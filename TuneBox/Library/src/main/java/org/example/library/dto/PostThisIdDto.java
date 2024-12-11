@@ -13,4 +13,5 @@ public class PostThisIdDto {
     private Long postId;
     private String postOwner;
     private boolean hidden;
+    private String content;
 }

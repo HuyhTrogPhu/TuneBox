@@ -74,6 +74,7 @@ public class ReportMapper {
         postDto.setPostId(report.getPost().getId());
         postDto.setPostOwner(report.getPost().getUser().getUserInformation().getName());
         postDto.setHidden(report.getPost().isHidden());
+        postDto.setContent(report.getPost().getContent());
         dto.setPost(postDto);
         dto.setReporterId(report.getUser().getUserName());
         dto.setReason(report.getReason());
