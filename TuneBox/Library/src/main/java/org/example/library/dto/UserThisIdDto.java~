@@ -1,0 +1,7 @@
+package org.example.library.dto;
+
+public class UserThisIdDto {
+    Long Userid;
+    String email;
+    
+}

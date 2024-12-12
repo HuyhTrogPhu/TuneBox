@@ -1,0 +1,12 @@
+package org.example.library.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class ReportUserStatsDto {
+    private String reportedBy;
+    private long totalReports;
+    private long resolvedReports;
+}

@@ -1,0 +1,45 @@
+package org.example.customer.controller;
+
+import org.example.library.model.ChatRequest;
+import org.example.library.model.ChatResponse;
+import org.example.library.service.GptService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/chat")
+
+public class GptController {
+
+    private static final Logger logger = LoggerFactory.getLogger(GptController.class);
+
+    @Autowired
+    private GptService gptService;
+
+    @PostMapping("/gpt")
+    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request) {
+        // Log incoming request
+        logger.info("Received chat request: {}", request.getMessage());
+
+        // Call the service to generate response
+        String response;
+        try {
+            response = gptService.generateResponse(request.getMessage());
+            // Log successful response generation
+            logger.info("Generated response: {}", response);
+        } catch (Exception e) {
+            // Log error if there's any issue
+            logger.error("Error generating response: {}", e.getMessage());
+            response = "Xin lỗi, đã có lỗi xảy ra: " + e.getMessage();
+        }
+
+        // Return the generated response
+        return ResponseEntity.ok(new ChatResponse(response));
+    }
+}

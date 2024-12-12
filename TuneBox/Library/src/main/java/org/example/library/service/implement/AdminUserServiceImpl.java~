@@ -1,0 +1,40 @@
+package org.example.library.service.implement;
+
+import org.example.library.dto.StatisticalUserDto;
+import org.example.library.repository.UserAdminRepository;
+import org.example.library.service.AdminUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+
+@Service
+public class AdminUserServiceImpl implements AdminUserService {
+
+    @Autowired
+    private UserAdminRepository userAdminRepository;
+
+    @Override
+    public StatisticalUserDto getUserStatistics() {
+        long totalUsers = userAdminRepository.countTotalUsers();
+        long reportedUsers = userAdminRepository.countReportedUsers();
+
+        LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        long newUsersThisMonth = userAdminRepository.countNewUsersThisMonth(startOfMonth);
+
+        double reportedUserPercentage = (double) reportedUsers / totalUsers * 100;
+
+        long totalFollowers = userAdminRepository.countTotalFollowers();
+        long totalFollowing = userAdminRepository.countTotalFollowing();
+
+        return new StatisticalUserDto(
+                totalUsers,
+                reportedUsers,
+                newUsersThisMonth,
+                reportedUserPercentage,
+                totalFollowers,
+                totalFollowing
+        );
+    }
+}

@@ -1,0 +1,41 @@
+package org.example.library.mapper;
+
+import org.example.library.dto.PostReportDto;
+import org.example.library.model.PostReport;
+import org.springframework.stereotype.Component;
+
+@Component
+public interface PostReportMapper {
+
+    // Ánh xạ từ PostReport entity sang PostReportDto
+    default PostReportDto toDto(PostReport postReport) {
+        if (postReport == null) {
+            return null;
+        }
+        return new PostReportDto(
+                postReport.getId(),
+                postReport.getPost().getId(),
+                postReport.getUserReported().getId(), 
+                postReport.getUserReporter().getId(),
+                postReport.getReason(),
+                postReport.getCreateDate(),
+                postReport.getStatus(),
+                postReport.getNotes()
+        );
+    }
+
+    // Ánh xạ từ PostReportDto sang PostReport entity
+    default PostReport toEntity(PostReportDto postReportDto) {
+        if (postReportDto == null) {
+            return null;
+        }
+        PostReport postReport = new PostReport();
+        postReport.setId(postReportDto.getId());
+        postReport.setReason(postReportDto.getReason());
+        postReport.setCreateDate(postReportDto.getCreateDate());
+        postReport.setStatus(postReportDto.getStatus());
+        postReport.setNotes(postReportDto.getNotes());
+        // Post, UserReported, UserReporter phải được ánh xạ từ các repository trước
+        return postReport;
+    }
+}

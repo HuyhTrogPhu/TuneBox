@@ -1,0 +1,5 @@
+package org.example.library.service;
+
+public interface GptService {
+    String generateResponse(String prompt);
+}

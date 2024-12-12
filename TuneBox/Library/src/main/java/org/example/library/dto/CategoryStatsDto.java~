@@ -1,0 +1,11 @@
+package org.example.library.dto;
+
+import lombok.Data;
+
+@Data
+public class CategoryStatsDto {
+    private String category;
+    private long postCount;
+    private long totalEngagement;
+    private double averageEngagement;
+}

@@ -1,0 +1,13 @@
+package org.example.library.repository;
+
+<<<<<<< HEAD
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.example.library.model.Country;
+=======
+import org.example.library.model.Country;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+>>>>>>> refs/heads/GiaBao
+public interface CountryRepository extends JpaRepository<Country, Long> {
+}

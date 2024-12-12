@@ -1,0 +1,19 @@
+package org.example.library.mapper;
+
+import org.example.library.dto.MessageDTO;
+import org.example.library.dto.ChatDTO;
+import org.example.library.model.Message;
+import org.example.library.model.Chat;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+
+@Mapper
+public interface ChatMapper {
+    ChatMapper INSTANCE = Mappers.getMapper(ChatMapper.class);
+
+    MessageDTO messageToMessageDTO(Message message);
+    Message messageDTOToMessage(MessageDTO messageDTO);
+
+    ChatDTO chatToChatDTO(Chat chat);
+    Chat chatDTOToChat(ChatDTO chatDTO);
+}

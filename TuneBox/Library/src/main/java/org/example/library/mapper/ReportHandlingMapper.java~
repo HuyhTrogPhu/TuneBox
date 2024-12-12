@@ -1,0 +1,35 @@
+package org.example.library.mapper;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class ReportHandlingMapper {
+    
+    public ReportHandlingDto entityToDto(ReportHandling entity) {
+        ReportHandlingDto dto = new ReportHandlingDto();
+        dto.setId(entity.getId());
+        dto.setReportId(entity.getReportId());
+        dto.setStatus(entity.getStatus());
+        dto.setNote(entity.getNote());
+        dto.setAdminId(entity.getAdminId());
+        dto.setHandledAt(entity.getHandledAt());
+        return dto;
+    }
+
+    public ReportHandling dtoToEntity(ReportHandlingDto dto) {
+        ReportHandling entity = new ReportHandling();
+        entity.setId(dto.getId());
+        entity.setReportId(dto.getReportId());
+        entity.setStatus(dto.getStatus());
+        entity.setNote(dto.getNote());
+        entity.setAdminId(dto.getAdminId());
+        entity.setHandledAt(dto.getHandledAt());
+        return entity;
+    }
+
+    public List<ReportHandlingDto> entitiesToDtos(List<ReportHandling> entities) {
+        return entities.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
+    }
+}

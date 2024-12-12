@@ -1,0 +1,8 @@
+package org.example.library.dto;
+
+import java.util.List;
+
+public class CountNewPostInDayDto {
+    private Long count; // Số lượng bài viết
+    private List<PostDto> posts; // Danh sách bài viết
+}

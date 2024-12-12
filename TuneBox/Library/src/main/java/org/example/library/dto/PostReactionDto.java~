@@ -1,0 +1,18 @@
+package org.example.library.dto;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class PostReactionDto {
+    private Long postId;
+    private long likeCount;
+    private long commentCount;
+
+    public PostReactionDTO(Long id, int likeCount, int commentCount) {
+        this.id = id;
+        this.likeCount = likeCount;
+        this.commentCount = commentCount;
+    }
+}

@@ -1,0 +1,10 @@
+package org.example.customer.config;
+
+@Configuration
+public class MapperConfig {
+
+    @Bean
+    public MessageMapper messageMapper() {
+        return Mappers.getMapper(MessageMapper.class);
+    }
+}
