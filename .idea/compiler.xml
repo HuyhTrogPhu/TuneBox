@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/TuneBox/src/main/resources/archetype-resources" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Customer" target="17" />
+      <module name="EcommerceAdmin" target="21" />
+      <module name="Library" target="21" />
+      <module name="SocialAdmin" target="21" />
+      <module name="TuneBox" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
