@@ -24,4 +24,5 @@ public class CommentDTO {
     private boolean edited;
     private Long trackId;
     private String icon;
+    private String avatar;
 }

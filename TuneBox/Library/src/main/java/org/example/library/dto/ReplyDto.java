@@ -18,5 +18,5 @@ public class ReplyDto {
     private String repliedToNickname;
     private Long commentId;
     private Long parentReplyId;
-
+    private String avatar;
 }

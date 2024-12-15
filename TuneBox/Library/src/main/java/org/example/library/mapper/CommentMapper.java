@@ -23,7 +23,7 @@ public class CommentMapper {
         commentDTO.setUserId(comment.getUser().getId());
 //        commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());
 //        commentDTO.setPostId(comment.getPost().getId());
-
+        commentDTO.setAvatar(comment.getUser().getUserInformation().getAvatar());
         // Kiểm tra null cho UserInformation
         if (comment.getUser().getUserInformation() != null) {
             commentDTO.setUserNickname(comment.getUser().getUserInformation().getName());

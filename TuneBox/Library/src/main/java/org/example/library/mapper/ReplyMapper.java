@@ -30,7 +30,7 @@ public class ReplyMapper {
         replyDTO.setCreationDate(reply.getCreationDate()); // Trực tiếp sử dụng LocalDateTime
         replyDTO.setUserId(reply.getUser().getId()); // ID của người reply
         replyDTO.setUserNickname(reply.getUser().getUserInformation().getName()); // Nickname của người reply
-
+        replyDTO.setAvatar(reply.getUser().getUserInformation().getAvatar());
         // Lấy nickname của người bình luận gốc (người được reply)
         if (reply.getParentComment() != null && reply.getParentComment().getUser() != null) {
             replyDTO.setRepliedToNickname(reply.getParentComment().getUser().getUserInformation().getName()); // Gán nickname của người bình luận gốc
