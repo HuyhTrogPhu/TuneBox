@@ -40,7 +40,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: tuneboxvietnam@gmail.com
-    password: znuo qxwy kjtd xmqz
+    password: rfye fjzj akez srbl
     properties:
       mail:
         smtp:

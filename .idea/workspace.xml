@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba422593-e042-4467-8b03-25bd3197e159" name="Changes" comment="commit">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/TuneBox.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/TuneBox.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/FriendController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/LikeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/java/org/example/customer/controller/ShareController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Customer/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/EcommerceAdmin/src/main/resources/application.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/Library/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/TuneBox/SocialAdmin/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +30,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="GiaNhu" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -93,7 +94,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.SocialAdminApplication">
+  <component name="RunManager" selected="Spring Boot.CustomerApplication">
     <configuration name="CustomerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="Customer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.customer.CustomerApplication" />
@@ -209,6 +210,8 @@
       <workItem from="1733744938942" duration="3038000" />
       <workItem from="1733815057194" duration="4537000" />
       <workItem from="1733831878558" duration="2946000" />
+      <workItem from="1734269710149" duration="1366000" />
+      <workItem from="1734316793458" duration="282000" />
     </task>
     <task id="LOCAL-00001" summary="commit">
       <option name="closed" value="true" />
